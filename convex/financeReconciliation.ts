@@ -1,7 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import { FinanceProviderError } from "@mangekyo/finance-core/agent";
 import { buildReconciliationInput, causeKey, checkReconciliationFindings, correctionEntries, evaluateCorrection, mockReconciliationProvider, reconcilableCauses, ReconciliationValidationError, validateReconciliationOutput, type CorrectingEntry, type ReconciliationInput } from "@mangekyo/finance-core/reconciliation";
-import { callWithRetry, MAX_AUTOMATIC_RETRIES, parseProviderTimeoutMs } from "@mangekyo/finance-core/orchestrator";
+import { callWithRetry, MAX_AUTOMATIC_RETRIES, parseProviderTimeoutMs, retryWriteConflicts } from "@mangekyo/finance-core/orchestrator";
 import { formatCents } from "@mangekyo/finance-core/intake";
 import { internal } from "./_generated/api";
 import { env, internalAction, internalMutation, internalQuery, mutation, query, type MutationCtx } from "./_generated/server";
@@ -96,12 +96,12 @@ export const execute = internalAction({
     const timeoutMs = parseProviderTimeoutMs(env.PROVIDER_TIMEOUT_MS);
     try {
       const execution = await callWithRetry(() => mockReconciliationProvider.start(run.input as ReconciliationInput), { timeoutMs, phase: "start", paid: false,
-        onRetry: async error => await ctx.runMutation(internal.financeReconciliation.recordRetry, { runId, error: { code: error.code, message: error.message, retryable: error.retryable } }) });
+        onRetry: async error => await retryWriteConflicts(() => ctx.runMutation(internal.financeReconciliation.recordRetry, { runId, error: { code: error.code, message: error.message, retryable: error.retryable } })) });
       if (execution.status !== "completed") throw new FinanceProviderError("provider_failed", "The reconciler did not complete.");
-      await ctx.runMutation(internal.financeReconciliation.recordResult, { runId, externalRunId: execution.externalRunId, outputJson: JSON.stringify(execution.output) });
+      await retryWriteConflicts(() => ctx.runMutation(internal.financeReconciliation.recordResult, { runId, externalRunId: execution.externalRunId, outputJson: JSON.stringify(execution.output) }));
     } catch (error) {
       const failure = error instanceof FinanceProviderError ? { code: error.code, message: error.message, retryable: error.retryable } : { code: "provider_failure", message: "The reconciler failed unexpectedly.", retryable: false };
-      await ctx.runMutation(internal.financeReconciliation.recordFailure, { runId, error: failure });
+      await retryWriteConflicts(() => ctx.runMutation(internal.financeReconciliation.recordFailure, { runId, error: failure }));
     }
     return null;
   },

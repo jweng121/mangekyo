@@ -72,7 +72,11 @@ export async function importBundle(ctx: MutationCtx, bundle: NormalizedAccountBu
   await appendMoneyEvent(ctx, { accountId, type: "finance.money.import_completed", actor: SYSTEM, operationId: `import:${accountId}:${now}`, stage: "import",
     message: `${system} import: ${counts.inserted} inserted, ${counts.updated} updated, ${counts.unchanged} unchanged source records; ${entriesInserted} new ledger entries; ${issues.length} issue(s).`,
     threeWay: checkAccount(loaded.state, now), sourceIds: issues.map(row => row.rawId) });
-  for (const bankSourceId of newlyEligible) await scheduleAutoInvestigation(ctx, loaded, bankSourceId);
+  // A bulk import (more than 10 new deposits, e.g. the 200-deposit batch) starts its investigations a little apart: every settle reads the
+  // whole account for the lock, so hundreds settling at once mostly conflict with each other.
+  let order = 0;
+  const stagger = newlyEligible.size > 10 ? AUTO_STAGGER_MS : 0;
+  for (const bankSourceId of newlyEligible) await scheduleAutoInvestigation(ctx, loaded, bankSourceId, stagger * order++);
   await recheckHeldProposals(ctx, accountId);
   return { accountId, ...counts, entriesInserted, issues };
 }
@@ -351,13 +355,15 @@ async function autoEvent(ctx: MutationCtx, accountId: string, bankSourceId: stri
 }
 
 /** Import-time decision: schedule when the setting allows it, otherwise record the skip and its reason now. */
-async function scheduleAutoInvestigation(ctx: MutationCtx, loaded: LoadedAccount, bankSourceId: string) {
+const AUTO_STAGGER_MS = 400;
+
+async function scheduleAutoInvestigation(ctx: MutationCtx, loaded: LoadedAccount, bankSourceId: string, delayMs = 0) {
   const accountId = loaded.state.account.accountId;
   const setting = autoInvestigationSetting();
   if (!setting.enabled) return await autoEvent(ctx, accountId, bankSourceId, false, setting.code, setting.message);
   const blocked = ineligibility(loaded, bankSourceId);
   if (blocked) return await autoEvent(ctx, accountId, bankSourceId, false, blocked.code, blocked.message);
-  await ctx.scheduler.runAfter(0, internal.financeIntake.autoInvestigateDeposit, { accountId, bankSourceId });
+  await ctx.scheduler.runAfter(delayMs, internal.financeIntake.autoInvestigateDeposit, { accountId, bankSourceId });
 }
 
 /** One investigation per deposit: rechecks the setting and eligibility, and never starts a second run for a task. */

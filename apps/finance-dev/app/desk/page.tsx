@@ -265,7 +265,7 @@ export default function Desk() {
 
   const working = (desk?.tasks ?? []).flatMap(t => {
     const text = t.latestRun ? progressText(t.latestRun.status, names.deposit(t.bankSourceId ?? ""), null) : null;
-    return text ? [text] : [];
+    return text ? [{ key: t.taskId, text }] : [];
   });
   const feed: Activity[] = activity.results.map(e => describeEvent(e, names));
   const cause = tw ? causeLine(tw, names.owner) : null;
@@ -337,7 +337,7 @@ export default function Desk() {
           <section className="col-main" aria-label="Activity">
             <div className="colhead"><h2>Activity</h2><span className="m" style={{ fontSize: 12, color: "var(--muted)" }}>Newest first · from saved events</span></div>
             <div className="feed" aria-live="polite">
-              {working.map(text => <div key={text} className="working">{text}</div>)}
+              {working.map(w => <div key={w.key} className="working">{w.text}</div>)}
               {feed.length === 0 ? <p className="empty" style={{ margin: "12px 0" }}>No activity yet.</p> :
                 <AnimatedList items={feed.map(a => ({ id: a.id, title: a.text }))} animation="none" frame={false} theme="light" showGradients={false} selectOnHover={false} enableArrowNavigation={false} maxHeight={560} gap={0} width="100%"
                   renderItem={(_, index) => { const a = feed[index]; return <div className="ev"><span className="tm">{new Date(a.at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</span><div className="tx"><b>{a.text}</b>{a.sub && <span className="sub">{a.sub}</span>}<span className={`who ${a.tone}`}>{a.who}</span></div></div>; }} />}

@@ -39,15 +39,17 @@ describe("scorecard (mock mode)", () => {
   it("runs a batch of synthetic deposits and reports time, % handled without a person and % flagged", async () => {
     const t = convexTest(schema, modules);
     const { accountId, count } = await t.mutation(api.financeScorecard.runBatch, { count: 40 });
-    await drain(t, 16);
+    // A bulk import starts its investigations 400 ms apart.
+    for (let i = 0; i < 40; i++) { vi.advanceTimersByTime(500); await t.finishInProgressScheduledFunctions(); }
+    await drain(t);
     const card = await t.query(api.financeScorecard.getScorecard, { accountId });
     if (card?.kind !== "batch") throw new Error("expected a batch scorecard");
     expect(card.summary).toMatchObject({ count, settled: count, matchedRightAnswer: count });
     expect(card.summary.pctHandled + card.summary.pctFlagged).toBeLessThanOrEqual(100);
     expect(card.summary.handledWithoutPerson).toBeGreaterThan(0);
     expect(card.summary.flagged).toBeGreaterThan(0);
-    // Fake timers advance 1 ms per scheduler round, so the measured time is a few ms here.
-    expect(card.summary.durationMs).toBeGreaterThanOrEqual(0);
+    // Fake time: the 400 ms stagger dominates, so 40 deposits take about 16 s here.
+    expect(card.summary.durationMs).toBeGreaterThanOrEqual(39 * 400);
     expect(card.summary.line).toMatch(/^40 deposits in [\d.]+ s · [\d.]+% handled without a person · [\d.]+% flagged · 40 of 40 matched the right answer$/);
     expect(Object.values(card.byState).reduce((a, b) => a + b, 0)).toBe(count);
   });

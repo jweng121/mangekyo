@@ -11,7 +11,7 @@ export function OrchestratorTimeline({ state, events, retries, highlightRunId }:
       <h2 style={{ fontSize: 18, margin: 0 }}>Orchestrator</h2>
       <span className={`tag ${current.tone}`}>Now: {current.label}</span>
     </div>
-    <p style={{ margin: "4px 0", fontSize: 13, color: "var(--muted)" }}>One orchestrator per deposit. {events.length} saved step{events.length === 1 ? "" : "s"} · {retries} automatic retr{retries === 1 ? "y" : "ies"} · {budgetChecks} budget check{budgetChecks === 1 ? "" : "s"}. Each step is an event with a snapshot.</p>
+    <p style={{ margin: "4px 0", fontSize: 13, color: "var(--muted)" }}>One orchestrator per deposit (or per code-found mismatch). {events.length} saved step{events.length === 1 ? "" : "s"} · {retries} automatic retr{retries === 1 ? "y" : "ies"} · {budgetChecks} budget check{budgetChecks === 1 ? "" : "s"}. Each step is an event with a snapshot.</p>
     {events.map(e => {
       const bad = e.to === "failed" || e.to === "rejected" || e.budget?.allowed === false;
       const [bg, fg] = bad ? DOT.bad : DOT[e.kind];

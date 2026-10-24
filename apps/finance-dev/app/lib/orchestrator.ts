@@ -22,7 +22,7 @@ const TRIGGER: Record<string, string> = {
 export const triggerWords = (trigger: string) => TRIGGER[trigger] ?? trigger.replace(/_/g, " ");
 
 export function actorWords(actor: { type: string; identity: string }): string {
-  if (actor.type === "person") return personName(actor.identity);
+  if (actor.type === "person") return actor.identity.startsWith("unauthenticated:") ? "A person (not signed in)" : personName(actor.identity);
   if (actor.type === "code") return "Code";
   if (actor.type === "system") return "Orchestrator";
   if (actor.identity.startsWith("agent:claim-checker")) return `Agent 2 · checker (${actor.identity.split(":").at(-1)})`;

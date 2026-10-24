@@ -108,6 +108,26 @@ export async function callWithRetry<T>(call: () => Promise<T>, options: { timeou
   }
 }
 
+/** Convex's message when a mutation kept conflicting with concurrent writes and gave up. */
+export const WRITE_CONFLICT = /changed while this mutation was being run/i;
+
+/**
+ * Saving a provider's answer is retried (up to 10 times, backoff capped at 5 s) when the database was busy: every settle
+ * appends to the account's one event stream, so many runs settling at once take turns. This is not a
+ * provider retry: the provider is not called again, and the save mutations are idempotent through their status guards.
+ */
+export async function retryWriteConflicts<T>(write: () => Promise<T>, options: { attempts?: number; baseMs?: number; sleep?: (ms: number) => Promise<void>; random?: () => number } = {}): Promise<T> {
+  const attempts = options.attempts ?? 10;
+  const sleep = options.sleep ?? (ms => new Promise<void>(resolve => setTimeout(resolve, ms)));
+  for (let attempt = 1; ; attempt++) {
+    try { return await write(); }
+    catch (error) {
+      if (attempt >= attempts || !(error instanceof Error) || !WRITE_CONFLICT.test(error.message)) throw error;
+      await sleep(Math.min(5000, (options.baseMs ?? 400) * 2 ** (attempt - 1)) * (0.5 + (options.random ?? Math.random)()));
+    }
+  }
+}
+
 /** MOCK_PROVIDER_FAULT (mock mode only): deterministic provider trouble for tests and demos. */
 export type MockFault = "network_once" | "network_always" | "hang" | "invalid_output";
 export function parseMockFault(raw: string | undefined): MockFault | null {

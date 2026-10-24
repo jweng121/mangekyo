@@ -3,7 +3,7 @@ import { FinanceProviderError } from "../src/agent/types";
 import { mockFinanceAgentProvider } from "../src/agent/mock";
 import {
   ACTIVE_STATES, ALLOWED, assertTransition, budgetDecision, callWithRetry, canTransition, IllegalTransitionError, isRetryable, ORCHESTRATOR_STATES,
-  parseBudget, parseMockFault, parseProviderTimeoutMs, settledState, SETTLED_STATES, utcDay, withMockFault, withTimeout,
+  parseBudget, parseMockFault, parseProviderTimeoutMs, retryWriteConflicts, settledState, SETTLED_STATES, utcDay, withMockFault, withTimeout,
 } from "../src/orchestrator";
 import { sampleInput } from "./fixtures";
 
@@ -79,6 +79,22 @@ describe("reliability", () => {
     const neverAsked = vi.fn(async () => true);
     await expect(callWithRetry(invalid, { timeoutMs: 100, phase: "start", paid: false, onRetry: neverAsked })).rejects.toThrow("bad");
     expect(neverAsked).not.toHaveBeenCalled();
+  });
+
+  it("retries a save that conflicted with other runs settling, and nothing else", async () => {
+    const conflict = new Error('Documents read from or written to the "financeEvents" table changed while this mutation was being run and on every subsequent retry.');
+    const sleeps: number[] = [];
+    const sleep = async (ms: number) => { sleeps.push(ms); };
+    const write = vi.fn().mockRejectedValueOnce(conflict).mockRejectedValueOnce(conflict).mockResolvedValueOnce("saved");
+    await expect(retryWriteConflicts(write, { sleep, random: () => 0.5 })).resolves.toBe("saved");
+    expect(write).toHaveBeenCalledTimes(3);
+    expect(sleeps).toEqual([400, 800]);
+    const always = vi.fn().mockRejectedValue(conflict);
+    await expect(retryWriteConflicts(always, { sleep, attempts: 3 })).rejects.toBe(conflict);
+    expect(always).toHaveBeenCalledTimes(3);
+    const other = vi.fn().mockRejectedValue(new Error("Investigation run not found"));
+    await expect(retryWriteConflicts(other, { sleep })).rejects.toThrow("not found");
+    expect(other).toHaveBeenCalledTimes(1);
   });
 
   it("MOCK_PROVIDER_FAULT wraps only the mock provider", async () => {
