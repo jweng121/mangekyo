@@ -9,6 +9,7 @@
  */
 
 import type * as finance from "../finance.js";
+import type * as financeDesk from "../financeDesk.js";
 import type * as financeIntake from "../financeIntake.js";
 import type * as financeInvestigationActions from "../financeInvestigationActions.js";
 import type * as financeInvestigations from "../financeInvestigations.js";
@@ -26,6 +27,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   finance: typeof finance;
+  financeDesk: typeof financeDesk;
   financeIntake: typeof financeIntake;
   financeInvestigationActions: typeof financeInvestigationActions;
   financeInvestigations: typeof financeInvestigations;
