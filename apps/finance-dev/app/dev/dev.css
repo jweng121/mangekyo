@@ -1,0 +1,63 @@
+/* /dev page styles, scoped so they never reach the landing, desk or run pages. */
+.dev-root { color-scheme: light; font-family: system-ui, sans-serif; color: #20242c; background: #f5f6f8; }
+.dev-root { padding: 2rem; }
+.dev-root main { max-width: 960px; margin: auto; }
+.dev-root header { margin-bottom: 1.5rem; }
+.dev-root header > p:first-child { font-size: .75rem; letter-spacing: .12em; color: #506178; }
+.dev-root h1 { margin: .5rem 0; }
+.dev-root section { margin: 1.5rem 0; padding: 1.5rem; background: white; border: 1px solid #dce0e7; border-radius: 8px; }
+.dev-root button { padding: .7rem 1rem; font: inherit; border: 0; border-radius: 5px; background: #244db0; color: white; cursor: pointer; }
+.dev-root button:disabled { opacity: .6; cursor: wait; }
+.dev-root button:focus-visible,.dev-root summary:focus-visible { outline: 3px solid #c09229; outline-offset: 3px; }
+.dev-root small { font-size: .65em; background: #fff0cc; padding: .2em .5em; border-radius: 4px; }
+.dev-root dt { font-weight: 600; margin-top: .8rem; }
+.dev-root dd { margin: .2rem 0; overflow-wrap: anywhere; }
+.dev-root blockquote { border-left: 3px solid #c09229; margin: 1rem 0; padding: .5rem 1rem; background: #fffbef; }
+.dev-root pre { overflow: auto; background: #f5f6f8; padding: 1rem; font-size: .8rem; }
+.dev-root summary { cursor: pointer; overflow-wrap: anywhere; }
+.dev-root [role="alert"] { color: #a12121; }
+.dev-root label { display: block; margin: 1rem 0; font-weight: 600; }
+.dev-root input,.dev-root select,.dev-root textarea { display: block; box-sizing: border-box; width: 100%; max-width: 640px; padding: .65rem; margin-top: .4rem; font: inherit; color: inherit; background: white; border: 1px solid #adb7c7; border-radius: 4px; }
+.dev-root textarea { min-height: 110px; resize: vertical; }
+.dev-root .period-fields { display: flex; gap: 1rem; flex-wrap: wrap; }
+.dev-root .period-fields label { flex: 1; min-width: 240px; }
+.dev-root .run-status { padding: .8rem; margin-top: 1.5rem; background: #edf2ff; border-radius: 4px; font-weight: 600; }
+.dev-root article { border-top: 1px solid #dce0e7; padding: .8rem 0; }
+.dev-root .evidence-reference { padding: .5rem 0; overflow-wrap: anywhere; }
+.dev-root .row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; }
+.dev-root .row label { margin: .5rem 0; }
+.dev-root .dev-banner { border: 2px dashed #c09229; background: #fffbef; padding: .8rem 1rem; border-radius: 6px; }
+.dev-root .three-numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; border-radius: 6px; border: 2px solid; }
+.dev-root .three-numbers.matched { background: #ecf8ef; border-color: #2f8a46; }
+.dev-root .three-numbers.mismatched,.dev-root .three-numbers.insufficient_data { background: #fdeeee; border-color: #a12121; }
+.dev-root .three-numbers span { display: block; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: #506178; }
+.dev-root .three-numbers strong { display: block; font-size: 1.5rem; margin: .2rem 0; }
+.dev-root .three-numbers small { background: none; padding: 0; font-size: .75rem; color: #506178; }
+.dev-root .three-numbers .verdict { grid-column: 1 / -1; margin: 0; font-weight: 700; }
+.dev-root table { width: 100%; border-collapse: collapse; font-size: .9rem; margin: .5rem 0 1rem; display: block; overflow-x: auto; }
+.dev-root th,.dev-root td { text-align: left; padding: .4rem .5rem; border-bottom: 1px solid #dce0e7; vertical-align: top; }
+.dev-root td code { overflow-wrap: anywhere; }
+.dev-root .chip { display: inline-block; padding: .1rem .5rem; border-radius: 999px; font-size: .8rem; background: #edf2ff; }
+.dev-root .chip.posted,.dev-root .chip.approved { background: #ecf8ef; }
+.dev-root .chip.blocked,.dev-root .chip.rejected { background: #fdeeee; }
+.dev-root .chip.pending_approval,.dev-root .chip.proposed,.dev-root .chip.awaiting_clearance { background: #fff0cc; }
+.dev-root .lock { padding: .6rem .8rem; border-radius: 4px; margin: .5rem 0; }
+.dev-root .lock.allowed { background: #ecf8ef; }
+.dev-root .lock.blocked { background: #fdeeee; }
+.dev-root .lock p { margin: .3rem 0; }
+.dev-root button.secondary { background: #e4e9f4; color: #20242c; }
+.dev-root button.danger { background: #a12121; }
+.dev-root .nested { border-left: 3px solid #244db0; padding-left: 1rem; }
+.dev-root .nested > section { margin: .5rem 0; }
+.dev-root .hint { color: #506178; font-size: .85rem; }
+.dev-root .chip.on_hold { background: #fff0cc; }
+.dev-root .chip.cancelled { background: #eceef2; }
+.dev-root article.on_hold { border-left: 4px solid #c09229; padding-left: .8rem; }
+.dev-root article.on_hold.ready { border-left-color: #2f8a46; }
+.dev-root .hold-reason { font-weight: 600; }
+@media (max-width: 600px) {
+.dev-root { padding: 1rem; }
+.dev-root section { padding: 1rem; }
+}
+.dev-root { min-height: 100vh; box-sizing: border-box; }
+
