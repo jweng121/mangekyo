@@ -87,6 +87,7 @@ export async function knownSourceIds(ctx: QueryCtx | MutationCtx, loaded: Loaded
     ...loaded.state.bankTransactions.map(r => r.sourceId), ...loaded.state.owners.map(r => r.sourceId), ...loaded.documents.map(r => r.sourceId),
     ...loaded.obligations.map(r => r.sourceId), ...loaded.state.statementBalances.map(r => r.sourceId), ...loaded.state.reconcilingItems.map(r => r.sourceId),
     ...clarifications.map(r => r.sourceId),
+    ...(await ctx.db.query("financeApprovedPolicies").withIndex("by_accountId_and_currency_and_approvedAt", (q) => q.eq("accountId", loaded.state.account.accountId).eq("currency", loaded.state.account.currency)).take(500)).map(p => p.sourceId),
   ]);
 }
 

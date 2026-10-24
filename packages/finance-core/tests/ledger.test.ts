@@ -87,6 +87,16 @@ describe("three-way check causes", () => {
     expect(codes(threeWayCheck(state, NOW))).toContain("AMOUNT_MISMATCH");
   });
 
+  it("warns, without a mismatch, when two received deposits share a reference", () => {
+    const state = demoState();
+    const second = { ...state.bankTransactions.find(t => t.sourceId === demoIds.depositA)!, sourceId: "demo:bank:txn:A-002", duplicateOfSourceId: demoIds.depositA };
+    state.bankTransactions.push(second);
+    state.entries.push(entry({ entryId: "import:A-002", amountCents: second.amountCents, kind: "deposit_received", fundsSourceId: second.sourceId, sourceRefs: [second.sourceId], effectiveAt: second.bookedAt }));
+    const result = threeWayCheck(state, NOW);
+    expect(result.status).toBe("matched");
+    expect(result.causes).toContainEqual(expect.objectContaining({ code: "DUPLICATE_POSTING", severity: "warning", sourceIds: ["demo:bank:txn:A-002", demoIds.depositA] }));
+  });
+
   it("finds duplicate postings of the same bank transaction", () => {
     const state = demoState();
     state.entries.push(entry({ entryId: "dup", amountCents: 150_000, kind: "deposit_received", fundsSourceId: demoIds.depositA, sourceRefs: [demoIds.depositA] }));

@@ -4,7 +4,7 @@ import { checkSelfApproval, checkState } from "@mangekyo/finance-core/gateway";
 import { buildReversalEntries } from "@mangekyo/finance-core/ledger";
 import { mutation, query } from "./_generated/server";
 import * as money from "./lib/moneyValidators";
-import { appendMoneyEvent, checkAccount, compact, gatedStep, getProposal, loadAccount, nextProposalId, recheckHeldProposals, recheckHold, requireAccount, resolveActor, submitProposal, transition, updateHold } from "./lib/money";
+import { appendMoneyEvent, checkAccount, compact, evaluate, gatedStep, gatewayContext, getProposal, loadAccount, nextProposalId, recheckHeldProposals, recheckHold, requireAccount, resolveActor, submitProposal, transition, updateHold } from "./lib/money";
 import { recordOnly } from "./lib/investigationRecords";
 import { appendBoundary } from "./financeInvestigations";
 
@@ -186,6 +186,62 @@ export const continueHeld = mutation({
     const proposal = await heldProposal(ctx, args.proposalId);
     const { proposal: next, lock } = await gatedStep(ctx, proposal, proposal.hold!.stage, actor);
     return { proposal: next, lock, alreadyDone: false };
+  },
+});
+
+/** Approve a policy the investigator proposed. Approver only; recorded with who; append-only. Used by the next investigation. */
+export const approvePolicy = mutation({
+  args: { runId: v.string(), candidatePolicyId: v.string(), dev: money.devIdentity }, returns: v.object({ policyId: v.string() }),
+  handler: async (ctx, args) => {
+    const actor = await resolveActor(ctx, args.dev);
+    if (actor.role !== "approver") throw new ConvexError("Switch to the approver role to approve a policy.");
+    const run = await ctx.db.query("financeInvestigationRuns").withIndex("by_runId", (q) => q.eq("runId", args.runId)).unique();
+    const candidate = run?.result?.candidatePolicies.find(p => p.policyId === args.candidatePolicyId);
+    if (!run || !candidate) throw new ConvexError("That policy proposal was not found.");
+    if (run.status === "checker_rejected") throw new ConvexError("The checker stopped this run; its proposals can't be approved.");
+    const task = await ctx.db.query("financeTasks").withIndex("by_taskId", (q) => q.eq("taskId", run.taskId)).unique();
+    if (!task?.accountId) throw new ConvexError("Policies can only be approved for an account's deposits.");
+    const account = await requireAccount(ctx, task.accountId);
+    const statement = candidate.statement.replace(/^For human review: /, "");
+    const existing = await ctx.db.query("financeApprovedPolicies").withIndex("by_accountId_and_currency_and_approvedAt", (q) => q.eq("accountId", task.accountId!).eq("currency", account.currency)).take(500);
+    if (existing.some(p => p.statement === statement)) throw new ConvexError("This policy is already approved for the account.");
+    const policyId = `P-${existing.length + 1}`;
+    const now = Date.now();
+    await ctx.db.insert("financeApprovedPolicies", { policyId, version: "v1", statement, status: "approved", accountId: task.accountId, currency: account.currency, approvedAt: now, sourceId: `policy:${task.accountId}:${policyId}@v1`, approvedBy: actor.identity, fromRunId: run.runId });
+    await appendMoneyEvent(ctx, { accountId: task.accountId, type: "finance.money.policy_approved", actor, operationId: `policy:${policyId}`, stage: "policy", message: `Approved policy ${policyId}: "${statement}" The next matching investigation will use it.`, sourceIds: [run.runId] });
+    return { policyId };
+  },
+});
+
+/**
+ * One action, approver only: approves just the proposals that pass every lock rule, had every checker claim supported,
+ * and cite an approved policy. Everything else is left for one-by-one review.
+ */
+export const approveAllProven = mutation({
+  args: { accountId: v.string(), dev: money.devIdentity },
+  returns: v.object({ approved: v.array(v.string()), skipped: v.array(v.object({ proposalId: v.string(), reason: v.string() })) }),
+  handler: async (ctx, args) => {
+    const actor = await resolveActor(ctx, args.dev);
+    if (actor.role !== "approver") throw new ConvexError("Switch to the approver role to approve.");
+    const account = await requireAccount(ctx, args.accountId);
+    const policies = await ctx.db.query("financeApprovedPolicies").withIndex("by_accountId_and_currency_and_approvedAt", (q) => q.eq("accountId", args.accountId).eq("currency", account.currency)).take(500);
+    const policySources = new Set(policies.map(p => p.sourceId));
+    const loaded = await loadAccount(ctx, args.accountId);
+    const approved: string[] = [];
+    const skipped: Array<{ proposalId: string; reason: string }> = [];
+    for (const proposal of loaded.proposals.filter(p => p.kind === "allocation" && p.status === "pending_approval")) {
+      if (proposal.origin.type !== "agent") { skipped.push({ proposalId: proposal.proposalId, reason: "Proposed by a person, not proven by the agent and checker." }); continue; }
+      const runId = proposal.origin.runId;
+      const run = await ctx.db.query("financeInvestigationRuns").withIndex("by_runId", (q) => q.eq("runId", runId)).unique();
+      if (!run?.claimCheck || run.claimCheck.status !== "passed" || run.claimCheck.claims.length === 0 || run.claimCheck.claims.some(c => c.verdict !== "supported")) { skipped.push({ proposalId: proposal.proposalId, reason: "Not every claim was confirmed by the checker." }); continue; }
+      if (!proposal.evidenceSourceIds.some(id => policySources.has(id))) { skipped.push({ proposalId: proposal.proposalId, reason: "Doesn't rely on an approved policy." }); continue; }
+      const lock = evaluate(await gatewayContext(ctx, await loadAccount(ctx, args.accountId), Date.now()), proposal, "approve", actor.identity, "approved");
+      if (!lock.allowed) { skipped.push({ proposalId: proposal.proposalId, reason: `Lock rules: ${lock.failures.map(f => f.code).join(", ")}.` }); continue; }
+      const result = await gatedStep(ctx, proposal, "approve", actor);
+      if (result.proposal.status === "approved") approved.push(proposal.proposalId);
+      else skipped.push({ proposalId: proposal.proposalId, reason: `Not approved: ${result.proposal.status}.` });
+    }
+    return { approved, skipped };
   },
 });
 

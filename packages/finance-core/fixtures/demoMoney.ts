@@ -72,6 +72,11 @@ function runFor(accountId: string): number {
   return run;
 }
 
+/** Maps fixture IDs ("demo:...") into the namespace of the DEMO run that owns accountId. */
+export function forDemoAccount<T>(value: T, accountId: string): T {
+  return forRun(value, runFor(accountId));
+}
+
 export function demoMoneyBundle(run = 1): NormalizedAccountBundle {
   const bundle = forRun(baseDemoBundle(), run);
   return run === 1 ? bundle : { ...bundle, account: { ...bundle.account, name: `${bundle.account.name} (run ${pad(run)})` } };

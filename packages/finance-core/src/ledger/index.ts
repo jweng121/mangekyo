@@ -130,7 +130,8 @@ export function threeWayCheck(state: AccountLedgerState, cutoff: number, options
     if (txn.duplicateOfSourceId && linked.length > 0) {
       const original = feed.find(row => row.sourceId === txn.duplicateOfSourceId);
       if (original && bankEntries.some(entry => bankLinked(entry, original))) {
-        causes.push({ code: "DUPLICATE_POSTING", severity: "mismatch", message: `${txn.sourceId} is flagged as a duplicate of ${original.sourceId}, and both are recorded.`, amountCents: txn.amountCents, sourceIds: [txn.sourceId, original.sourceId], ownerIds: owners, unattributed: owners.length === 0 });
+        // Both deposits really reached the bank, so recording both keeps bank = books. Whether the payer paid twice is a question for a person.
+        causes.push({ code: "DUPLICATE_POSTING", severity: "warning", message: `${txn.sourceId} shares a reference with ${original.sourceId}; both were received and recorded. A person should confirm it isn't a double payment.`, amountCents: txn.amountCents, sourceIds: [txn.sourceId, original.sourceId], ownerIds: owners, unattributed: owners.length === 0 });
       }
     }
   }

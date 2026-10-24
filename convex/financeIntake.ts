@@ -7,7 +7,9 @@ import { DEMO_ACCOUNT_ID, demoMoneyBundle, demoRunOf, demoSettlement, demoUnreco
 import { createSeed } from "../apps/demo-erp/data/seed";
 import { api, internal } from "./_generated/api";
 import { internalMutation, mutation, query, type MutationCtx } from "./_generated/server";
-import { autoInvestigationSetting } from "./financeInvestigations";
+import { autoInvestigationSetting, providerMode } from "./financeInvestigations";
+import { demoFeedStep, feedBundle, FEED_LENGTH, FEED_PAYMENT_PURPOSE } from "@mangekyo/finance-core/fixtures/demo-feed";
+import { nextProposalId, submitProposal } from "./lib/money";
 import * as money from "./lib/moneyValidators";
 import * as validators from "./lib/validators";
 import { appendMoneyEvent, checkAccount, compact, LATEST, latestActivity, loadAccount, outstandingMaxDays, recheckHeldProposals, resolveActor, SYSTEM, getProposal, requireAccount, type LoadedAccount } from "./lib/money";
@@ -160,6 +162,33 @@ async function ensureTaskRow(ctx: MutationCtx, loaded: LoadedAccount, bankSource
   });
   return { taskId, created: true };
 }
+
+/** DEMO live feed, mock mode only: adds the next scripted step through the normal import path. Same order every time. */
+export const feedNext = mutation({
+  args: { accountId: v.string() },
+  returns: v.object({ step: v.number(), total: v.number(), label: v.union(v.string(), v.null()), done: v.boolean() }),
+  handler: async (ctx, { accountId }) => {
+    if (providerMode() !== "mock") throw new ConvexError("The live feed runs only in mock mode. In CREAO mode every investigation costs money, so it never starts here.");
+    await requireAccount(ctx, accountId);
+    const loaded = await loadAccount(ctx, accountId);
+    for (let index = 0; index < FEED_LENGTH; index++) {
+      const step = demoFeedStep(index, accountId, Date.now());
+      if (!step) break;
+      const done = step.kind === "payment" ? loaded.proposals.some(p => p.purpose === FEED_PAYMENT_PURPOSE) : loaded.state.bankTransactions.some(t => t.sourceId === step.marker);
+      if (done) continue;
+      if (step.kind === "import") await importBundle(ctx, feedBundle(step, accountId), "demo");
+      else {
+        const now = Date.now();
+        await submitProposal(ctx, { proposalId: await nextProposalId(ctx, accountId, "payment"), accountId, kind: "payment", status: "proposed", currency: loaded.state.account.currency,
+          requestedBy: "dev-unverified:riley", origin: { type: "person" }, evidenceSourceIds: step.evidenceSourceIds, ownerId: step.ownerId, amountCents: step.amountCents, purpose: step.purpose, createdAt: now, updatedAt: now },
+          { identity: "dev-unverified:riley", authenticated: false, role: "requester" });
+      }
+      await appendMoneyEvent(ctx, { accountId, type: "finance.money.feed_step", actor: SYSTEM, operationId: `feed:${accountId}:${index + 1}`, stage: "feed", message: `Live feed step ${index + 1} of ${FEED_LENGTH}: ${step.label}.` });
+      return { step: index + 1, total: FEED_LENGTH, label: step.label, done: index + 1 === FEED_LENGTH };
+    }
+    return { step: FEED_LENGTH, total: FEED_LENGTH, label: null, done: true };
+  },
+});
 
 /** DEV ONLY, DEMO accounts only: the bank feed reports a pending demo deposit as cleared. */
 export const simulateDepositCleared = mutation({

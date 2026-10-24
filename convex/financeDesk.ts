@@ -4,6 +4,8 @@ import { query } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
 import * as validators from "./lib/validators";
 import { recordOnly } from "./lib/investigationRecords";
+import { providerMode } from "./financeInvestigations";
+import { FEED_LENGTH } from "@mangekyo/finance-core/fixtures/demo-feed";
 
 /** Read-only views for the operator desk. No writes; the desk acts through the existing mutations. */
 
@@ -30,12 +32,16 @@ export const getDeskData = query({
     policies: v.array(v.object({ policyId: v.string(), runId: v.string(), statement: v.string(), sourceRefs: v.array(v.string()) })),
     activity: v.array(validators.event),
     counts: v.object({ autoStarted: v.number(), blocked: v.number(), posted: v.number() }),
+    approvedPolicies: v.array(v.object({ policyId: v.string(), statement: v.string(), sourceId: v.string(), approvedBy: v.union(v.string(), v.null()), approvedAt: v.number() })),
+    checkerStopped: v.array(v.object({ runId: v.string(), taskId: v.string(), bankSourceId: v.union(v.string(), v.null()), attempt: v.number(), claim: v.string(), reason: v.string(), sourceSays: v.union(v.string(), v.null()) })),
+    feed: v.object({ mode: v.union(v.literal("mock"), v.literal("creao"), v.null()), stepsDone: v.number(), total: v.number() }),
   }),
   handler: async (ctx, { accountId }) => {
     const tasks = await ctx.db.query("financeTasks").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(100);
     const taskRows = [];
     const questions = [];
     const policies = [];
+    const checkerStopped = [];
     const taskEvents: AnyFinanceEvent[] = [];
     for (const task of tasks) {
       const latest = await ctx.db.query("financeInvestigationRuns").withIndex("by_taskId_and_attempt", (q) => q.eq("taskId", task.taskId)).order("desc").first();
@@ -43,7 +49,11 @@ export const getDeskData = query({
       taskRows.push({ taskId: task.taskId, bankSourceId: task.bankSourceId ?? null, status: task.status, latestRun: run ? summarize(run) : null });
       const open = (await ctx.db.query("financeInvestigationQuestions").withIndex("by_taskId", (q) => q.eq("taskId", task.taskId)).take(50)).filter(row => row.status === "open");
       questions.push(...open.map(row => ({ questionId: row.questionId, runId: row.runId, taskId: row.taskId, bankSourceId: task.bankSourceId ?? null, question: row.question, sourceRefs: row.sourceRefs })));
-      if (run?.result) policies.push(...run.result.candidatePolicies.map(p => ({ policyId: p.policyId, runId: run.runId, statement: p.statement, sourceRefs: p.sourceRefs })));
+      if (run?.status === "checker_rejected" && run.claimCheck) {
+        const bad = run.claimCheck.claims.find(c => c.verdict === "not_supported");
+        if (bad) checkerStopped.push({ runId: run.runId, taskId: run.taskId, bankSourceId: task.bankSourceId ?? null, attempt: run.attempt, claim: bad.claim, reason: bad.reason, sourceSays: bad.sourceSays });
+      }
+      if (run?.result && run.status !== "checker_rejected") policies.push(...run.result.candidatePolicies.map(p => ({ policyId: p.policyId, runId: run.runId, statement: p.statement, sourceRefs: p.sourceRefs })));
       const events = await ctx.db.query("financeEvents").withIndex("by_taskId_and_sequence", (q) => q.eq("taskId", task.taskId)).order("desc").take(15);
       taskEvents.push(...events.map(recordOnly) as AnyFinanceEvent[]);
     }
@@ -51,8 +61,15 @@ export const getDeskData = query({
     const proposals = await ctx.db.query("financeProposals").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(2000);
     const autoStarted = money.filter(e => e.type === "finance.money.auto_investigation" && e.payload.allowed === true).length;
     const activity = [...money.slice(0, 60), ...taskEvents].sort((a, b) => b.timestamp - a.timestamp || b.sequence - a.sequence).slice(0, 60);
+    const account = await ctx.db.query("financeAccounts").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).unique();
+    const approved = account ? await ctx.db.query("financeApprovedPolicies").withIndex("by_accountId_and_currency_and_approvedAt", (q) => q.eq("accountId", accountId).eq("currency", account.currency)).take(100) : [];
+    const approvedStatements = new Set(approved.map(p => p.statement));
+    const feedSteps = money.filter(e => e.type === "finance.money.feed_step").length;
     return {
-      tasks: taskRows, questions, policies, activity,
+      tasks: taskRows, questions, activity, checkerStopped,
+      policies: policies.filter(p => !approvedStatements.has(p.statement.replace(/^For human review: /, ""))),
+      approvedPolicies: approved.map(p => ({ policyId: p.policyId, statement: p.statement, sourceId: p.sourceId, approvedBy: p.approvedBy ?? null, approvedAt: p.approvedAt })),
+      feed: { mode: providerMode(), stepsDone: feedSteps, total: FEED_LENGTH },
       counts: { autoStarted, blocked: proposals.filter(p => p.status === "blocked").length, posted: proposals.filter(p => p.status === "posted").length },
     };
   },
