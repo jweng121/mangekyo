@@ -45,7 +45,7 @@ describe("batch mode", () => {
     const state = stateFrom(bundle);
     for (const deposit of bundle.bankTransactions) {
       const kind = batchKindOf(deposit.raw.rawId)!;
-      const scope = { kind: "deposit_investigation" as const, accountId: bundle.account.accountId, currency: "USD", from: null, cutoff: NOW + 1_000_000 };
+      const scope = { kind: "deposit_investigation" as const, accountId: bundle.account.accountId, currency: "USD", from: null, cutoff: NOW };
       const records = buildDepositRecordSet({ state, documents: bundle.documents, obligations: bundle.obligations, deposit, caseId: depositCaseId(bundle.account.accountId), system: "demo", datasetVersion: "synthetic-batch-v1", scope });
       const input = { schemaVersion: FINANCE_INPUT_VERSION, instructionVersion: FINANCE_INSTRUCTION_VERSION, caseId: "c", taskId: "t", runId: "r", scope, records, evidenceRefs: [], deterministicChecks: runDeterministicChecks(records, scope), approvedPolicies: [], humanClarifications: [] };
       const output = validateFinanceAgentOutput(mockInvestigation(input), input);

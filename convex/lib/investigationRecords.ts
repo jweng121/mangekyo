@@ -1,9 +1,16 @@
-import type { FinanceRecordSet, FinanceTask, InvestigationScope } from "@mangekyo/contracts";
+import type { FinanceInvestigationRun, FinanceRecordSet, FinanceTask, InvestigationScope } from "@mangekyo/contracts";
+import type { Doc } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
 
 export function recordOnly<T extends { _id: unknown; _creationTime: number }>(row: T): T extends unknown ? Omit<T, "_id" | "_creationTime"> : never {
   const { _id, _creationTime, ...record } = row;
   return record as T extends unknown ? Omit<T, "_id" | "_creationTime"> : never;
+}
+
+/** The contract view of a stored run: execution bookkeeping (claims, polls, retries, checker job) stays internal. */
+export function publicRun(row: Doc<"financeInvestigationRuns">): FinanceInvestigationRun {
+  const { executionClaimed, pollCount, deadline, providerRetries, checkerRetries, checkerMode, checkerAppId, checkerExternalRunId, checkerPollCount, ...run } = recordOnly(row);
+  return run as FinanceInvestigationRun;
 }
 
 export async function requireTask(ctx: QueryCtx | MutationCtx, taskId: string) {

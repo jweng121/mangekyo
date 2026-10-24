@@ -7,26 +7,38 @@ import {
 } from "@mangekyo/contracts";
 import { runDeterministicChecks } from "@mangekyo/finance-core/checks";
 import { validateFinanceAgentOutput, FinanceOutputValidationError } from "@mangekyo/finance-core/agent";
-import { checkClaims, mockClaimChecker, type CheckerAgentMode } from "@mangekyo/finance-core/checker";
+import { buildCheckerInput, CheckerOutputValidationError, codeCheckClaims, finalizeClaimCheck, mockClaimCheckerProvider, parseCheckerMode, validateCheckerOutput } from "@mangekyo/finance-core/checker";
+import { ACTIVE_STATES, MAX_AUTOMATIC_RETRIES, settledState, type OrchestratorActor, type Trigger } from "@mangekyo/finance-core/orchestrator";
 import { internal } from "./_generated/api";
 import { env, internalMutation, internalQuery, mutation, query, type MutationCtx } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
 import * as validators from "./lib/validators";
-import { readRecords, recordOnly, requireTask, validateScope } from "./lib/investigationRecords";
+import { publicRun, readRecords, recordOnly, requireTask, validateScope } from "./lib/investigationRecords";
 import { nextProposalId, readIntakeRecords, submitProposal } from "./lib/money";
+import { checkBudget, CODE_ACTOR, ensureOrchestration, step, stepForRun, SYSTEM_ACTOR } from "./lib/orchestrator";
 
 const ACTIVE = new Set(["queued", "retrieving_evidence", "checking", "provider_starting", "provider_pending", "validating"]);
 const RUN_TIMEOUT_MS = 10 * 60 * 1000;
-const startResult = v.object({ runId: v.string(), created: v.boolean() });
+const startResult = v.object({ runId: v.string(), created: v.boolean(), refused: v.optional(v.object({ code: v.string(), message: v.string() })) });
+type StartResult = { runId: string; created: boolean; refused?: { code: string; message: string } };
+const AGENT: OrchestratorActor = { type: "agent", identity: "agent:finance-investigator" };
 
 export function providerMode(): "mock" | "creao" | null {
   return configuration().mode;
 }
 
-/** CHECKER_AGENT_MODE: the claim checker's agent part. Off by default; the code part always runs. */
-export function checkerAgentMode(): CheckerAgentMode {
-  const raw = env.CHECKER_AGENT_MODE?.trim().toLowerCase();
-  return raw === "mock" || raw === "creao" ? raw : "off";
+/** CHECKER_MODE: the claim checker's agent part, mock by default. The code part always runs. null means misconfigured. */
+export function checkerMode(): "mock" | "creao" | null {
+  return parseCheckerMode(env.CHECKER_MODE);
+}
+
+export function checkerConfiguration(): { mode: "mock" | "creao" | null; configured: boolean; message: string } {
+  const mode = checkerMode();
+  const key = env.CREAO_CHECKER_API_KEY ?? env.CREAO_API_KEY ?? "";
+  const configured = mode === "mock" || (mode === "creao" && Boolean(env.CREAO_CHECKER_APP_ID?.trim() && /^capi_\S+$/.test(key)));
+  return { mode, configured, message: mode === null ? "CHECKER_MODE must be mock or creao (unset means mock). No investigation starts until it is fixed."
+    : mode === "mock" ? "Checker agent simulated: deterministic mock behind the provider interface. Code checks always run."
+    : configured ? "Checker agent on CREAO (CREAO_CHECKER_APP_ID). Each checked attempt is one more real run." : "CHECKER_MODE=creao needs CREAO_CHECKER_APP_ID and an app-scoped key (CREAO_CHECKER_API_KEY, or CREAO_API_KEY). Checks will fail and need a person until then." };
 }
 
 function configuration(): { mode: "mock" | "creao" | null; configured: boolean; message: string } {
@@ -59,11 +71,6 @@ export const getProviderConfiguration = query({
   args: {}, returns: v.object({ mode: v.union(validators.mode, v.null()), configured: v.boolean(), message: v.string() }),
   handler: async () => configuration(),
 });
-
-function publicRun(row: Doc<"financeInvestigationRuns">): FinanceInvestigationRun {
-  const { executionClaimed, pollCount, deadline, ...run } = recordOnly(row);
-  return run as FinanceInvestigationRun;
-}
 
 async function findRun(ctx: MutationCtx, runId: string) {
   const run = await ctx.db.query("financeInvestigationRuns").withIndex("by_runId", (q) => q.eq("runId", runId)).unique();
@@ -108,7 +115,15 @@ export async function appendBoundary(ctx: MutationCtx, run: FinanceInvestigation
   });
 }
 
-async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requestedScope: InvestigationStartScope, parent: Doc<"financeInvestigationRuns"> | null): Promise<{ runId: string; created: boolean }> {
+/** Who or what started an attempt, recorded on the orchestrator's transition. */
+interface AttemptCause { trigger: Trigger; actor: OrchestratorActor }
+
+async function personActor(ctx: MutationCtx, fallback: string): Promise<OrchestratorActor> {
+  const identity = await ctx.auth.getUserIdentity();
+  return { type: "person", identity: identity?.tokenIdentifier ?? fallback };
+}
+
+async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requestedScope: InvestigationStartScope, parent: Doc<"financeInvestigationRuns"> | null, cause: AttemptCause): Promise<StartResult> {
   const now = Date.now();
   const scope: InvestigationScope = { ...requestedScope, cutoff: requestedScope.cutoff ?? now };
   let intake: Awaited<ReturnType<typeof readIntakeRecords>> | null = null;
@@ -116,12 +131,28 @@ async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requeste
     throw new ConvexError(error instanceof Error ? error.message : "Choose a valid investigation period.");
   }
   if (scope.cutoff > now) throw new ConvexError("Investigation cutoff cannot be in the future. Choose a time at or before the current server time, or leave the cutoff blank.");
+  // One active run per deposit: a second start returns the running one.
   if (task.activeRunId) {
     const active = await findRun(ctx, task.activeRunId);
     if (ACTIVE.has(active.status)) return { runId: active.runId, created: false };
   }
   const config = configuration();
   if (!config.mode) throw new Error(config.message);
+  const checker = checkerMode();
+  if (!checker) throw new ConvexError(checkerConfiguration().message);
+  let orchestration = await ensureOrchestration(ctx, { kind: "deposit", taskId: task.taskId, accountId: task.accountId ?? null, subjectSourceId: task.bankSourceId ?? task.transactionId,
+    trigger: cause.trigger === "auto_start" ? "deposit_received" : cause.trigger, actor: cause.actor, reason: { code: "RECEIVED", message: "Deposit received by the orchestrator." } });
+  if (ACTIVE_STATES.has(orchestration.state)) {
+    orchestration = await step(ctx, orchestration, { to: "failed", trigger: "timeout", actor: SYSTEM_ACTOR, activeRunId: null, reason: { code: "STALE", message: "The previous run was no longer active; closed before starting a new one." } });
+  }
+  // Real-run budget: the investigator and/or the checker in CREAO mode. Mock runs need 0 and always pass.
+  const needed = (config.mode === "creao" ? 1 : 0) + (checker === "creao" ? 1 : 0);
+  const budget = await checkBudget(ctx, task.taskId, needed, now);
+  orchestration = await step(ctx, orchestration, { kind: "budget_check", to: orchestration.state, trigger: cause.trigger, actor: CODE_ACTOR, reason: { code: budget.code, message: budget.message }, budget });
+  if (!budget.allowed) {
+    await step(ctx, orchestration, { to: "needs_person", trigger: "budget_refused", actor: CODE_ACTOR, reason: { code: budget.code, message: budget.message }, budget });
+    return { runId: parent?.runId ?? "", created: false, refused: { code: budget.code, message: budget.message } };
+  }
   const attempt = (parent?.attempt ?? 0) + 1;
   const runId = `${task.taskId}:investigation:${attempt}`;
   const records = intake ? intake.records : await readRecords(ctx, task, scope);
@@ -142,8 +173,14 @@ async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requeste
     externalRunId: null, providerInput, result: null, error: null,
     ...(config.mode === "creao" ? { providerAppId: env.CREAO_APP_ID ?? "" } : {}),
   };
-  await ctx.db.insert("financeInvestigationRuns", { ...run, executionClaimed: false, pollCount: 0, deadline: now + RUN_TIMEOUT_MS });
+  await ctx.db.insert("financeInvestigationRuns", { ...run, executionClaimed: false, pollCount: 0, deadline: now + RUN_TIMEOUT_MS,
+    providerRetries: 0, checkerRetries: 0, checkerMode: checker, ...(checker === "creao" ? { checkerAppId: env.CREAO_CHECKER_APP_ID ?? "" } : {}) });
+  for (const provider of [...(config.mode === "creao" ? ["investigator" as const] : []), ...(checker === "creao" ? ["checker" as const] : [])]) {
+    await ctx.db.insert("financeRealRuns", { runId, taskId: task.taskId, accountId: task.accountId ?? null, provider, day: new Date(now).toISOString().slice(0, 10), at: now });
+  }
   await ctx.db.patch("financeTasks", task._id, { status: "investigating", activeRunId: runId });
+  await step(ctx, orchestration, { to: "investigating", trigger: cause.trigger, actor: cause.actor, run, activeRunId: runId,
+    reason: { code: "ATTEMPT_STARTED", message: `Attempt ${attempt} started: investigator ${config.mode}, checker ${checker}.` } });
   await appendBoundary(ctx, run, "finance.investigation.started", `Attempt ${attempt} started for ${scope.kind}; available records only.`);
   if (parent) await appendBoundary(ctx, run, "finance.investigation.resumed", "New attempt preserves the prior result and includes saved task clarifications.");
   run.status = "retrieving_evidence";
@@ -155,12 +192,24 @@ async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requeste
   return { runId, created: true };
 }
 
+async function latestAttempt(ctx: MutationCtx, taskId: string) {
+  return await ctx.db.query("financeInvestigationRuns").withIndex("by_taskId_and_attempt", (q) => q.eq("taskId", taskId)).order("desc").first();
+}
+
 export const startInvestigation = mutation({
   args: { taskId: v.string(), scope: validators.scope.omit("cutoff").extend({ cutoff: v.optional(v.number()) }) }, returns: startResult,
   handler: async (ctx, args) => {
     const task = await requireTask(ctx, args.taskId);
-    const parent = await ctx.db.query("financeInvestigationRuns").withIndex("by_taskId_and_attempt", (q) => q.eq("taskId", task.taskId)).order("desc").first();
-    return await makeAttempt(ctx, task, args.scope, parent);
+    return await makeAttempt(ctx, task, args.scope, await latestAttempt(ctx, task.taskId), { trigger: "person_started", actor: await personActor(ctx, "unauthenticated:finance-dev") });
+  },
+});
+
+/** Automatic starts (new deposits, a deposit that cleared, the demo feed). Same idempotent start as a person's. */
+export const autoStartInvestigation = internalMutation({
+  args: { taskId: v.string(), scope: validators.scope.omit("cutoff").extend({ cutoff: v.optional(v.number()) }), trigger: v.union(v.literal("auto_start"), v.literal("deposit_cleared")) }, returns: startResult,
+  handler: async (ctx, args) => {
+    const task = await requireTask(ctx, args.taskId);
+    return await makeAttempt(ctx, task, args.scope, await latestAttempt(ctx, task.taskId), { trigger: args.trigger, actor: SYSTEM_ACTOR });
   },
 });
 
@@ -194,7 +243,7 @@ export const answerQuestion = mutation({
     if (!question || question.runId !== run.runId || question.taskId !== task.taskId) throw new Error("Question does not belong to this task/run");
     if (question.status !== "open") throw new Error("This question already has a saved clarification");
     if (task.activeRunId) throw new Error("Wait for the active investigation before saving another clarification");
-    const latest = await ctx.db.query("financeInvestigationRuns").withIndex("by_taskId_and_attempt", (q) => q.eq("taskId", task.taskId)).order("desc").first();
+    const latest = await latestAttempt(ctx, task.taskId);
     if (!latest) throw new Error("Investigation history is incomplete");
     const evidenceRefs = args.evidenceRefs ?? [];
     if (evidenceRefs.length > 20 || evidenceRefs.some((ref) => !run.providerInput?.records.documents.some((document) => document.sourceId === ref.sourceId && document.documentId === ref.documentId && document.text.includes(ref.excerpt) && ref.excerpt.length > 0))) {
@@ -210,7 +259,7 @@ export const answerQuestion = mutation({
     });
     await ctx.db.patch("financeInvestigationQuestions", question._id, { status: "answered", clarificationId });
     await appendBoundary(ctx, publicRun(run), "finance.clarification.saved", "Human clarification saved as task-scoped evidence, without financial authorization.", { questionId: question.questionId, clarificationId }, { type: "human", component: "finance-dev", ...respondent });
-    return await makeAttempt(ctx, task, latest.scope, latest);
+    return await makeAttempt(ctx, task, latest.scope, latest, { trigger: "person_answered", actor: { type: "person", identity: respondent.identity } });
   },
 });
 
@@ -221,7 +270,7 @@ export const correctAndRerun = mutation({
     const run = await findRun(ctx, args.runId);
     if (run.status !== "checker_rejected") throw new ConvexError("Only a run the checker stopped can be corrected and rerun.");
     const task = await requireTask(ctx, run.taskId);
-    const latest = await ctx.db.query("financeInvestigationRuns").withIndex("by_taskId_and_attempt", (q) => q.eq("taskId", task.taskId)).order("desc").first();
+    const latest = await latestAttempt(ctx, task.taskId);
     if (!latest || latest.runId !== run.runId) throw new ConvexError("A newer attempt exists; correct the latest run.");
     if (task.activeRunId) throw new ConvexError("Wait for the active investigation to finish.");
     const note = args.note.trim();
@@ -238,7 +287,7 @@ export const correctAndRerun = mutation({
     const answer = args.choice === "cite_clarification" ? (note || earlier.map(c => c.answer).join(" / ")) : note;
     await ctx.db.insert("financeClarifications", { clarificationId, sourceId: `clarification:${clarificationId}`, questionId: clarificationId, question, answer, caseId: task.caseId, taskId: task.taskId, runId: run.runId, timestamp: Date.now(), respondent, evidenceRefs: [] });
     await appendBoundary(ctx, publicRun(run), "finance.clarification.saved", `${respondent.identity} chose "${args.choice.replace(/_/g, " ")}" and reran from step 3. Run ${run.attempt} stays as it was.`, { clarificationId }, { type: "human", component: "finance-dev", ...respondent });
-    return await makeAttempt(ctx, task, latest.scope, latest);
+    return await makeAttempt(ctx, task, latest.scope, latest, { trigger: "person_corrected", actor: { type: "person", identity: respondent.identity } });
   },
 });
 
@@ -281,13 +330,30 @@ export const recordPending = internalMutation({
   },
 });
 
-async function failRun(ctx: MutationCtx, run: Doc<"financeInvestigationRuns">, error: InvestigationError, validation = false) {
+/** The single automatic retry for provider or network trouble. Returns false when this provider already used it. */
+export const recordRetry = internalMutation({
+  args: { runId: v.string(), provider: v.union(v.literal("investigator"), v.literal("checker")), error: validators.investigationError }, returns: v.boolean(),
+  handler: async (ctx, { runId, provider, error }) => {
+    const run = await findRun(ctx, runId);
+    if (!ACTIVE.has(run.status)) return false;
+    const used = provider === "checker" ? run.checkerRetries ?? 0 : run.providerRetries ?? 0;
+    if (used >= MAX_AUTOMATIC_RETRIES) return false;
+    await ctx.db.patch("financeInvestigationRuns", run._id, provider === "checker" ? { checkerRetries: used + 1 } : { providerRetries: used + 1 });
+    await stepForRun(ctx, publicRun(run), { kind: "retry", to: provider === "checker" ? "checking" : "investigating", trigger: "provider_error", actor: SYSTEM_ACTOR, error,
+      reason: { code: error.code, message: `${provider === "checker" ? "Checker" : "Investigator"}: ${error.message} Retrying once automatically.` } });
+    return true;
+  },
+});
+
+async function failRun(ctx: MutationCtx, run: Doc<"financeInvestigationRuns">, error: InvestigationError, options: { validation?: boolean; trigger?: Trigger } = {}) {
   if (!ACTIVE.has(run.status)) return;
   const failed = { ...publicRun(run), status: "failed" as const, error, updatedAt: Date.now() };
   await ctx.db.patch("financeInvestigationRuns", run._id, { status: failed.status, error, updatedAt: failed.updatedAt });
   const task = await requireTask(ctx, run.taskId);
   if (task.activeRunId === run.runId) await ctx.db.patch("financeTasks", task._id, { status: "investigation_failed", activeRunId: undefined });
-  await appendBoundary(ctx, failed, validation ? "finance.validation.failed" : "finance.investigation.failed", error.message, { errorCode: error.code, ...(run.externalRunId ? { externalRunId: run.externalRunId } : {}) });
+  await appendBoundary(ctx, failed, options.validation ? "finance.validation.failed" : "finance.investigation.failed", error.message, { errorCode: error.code, ...(run.externalRunId ? { externalRunId: run.externalRunId } : {}) });
+  await stepForRun(ctx, failed, { to: "failed", trigger: options.trigger ?? (error.code === "timeout" ? "timeout" : options.validation ? "validation_failed" : "provider_error"),
+    actor: options.validation ? CODE_ACTOR : SYSTEM_ACTOR, error, activeRunId: null, reason: { code: error.code, message: `Failed, needs a person: ${error.message}` } });
 }
 
 export const recordFailure = internalMutation({
@@ -295,24 +361,26 @@ export const recordFailure = internalMutation({
   handler: async (ctx, args) => {
     let run = await findRun(ctx, args.runId);
     if (args.externalRunId) run = await retainExternalRunId(ctx, run, args.externalRunId);
-    await failRun(ctx, run, args.error, args.error.code === "validation_failed");
+    await failRun(ctx, run, args.error, { validation: args.error.code === "validation_failed" });
     return null;
   },
 });
 
+/** Validates the investigator's answer. Returns true when the claim checker must run outside this mutation (CHECKER_MODE=creao). */
 export const recordResult = internalMutation({
   // Unknown model data is passed as JSON text; parsing and semantic validation happen before storage.
-  args: { runId: v.string(), externalRunId: v.string(), outputJson: v.string(), reportSource: v.optional(validators.reportSource) }, returns: v.null(),
+  args: { runId: v.string(), externalRunId: v.string(), outputJson: v.string(), reportSource: v.optional(validators.reportSource) }, returns: v.boolean(),
   handler: async (ctx, args) => {
     let run = await retainExternalRunId(ctx, await findRun(ctx, args.runId), args.externalRunId);
-    if (!ACTIVE.has(run.status)) return null;
+    if (!ACTIVE.has(run.status)) return false;
     if (Date.now() >= run.deadline) {
       await failRun(ctx, run, timeoutError(run));
-      return null;
+      return false;
     }
     await ctx.db.patch("financeInvestigationRuns", run._id, { externalRunId: args.externalRunId, status: "validating", updatedAt: Date.now(), ...(args.reportSource ? { reportSource: args.reportSource } : {}) });
     run = await findRun(ctx, args.runId);
     await appendBoundary(ctx, publicRun(run), "finance.provider.result_received", "Provider response received; validating schema, evidence references, and deterministic allocation checks.", { externalRunId: args.externalRunId });
+    await stepForRun(ctx, publicRun(run), { to: "validating", trigger: "provider_result", actor: { ...AGENT, identity: `${AGENT.identity}:${run.mode}` }, reason: { code: "ANSWER_RECEIVED", message: "The investigator answered; validating it before anything else sees it." } });
     let result: FinanceAgentOutput;
     try {
       if (!run.providerInput) throw new Error("Persisted provider input is missing");
@@ -320,60 +388,141 @@ export const recordResult = internalMutation({
       result = validateFinanceAgentOutput(JSON.parse(args.outputJson) as unknown, run.providerInput);
     } catch (error) {
       const details = error instanceof FinanceOutputValidationError ? error.details : [{ path: "$", reason: "Result must be valid JSON within the supported size and have a saved provider context." }];
-      await failRun(ctx, run, { code: "validation_failed", message: "Provider result failed validation. No proposal was accepted.", retryable: false, details }, true);
-      return null;
+      await failRun(ctx, run, { code: "validation_failed", message: "Provider result failed validation. No proposal was accepted.", retryable: false, details }, { validation: true });
+      return false;
     }
     const resultChecks = runDeterministicChecks(run.providerInput!.records, run.scope, result.proposedAllocations);
-    // Agent 2 runs before anything reaches a person. Code verdicts always apply; the CREAO checker agent is not connected yet.
-    const agentMode = checkerAgentMode();
-    const claimCheck = await checkClaims(run.providerInput!, result, agentMode, agentMode === "mock" ? mockClaimChecker : null, Date.now());
-    const rejected = claimCheck.status === "rejected";
-    const status = rejected ? "checker_rejected" : result.outcome === "needs_information" ? "needs_information" : result.outcome === "proposal_ready" ? "review_required" : "completed";
-    const completed: FinanceInvestigationRun = { ...publicRun(run), status, result, resultChecks, claimCheck, updatedAt: Date.now() };
-    await ctx.db.patch("financeInvestigationRuns", run._id, { status, result, resultChecks, claimCheck, updatedAt: completed.updatedAt });
-    const task = await requireTask(ctx, run.taskId);
-    if (task.activeRunId === run.runId) await ctx.db.patch("financeTasks", task._id, { status: status === "completed" ? "investigation_completed" : status, activeRunId: undefined });
-    const counts = (v: string) => claimCheck.claims.filter(c => c.verdict === v).length;
-    const tally = `${counts("supported")} supported, ${counts("not_supported")} not supported, ${counts("not_checkable")} not checkable`;
-    if (rejected) {
-      const first = claimCheck.claims.find(c => c.verdict === "not_supported")!;
-      await appendBoundary(ctx, completed, "finance.checker.rejected", `Checker stopped this run (${tally}): "${first.claim}" ${first.reason}`, { errorCode: "checker_rejected" });
-      await appendBoundary(ctx, completed, "finance.investigation.completed", "Stopped by the claim checker. Nothing was sent for approval and no money moved.", { externalRunId: args.externalRunId });
-      return null;
-    }
-    await appendBoundary(ctx, completed, "finance.checker.completed", `Checker passed every claim it could judge (${tally}).`);
-    for (const item of result.questions) {
-      const questionId = `${run.runId}:question:${item.key}`;
-      await ctx.db.insert("financeInvestigationQuestions", { caseId: run.caseId, taskId: run.taskId, runId: run.runId, questionId, ...item, status: "open", clarificationId: null });
-      await appendBoundary(ctx, completed, "finance.question.raised", item.question, { questionId });
-    }
-    await appendBoundary(ctx, completed, "finance.investigation.completed", result.summary, { externalRunId: args.externalRunId });
-    if (task.accountId && result.outcome === "proposal_ready") await queueAgentAllocations(ctx, task.accountId, completed, result);
-    // Clearing may race the pending mock review. Recheck after saving it so the cleared review isn't lost.
-    if (run.mode === "mock" && status === "completed" && task.accountId && task.bankSourceId
-      && run.providerInput?.records.transactions.length === 0
-      && run.providerInput.records.bankTransactions?.some(t => t.sourceId === task.bankSourceId && t.clearing === "pending")) {
-      const bank = await ctx.db.query("financeBankTransactions").withIndex("by_sourceId", q => q.eq("sourceId", task.bankSourceId!)).unique();
-      if (bank?.clearing === "cleared") await ctx.scheduler.runAfter(0, internal.financeIntake.autoInvestigateDeposit, { accountId: task.accountId, bankSourceId: task.bankSourceId });
-    }
+    await ctx.db.patch("financeInvestigationRuns", run._id, { status: "checking", result, resultChecks, updatedAt: Date.now() });
+    run = await findRun(ctx, args.runId);
+    await stepForRun(ctx, publicRun(run), { to: "checking", trigger: "validated", actor: CODE_ACTOR, reason: { code: "VALIDATED", message: "Schema, citations and financial checks passed. The claim checker runs next." } });
+    // Agent 2 runs before anything reaches a person. The mock checker needs no I/O, so it runs here through the same provider interface.
+    if ((run.checkerMode ?? "mock") === "creao") return true;
+    const input = checkerInputFor(run);
+    const execution = await mockClaimCheckerProvider.start(input);
+    if (execution.status !== "completed") throw new Error("The mock checker always completes");
+    await settleCheck(ctx, run, JSON.stringify(execution.output));
+    return false;
+  },
+});
+
+function checkerInputFor(run: Doc<"financeInvestigationRuns">) {
+  return buildCheckerInput(run.runId, run.providerInput!, codeCheckClaims(run.result!, run.providerInput!));
+}
+
+/** What the CREAO checker action sends. Null when the run isn't waiting on the checker. */
+export const getCheckerJob = internalQuery({
+  args: { runId: v.string() },
+  returns: v.union(v.null(), v.object({ checkerInputJson: v.string(), claims: v.number(), appId: v.union(v.string(), v.null()), externalRunId: v.union(v.string(), v.null()), deadline: v.number() })),
+  handler: async (ctx, { runId }) => {
+    const run = await ctx.db.query("financeInvestigationRuns").withIndex("by_runId", (q) => q.eq("runId", runId)).unique();
+    if (!run || run.status !== "checking" || !run.result || !run.providerInput || run.checkerMode !== "creao") return null;
+    const input = checkerInputFor(run);
+    return { checkerInputJson: JSON.stringify(input), claims: input.claims.length, appId: run.checkerAppId ?? null, externalRunId: run.checkerExternalRunId ?? null, deadline: run.deadline };
+  },
+});
+
+export const recordCheckerPending = internalMutation({
+  args: { runId: v.string(), externalRunId: v.string() }, returns: v.null(),
+  handler: async (ctx, { runId, externalRunId }) => {
+    const run = await findRun(ctx, runId);
+    if (run.checkerExternalRunId && run.checkerExternalRunId !== externalRunId) throw new Error("Checker run ID cannot change");
+    if (run.status !== "checking") return null;
+    if (Date.now() >= run.deadline) { await failRun(ctx, run, timeoutError(run)); return null; }
+    await ctx.db.patch("financeInvestigationRuns", run._id, { checkerExternalRunId: externalRunId, checkerPollCount: (run.checkerPollCount ?? 0) + 1, updatedAt: Date.now() });
+    await ctx.scheduler.runAfter(3000, internal.financeInvestigationActions.pollChecker, { runId });
     return null;
   },
 });
 
+export const recordCheck = internalMutation({
+  args: { runId: v.string(), outputJson: v.string(), externalRunId: v.optional(v.string()) }, returns: v.null(),
+  handler: async (ctx, args) => {
+    const run = await findRun(ctx, args.runId);
+    if (run.status !== "checking") return null;
+    if (args.externalRunId && !run.checkerExternalRunId) await ctx.db.patch("financeInvestigationRuns", run._id, { checkerExternalRunId: args.externalRunId });
+    if (Date.now() >= run.deadline) { await failRun(ctx, run, timeoutError(run)); return null; }
+    await settleCheck(ctx, run, args.outputJson);
+    return null;
+  },
+});
+
+export const recordCheckFailure = internalMutation({
+  args: { runId: v.string(), error: validators.investigationError }, returns: v.null(),
+  handler: async (ctx, { runId, error }) => {
+    const run = await findRun(ctx, runId);
+    if (run.status === "checking") await failRun(ctx, run, { ...error, message: `Claim checker: ${error.message} Nothing was sent for approval.` }, { trigger: "checker_failed" });
+    return null;
+  },
+});
+
+/** Validates the checker's answer (never repaired), stores verdicts, and settles the run and its orchestrator. */
+async function settleCheck(ctx: MutationCtx, run: Doc<"financeInvestigationRuns">, outputJson: string) {
+  const input = checkerInputFor(run);
+  const code = codeCheckClaims(run.result!, run.providerInput!);
+  let claimCheck;
+  try {
+    if (outputJson.length > 120_000) throw new Error("Checker output exceeds the bounded size");
+    claimCheck = finalizeClaimCheck(code, validateCheckerOutput(JSON.parse(outputJson) as unknown, input), run.checkerMode ?? "mock", Date.now());
+  } catch (error) {
+    const details = error instanceof CheckerOutputValidationError ? error.details : [{ path: "$", reason: "Checker output must be one raw JSON object within the supported size." }];
+    await failRun(ctx, run, { code: "checker_validation_failed", message: "The checker's answer failed validation, so no claim counts as checked. Nothing was sent for approval.", retryable: false, details }, { trigger: "checker_failed" });
+    return;
+  }
+  const result = run.result!;
+  const rejected = claimCheck.status === "rejected";
+  const status = rejected ? "checker_rejected" : result.outcome === "needs_information" ? "needs_information" : result.outcome === "proposal_ready" ? "review_required" : "completed";
+  const completed: FinanceInvestigationRun = { ...publicRun(run), status, claimCheck, updatedAt: Date.now() };
+  await ctx.db.patch("financeInvestigationRuns", run._id, { status, claimCheck, updatedAt: completed.updatedAt });
+  const task = await requireTask(ctx, run.taskId);
+  if (task.activeRunId === run.runId) await ctx.db.patch("financeTasks", task._id, { status: status === "completed" ? "investigation_completed" : status, activeRunId: undefined });
+  const counts = (v: string) => claimCheck.claims.filter(c => c.verdict === v).length;
+  const tally = `${counts("supported")} supported, ${counts("not_supported")} not supported, ${counts("not_checkable")} not checkable`;
+  const externalRunId = run.externalRunId ?? undefined;
+  const checkerActor: OrchestratorActor = { type: "agent", identity: `agent:claim-checker:${claimCheck.agentMode}` };
+  const depositPending = result.outcome === "findings" && !!task.bankSourceId && run.providerInput!.records.transactions.length === 0
+    && !!run.providerInput!.records.bankTransactions?.some(t => t.sourceId === task.bankSourceId && t.clearing === "pending");
+  if (rejected) {
+    const first = claimCheck.claims.find(c => c.verdict === "not_supported")!;
+    await appendBoundary(ctx, completed, "finance.checker.rejected", `Checker stopped this run (${tally}): "${first.claim}" ${first.reason}`, { errorCode: "checker_rejected" });
+    await appendBoundary(ctx, completed, "finance.investigation.completed", "Stopped by the claim checker. Nothing was sent for approval and no money moved.", { ...(externalRunId ? { externalRunId } : {}) });
+    const settled = settledState({ checkerRejected: true, outcome: result.outcome, depositPending, lockBlocked: false });
+    await stepForRun(ctx, completed, { to: settled.state, trigger: "checker_result", actor: first.checkedBy === "agent" ? checkerActor : CODE_ACTOR, activeRunId: null, reason: { code: settled.reason.code, message: `${settled.reason.message} "${first.claim}" ${first.reason}` } });
+    return;
+  }
+  await appendBoundary(ctx, completed, "finance.checker.completed", `Checker passed every claim it could judge (${tally}).`);
+  for (const item of result.questions) {
+    const questionId = `${run.runId}:question:${item.key}`;
+    await ctx.db.insert("financeInvestigationQuestions", { caseId: run.caseId, taskId: run.taskId, runId: run.runId, questionId, ...item, status: "open", clarificationId: null });
+    await appendBoundary(ctx, completed, "finance.question.raised", item.question, { questionId });
+  }
+  await appendBoundary(ctx, completed, "finance.investigation.completed", result.summary, { ...(externalRunId ? { externalRunId } : {}) });
+  const queued = task.accountId && result.outcome === "proposal_ready" ? await queueAgentAllocations(ctx, task.accountId, completed, result) : [];
+  const settled = settledState({ checkerRejected: false, outcome: result.outcome, depositPending, lockBlocked: queued.some(status => status === "blocked") });
+  await stepForRun(ctx, completed, { to: settled.state, trigger: "checker_result", actor: checkerActor, activeRunId: null, reason: { code: settled.reason.code, message: `${settled.reason.message} Checker: ${tally}.` } });
+  // Clearing may race the pending mock review. Recheck after saving it so the cleared review isn't lost.
+  if (run.mode === "mock" && status === "completed" && task.accountId && task.bankSourceId && depositPending) {
+    const bank = await ctx.db.query("financeBankTransactions").withIndex("by_sourceId", q => q.eq("sourceId", task.bankSourceId!)).unique();
+    if (bank?.clearing === "cleared") await ctx.scheduler.runAfter(0, internal.financeIntake.autoInvestigateDeposit, { accountId: task.accountId, bankSourceId: task.bankSourceId });
+  }
+}
+
 /** Validated agent allocations enter the approval queue through the same lock rules as a person's. Never auto-posted. */
-async function queueAgentAllocations(ctx: MutationCtx, accountId: string, run: FinanceInvestigationRun, result: FinanceAgentOutput) {
+async function queueAgentAllocations(ctx: MutationCtx, accountId: string, run: FinanceInvestigationRun, result: FinanceAgentOutput): Promise<string[]> {
   const byDeposit = new Map<string, FinanceAgentOutput["proposedAllocations"]>();
   for (const row of result.proposedAllocations) byDeposit.set(row.transactionId, [...(byDeposit.get(row.transactionId) ?? []), row]);
   const actor = { identity: `agent:finance-investigator:${run.runId}`, authenticated: false, role: "system" as const };
+  const statuses: string[] = [];
   for (const [bankSourceId, rows] of byDeposit) {
     const now = Date.now();
-    await submitProposal(ctx, {
+    const { proposal } = await submitProposal(ctx, {
       proposalId: await nextProposalId(ctx, accountId, "allocation"), accountId, kind: "allocation", status: "proposed", currency: rows[0].currency,
       requestedBy: actor.identity, origin: { type: "agent", taskId: run.taskId, runId: run.runId, agentProposalIds: rows.map(r => r.proposalId) },
       evidenceSourceIds: [...new Set(rows.flatMap(r => r.evidenceSourceIds))], bankSourceId, shares: rows.map(r => ({ ownerId: r.ownerId, amountCents: r.amountCents })),
       amountCents: rows.reduce((sum, r) => sum + r.amountCents, 0), purpose: `Agent proposal from ${run.runId} (unapproved)`, createdAt: now, updatedAt: now,
     }, actor);
+    statuses.push(proposal.status);
   }
+  return statuses;
 }
 
 export const expireRun = internalMutation({

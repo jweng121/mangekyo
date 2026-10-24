@@ -37,7 +37,7 @@ async function upsert(ctx: MutationCtx, table: SourceTable, row: { sourceId: str
 
 const importResult = v.object({ accountId: v.string(), inserted: v.number(), updated: v.number(), unchanged: v.number(), entriesInserted: v.number(), issues: v.array(money.issue) });
 
-async function importBundle(ctx: MutationCtx, bundle: NormalizedAccountBundle, system: "erp" | "demo") {
+export async function importBundle(ctx: MutationCtx, bundle: NormalizedAccountBundle, system: "erp" | "demo") {
   const now = Date.now();
   const accountId = bundle.account.accountId;
   const counts = { inserted: 0, updated: 0, unchanged: 0 };
@@ -87,13 +87,18 @@ export const loadDemoFixture = mutation({
   handler: async (ctx) => await importBundle(ctx, demoMoneyBundle(), "demo"),
 });
 
+/** The next DEMO pool number. Earlier accounts and their history are never reused or touched. */
+export async function nextDemoRun(ctx: MutationCtx): Promise<number> {
+  const accounts = await ctx.db.query("financeAccounts").take(500);
+  const runs = accounts.map(a => demoRunOf(a.accountId)).filter((run): run is number => run !== null);
+  return runs.length ? Math.max(...runs) + 1 : 1;
+}
+
 /** A new DEMO account (next pool number) with the fixture loaded clean. Earlier accounts and their history are untouched. */
 export const startFreshDemoRun = mutation({
   args: { fixture: v.optional(v.literal("legacy")) }, returns: importResult,
   handler: async (ctx, args) => {
-    const accounts = await ctx.db.query("financeAccounts").take(500);
-    const runs = accounts.map(a => demoRunOf(a.accountId)).filter((run): run is number => run !== null);
-    const run = runs.length ? Math.max(...runs) + 1 : 1;
+    const run = await nextDemoRun(ctx);
     return await importBundle(ctx, args.fixture === "legacy" ? demoMoneyBundle(run) : lawFirmBundle(demoAccountId(run)), "demo");
   },
 });
@@ -194,7 +199,7 @@ export const simulateSettlement = mutation({
   },
 });
 
-function depositTaskId(accountId: string, bankSourceId: string) {
+export function depositTaskId(accountId: string, bankSourceId: string) {
   return `${depositCaseId(accountId)}:deposit:${bankSourceId}`;
 }
 
@@ -277,7 +282,7 @@ async function advanceLawFirmFeed(ctx: MutationCtx, loaded: LoadedAccount) {
     const bankSourceId = id("bank:txn:harborline-delgado");
     if (!activeAllocations(loaded.state.entries, bankSourceId).length) throw new ConvexError("Approve and post Maria Delgado's allocation before proposing the policy.");
     const taskId = depositTaskId(accountId, bankSourceId);
-    await ctx.runMutation(api.financeInvestigations.startInvestigation, { taskId, scope: { kind: "deposit_investigation", accountId, currency: "USD", from: null } });
+    await ctx.runMutation(internal.financeInvestigations.autoStartInvestigation, { taskId, scope: { kind: "deposit_investigation", accountId, currency: "USD", from: null }, trigger: "auto_start" });
   }
   const label = lawFirmSteps[step - 1];
   await appendMoneyEvent(ctx, { accountId, type: "finance.money.feed_step", actor: SYSTEM, operationId: `feed:${accountId}:${step}`, stage: "feed", message: `Live feed step ${step} of ${total}: ${label}.` });
@@ -375,8 +380,9 @@ export const autoInvestigateDeposit = internalMutation({
     const { taskId } = await ensureTaskRow(ctx, loaded, bankSourceId);
     try {
       // Nested mutation: a failed start rolls back on its own while the skip is still recorded here.
-      const started = await ctx.runMutation(api.financeInvestigations.startInvestigation, { taskId, scope: { kind: "deposit_investigation", accountId, currency: loaded.state.account.currency, from: null } });
-      await autoEvent(ctx, accountId, bankSourceId, started.created, started.created ? "AUTO_STARTED" : "ALREADY_INVESTIGATED", started.created ? "Proposals from this run still need a person to approve." : "An investigation is already active.", started.runId);
+      const started = await ctx.runMutation(internal.financeInvestigations.autoStartInvestigation, { taskId, scope: { kind: "deposit_investigation", accountId, currency: loaded.state.account.currency, from: null }, trigger: clearedAfterReview ? "deposit_cleared" : "auto_start" });
+      if (started.refused) await autoEvent(ctx, accountId, bankSourceId, false, started.refused.code, started.refused.message);
+      else await autoEvent(ctx, accountId, bankSourceId, started.created, started.created ? "AUTO_STARTED" : "ALREADY_INVESTIGATED", started.created ? "Proposals from this run still need a person to approve." : "An investigation is already active.", started.runId);
     } catch (error) {
       await autoEvent(ctx, accountId, bankSourceId, false, "START_FAILED", error instanceof ConvexError && typeof error.data === "string" ? error.data : "The investigation could not be started.");
     }

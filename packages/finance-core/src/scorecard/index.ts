@@ -132,7 +132,7 @@ export function batchKindOf(rawId: string): BatchKind | null {
   return (Object.keys(BATCH_EXPECT) as BatchKind[]).includes(kind as BatchKind) ? kind as BatchKind : null;
 }
 
-/** A DEMO account with 20 fictional clients and `count` deposits. A duplicate adds its original, so it counts two. */
+/** A DEMO account with 20 fictional clients and `count` deposits booked in the minute before `now`. A duplicate adds its original, so it counts two. */
 export function batchBundle(accountId: string, count: number, now: number, seed = 42): NormalizedAccountBundle {
   const r = (recordType: string, rawId: string) => raw(recordType, rawId, BATCH_DATASET);
   const rand = prng(seed);
@@ -146,7 +146,7 @@ export function batchBundle(accountId: string, count: number, now: number, seed 
   const dollars = (cents: number) => `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
   const doc = (key: string, title: string, text: string, named: NormalizedOwner[]) => { documents.push({ sourceId: `demo:document:${key}:v1`, accountId: DEMO_ACCOUNT_ID, documentType: "Remittance advice", title, text, excerpt: text, version: "v1", namedOwnerSourceIds: named.map(o => o.sourceId), raw: r("document", key) }); return `demo:document:${key}:v1`; };
   const deposit = (id: string, kind: BatchKind, amountCents: number, counterparty: string, reference: string, docs: string[], extra: Partial<NormalizedBankTransaction> = {}) =>
-    bank.push({ sourceId: `demo:bank:txn:${id}`, accountId: DEMO_ACCOUNT_ID, subAccount: "BATCH", direction: "inflow", amountCents, currency: "USD", bookedAt: now + bank.length, clearing: "cleared", reference, counterparty, ownerHintSourceId: null, documentSourceIds: docs, duplicateOfSourceId: null, raw: r(kind === "planted" ? PLANT_RAW : "bank-transaction", `${kind}:${id}`), ...extra });
+    bank.push({ sourceId: `demo:bank:txn:${id}`, accountId: DEMO_ACCOUNT_ID, subAccount: "BATCH", direction: "inflow", amountCents, currency: "USD", bookedAt: now - 60_000 + bank.length, clearing: "cleared", reference, counterparty, ownerHintSourceId: null, documentSourceIds: docs, duplicateOfSourceId: null, raw: r(kind === "planted" ? PLANT_RAW : "bank-transaction", `${kind}:${id}`), ...extra });
   const total = MIX.reduce((sum, [, w]) => sum + w, 0);
   for (let i = 0; bank.length < count; i++) {
     let pick = rand() * total;

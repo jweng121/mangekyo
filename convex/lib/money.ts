@@ -4,6 +4,7 @@ import { buildPostingEntries, canTransition, classifyFailures, evaluateAllocatio
 import { buildDepositRecordSet, depositCaseId } from "@mangekyo/finance-core/intake";
 import { DEFAULT_OUTSTANDING_MAX_DAYS, threeWayCheck, type AccountLedgerState } from "@mangekyo/finance-core/ledger";
 import type { Doc } from "../_generated/dataModel";
+import { internal } from "../_generated/api";
 import { env, type MutationCtx, type QueryCtx } from "../_generated/server";
 import { recordOnly } from "./investigationRecords";
 
@@ -286,8 +287,12 @@ export async function recheckHold(ctx: MutationCtx, proposal: MoneyProposal, act
   return await updateHold(ctx, proposal, hold, actor, lock, gateway.threeWay, `${decision === "auto_recheck" ? "Automatic re-check" : `Re-check by ${actor.identity}`}: ${message}`);
 }
 
-/** Called after anything that can clear a hold (bank feed, postings, recorded bank items, imports). */
+/**
+ * Called after anything that can clear a hold or change the books (bank feed, postings, recorded bank items, imports).
+ * It also asks the mismatch agent to look at any new code-found cause; that check is idempotent per cause.
+ */
 export async function recheckHeldProposals(ctx: MutationCtx, accountId: string): Promise<void> {
   const loaded = await loadAccount(ctx, accountId);
   for (const proposal of loaded.proposals.filter(p => p.status === "on_hold")) await recheckHold(ctx, proposal, SYSTEM, "auto_recheck", loaded);
+  if (checkAccount(loaded.state, Date.now()).status === "mismatched") await ctx.scheduler.runAfter(0, internal.financeReconciliation.autoStart, { accountId });
 }

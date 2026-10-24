@@ -1,6 +1,7 @@
 import { defineSchema, defineTable } from "convex/server";
 import * as fields from "./lib/validators";
 import * as money from "./lib/moneyValidators";
+import * as orchestrator from "./lib/orchestratorValidators";
 
 export default defineSchema({
   financeCases: defineTable(fields.financeCase).index("by_caseId", ["caseId"]),
@@ -29,4 +30,13 @@ export default defineSchema({
   financeLedgerEntries: defineTable(money.ledgerEntry).index("by_accountId_and_effectiveAt", ["accountId", "effectiveAt"]).index("by_entryId", ["entryId"]),
   financeProposals: defineTable(money.proposal).index("by_proposalId", ["proposalId"]).index("by_accountId", ["accountId"]),
   financeProposalTransitions: defineTable(money.transition).index("by_proposalId", ["proposalId"]),
+  financeOrchestrations: defineTable(orchestrator.orchestration).index("by_orchestrationId", ["orchestrationId"]).index("by_taskId", ["taskId"]).index("by_accountId", ["accountId"]),
+  // Append-only, like financeEvents/financeSnapshots: one event and one snapshot per orchestrator step.
+  financeOrchestratorEvents: defineTable(orchestrator.event).index("by_orchestrationId_and_sequence", ["orchestrationId", "sequence"]),
+  financeOrchestratorSnapshots: defineTable(orchestrator.snapshot).index("by_orchestrationId_and_sequence", ["orchestrationId", "sequence"]),
+  financeRealRuns: defineTable(orchestrator.realRun).index("by_day", ["day"]).index("by_taskId", ["taskId"]),
+  financeReconciliationRuns: defineTable(orchestrator.reconciliationRun).index("by_runId", ["runId"]).index("by_orchestrationId", ["orchestrationId"]),
+  financeCorrections: defineTable(orchestrator.correction).index("by_correctionId", ["correctionId"]).index("by_accountId", ["accountId"]),
+  financePolicyBacktests: defineTable(orchestrator.policyBacktest).index("by_accountId", ["accountId"]),
+  financeScorecards: defineTable(orchestrator.scorecard).index("by_accountId", ["accountId"]),
 });

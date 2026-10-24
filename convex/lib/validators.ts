@@ -84,7 +84,10 @@ export const investigationStatus = v.union(v.literal("checker_rejected"), v.lite
 export const investigationError = v.object({ code: v.string(), message: v.string(), retryable: v.boolean(), details: v.optional(v.array(v.object({ path: v.string(), reason: v.string() }))) });
 export const reportSource = v.object({ field: v.union(v.literal("result.text"), v.literal("result.chatText")), format: v.union(v.literal("json"), v.literal("json_suffix")) });
 export const run = v.object({ caseId: v.string(), taskId: v.string(), runId: v.string(), parentRunId: v.union(v.string(), v.null()), attempt: v.number(), mode, simulated: v.boolean(), status: investigationStatus, scope, createdAt: v.number(), updatedAt: v.number(), externalRunId: v.union(v.string(), v.null()), reportSource: v.optional(reportSource), providerAppId: v.optional(v.string()), providerInput: v.union(input, v.null()), result: v.union(output, v.null()), resultChecks: v.optional(checks), claimCheck: v.optional(claimCheck), error: v.union(investigationError, v.null()) });
-export const storedRun = run.extend({ executionClaimed: v.boolean(), pollCount: v.number(), deadline: v.number() });
+export const storedRun = run.extend({ executionClaimed: v.boolean(), pollCount: v.number(), deadline: v.number(),
+  // Orchestrator bookkeeping; optional because runs saved before it existed don't have it.
+  providerRetries: v.optional(v.number()), checkerRetries: v.optional(v.number()), checkerMode: v.optional(mode), checkerAppId: v.optional(v.string()),
+  checkerExternalRunId: v.optional(v.string()), checkerPollCount: v.optional(v.number()) });
 export const question = v.object({ caseId: v.string(), taskId: v.string(), runId: v.string(), questionId: v.string(), key: v.string(), question: v.string(), sourceRefs: v.array(v.string()), status: v.union(v.literal("open"), v.literal("answered")), clarificationId: v.union(v.string(), v.null()) });
 export const auditHandoff = v.object({ kind: v.literal("finance.investigation.review_requested"), taskId: v.string(), runId: v.string(), contextRunId: v.string(), resultAvailable: v.boolean(), visualAuditStatus: v.literal("not_connected") });
 export const taskView = v.object({ runs: v.array(run), questions: v.array(question), clarifications: v.array(clarification), auditHandoff: v.union(auditHandoff, v.null()) });
