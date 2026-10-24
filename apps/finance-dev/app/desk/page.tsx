@@ -67,8 +67,10 @@ export default function Desk() {
     if (!playing || !accountId) return;
     let stop = false;
     const tick = async () => {
+      setBusy(true);
       try { const r = await m.feed({ accountId }); if (r.done) { setPlaying(false); setToast("Live feed finished. Break it, or request a payment, to keep going."); return; } }
       catch (e) { setPlaying(false); setToast(errorText(e)); return; }
+      finally { setBusy(false); }
       if (!stop) timer = setTimeout(tick, 4500);
     };
     let timer = setTimeout(tick, 300);
@@ -223,8 +225,9 @@ export default function Desk() {
       <div className="ctl">
         <label>Acting as (dev only)<select value={acting} onChange={e => setActing(e.target.value as Acting)}><option value="sam">sam, approver</option><option value="riley">riley, requester</option></select></label>
         <label>Account<select value={accountId ?? ""} onChange={e => setChosen(e.target.value)}>{accounts?.map(a => <option key={a.accountId} value={a.accountId}>{a.name.replace("Sandbox ERP pooled trust accounts (TRUST-01 + TRUST-02)", "Sandbox ERP (seed 42)")}</option>)}</select></label>
-        {accountId && isDemo(accountId) && <button className="btn alt" disabled={desk?.feed.mode !== "mock" || (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7)} title={desk?.feed.mode !== "mock" ? "Mock mode only: in CREAO mode investigations cost money" : undefined} onClick={() => setPlaying(!playing)}>
+        {accountId && isDemo(accountId) && <button className="btn alt" disabled={busy || desk?.feed.mode !== "mock" || (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7)} title={desk?.feed.mode !== "mock" ? "Mock mode only: in CREAO mode investigations cost money" : undefined} onClick={() => setPlaying(!playing)}>
           {desk?.feed.mode !== "mock" ? "Live feed (mock only)" : (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7) ? "Feed finished" : playing ? "Pause live feed" : desk?.feed.stepsDone ? `Resume live feed (${desk.feed.stepsDone}/${desk.feed.total})` : "Start live feed"}</button>}
+        {accountId && isDemo(accountId) && <button className="btn alt" disabled={busy || playing || desk?.feed.mode !== "mock" || (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7)} onClick={() => act(async () => { const result = await m.feed({ accountId }); setToast(result.done ? "Live feed finished." : "One scripted step saved."); })}>Next step</button>}
         {accountId && isDemo(accountId) && <select aria-label="Break it" value="" disabled={busy} onChange={e => {
           const v = e.target.value;
           if (v === "outflow") void act(() => m.outflow({ accountId }), "A wire left the bank with no ledger entry.");
@@ -269,7 +272,7 @@ export default function Desk() {
             <div className="feed" aria-live="polite">
               {working.map(text => <div key={text} className="working">{text}</div>)}
               {feed.length === 0 ? <p className="empty" style={{ margin: "12px 0" }}>No activity yet.</p> :
-                <AnimatedList items={feed.map(a => ({ id: a.id, title: a.text }))} animation="slide" frame={false} theme="light" showGradients={false} selectOnHover={false} enableArrowNavigation={false} maxHeight={560} gap={0} width="100%"
+                <AnimatedList items={feed.map(a => ({ id: a.id, title: a.text }))} animation="none" frame={false} theme="light" showGradients={false} selectOnHover={false} enableArrowNavigation={false} maxHeight={560} gap={0} width="100%"
                   renderItem={(_, index) => { const a = feed[index]; return <div className="ev"><span className="tm">{new Date(a.at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</span><div className="tx"><b>{a.text}</b>{a.sub && <span className="sub">{a.sub}</span>}<span className={`who ${a.tone}`}>{a.who}</span></div></div>; }} />}
             </div>
           </section>

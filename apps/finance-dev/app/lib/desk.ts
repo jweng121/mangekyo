@@ -44,7 +44,7 @@ function proposalLabel(p: MoneyProposal | undefined, names: Names): string {
 
 /** Replaces internal record IDs in backend messages with names people use. */
 export function scrubIds(text: string, names: Names): string {
-  return text.replace(/(?:demo|erp|bank|intake)(?::[\w@-]+)+(?:\.\w+)?/g, id => {
+  return text.replace(/\b(?:demo|erp|bank|intake)(?::[\w@-]+)+(?:\.\w+)?/g, id => {
     if (/(^|:)owner:/.test(id)) return names.owner(id);
     if (/bank:txn:/.test(id)) { const d = names.deposit(id); return d === "a deposit" ? "the bank item" : d; }
     return "a record";
