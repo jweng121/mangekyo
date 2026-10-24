@@ -3,13 +3,12 @@ import type { FinanceAgentProvider } from "./types";
 import { formatCents } from "../intake/cents";
 import { FinanceProviderError } from "./types";
 import { INSURANCE_POLICY } from "../../fixtures/lawFirmFeed";
+import { INVOICE_POLICY } from "../policy";
 
 function amountTexts(cents: number): string[] {
   const exact = formatCents(cents);
   return cents % 100 === 0 ? [exact, exact.slice(0, -3)] : [exact];
 }
-
-const INVOICE_POLICY = "A deposit that quotes an open invoice number for the exact amount goes to that invoice's owner.";
 
 function output(fields: Partial<FinanceAgentOutput> & Pick<FinanceAgentOutput, "outcome" | "summary">): FinanceAgentOutput {
   return { schemaVersion: FINANCE_OUTPUT_VERSION, findings: [], questions: [], proposedAllocations: [], proposedActions: [], candidatePolicies: [], ...fields };
@@ -108,6 +107,30 @@ function mockIntakeProposal(input: FinanceAgentInput): FinanceAgentOutput | null
   };
 }
 
+/**
+ * Scorecard plants only (raw.recordType "scorecard-plant"): the mistakes the checker exists to catch.
+ * wrong-client believes the bank's owner hint over the linked document; unsupported-claim quotes an invoice the memo never mentions.
+ */
+function mockPlanted(input: FinanceAgentInput): FinanceAgentOutput | null {
+  const deposit = input.records.transactions[0];
+  const bank = deposit && input.records.bankTransactions?.find(t => t.sourceId === deposit.sourceId);
+  if (!bank || bank.raw.recordType !== "scorecard-plant") return null;
+  const amount = formatCents(deposit.amountCents, deposit.currency);
+  const doc = input.records.documents.find(d => bank.documentSourceIds.includes(d.sourceId));
+  const propose = (ownerId: string, finding: string) => output({ outcome: "proposal_ready", summary: "SIMULATED (planted mistake): proposed ownership for a person's approval.",
+    findings: [{ findingId: "ownership-evidence", summary: finding, sourceRefs: doc ? [doc.sourceId] : [deposit.sourceId] }],
+    proposedAllocations: [{ proposalId: `mock-allocation:${deposit.transactionId}`, transactionId: deposit.transactionId, ownerId, amountCents: deposit.amountCents, currency: deposit.currency, evidenceSourceIds: [deposit.sourceId, ...(doc ? [doc.sourceId] : [])] }] });
+  if (bank.raw.rawId === "wrong-client" || bank.raw.rawId.startsWith("planted:")) {
+    const hinted = input.records.owners.find(o => bank.ownerHintSourceId?.replace("owner-record:", "owner:") === o.ownerId);
+    if (hinted && doc) return propose(hinted.ownerId, `The ${doc.title} names ${hinted.name} for ${amount}.`);
+  }
+  if (bank.raw.rawId === "unsupported-claim") {
+    const owner = input.records.owners.find(o => o.name === "James Nguyen");
+    if (owner && doc) return propose(owner.ownerId, `The ${doc.title} quotes invoice INV-7781 for ${owner.name}: ${amount}.`);
+  }
+  return null;
+}
+
 function mockLawFirm(input: FinanceAgentInput): FinanceAgentOutput | null {
   if (input.records.sourceAdapter?.datasetVersion !== "law-firm-demo-v1") return null;
   const { records } = input;
@@ -157,6 +180,8 @@ export function mockInvestigation(input: FinanceAgentInput): FinanceAgentOutput 
     return output({ outcome: "findings", summary: "Waiting for the check to clear. Ownership evidence can be reviewed now; an allocation can only be proposed after clearing.",
       findings: [{ findingId: "waiting-for-clearance", summary: `The ${formatCents(pending.amountCents)} deposit from ${pending.counterparty} has not cleared.`, sourceRefs: [pending.sourceId] }] });
   }
+  const planted = mockPlanted(input);
+  if (planted) return planted;
   const lawFirm = mockLawFirm(input);
   if (lawFirm) return lawFirm;
   const scripted = mockIntakeRules(input);
