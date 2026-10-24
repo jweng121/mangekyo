@@ -36,8 +36,22 @@ function proposalLabel(p: MoneyProposal | undefined, names: Names): string {
   return p.kind === "payment" ? `payment of ${money(p.amountCents)} for ${names.owner(p.ownerId)}` : `${money(p.amountCents)} → ${p.shares?.map(s => names.owner(s.ownerId)).join(", ")}`;
 }
 
+/** Replaces internal record IDs in backend messages with names people use. */
+export function scrubIds(text: string, names: Names): string {
+  return text.replace(/(?:demo|erp|bank|intake)(?::[\w@-]+)+(?:\.\w+)?/g, id => {
+    if (/(^|:)owner:/.test(id)) return names.owner(id);
+    if (/bank:txn:/.test(id)) { const d = names.deposit(id); return d === "a deposit" ? "the bank item" : d; }
+    return "a record";
+  });
+}
+
 /** Plain-English activity row for any stored event. */
 export function describeEvent(e: AnyFinanceEvent, names: Names): Activity {
+  const row = describeRaw(e, names);
+  return { ...row, text: scrubIds(row.text, names), sub: row.sub === undefined ? undefined : scrubIds(row.sub, names) };
+}
+
+function describeRaw(e: AnyFinanceEvent, names: Names): Activity {
   const base = { id: e.eventId, at: e.timestamp };
   const actor = e.actor.type === "human" ? { who: personName(e.actor.identity), tone: "person" as Tone } : null;
   if (e.type.startsWith("finance.money.")) {
@@ -52,10 +66,13 @@ export function describeEvent(e: AnyFinanceEvent, names: Names): Activity {
           ? { ...base, who: "System", tone: "system", text: `Investigation started automatically for ${deposit}` }
           : { ...base, who: "System", tone: "system", text: `Not started automatically: ${deposit}`, sub: m.payload.message.split(": ").slice(1).join(": ") };
       }
-      case "finance.money.lock_checked":
+      case "finance.money.lock_checked": {
+        const step = /at (request|approve|post)/.exec(m.payload.message)?.[1];
+        const when = step === "request" ? " when requested" : step === "approve" ? " at approval" : step === "post" ? " at posting" : "";
         return m.payload.allowed
-          ? { ...base, who: "Code · the lock", tone: "code", text: `All lock rules passed for the ${label}` }
+          ? { ...base, who: "Code · the lock", tone: "code", text: `All lock rules passed${when} for the ${label}` }
           : { ...base, who: "Code · the lock", tone: "bad", text: `Stopped the ${label}`, sub: `Because ${reasonWords(m.payload.reasonCodes)}.` };
+      }
       case "finance.money.proposal_transitioned": {
         const to = /→ (\w+)/.exec(m.payload.message)?.[1] ?? "";
         const verbs: Record<string, string> = { proposed: "Created", pending_approval: "Sent for sign-off:", approved: "Approved", posted: "Posted", rejected: "Rejected", blocked: "Blocked by the lock:", on_hold: "Put on hold:", cancelled: "Cancelled" };

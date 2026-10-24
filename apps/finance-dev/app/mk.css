@@ -91,7 +91,9 @@
 .mk .field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
 .mk .empty { border: 1px dashed var(--rule); border-radius: 4px; padding: 18px; color: var(--muted); font-size: 14px; }
 .mk .feed { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 2px 16px; }
-.mk .feed .animated-list__item { background: none; box-shadow: none; padding: 0; border-radius: 0; }
+.mk .feed .animated-list__item { background: none; box-shadow: none; padding: 0; border: 0; border-radius: 0; }
+.mk .feed .animated-list__rim, .mk .feed .animated-list__indicator { display: none; }
+.mk .feed .animated-list__viewport { padding: 0; }
 .mk .ev { display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid var(--hair); align-items: flex-start; width: 100%; }
 .mk .ev .tm { width: 64px; flex: none; font: 500 12px var(--mono); color: var(--muted); padding-top: 2px; }
 .mk .ev .tx { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -134,8 +136,8 @@
 .mk .frm { flex: 0 0 132px; display: flex; flex-direction: column; gap: 5px; background: none; border: 0; color: #E9ECEA; cursor: pointer; text-align: left; padding: 0; font: inherit; font-size: 12px; }
 .mk .frm i { aspect-ratio: 16/9; background: #0C171D; border: 1px solid #33464F; border-radius: 3px; display: block; }
 .mk .frm[aria-current="true"] i { border: 2px solid #E9ECEA; }
-.mk .given { display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px solid #33464F; font-size: 13px; }
-.mk .given span:last-child { font-family: var(--mono); color: #9FB1B8; text-align: right; overflow-wrap: anywhere; min-width: 0; }
+.mk .given { display: flex; flex-direction: column; gap: 3px; padding: 9px 0; border-top: 1px solid #33464F; font-size: 13px; }
+.mk .given span:last-child { font-family: var(--mono); font-size: 12px; color: #9FB1B8; overflow-wrap: anywhere; min-width: 0; }
 .mk .given-group { margin-top: 10px; font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #9FB1B8; text-transform: uppercase; }
 
 /* modal + toast */

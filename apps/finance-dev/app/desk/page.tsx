@@ -240,7 +240,7 @@ export default function Desk() {
             <div className="feed" aria-live="polite">
               {working.map(text => <div key={text} className="working">{text}</div>)}
               {feed.length === 0 ? <p className="empty" style={{ margin: "12px 0" }}>No activity yet.</p> :
-                <AnimatedList items={feed.map(a => ({ id: a.id, title: a.text }))} animation="slide" frame={false} theme="light" showGradients={false} selectOnHover={false} enableArrowNavigation={false} maxHeight={560} gap={0}
+                <AnimatedList items={feed.map(a => ({ id: a.id, title: a.text }))} animation="slide" frame={false} theme="light" showGradients={false} selectOnHover={false} enableArrowNavigation={false} maxHeight={560} gap={0} width="100%"
                   renderItem={(_, index) => { const a = feed[index]; return <div className="ev"><span className="tm">{new Date(a.at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</span><div className="tx"><b>{a.text}</b>{a.sub && <span className="sub">{a.sub}</span>}<span className={`who ${a.tone}`}>{a.who}</span></div></div>; }} />}
             </div>
           </section>

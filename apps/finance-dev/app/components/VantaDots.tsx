@@ -11,12 +11,17 @@ export default function VantaDots() {
     let effect: { destroy(): void } | null = null;
     let cancelled = false;
     (async () => {
-      const THREE = await import("three");
+      const three = await import("three");
+      // three r134 is a CommonJS build: its classes may sit on the namespace or on .default.
+      const THREE = three.PerspectiveCamera ? three : three.default;
+      // Vanta's bundle reads window.THREE when it loads, so expose r134 before importing it.
+      (window as unknown as { THREE: unknown }).THREE = THREE;
       const DOTS = (await import("vanta/dist/vanta.dots.min")).default;
       if (cancelled || !ref.current) return;
       effect = DOTS({ el: ref.current, THREE, mouseControls: true, touchControls: true, gyroControls: false, color: 0xffffff, color2: 0xffffff, backgroundColor: 0x050505, size: 2.2, spacing: 26, showLines: false });
     })().catch(() => { effect = null; });
-    return () => { cancelled = true; effect?.destroy(); };
+    // A failed or partial init must never break unmounting.
+    return () => { cancelled = true; try { effect?.destroy(); } catch { /* already gone */ } };
   }, []);
   return <div ref={ref} className="vanta" aria-hidden="true" />;
 }

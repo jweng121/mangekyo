@@ -61,7 +61,7 @@ describe("desk render with real backend query results", () => {
 
     const names: Names = { owner: id => overview.owners.find(o => o.ownerId === id)?.name ?? "Not yet assigned", deposit: () => "a deposit", proposal: id => overview.proposals.find(p => p.proposalId === id) };
     const rows = desk.activity.map(e => describeEvent(e, names));
-    expect(rows.every(r => r.text.length > 0 && !/demo:account|intake:/.test(r.text))).toBe(true);
+    expect(rows.every(r => r.text.length > 0 && !/b(demo|erp|intake|bank):/.test(`${r.text} ${r.sub ?? ""}`))).toBe(true);
     expect(rows.some(r => r.who === "Agent" && r.tone === "agent")).toBe(true);
     expect(rows.some(r => r.who === "sam" && r.tone === "person")).toBe(true);
     expect(causeLine(overview.threeWay, names.owner)).toBe("Found by code: $2,000.00 moved at the bank with no ledger entry. Payments for DEMO Owner Y — Yankee Trust are on hold until it's fixed.");

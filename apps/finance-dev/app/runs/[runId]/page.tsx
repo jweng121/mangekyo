@@ -84,9 +84,10 @@ export default function RunInspector() {
               </div></div>)}
             <p className="meta">Validation already confirmed every cited source exists in the frozen input. Whether each claim is supported by its source is the claim checker&apos;s job, which isn&apos;t connected yet.</p>
           </section>
-          {run.result && <section className="card" aria-label="Outcome"><h2 style={{ fontSize: 18, margin: 0 }}>Outcome</h2><p>{plain(run.result.summary)}</p>
+          {run.result && <section className="card" aria-label="Outcome"><h2 style={{ fontSize: 18, margin: 0 }}>Outcome</h2>
+            <p>{run.result.proposedAllocations.length ? `Proposed ${run.result.proposedAllocations.length} allocation(s); none is approved until a person signs off.` : run.result.questions.length ? `Asked ${run.result.questions.length} question(s) instead of guessing (steps above). No money moved.` : "Findings only. No money moved."}</p>
             {run.result.proposedAllocations.map(a => <p key={a.proposalId}><b>Proposed:</b> {money(a.amountCents)} to {input?.records.owners.find(o => o.ownerId === a.ownerId)?.name ?? "an owner"} · unapproved</p>)}
-            {run.result.questions.map(q => <p key={q.key}><b>Asked:</b> {q.question}</p>)}</section>}
+            <details><summary style={{ cursor: "pointer", fontSize: 14 }}>The agent&apos;s full summary</summary><p style={{ marginTop: 8 }}>{plain(run.result.summary)}</p></details></section>}
           {run.error && <section className="card bad"><h2 style={{ fontSize: 18, margin: 0 }}>Why it failed</h2><p>{run.error.message}</p></section>}
         </aside>
       </div>
