@@ -52,3 +52,22 @@ export interface InvestigationSnapshot extends SyntheticRecord {
 }
 
 export type FinanceSnapshot = InitialFinanceSnapshot | InvestigationSnapshot;
+
+export interface MoneySnapshot extends SyntheticRecord {
+  kind: "money";
+  snapshotId: string;
+  eventId: string;
+  taskId: string;
+  runId: string;
+  sequence: number;
+  timestamp: number;
+  inputs: { accountId: string; proposalId: string | null; stage: string };
+  output: {
+    proposal: import("./money").MoneyProposal | null;
+    lock: import("./money").LockResult | null;
+    threeWay: import("./money").ThreeWayCheckResult | null;
+    entryIds: string[];
+  };
+}
+
+export type AnyFinanceSnapshot = FinanceSnapshot | MoneySnapshot;

@@ -3,9 +3,26 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": { ".": "./src/index.ts", "./agent": "./src/agent/index.ts", "./checks": "./src/checks.ts" },
-  "scripts": { "typecheck": "tsc --noEmit" },
-  "dependencies": { "@mangekyo/contracts": "workspace:*" },
-  "peerDependencies": { "react": "^19.0.0" },
-  "devDependencies": { "@types/react": "^19.0.0", "typescript": "^5.0.0" }
+  "exports": {
+    ".": "./src/index.ts",
+    "./agent": "./src/agent/index.ts",
+    "./checks": "./src/checks.ts",
+    "./intake": "./src/intake/index.ts",
+    "./ledger": "./src/ledger/index.ts",
+    "./gateway": "./src/gateway/index.ts",
+    "./fixtures/demo-money": "./fixtures/demoMoney.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mangekyo/contracts": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "typescript": "^5.0.0"
+  }
 }

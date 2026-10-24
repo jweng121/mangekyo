@@ -53,6 +53,9 @@ export interface FinanceTask extends SyntheticRecord {
   status: "awaiting_investigation" | "investigating" | "needs_information" | "review_required" | "investigation_completed" | "investigation_failed";
   activeRunId?: string;
   createdAt: number;
+  /** Present on tasks created from the money source adapter. */
+  accountId?: string;
+  bankSourceId?: string;
 }
 
 export interface FinanceCaseBundle {

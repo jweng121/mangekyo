@@ -51,3 +51,30 @@ export interface InvestigationEvent extends SyntheticRecord {
 }
 
 export type FinanceEvent = TaskCreatedEvent | InvestigationEvent;
+
+export type MoneyEventType = "finance.money.import_completed" | "finance.money.lock_checked" |
+  "finance.money.proposal_transitioned" | "finance.money.ledger_posted" | "finance.money.bank_item_recorded";
+
+/** Account-level money stream. taskId is the stream key `money:<accountId>`; runId is the operation ID. */
+export interface MoneyEvent extends SyntheticRecord {
+  eventId: string;
+  taskId: string;
+  runId: string;
+  sequence: number;
+  type: MoneyEventType;
+  timestamp: number;
+  actor: { type: "system"; component: "finance-money" } |
+    { type: "human"; component: "finance-dev"; identity: string; authenticated: boolean };
+  evidenceRefs: EvidenceReference[];
+  payload: {
+    accountId: string;
+    message: string;
+    proposalId: string | null;
+    allowed: boolean | null;
+    reasonCodes: string[];
+    sourceIds: string[];
+    entryIds: string[];
+  };
+}
+
+export type AnyFinanceEvent = FinanceEvent | MoneyEvent;

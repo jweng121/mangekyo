@@ -7,3 +7,4 @@ export type {
   ActionType, ExecutionStatus, AuditStatus, AgentEvent, ObservationField, StructuredObservation,
   EvidenceAnnotation, Snapshot, AuditFinding, Escalation, SteeringRequest, CorrectionRequest,
 } from "./agent";
+export type * from "./money";

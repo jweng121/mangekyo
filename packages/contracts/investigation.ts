@@ -1,4 +1,5 @@
 import type { EvidenceReference, FinanceDocument, FinanceOwner, FinanceTransaction } from "./finance";
+import type { NormalizedBankTransaction, NormalizedObligation, OwnerBalance, ThreeWayCheckResult } from "./money";
 
 export const FINANCE_INPUT_VERSION = "finance-investigation-input/v1" as const;
 export const FINANCE_OUTPUT_VERSION = "finance-investigation-output/v1" as const;
@@ -53,6 +54,11 @@ export interface FinanceRecordSet {
   allocationHistoryComplete: boolean;
   missingEvidence: string[];
   coverage: "available_records_only";
+  /** Optional v1 additions from the money source adapter; absent on legacy inputs. */
+  sourceAdapter?: { system: "erp" | "demo"; datasetVersion: string; accountId: string };
+  bankTransactions?: NormalizedBankTransaction[];
+  obligations?: NormalizedObligation[];
+  ownerLedgerBalances?: Array<OwnerBalance & { ownerId: string; sourceId: string; cutoff: number }>;
 }
 export interface ApprovedFinancePolicy {
   policyId: string;
@@ -95,6 +101,8 @@ export interface DeterministicChecks {
   amounts: FinancialCheck;
   proposedAllocations: FinancialCheck;
   reconciliation: ReconciliationResult;
+  /** Code-computed bank = books = owners check for the account; optional v1 addition. */
+  threeWay?: ThreeWayCheckResult;
 }
 export interface ProposedAllocation {
   proposalId: string;
