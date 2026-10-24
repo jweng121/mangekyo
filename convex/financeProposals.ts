@@ -1,10 +1,10 @@
 import { ConvexError, v } from "convex/values";
 import type { MoneyProposal } from "@mangekyo/contracts";
-import { checkState } from "@mangekyo/finance-core/gateway";
-import { threeWayCheck } from "@mangekyo/finance-core/ledger";
+import { checkSelfApproval, checkState } from "@mangekyo/finance-core/gateway";
+import { buildReversalEntries, threeWayCheck } from "@mangekyo/finance-core/ledger";
 import { mutation, query } from "./_generated/server";
 import * as money from "./lib/moneyValidators";
-import { appendMoneyEvent, gatedStep, getProposal, loadAccount, nextProposalId, requireAccount, resolveActor, submitProposal, transition } from "./lib/money";
+import { appendMoneyEvent, compact, gatedStep, getProposal, loadAccount, nextProposalId, requireAccount, resolveActor, submitProposal, transition } from "./lib/money";
 import { recordOnly } from "./lib/investigationRecords";
 import { appendBoundary } from "./financeInvestigations";
 
@@ -107,6 +107,36 @@ export const rejectProposal = mutation({
       }
     }
     return { proposal: rejected, lock: null, alreadyDone: false };
+  },
+});
+
+/** Correction without deletion: appends negating entries linked by reversesEntryId. The proposal stays posted. */
+export const reversePosting = mutation({
+  args: { proposalId: v.string(), reason: v.string(), dev: money.devIdentity },
+  returns: v.object({ entryIds: v.array(v.string()), alreadyDone: v.boolean() }),
+  handler: async (ctx, args) => {
+    const actor = await resolveActor(ctx, args.dev);
+    if (actor.role !== "approver") throw new ConvexError("Switch to the approver role to reverse a posting.");
+    const reason = args.reason.trim();
+    if (!reason || reason.length > 4000) throw new ConvexError("A reversal reason (1–4000 characters) is required.");
+    const proposal = await getProposal(ctx, args.proposalId);
+    if (proposal.status !== "posted" || !proposal.postedEntryIds?.length) throw new ConvexError("Only posted proposals can be reversed.");
+    const self = checkSelfApproval(proposal.requestedBy, actor.identity, proposal.proposalId);
+    if (self) throw new ConvexError(self.message);
+    const originals = [];
+    for (const entryId of proposal.postedEntryIds) {
+      const row = await ctx.db.query("financeLedgerEntries").withIndex("by_entryId", (q) => q.eq("entryId", entryId)).unique();
+      if (!row) throw new Error(`Posted entry ${entryId} is missing`);
+      originals.push(recordOnly(row));
+    }
+    const reversals = buildReversalEntries(originals, reason, actor.identity, Date.now(), proposal.approvalId);
+    const existing = await ctx.db.query("financeLedgerEntries").withIndex("by_entryId", (q) => q.eq("entryId", reversals[0].entryId)).unique();
+    if (existing) return { entryIds: reversals.map(r => r.entryId), alreadyDone: true };
+    for (const entry of reversals) await ctx.db.insert("financeLedgerEntries", compact(entry));
+    const loaded = await loadAccount(ctx, proposal.accountId);
+    await appendMoneyEvent(ctx, { accountId: proposal.accountId, type: "finance.money.ledger_posted", actor, operationId: proposal.proposalId, stage: "reversal",
+      message: `Reversed ${reversals.length} entr${reversals.length === 1 ? "y" : "ies"} of ${proposal.proposalId}: ${reason}`, proposal, threeWay: threeWayCheck(loaded.state, Date.now()), entryIds: reversals.map(r => r.entryId) });
+    return { entryIds: reversals.map(r => r.entryId), alreadyDone: false };
   },
 });
 

@@ -47,6 +47,7 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
   const approve = useMutation(api.financeProposals.approveProposal);
   const post = useMutation(api.financeProposals.postProposal);
   const reject = useMutation(api.financeProposals.rejectProposal);
+  const reverse = useMutation(api.financeProposals.reversePosting);
   const simulateOutflow = useMutation(api.financeIntake.simulateUnrecordedOutflow);
   const simulateSettlement = useMutation(api.financeIntake.simulateSettlement);
 
@@ -148,7 +149,11 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
             <button className="danger" disabled={busy || role !== "approver" || !(reasons[p.proposalId] ?? "").trim()} onClick={() => run(async () => show(await reject({ proposalId: p.proposalId, reason: reasons[p.proposalId] ?? "", dev })))}>Reject</button>
           </div>}
           {p.status === "approved" && <button disabled={busy || role !== "approver"} onClick={() => run(async () => show(await post({ proposalId: p.proposalId, dev })))}>Post to ledger</button>}
-          {p.status === "posted" && p.kind === "payment" && overview.account.accountId === DEMO_ACCOUNT && <button className="secondary" disabled={busy} onClick={() => run(async () => { const r = await simulateSettlement({ proposalId: p.proposalId }); setNotice(r.created ? "Simulated DEMO bank settlement arrived." : "Settlement already recorded."); })}>DEV: simulate bank settlement</button>}
+          {p.status === "posted" && role === "approver" && !overview.entries.some(e => e.reversesEntryId === p.postedEntryIds?.[0]) && <div className="row">
+            <input aria-label={`Reversal reason for ${p.proposalId}`} placeholder="Reason for reversal (required)" value={reasons[p.proposalId] ?? ""} onChange={e => setReasons({ ...reasons, [p.proposalId]: e.target.value })} />
+            <button className="danger" disabled={busy || !(reasons[p.proposalId] ?? "").trim()} onClick={() => run(async () => { const r = await reverse({ proposalId: p.proposalId, reason: reasons[p.proposalId] ?? "", dev }); setNotice(r.alreadyDone ? "Already reversed." : `Appended ${r.entryIds.length} reversal entries.`); })}>Reverse posting</button>
+          </div>}
+          {p.status === "posted" && p.kind === "payment" && overview.account.accountId === DEMO_ACCOUNT &&<button className="secondary" disabled={busy} onClick={() => run(async () => { const r = await simulateSettlement({ proposalId: p.proposalId }); setNotice(r.created ? "Simulated DEMO bank settlement arrived." : "Settlement already recorded."); })}>DEV: simulate bank settlement</button>}
           {lastLock?.proposalId === p.proposalId && <LockView lock={lastLock.lock} />}
           {(p.status === "pending_approval" || p.status === "approved") && role !== "approver" && <p className="hint">Switch to the approver role to act.</p>}
         </article>)}

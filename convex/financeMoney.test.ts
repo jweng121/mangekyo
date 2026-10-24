@@ -165,6 +165,23 @@ describe("core money workflow", () => {
     expect(late.lock?.failures.map(f => f.code)).toContain("RECONCILIATION_MISMATCH");
   });
 
+  it("corrects a posted allocation with reversal entries, freeing the deposit without deleting history", async () => {
+    const t = await setup();
+    await investigate(t, ERP, "bank:txn:TX-001");
+    const { proposalId } = (await overview(t, ERP)).proposals[0];
+    await t.mutation(api.financeProposals.approveProposal, { proposalId, dev: approver });
+    await t.mutation(api.financeProposals.postProposal, { proposalId, dev: approver });
+    await expect(t.mutation(api.financeProposals.reversePosting, { proposalId, reason: "", dev: approver })).rejects.toThrow("reason");
+    const reversed = await t.mutation(api.financeProposals.reversePosting, { proposalId, reason: "Allocated to the wrong client", dev: approver });
+    expect(reversed).toEqual({ entryIds: [`${proposalId}:entry:1:reversal`, `${proposalId}:entry:2:reversal`], alreadyDone: false });
+    expect((await t.mutation(api.financeProposals.reversePosting, { proposalId, reason: "again", dev: approver })).alreadyDone).toBe(true);
+    const after = await overview(t, ERP);
+    expect(after.threeWay.status).toBe("matched");
+    expect(after.deposits.find(d => d.transaction.sourceId === "bank:txn:TX-001")?.status).toBe("unallocated");
+    expect(after.balances.find(b => b.ownerId === "erp:owner:CMP-001")?.postedCents).toBe(4_000_000);
+    expect(after.entries.filter(e => e.proposalId === proposalId)).toHaveLength(4);
+  });
+
   it("never deletes: ledger entries only accumulate across the workflow", async () => {
     const t = await setup();
     const ids = async () => (await t.run(async (ctx) => (await ctx.db.query("financeLedgerEntries").collect()).map(r => `${r.entryId}:${r.amountCents}`)));

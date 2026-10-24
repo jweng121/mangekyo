@@ -2,7 +2,7 @@ import type {
   AllocationShare, LedgerEntry, LockFailure, LockResult, MoneyProposal, ProposalStatus, ThreeWayCheckResult,
 } from "@mangekyo/contracts";
 import { formatCents, isPositiveCents } from "../intake/cents";
-import { affectedOwners, ownerBalances, type AccountLedgerState } from "../ledger";
+import { activeAllocations, affectedOwners, ownerBalances, type AccountLedgerState } from "../ledger";
 
 export type LockStage = LockResult["stage"];
 
@@ -118,17 +118,16 @@ export function evaluatePayment(ctx: GatewayContext, request: PaymentRequest, ar
   }
   evaluated.push("L5");
   const affected = affectedOwners(threeWay);
-  if (threeWay.status !== "matched" && (affected === "all" || affected.has(request.ownerId))) {
-    const relevant = threeWay.causes.filter(c => c.severity === "mismatch" && (affected === "all" || c.ownerIds.includes(request.ownerId)));
-    failures.push({ rule: "L5", code: "RECONCILIATION_MISMATCH", message: `Three-way check is ${threeWay.status}${affected === "all" ? " with causes not attributable to one owner" : ` for this owner`}: ${relevant.map(c => c.code).join(", ") || "no opening balance"}. Outgoing payments are blocked until it is fixed.`, sourceIds: [...new Set(relevant.flatMap(c => c.sourceIds))] });
+  const touchesSource = (c: ThreeWayCheckResult["causes"][number]) => !!request.fundingSourceId && c.sourceIds.includes(request.fundingSourceId);
+  if (threeWay.status !== "matched" && (affected === "all" || affected.has(request.ownerId) || threeWay.causes.some(c => c.severity === "mismatch" && touchesSource(c)))) {
+    const relevant = threeWay.causes.filter(c => c.severity === "mismatch" && (affected === "all" || c.ownerIds.includes(request.ownerId) || touchesSource(c)));
+    failures.push({ rule: "L5", code: "RECONCILIATION_MISMATCH", message: `Three-way check is ${threeWay.status}${affected === "all" ? " with causes not attributable to one owner" : ` for this owner or its funding source`}: ${relevant.map(c => c.code).join(", ") || "no opening balance"}. Outgoing payments are blocked until it is fixed.`, sourceIds: [...new Set(relevant.flatMap(c => c.sourceIds))] });
   }
   return result(args.stage, evaluated, failures, facts);
 }
 
 function allocatedElsewhere(entries: LedgerEntry[], bankSourceId: string): number {
-  const reversed = new Set(entries.flatMap(row => row.reversesEntryId ? [row.reversesEntryId] : []));
-  return entries.filter(row => row.kind === "allocation" && row.ownerId !== null && row.fundsSourceId === bankSourceId && !reversed.has(row.entryId))
-    .reduce((total, row) => total + row.amountCents, 0);
+  return activeAllocations(entries, bankSourceId).reduce((total, row) => total + row.amountCents, 0);
 }
 
 /** Every rule for dividing one deposit among owners. Allocations move money between buckets, not out of the pool. */

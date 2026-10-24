@@ -1,7 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import type { NormalizedAccountBundle, NormalizedBankTransaction } from "@mangekyo/contracts";
 import { candidateOwnerSourceIds, depositCaseId, formatCents, normalizeErpState, type ErpState } from "@mangekyo/finance-core/intake";
-import { importLedgerEntries, ownerBalances, threeWayCheck } from "@mangekyo/finance-core/ledger";
+import { activeAllocations, importLedgerEntries, ownerBalances, threeWayCheck } from "@mangekyo/finance-core/ledger";
 import { DEMO_ACCOUNT_ID, demoMoneyBundle, demoSettlement, demoUnrecordedOutflow } from "@mangekyo/finance-core/fixtures/demo-money";
 // Read-only use of the teammate's deterministic generator; his runtime state file is never touched.
 import { createSeed } from "../apps/demo-erp/data/seed";
@@ -113,7 +113,7 @@ export const ensureDepositTask = mutation({
     if (!deposit || deposit.direction !== "inflow") throw new ConvexError("Only bank deposits can be investigated.");
     if (deposit.clearing !== "cleared") throw new ConvexError("This deposit has not cleared; investigation input v1 only carries cleared deposits.");
     if (!loaded.state.entries.some(e => e.kind === "deposit_received" && e.fundsSourceId === bankSourceId)) throw new ConvexError("This deposit is not recorded in the ledger (it predates the cutover and is reflected in opening balances).");
-    if (loaded.state.entries.some(e => e.kind === "allocation" && e.fundsSourceId === bankSourceId)) throw new ConvexError("This deposit is already allocated.");
+    if (activeAllocations(loaded.state.entries, bankSourceId).length > 0) throw new ConvexError("This deposit is already allocated.");
     const candidates = candidateOwnerSourceIds({ deposit, documents: loaded.documents, obligations: loaded.obligations, state: loaded.state });
     const candidate = loaded.state.owners.find(o => o.sourceId === candidates[0]);
     const linked = loaded.documents.filter(d => deposit.documentSourceIds.includes(d.sourceId));
@@ -150,7 +150,7 @@ export const getAccountOverview = query({
     const tasks = await ctx.db.query("financeTasks").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(200);
     const deposits = loaded.state.bankTransactions.filter(t => t.direction === "inflow").sort((a, b) => a.bookedAt - b.bookedAt).map(transaction => {
       const recorded = loaded.state.entries.some(e => e.kind === "deposit_received" && e.fundsSourceId === transaction.sourceId);
-      const allocatedTo = loaded.state.entries.filter(e => e.kind === "allocation" && e.ownerId !== null && e.fundsSourceId === transaction.sourceId).map(e => e.ownerId!);
+      const allocatedTo = activeAllocations(loaded.state.entries, transaction.sourceId).map(e => e.ownerId!);
       const proposed = loaded.proposals.some(p => p.kind === "allocation" && p.bankSourceId === transaction.sourceId && (p.status === "pending_approval" || p.status === "approved"));
       const status = allocatedTo.length ? "posted" as const : !recorded ? "historical" as const : transaction.clearing !== "cleared" ? "awaiting_clearance" as const : proposed ? "proposed" as const : "unallocated" as const;
       return { transaction, status, taskId: tasks.find(t => t.bankSourceId === transaction.sourceId)?.taskId ?? null, allocatedTo };

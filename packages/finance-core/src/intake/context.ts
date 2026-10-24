@@ -2,7 +2,7 @@ import type {
   FinanceRecordSet, InvestigationScope, LedgerEntry, NormalizedBankTransaction, NormalizedDocument,
   NormalizedObligation, ProposedAllocation,
 } from "@mangekyo/contracts";
-import { ownerBalances, type AccountLedgerState } from "../ledger";
+import { activeAllocations, ownerBalances, type AccountLedgerState } from "../ledger";
 
 export interface DepositContextInput {
   state: AccountLedgerState;
@@ -36,8 +36,7 @@ export function candidateOwnerSourceIds(input: Pick<DepositContextInput, "deposi
 }
 
 function existingAllocations(entries: LedgerEntry[], deposit: NormalizedBankTransaction): ProposedAllocation[] {
-  const reversed = new Set(entries.flatMap(row => row.reversesEntryId ? [row.reversesEntryId] : []));
-  return entries.filter(row => row.kind === "allocation" && row.ownerId !== null && row.fundsSourceId === deposit.sourceId && !reversed.has(row.entryId))
+  return activeAllocations(entries, deposit.sourceId)
     .map(row => ({ proposalId: row.proposalId ?? row.entryId, transactionId: deposit.sourceId, ownerId: row.ownerId!, amountCents: row.amountCents, currency: row.currency, evidenceSourceIds: row.sourceRefs }));
 }
 

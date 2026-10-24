@@ -166,6 +166,12 @@ export function affectedOwners(result: ThreeWayCheckResult): "all" | Set<string>
   return new Set(mismatches.flatMap(row => row.ownerIds));
 }
 
+/** Owner-side allocation entries for a deposit that have not been reversed. */
+export function activeAllocations(entries: LedgerEntry[], bankSourceId: string): LedgerEntry[] {
+  const reversed = new Set(entries.flatMap(row => row.reversesEntryId ? [row.reversesEntryId] : []));
+  return entries.filter(row => row.kind === "allocation" && row.ownerId !== null && row.fundsSourceId === bankSourceId && !reversed.has(row.entryId));
+}
+
 export function buildReversalEntries(entries: LedgerEntry[], reason: string, actor: string, now: number, approvalId?: string): LedgerEntry[] {
   return entries.map(entry => ({
     ...entry, entryId: `${entry.entryId}:reversal`, amountCents: -entry.amountCents, kind: "reversal", reversesEntryId: entry.entryId,

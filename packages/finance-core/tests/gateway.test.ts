@@ -80,6 +80,15 @@ describe("L5 reconciliation lock", () => {
     expect(evaluatePayment(ctx, payment(demoIds.alpha, 100), request).allowed).toBe(true);
   });
 
+  it("blocks a payment funded by a source named in a mismatch cause, even for an unaffected owner", () => {
+    const ctx = context();
+    ctx.threeWay = { ...ctx.threeWay, status: "mismatched", causes: [{ code: "AMOUNT_MISMATCH", severity: "mismatch", message: "test", amountCents: 1, sourceIds: [demoIds.depositA], ownerIds: [demoIds.yankee], unattributed: false }] };
+    const unfunded = payment(demoIds.alpha, 100, { evidenceSourceIds: ["demo:document:remit-a-001:v1"] });
+    expect(evaluatePayment(ctx, unfunded, request).allowed).toBe(true);
+    const result = evaluatePayment(ctx, { ...unfunded, fundingSourceId: demoIds.depositA }, request);
+    expect(result.failures).toEqual([expect.objectContaining({ code: "RECONCILIATION_MISMATCH", sourceIds: [demoIds.depositA] })]);
+  });
+
   it("blocks every outflow when a cause cannot be attributed to an owner", () => {
     const state = demoState();
     state.bankTransactions.push({ ...demoUnrecordedOutflow(NOW - 10), ownerHintSourceId: null });
