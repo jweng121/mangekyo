@@ -1,0 +1,121 @@
+{
+  "approvedPolicies": [],
+  "caseId": "synthetic-finance-case-001",
+  "contextAsOf": 1792833338729,
+  "deterministicChecks": {
+    "amounts": {
+      "issues": [],
+      "status": "passed"
+    },
+    "proposedAllocations": {
+      "issues": [],
+      "status": "not_applicable"
+    },
+    "reconciliation": {
+      "adjustedBankCents": null,
+      "adjustedControlCents": null,
+      "adjustedOwnerCents": null,
+      "ownerAllocationsVerified": false,
+      "reasons": [
+        "Bank closing balance is unavailable.",
+        "Corresponding book/control balance is unavailable.",
+        "Complete corresponding owner ledger balances are unavailable."
+      ],
+      "status": "insufficient_data",
+      "timingDifferences": []
+    }
+  },
+  "evidenceRefs": [
+    {
+      "documentId": "synthetic-finance-case-001:document:001",
+      "excerpt": "SYNTHETIC: A $1,250.00 deposit may relate to Example Client A. Confirm the payer and agreement before allocating any funds.",
+      "sourceId": "synthetic:remittance-note:001"
+    }
+  ],
+  "humanClarifications": [
+    {
+      "answer": "SYNTHETIC clarification: payer reference DEMO-1250 suggests Example Client A; the signed agreement is still unavailable.",
+      "caseId": "synthetic-finance-case-001",
+      "clarificationId": "synthetic-finance-case-001:task:001:investigation:1:question:payer-and-agreement:clarification",
+      "evidenceRefs": [],
+      "question": "Who sent the $1,250 deposit, and what bank payer reference plus signed agreement or invoice identifies the beneficial owner? Supply source identifiers or explain what is unavailable.",
+      "questionId": "synthetic-finance-case-001:task:001:investigation:1:question:payer-and-agreement",
+      "respondent": {
+        "authenticated": false,
+        "identity": "unauthenticated:finance-dev"
+      },
+      "runId": "synthetic-finance-case-001:task:001:investigation:1",
+      "sourceId": "clarification:synthetic-finance-case-001:task:001:investigation:1:question:payer-and-agreement:clarification",
+      "taskId": "synthetic-finance-case-001:task:001",
+      "timestamp": 1792822656963
+    }
+  ],
+  "instructionVersion": "finance-investigator/v1",
+  "records": {
+    "agreements": [],
+    "allocationHistoryComplete": false,
+    "bankBalance": null,
+    "controlBalance": null,
+    "coverage": "available_records_only",
+    "documents": [
+      {
+        "caseId": "synthetic-finance-case-001",
+        "documentId": "synthetic-finance-case-001:document:001",
+        "effectiveAt": null,
+        "excerpt": "SYNTHETIC: A $1,250.00 deposit may relate to Example Client A. Confirm the payer and agreement before allocating any funds.",
+        "mimeType": "text/plain",
+        "sourceId": "synthetic:remittance-note:001",
+        "synthetic": true,
+        "text": "SYNTHETIC: A $1,250.00 deposit may relate to Example Client A. Confirm the payer and agreement before allocating any funds.\nThis is fabricated development evidence. It is not an instruction to allocate or execute a payment.",
+        "title": "SYNTHETIC — Unverified remittance note",
+        "version": "legacy-v1"
+      }
+    ],
+    "existingAllocations": [],
+    "invoices": [],
+    "missingEvidence": [
+      "No payer identity or agreement verifies the candidate owner's deposit ownership.",
+      "No bank closing balance, book/control balance, or complete owner ledger balances are available.",
+      "Invoices and agreements are unavailable in the current source schema.",
+      "Historical records for the complete account and allocation history are unavailable; only this synthetic case is reviewed.",
+      "Legacy document versions use legacy-v1; effective dates were not recorded, so document availability at the cutoff is unverified."
+    ],
+    "ownerBalances": null,
+    "ownerBalancesComplete": false,
+    "owners": [
+      {
+        "caseId": "synthetic-finance-case-001",
+        "name": "SYNTHETIC — Example Client A",
+        "ownerId": "synthetic-finance-case-001:owner:001",
+        "synthetic": true
+      }
+    ],
+    "timingDifferences": [],
+    "transactions": [
+      {
+        "accountId": "synthetic-bank-account-001",
+        "allocationStatus": "unallocated",
+        "amountCents": 125000,
+        "bankStatus": "cleared",
+        "caseId": "synthetic-finance-case-001",
+        "clearedAt": 1792819492852,
+        "currency": "USD",
+        "description": "SYNTHETIC — Cleared deposit awaiting ownership investigation",
+        "direction": "deposit",
+        "sourceId": "synthetic:bank-feed:deposit:001",
+        "synthetic": true,
+        "transactionId": "synthetic-finance-case-001:transaction:001"
+      }
+    ]
+  },
+  "runId": "synthetic-finance-case-001:task:001:investigation:5",
+  "schemaVersion": "finance-investigation-input/v1",
+  "scope": {
+    "accountId": "synthetic-bank-account-001",
+    "currency": "USD",
+    "cutoff": 1792833338729,
+    "from": null,
+    "kind": "deposit_investigation"
+  },
+  "taskId": "synthetic-finance-case-001:task:001"
+}
