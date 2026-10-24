@@ -9,9 +9,13 @@
  */
 
 import type * as finance from "../finance.js";
+import type * as financeIntake from "../financeIntake.js";
 import type * as financeInvestigationActions from "../financeInvestigationActions.js";
 import type * as financeInvestigations from "../financeInvestigations.js";
+import type * as financeProposals from "../financeProposals.js";
 import type * as lib_investigationRecords from "../lib/investigationRecords.js";
+import type * as lib_money from "../lib/money.js";
+import type * as lib_moneyValidators from "../lib/moneyValidators.js";
 import type * as lib_validators from "../lib/validators.js";
 
 import type {
@@ -22,9 +26,13 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   finance: typeof finance;
+  financeIntake: typeof financeIntake;
   financeInvestigationActions: typeof financeInvestigationActions;
   financeInvestigations: typeof financeInvestigations;
+  financeProposals: typeof financeProposals;
   "lib/investigationRecords": typeof lib_investigationRecords;
+  "lib/money": typeof lib_money;
+  "lib/moneyValidators": typeof lib_moneyValidators;
   "lib/validators": typeof lib_validators;
 }>;
 
