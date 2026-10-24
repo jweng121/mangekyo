@@ -1,5 +1,15 @@
 {
   "name": "@mangekyo/contracts",
   "version": "0.0.0",
-  "private": true
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./finance": "./finance.ts",
+    "./events": "./events.ts",
+    "./snapshots": "./snapshots.ts",
+    "./investigation": "./investigation.ts"
+  },
+  "scripts": { "typecheck": "tsc --noEmit" },
+  "devDependencies": { "typescript": "^5.0.0" }
 }
