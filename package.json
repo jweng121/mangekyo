@@ -10,7 +10,13 @@
     "dev:finance": "pnpm --filter @mangekyo/finance-dev dev",
     "build:finance": "pnpm --filter @mangekyo/finance-dev build",
     "dev:backend": "convex dev",
-    "test": "vitest run"
+    "test": "vitest run",
+    "dev:visual-audit": "node scripts/dev-visual-audit.mjs",
+    "dev:demo-erp": "pnpm --filter @mangekyo/demo-erp dev",
+    "dev:monitored-agent": "tsx scripts/monitored-agent/runner.ts",
+    "demo:reset": "tsx apps/demo-erp/data/reset.ts",
+    "demo:seed": "tsx apps/demo-erp/data/reset.ts",
+    "demo:test": "vitest run && playwright test"
   },
   "dependencies": {
     "@mangekyo/contracts": "workspace:*",
@@ -18,10 +24,13 @@
     "convex": "^1.48.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
     "@edge-runtime/vm": "^5.0.0",
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^22.0.0",
     "convex-test": "^0.0.65",
-    "typescript": "^5.0.0",
+    "playwright": "^1.56.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
     "vite": "^7.3.7",
     "vitest": "^5.0.5"
   }

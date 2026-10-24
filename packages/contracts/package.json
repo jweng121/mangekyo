@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./index.ts",
+    "./agent": "./agent.ts",
     "./finance": "./finance.ts",
     "./events": "./events.ts",
     "./snapshots": "./snapshots.ts",

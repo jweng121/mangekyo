@@ -1,0 +1,4 @@
+"use client";
+import {useState} from "react";
+import type {Company} from "../data/seed";
+export function CompanySearch({companies}:{companies:Company[]}){const [query,setQuery]=useState("");return <><label className="label" htmlFor="company-search">Search companies</label><input id="company-search" data-testid="company-search" className="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Name, ID, or client"/><div className="table-wrap"><table><thead><tr><th>Company ID</th><th>Company</th><th>Client</th><th>Trust account</th><th>Status</th></tr></thead><tbody>{companies.filter(c=>`${c.id} ${c.name} ${c.client}`.toLowerCase().includes(query.toLowerCase())).map(c=><tr key={c.id} data-testid={`company-row-${c.id}`}><td><a href={`/companies/${c.id}`}>{c.id}</a></td><td>{c.name}</td><td>{c.client}</td><td>{c.account}</td><td><span className="badge">{c.status}</span></td></tr>)}</tbody></table></div></>}

@@ -11,3 +11,8 @@ test-results/
 skills-lock.json
 .env*
 !.env.example
+apps/demo-erp/.data/
+apps/demo-erp/public/captures/
+artifacts/
+test-results/
+playwright-report/

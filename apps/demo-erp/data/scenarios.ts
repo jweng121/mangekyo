@@ -1,0 +1,1 @@
+export const scenarios=[{id:"A",name:"Correct allocation",transactionId:"TX-001"},{id:"B",name:"Conflicting ownership",transactionId:"TX-002"},{id:"C",name:"Multi-company document",documentId:"DOC-MULTI-001"},{id:"D",name:"Duplicate payment",transactionId:"TX-013"},{id:"E",name:"Blocked write",transactionId:"TX-002"},{id:"F",name:"Steering and rerun",transactionId:"TX-002"}];
