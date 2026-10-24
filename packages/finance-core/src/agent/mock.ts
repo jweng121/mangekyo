@@ -2,6 +2,7 @@ import { FINANCE_OUTPUT_VERSION, type FinanceAgentInput, type FinanceAgentOutput
 import type { FinanceAgentProvider } from "./types";
 import { formatCents } from "../intake/cents";
 import { FinanceProviderError } from "./types";
+import { INSURANCE_POLICY } from "../../fixtures/lawFirmFeed";
 
 function amountTexts(cents: number): string[] {
   const exact = formatCents(cents);
@@ -107,7 +108,57 @@ function mockIntakeProposal(input: FinanceAgentInput): FinanceAgentOutput | null
   };
 }
 
+function mockLawFirm(input: FinanceAgentInput): FinanceAgentOutput | null {
+  if (input.records.sourceAdapter?.datasetVersion !== "law-firm-demo-v1") return null;
+  const { records } = input;
+  const deposit = records.transactions[0];
+  if (!deposit) return null;
+  const bank = records.bankTransactions?.find(t => t.sourceId === deposit.sourceId);
+  if (!bank) return null;
+  const policy = input.approvedPolicies.find(p => p.statement === INSURANCE_POLICY);
+  if (bank.reference === "Claim HL-44812" && records.existingAllocations.length) return output({
+    outcome: "findings", summary: "Maria Delgado's allocation is recorded. A person can review this proposed insurance policy.",
+    findings: [{ findingId: "claim-document", summary: "The settlement agreement names Maria Delgado for $85,000.00.", sourceRefs: bank.documentSourceIds }],
+    candidatePolicies: policy ? [] : [{ policyId: "insurance-claim-owner", statement: INSURANCE_POLICY, sourceRefs: bank.documentSourceIds, status: "proposed" }],
+  });
+  const answers = input.humanClarifications.filter(c => !c.questionId.endsWith(":rejection"));
+  const propose = (ownerId: string, finding: string, refs: string[]) => output({ outcome: "proposal_ready", summary: "Proposed ownership requires a person's approval before posting.",
+    findings: [{ findingId: "ownership-evidence", summary: finding, sourceRefs: refs }],
+    proposedAllocations: [{ proposalId: `mock-allocation:${deposit.transactionId}`, transactionId: deposit.transactionId, ownerId, amountCents: deposit.amountCents, currency: deposit.currency, evidenceSourceIds: [deposit.sourceId, ...refs] }] });
+  if (bank.counterparty === "D OKAFOR") {
+    const owner = records.owners.find(o => o.name === "Daniel Okafor");
+    const confirmation = answers.find(c => c.questionId.endsWith(":question:partial-retainer") && /^(yes|confirmed)\b/i.test(c.answer.trim()));
+    if (owner && confirmation) return propose(owner.ownerId, "A person confirmed the $2,500.00 deposit as a partial payment of Daniel Okafor's $5,000.00 retainer.", [...bank.documentSourceIds, deposit.sourceId, confirmation.sourceId]);
+    return output({ outcome: "needs_information", summary: "The deposit is smaller than the agreed retainer. Ownership needs confirmation.", questions: [{ key: "partial-retainer", question: "Is $2,500.00 a partial payment of Daniel Okafor's $5,000.00 retainer?", sourceRefs: [deposit.sourceId, ...bank.documentSourceIds] }] });
+  }
+  if (bank.counterparty === "J NGUYEN") {
+    const answer = answers.find(c => c.questionId.endsWith(":question:which-nguyen"));
+    const choice = answer?.answer.trim().toLowerCase();
+    const owner = records.owners.find(o => (choice === "james" || choice === "james nguyen") ? o.name === "James Nguyen" : (choice === "linh" || choice === "linh nguyen") ? o.name === "Linh Nguyen" : false);
+    if (owner && answer) {
+      const corrected = answers.some(c => c.questionId.endsWith(":correction") && !c.question.startsWith("A person disputes"));
+      return propose(owner.ownerId, corrected ? `For the $1,200.00 deposit, a person answered ${answer.answer.trim()}.` : `The memo names ${owner.name} for this deposit.`, corrected ? [deposit.sourceId, answer.sourceId] : bank.documentSourceIds);
+    }
+    return output({ outcome: "needs_information", summary: "The payer and memo do not distinguish the two Nguyen clients.", questions: [{ key: "which-nguyen", question: "Which Nguyen is this for, Linh or James?", sourceRefs: [deposit.sourceId, ...bank.documentSourceIds] }] });
+  }
+  const proposal = mockIntakeRules(input) ?? mockIntakeProposal(input);
+  if (!proposal) return output({ outcome: "needs_information", summary: "Ownership needs supporting evidence.", questions: [{ key: "ownership-evidence", question: "Which client does this deposit belong to?", sourceRefs: [deposit.sourceId] }] });
+  proposal.candidatePolicies = [];
+  if (bank.reference === "Claim HL-50210" && policy) {
+    proposal.proposedAllocations.forEach(p => p.evidenceSourceIds.push(policy.sourceId));
+    proposal.summary = `Used policy ${policy.policyId}, approved by ${policy.approvedBy ?? "a person"}. ${proposal.summary}`;
+  }
+  return proposal;
+}
+
 export function mockInvestigation(input: FinanceAgentInput): FinanceAgentOutput {
+  const pending = input.records.bankTransactions?.find(t => t.sourceId === input.records.bankTransactions?.[0]?.sourceId && t.direction === "inflow" && t.clearing === "pending");
+  if (input.records.sourceAdapter && input.records.transactions.length === 0 && pending) {
+    return output({ outcome: "findings", summary: "Waiting for the check to clear. Ownership evidence can be reviewed now; an allocation can only be proposed after clearing.",
+      findings: [{ findingId: "waiting-for-clearance", summary: `The ${formatCents(pending.amountCents)} deposit from ${pending.counterparty} has not cleared.`, sourceRefs: [pending.sourceId] }] });
+  }
+  const lawFirm = mockLawFirm(input);
+  if (lawFirm) return lawFirm;
   const scripted = mockIntakeRules(input);
   if (scripted) return scripted;
   const proposal = mockIntakeProposal(input);

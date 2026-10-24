@@ -47,7 +47,7 @@ export function autoInvestigationSetting(): { enabled: boolean; code: AutoInvest
   if (!config.configured) return { enabled: false, code: "PROVIDER_NOT_CONFIGURED", message: config.message };
   if (raw === "false") return { enabled: false, code: "AUTO_DISABLED_SETTING", message: "AUTO_INVESTIGATE=false: new deposits wait for a person to start an investigation." };
   if (config.mode === "creao" && raw !== "true") return { enabled: false, code: "AUTO_OFF_IN_CREAO", message: "Auto-investigation is off in creao mode so no paid run starts without a person. Set AUTO_INVESTIGATE=true to opt in." };
-  return { enabled: true, code: "AUTO_ENABLED", message: `New cleared, unallocated deposits are investigated automatically in ${config.mode} mode. Proposals still need a person to approve.` };
+  return { enabled: true, code: "AUTO_ENABLED", message: `New recorded, unallocated deposits are investigated automatically in ${config.mode} mode. Pending deposits cannot receive allocation proposals. Proposals still need a person to approve.` };
 }
 
 export const getAutoInvestigationSetting = query({

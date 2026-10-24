@@ -9,6 +9,9 @@ import { api, internal } from "./_generated/api";
 import { internalMutation, mutation, query, type MutationCtx } from "./_generated/server";
 import { autoInvestigationSetting, providerMode } from "./financeInvestigations";
 import { demoFeedStep, feedBundle, FEED_LENGTH, FEED_PAYMENT_PURPOSE } from "@mangekyo/finance-core/fixtures/demo-feed";
+import { lawFirmBundle } from "@mangekyo/finance-core/fixtures/law-firm";
+import { lawFirmFeedBundle, lawFirmSteps, lawId, LAW_FIRM_FEED_LENGTH } from "@mangekyo/finance-core/fixtures/law-firm-feed";
+import { demoAccountId } from "@mangekyo/finance-core/fixtures/demo-money";
 import { nextProposalId, submitProposal } from "./lib/money";
 import * as money from "./lib/moneyValidators";
 import * as validators from "./lib/validators";
@@ -86,11 +89,12 @@ export const loadDemoFixture = mutation({
 
 /** A new DEMO account (next pool number) with the fixture loaded clean. Earlier accounts and their history are untouched. */
 export const startFreshDemoRun = mutation({
-  args: {}, returns: importResult,
-  handler: async (ctx) => {
+  args: { fixture: v.optional(v.literal("legacy")) }, returns: importResult,
+  handler: async (ctx, args) => {
     const accounts = await ctx.db.query("financeAccounts").take(500);
     const runs = accounts.map(a => demoRunOf(a.accountId)).filter((run): run is number => run !== null);
-    return await importBundle(ctx, demoMoneyBundle(runs.length ? Math.max(...runs) + 1 : 1), "demo");
+    const run = runs.length ? Math.max(...runs) + 1 : 1;
+    return await importBundle(ctx, args.fixture === "legacy" ? demoMoneyBundle(run) : lawFirmBundle(demoAccountId(run)), "demo");
   },
 });
 
@@ -134,11 +138,10 @@ function depositTaskId(accountId: string, bankSourceId: string) {
   return `${depositCaseId(accountId)}:deposit:${bankSourceId}`;
 }
 
-/** Why a deposit cannot be investigated, or null when it is a cleared, recorded, unallocated deposit. */
+/** Investigation moves no money. Pending deposits remain bank evidence, not allocatable transactions. */
 function ineligibility(loaded: LoadedAccount, bankSourceId: string): { code: string; message: string } | null {
   const deposit = loaded.state.bankTransactions.find(t => t.sourceId === bankSourceId);
   if (!deposit || deposit.direction !== "inflow") return { code: "NOT_A_DEPOSIT", message: "Only bank deposits can be investigated." };
-  if (deposit.clearing !== "cleared") return { code: "AWAITING_CLEARANCE", message: "This deposit has not cleared; investigation input v1 only carries cleared deposits." };
   if (!loaded.state.entries.some(e => e.kind === "deposit_received" && e.fundsSourceId === bankSourceId)) return { code: "NOT_RECORDED", message: "This deposit is not recorded in the ledger (it predates the cutover and is reflected in opening balances)." };
   if (activeAllocations(loaded.state.entries, bankSourceId).length > 0) return { code: "ALREADY_ALLOCATED", message: "This deposit is already allocated." };
   return null;
@@ -171,6 +174,7 @@ export const feedNext = mutation({
     if (providerMode() !== "mock") throw new ConvexError("The live feed runs only in mock mode. In CREAO mode every investigation costs money, so it never starts here.");
     await requireAccount(ctx, accountId);
     const loaded = await loadAccount(ctx, accountId);
+    if (loaded.account.datasetVersion === "law-firm-demo-v1") return await advanceLawFirmFeed(ctx, loaded);
     for (let index = 0; index < FEED_LENGTH; index++) {
       const step = demoFeedStep(index, accountId, Date.now());
       if (!step) break;
@@ -190,6 +194,36 @@ export const feedNext = mutation({
   },
 });
 
+async function advanceLawFirmFeed(ctx: MutationCtx, loaded: LoadedAccount) {
+  const accountId = loaded.account.accountId;
+  const events = await ctx.db.query("financeEvents").withIndex("by_taskId_and_sequence", q => q.eq("taskId", `money:${accountId}`)).take(2000);
+  const step = events.filter(e => e.type === "finance.money.feed_step").length + 1;
+  const total = LAW_FIRM_FEED_LENGTH;
+  if (step > total) return { step: total, total, label: null, done: true };
+  const id = (suffix: string) => lawId(accountId, suffix);
+  if ([1, 4, 5, 6, 9].includes(step)) await importBundle(ctx, lawFirmFeedBundle(step, accountId, Date.now()), "demo");
+  if (step === 2 || step === 7) {
+    const now = Date.now();
+    await submitProposal(ctx, { proposalId: await nextProposalId(ctx, accountId, "payment"), accountId, kind: "payment", status: "proposed", currency: "USD",
+      requestedBy: "dev-unverified:riley", origin: { type: "person" },
+      ownerId: id(`owner:${step === 2 ? "maria-delgado" : "raymond-cho"}`), amountCents: step === 2 ? 5_600_000 : 600_000,
+      purpose: step === 2 ? "Delgado client share before check clearance" : "Raymond Cho expert witness",
+      evidenceSourceIds: [id(`document:${step === 2 ? "delgado-settlement" : "cho-expert"}:v1`)],
+      ...(step === 2 ? { fundingSourceId: id("bank:txn:harborline-delgado") } : {}), createdAt: now, updatedAt: now },
+      { identity: "dev-unverified:riley", authenticated: false, role: "requester" });
+  }
+  if (step === 3) await ctx.runMutation(api.financeIntake.simulateDepositCleared, { bankSourceId: id("bank:txn:harborline-delgado") });
+  if (step === 8) {
+    const bankSourceId = id("bank:txn:harborline-delgado");
+    if (!activeAllocations(loaded.state.entries, bankSourceId).length) throw new ConvexError("Approve and post Maria Delgado's allocation before proposing the policy.");
+    const taskId = depositTaskId(accountId, bankSourceId);
+    await ctx.runMutation(api.financeInvestigations.startInvestigation, { taskId, scope: { kind: "deposit_investigation", accountId, currency: "USD", from: null } });
+  }
+  const label = lawFirmSteps[step - 1];
+  await appendMoneyEvent(ctx, { accountId, type: "finance.money.feed_step", actor: SYSTEM, operationId: `feed:${accountId}:${step}`, stage: "feed", message: `Live feed step ${step} of ${total}: ${label}.` });
+  return { step, total, label, done: step === total };
+}
+
 /** DEV ONLY, DEMO accounts only: the bank feed reports a pending demo deposit as cleared. */
 export const simulateDepositCleared = mutation({
   args: { bankSourceId: v.string() }, returns: v.object({ sourceId: v.string(), changed: v.boolean() }),
@@ -201,6 +235,7 @@ export const simulateDepositCleared = mutation({
     const loaded = await loadAccount(ctx, row.accountId);
     await appendMoneyEvent(ctx, { accountId: row.accountId, type: "finance.money.bank_item_recorded", actor: SYSTEM, operationId: bankSourceId, stage: "bank_feed", message: `DEMO bank feed: ${bankSourceId} cleared (simulated).`, threeWay: checkAccount(loaded.state, Date.now()), sourceIds: [bankSourceId] });
     await recheckHeldProposals(ctx, row.accountId);
+    await scheduleAutoInvestigation(ctx, loaded, bankSourceId);
     return { sourceId: bankSourceId, changed: true };
   },
 });
@@ -263,8 +298,13 @@ export const autoInvestigateDeposit = internalMutation({
     if (!setting.enabled) { await autoEvent(ctx, accountId, bankSourceId, false, setting.code, setting.message); return null; }
     const loaded = await loadAccount(ctx, accountId);
     const existing = await ctx.db.query("financeTasks").withIndex("by_taskId", (q) => q.eq("taskId", depositTaskId(accountId, bankSourceId))).unique();
-    const prior = existing && await ctx.db.query("financeInvestigationRuns").withIndex("by_taskId_and_attempt", (q) => q.eq("taskId", existing.taskId)).first();
-    if (prior) { await autoEvent(ctx, accountId, bankSourceId, false, "ALREADY_INVESTIGATED", `Task already has investigation ${prior.runId}; no second run.`); return null; }
+    const prior = existing && await ctx.db.query("financeInvestigationRuns").withIndex("by_taskId_and_attempt", (q) => q.eq("taskId", existing.taskId)).order("desc").first();
+    // Only the simulated clearance workflow gets a new automatic attempt. Never retry a paid run.
+    const clearedAfterReview = providerMode() === "mock" && prior?.mode === "mock" && prior.status === "completed"
+      && prior.result?.outcome === "findings" && prior.providerInput?.records.transactions.length === 0
+      && prior.providerInput.records.bankTransactions?.some(t => t.sourceId === bankSourceId && t.clearing === "pending")
+      && loaded.state.bankTransactions.some(t => t.sourceId === bankSourceId && t.clearing === "cleared");
+    if (prior && !clearedAfterReview) { await autoEvent(ctx, accountId, bankSourceId, false, "ALREADY_INVESTIGATED", `Task already has investigation ${prior.runId}; no second run.`); return null; }
     const blocked = ineligibility(loaded, bankSourceId);
     if (blocked) { await autoEvent(ctx, accountId, bankSourceId, false, blocked.code, blocked.message); return null; }
     const { taskId } = await ensureTaskRow(ctx, loaded, bankSourceId);

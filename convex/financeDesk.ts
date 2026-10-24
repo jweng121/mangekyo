@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import { paginationOptsValidator, paginationResultValidator } from "convex/server";
 import type { AnyFinanceEvent, FinanceInvestigationRun } from "@mangekyo/contracts";
 import { query } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
@@ -6,8 +7,17 @@ import * as validators from "./lib/validators";
 import { recordOnly } from "./lib/investigationRecords";
 import { providerMode } from "./financeInvestigations";
 import { FEED_LENGTH } from "@mangekyo/finance-core/fixtures/demo-feed";
+import { LAW_FIRM_FEED_LENGTH } from "@mangekyo/finance-core/fixtures/law-firm-feed";
 
 /** Read-only views for the operator desk. No writes; the desk acts through the existing mutations. */
+export const getActivity = query({
+  args: { accountId: v.string(), paginationOpts: paginationOptsValidator },
+  returns: paginationResultValidator(validators.event),
+  handler: async (ctx, args) => {
+    const result = await ctx.db.query("financeEvents").withIndex("by_caseId_and_timestamp", q => q.eq("caseId", `intake:${args.accountId}`)).order("desc").paginate(args.paginationOpts);
+    return { ...result, page: result.page.map(recordOnly) };
+  },
+});
 
 function publicRun(row: Doc<"financeInvestigationRuns">): FinanceInvestigationRun {
   const { executionClaimed, pollCount, deadline, ...run } = recordOnly(row);
@@ -72,7 +82,7 @@ export const getDeskData = query({
       // One card per distinct statement; several runs often propose the same policy.
       policies: policies.filter((p, i) => !approvedStatements.has(p.statement.replace(/^For human review: /, "")) && policies.findIndex(q => q.statement === p.statement) === i),
       approvedPolicies: approved.map(p => ({ policyId: p.policyId, statement: p.statement, sourceId: p.sourceId, approvedBy: p.approvedBy ?? null, approvedAt: p.approvedAt })),
-      feed: { mode: providerMode(), stepsDone: feedSteps, total: FEED_LENGTH },
+      feed: { mode: providerMode(), stepsDone: feedSteps, total: account?.datasetVersion === "law-firm-demo-v1" ? LAW_FIRM_FEED_LENGTH : FEED_LENGTH },
       counts: { autoStarted, blocked: proposals.filter(p => p.status === "blocked").length, posted: proposals.filter(p => p.status === "posted").length },
     };
   },

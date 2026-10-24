@@ -10,6 +10,7 @@ import { causeLine, describeEvent, money, ownerStatus, personName, progressText,
 const results: Record<string, unknown> = {};
 vi.mock("convex/react", () => ({
   useQuery: (ref: Parameters<typeof getFunctionName>[0], args: unknown) => args === "skip" ? undefined : results[getFunctionName(ref)],
+  usePaginatedQuery: (ref: Parameters<typeof getFunctionName>[0]) => ({ results: (results[getFunctionName(ref)] as { page: unknown[] } | undefined)?.page ?? [], status: "Exhausted", loadMore: () => undefined }),
   useMutation: () => async () => { throw new Error("not used in render test"); },
 }));
 vi.mock("next/navigation", () => ({ useParams: () => ({ runId: encodeURIComponent(String(results.runId)) }), useRouter: () => ({ push: () => undefined }) }));
@@ -55,6 +56,7 @@ describe("desk render with real backend query results", () => {
     const overview = await t.query(api.financeIntake.getAccountOverview, { accountId: DEMO });
     const desk = await t.query(api.financeDesk.getDeskData, { accountId: DEMO });
     Object.assign(results, {
+      "financeDesk:getActivity": await t.query(api.financeDesk.getActivity, { accountId: DEMO, paginationOpts: { numItems: 50, cursor: null } }),
       "financeIntake:listAccounts": await t.query(api.financeIntake.listAccounts, {}), "financeIntake:getAccountOverview": overview,
       "financeDesk:getDeskData": desk, "financeInvestigations:getProviderConfiguration": await t.query(api.financeInvestigations.getProviderConfiguration, {}),
     });
@@ -102,6 +104,7 @@ describe("desk render with real backend query results", () => {
       "financeIntake:listAccounts": await t.query(api.financeIntake.listAccounts, {}), "financeIntake:getAccountOverview": await t.query(api.financeIntake.getAccountOverview, { accountId: DEMO }),
       "financeDesk:getDeskData": await t.query(api.financeDesk.getDeskData, { accountId: DEMO }), "financeInvestigations:getProviderConfiguration": await t.query(api.financeInvestigations.getProviderConfiguration, {}),
       runId: rerun.runId, "financeDesk:getRunView": await t.query(api.financeDesk.getRunView, { runId: rerun.runId }),
+      "financeDesk:getActivity": await t.query(api.financeDesk.getActivity, { accountId: DEMO, paginationOpts: { numItems: 50, cursor: null } }),
     });
     const { default: Desk } = await import("../app/desk/page");
     const html = decode(renderToString(<Desk />));

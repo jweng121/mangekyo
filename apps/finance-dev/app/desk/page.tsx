@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 import Link from "next/link";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation, useQuery, usePaginatedQuery } from "convex/react";
 import { ConvexError } from "convex/values";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -45,6 +45,7 @@ export default function Desk() {
   useEffect(() => { const t = setInterval(() => setMinute(Math.floor(Date.now() / 60_000) * 60_000), 60_000); return () => clearInterval(t); }, []);
   const overview = useQuery(api.financeIntake.getAccountOverview, accountId ? { accountId, now: minute + 59_999 } : "skip");
   const desk = useQuery(api.financeDesk.getDeskData, accountId ? { accountId } : "skip");
+  const activity = usePaginatedQuery(api.financeDesk.getActivity, accountId ? { accountId } : "skip", { initialNumItems: 50 });
   const config = useQuery(api.financeInvestigations.getProviderConfiguration);
   const [acting, setActing] = useState<Acting>("sam");
   const dev = devFor(acting);
@@ -115,6 +116,12 @@ export default function Desk() {
   const queue: Array<{ key: string; node: ReactNode }> = [];
   const runFor = (bankSourceId?: string) => desk?.tasks.find(t => t.bankSourceId === bankSourceId)?.latestRun ?? null;
   const reasonBox = (key: string, placeholder: string) => <input aria-label={placeholder} placeholder={placeholder} value={inputs[key] ?? ""} onChange={e => setInputs({ ...inputs, [key]: e.target.value })} />;
+
+  for (const d of overview?.deposits.filter(d => d.status === "awaiting_clearance") ?? []) queue.push({ key: `waiting:${d.transaction.sourceId}`, node:
+    <Card tone="wait" tag="Bank clearance pending" tagTone="t-wait" title="Waiting for the check to clear">
+      <p>{names.deposit(d.transaction.sourceId)}. The agent can review the evidence now, but cannot propose an allocation until the check clears.</p>
+      {runFor(d.transaction.sourceId) && <Link className="btn alt sm" href={`/runs/${encodeURIComponent(runFor(d.transaction.sourceId)!.runId)}`}>Open run</Link>}
+    </Card> });
 
   for (const p of proposals.filter(p => p.status === "on_hold")) queue.push({ key: p.proposalId, node:
     <Card tone="wait" tag={p.hold?.ready ? "Ready to continue · a person decides" : "On hold · needs a person"} tagTone={p.hold?.ready ? "t-ok" : "t-wait"} title={p.kind === "payment" ? `${money(p.amountCents)} for ${names.owner(p.ownerId)}` : `${money(p.amountCents)} → ${p.shares?.map(s => names.owner(s.ownerId)).join(", ")}`}>
@@ -199,9 +206,12 @@ export default function Desk() {
 
   for (const p of proposals.filter(p => p.kind === "payment" && p.status === "blocked").slice(0, 3)) {
     const l1 = p.blockedReasons?.some(f => f.rule === "L1");
+    const l2 = p.blockedReasons?.some(f => f.rule === "L2");
+    const funding = overview?.deposits.find(d => d.transaction.sourceId === p.fundingSourceId)?.transaction;
     queue.push({ key: p.proposalId, node: <Card tone="bad" tag={`Blocked by the lock · ${p.blockedReasons?.map(f => `rule ${f.rule}`).join(", ")}`} tagTone="t-bad" title={`${money(p.amountCents)} for ${names.owner(p.ownerId)} can't go out`}>
       {l1 && <Bars pool={tw?.bank.clearedCents ?? null} available={available(p.ownerId)} requested={p.amountCents} ownerName={names.owner(p.ownerId)} />}
-      <p>Requested by {personName(p.requestedBy)}. {l1 ? "The pool has the cash, but it belongs to other owners." : `Stopped because ${reasonWords(p.blockedReasons?.map(f => f.code) ?? [])}.`} Nobody can override this; it stays on record.</p>
+      <p>Requested by {personName(p.requestedBy)}. {l2 && funding ? `At request time, the ${money(funding.amountCents)} ${funding.counterparty.replace(" Insurance", "")} check hadn't cleared yet.` : l1 ? `The account holds ${money(tw?.bank.adjustedCents)}, but ${names.owner(p.ownerId)} has ${money(available(p.ownerId))}. Paying this would use other clients' money.` : `Stopped because ${reasonWords(p.blockedReasons?.map(f => f.code) ?? [])}.`} This request stays blocked in the history.</p>
+      {l2 && funding?.clearing === "cleared" && <button className="btn alt sm" disabled={busy || acting !== "riley"} onClick={() => setPayOpen({ ownerId: p.ownerId, amount: (p.amountCents / 100).toFixed(2) })}>Make a new request as riley</button>}
     </Card> });
   }
 
@@ -215,7 +225,7 @@ export default function Desk() {
     const text = t.latestRun ? progressText(t.latestRun.status, names.deposit(t.bankSourceId ?? ""), null) : null;
     return text ? [text] : [];
   });
-  const feed: Activity[] = (desk?.activity ?? []).map(e => describeEvent(e, names));
+  const feed: Activity[] = activity.results.map(e => describeEvent(e, names));
   const cause = tw ? causeLine(tw, names.owner) : null;
   const pool = tw?.bank.clearedCents ?? null;
 
@@ -238,7 +248,7 @@ export default function Desk() {
         <button className="btn" onClick={() => setPayOpen({})}>New payment</button>
       </div>
     </div></header>
-    <div className="wrap proto">{config?.mode === "creao" ? "CREAO mode · investigations cost money and never start automatically here" : config?.mode === "mock" ? "Mock mode · agent answers are simulated and deterministic" : "Provider mode not configured"} · {overview?.account.synthetic ? "synthetic data" : ""} · dev-only identities</div>
+    <div className="wrap proto">{config?.mode === "creao" ? "CREAO mode · investigations cost money" : config?.mode === "mock" && overview?.account.datasetVersion === "law-firm-demo-v1" ? "Sample data · fictional law firm · agents simulated" : config?.mode === "mock" ? "Sample data · agents simulated" : "Provider mode not configured"}</div>
 
     <main className="wrap desk">
       {!overview || !tw ? <p className="empty">{accounts?.length === 0 ? "No accounts yet. Use Fresh DEMO run to load one." : "Loading the account…"}</p> : <>
@@ -275,6 +285,7 @@ export default function Desk() {
                 <AnimatedList items={feed.map(a => ({ id: a.id, title: a.text }))} animation="none" frame={false} theme="light" showGradients={false} selectOnHover={false} enableArrowNavigation={false} maxHeight={560} gap={0} width="100%"
                   renderItem={(_, index) => { const a = feed[index]; return <div className="ev"><span className="tm">{new Date(a.at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</span><div className="tx"><b>{a.text}</b>{a.sub && <span className="sub">{a.sub}</span>}<span className={`who ${a.tone}`}>{a.who}</span></div></div>; }} />}
             </div>
+            {activity.status !== "Exhausted" && <button className="btn alt sm" disabled={activity.status !== "CanLoadMore"} onClick={() => activity.loadMore(50)}>{activity.status === "LoadingMore" ? "Loading activity" : "Load older activity"}</button>}
           </section>
         </div>
 

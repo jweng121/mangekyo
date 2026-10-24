@@ -8,7 +8,7 @@ export default defineSchema({
   financeTransactions: defineTable(fields.transaction).index("by_caseId", ["caseId"]),
   financeDocuments: defineTable(fields.document).index("by_caseId", ["caseId"]),
   financeTasks: defineTable(fields.task).index("by_taskId", ["taskId"]).index("by_accountId", ["accountId"]),
-  financeEvents: defineTable(fields.event).index("by_taskId_and_sequence", ["taskId", "sequence"]),
+  financeEvents: defineTable(fields.event).index("by_taskId_and_sequence", ["taskId", "sequence"]).index("by_caseId_and_timestamp", ["caseId", "timestamp"]),
   financeSnapshots: defineTable(fields.snapshot).index("by_taskId_and_sequence", ["taskId", "sequence"]),
   financeInvestigationRuns: defineTable(fields.storedRun)
     .index("by_runId", ["runId"]).index("by_taskId_and_attempt", ["taskId", "attempt"]),

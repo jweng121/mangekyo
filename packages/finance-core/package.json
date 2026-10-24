@@ -12,7 +12,9 @@
     "./gateway": "./src/gateway/index.ts",
     "./checker": "./src/checker/index.ts",
     "./fixtures/demo-money": "./fixtures/demoMoney.ts",
-    "./fixtures/demo-feed": "./fixtures/demoFeed.ts"
+    "./fixtures/demo-feed": "./fixtures/demoFeed.ts",
+    "./fixtures/law-firm": "./fixtures/lawFirm.ts",
+    "./fixtures/law-firm-feed": "./fixtures/lawFirmFeed.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

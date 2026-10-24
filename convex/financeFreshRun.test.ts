@@ -24,7 +24,7 @@ describe("Fix 3: fresh DEMO run", () => {
     });
     const before = await snapshot();
 
-    const fresh = await t.mutation(api.financeIntake.startFreshDemoRun, {});
+    const fresh = await t.mutation(api.financeIntake.startFreshDemoRun, { fixture: "legacy" });
     expect(fresh).toMatchObject({ accountId: "demo:account:pool-002", updated: 0, issues: [] });
     expect(await snapshot()).toEqual(before);
 
@@ -35,13 +35,13 @@ describe("Fix 3: fresh DEMO run", () => {
     expect(view.owners.map(o => o.ownerId)).toEqual(["demo:run-002:owner:alpha", "demo:run-002:owner:xavier", "demo:run-002:owner:delta", "demo:run-002:owner:yankee"]);
     expect(view.deposits.map(d => d.transaction.sourceId)).toEqual(["demo:run-002:bank:txn:D-001", "demo:run-002:bank:txn:A-001", "demo:run-002:bank:txn:B-001"]);
     expect((await t.query(api.financeIntake.getAccountOverview, { accountId: "demo:account:pool-001" })).threeWay.status).toBe("mismatched");
-    expect((await t.mutation(api.financeIntake.startFreshDemoRun, {})).accountId).toBe("demo:account:pool-003");
+    expect((await t.mutation(api.financeIntake.startFreshDemoRun, { fixture: "legacy" })).accountId).toBe("demo:account:pool-003");
   });
 
   it("runs the lock scenarios on the fresh run's own IDs", async () => {
     const t = convexTest(schema, modules);
     await t.mutation(api.financeIntake.loadDemoFixture, {});
-    const { accountId } = await t.mutation(api.financeIntake.startFreshDemoRun, {});
+    const { accountId } = await t.mutation(api.financeIntake.startFreshDemoRun, { fixture: "legacy" });
     const x = await t.mutation(api.financeProposals.requestPayment, { accountId, ownerId: "demo:run-002:owner:xavier", amountCents: 500_000, purpose: "tax", evidenceSourceIds: ["demo:run-002:document:instruction-x-001:v1"], dev: requester });
     expect(x.lock?.failures.map(f => f.code)).toEqual(["OWNER_INSUFFICIENT_FUNDS"]);
     await t.mutation(api.financeIntake.simulateUnrecordedOutflow, { accountId });
