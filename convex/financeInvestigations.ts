@@ -12,6 +12,7 @@ import { env, internalMutation, internalQuery, mutation, query, type MutationCtx
 import type { Doc } from "./_generated/dataModel";
 import * as validators from "./lib/validators";
 import { readRecords, recordOnly, requireTask, validateScope } from "./lib/investigationRecords";
+import { nextProposalId, readIntakeRecords, submitProposal } from "./lib/money";
 
 const ACTIVE = new Set(["queued", "retrieving_evidence", "checking", "provider_starting", "provider_pending", "validating"]);
 const RUN_TIMEOUT_MS = 10 * 60 * 1000;
@@ -53,7 +54,7 @@ function timeoutError(run: Doc<"financeInvestigationRuns">): InvestigationError 
 }
 
 /** Every observable boundary appends an event and snapshot in the same transaction. */
-async function appendBoundary(ctx: MutationCtx, run: FinanceInvestigationRun, type: InvestigationEventType, message: string,
+export async function appendBoundary(ctx: MutationCtx, run: FinanceInvestigationRun, type: InvestigationEventType, message: string,
   extra: Partial<InvestigationEvent["payload"]> = {}, actor: InvestigationEvent["actor"] = { type: "system", component: "finance-investigation" }) {
   const task = await requireTask(ctx, run.taskId);
   const last = await ctx.db.query("financeEvents").withIndex("by_taskId_and_sequence", (q) => q.eq("taskId", run.taskId)).order("desc").first();
@@ -80,7 +81,8 @@ async function appendBoundary(ctx: MutationCtx, run: FinanceInvestigationRun, ty
 async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requestedScope: InvestigationStartScope, parent: Doc<"financeInvestigationRuns"> | null): Promise<{ runId: string; created: boolean }> {
   const now = Date.now();
   const scope: InvestigationScope = { ...requestedScope, cutoff: requestedScope.cutoff ?? now };
-  try { validateScope(scope); } catch (error) {
+  let intake: Awaited<ReturnType<typeof readIntakeRecords>> | null = null;
+  try { if (task.accountId) intake = await readIntakeRecords(ctx, task, scope); else validateScope(scope); } catch (error) {
     throw new ConvexError(error instanceof Error ? error.message : "Choose a valid investigation period.");
   }
   if (scope.cutoff > now) throw new ConvexError("Investigation cutoff cannot be in the future. Choose a time at or before the current server time, or leave the cutoff blank.");
@@ -92,7 +94,7 @@ async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requeste
   if (!config.mode) throw new Error(config.message);
   const attempt = (parent?.attempt ?? 0) + 1;
   const runId = `${task.taskId}:investigation:${attempt}`;
-  const records = await readRecords(ctx, task, scope);
+  const records = intake ? intake.records : await readRecords(ctx, task, scope);
   const humanClarifications = (await ctx.db.query("financeClarifications")
     .withIndex("by_taskId_and_timestamp", (q) => q.eq("taskId", task.taskId).lte("timestamp", now)).take(101)).map(recordOnly);
   const approvedPolicies = (await ctx.db.query("financeApprovedPolicies")
@@ -101,7 +103,7 @@ async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requeste
   const evidenceRefs = records.documents.map((document) => ({ documentId: document.documentId, sourceId: document.sourceId, excerpt: document.excerpt }));
   const providerInput: FinanceAgentInput = {
     schemaVersion: FINANCE_INPUT_VERSION, instructionVersion: FINANCE_INSTRUCTION_VERSION, caseId: task.caseId,
-    taskId: task.taskId, runId, scope, contextAsOf: now, records, evidenceRefs, deterministicChecks: runDeterministicChecks(records, scope), approvedPolicies, humanClarifications,
+    taskId: task.taskId, runId, scope, contextAsOf: now, records, evidenceRefs, deterministicChecks: { ...runDeterministicChecks(records, scope), ...(intake ? { threeWay: intake.threeWay } : {}) }, approvedPolicies, humanClarifications,
   };
   if (JSON.stringify(providerInput).length > 180_000) throw new Error("Evidence context exceeds the safe development snapshot size; narrow the source adapter");
   const run: FinanceInvestigationRun = {
@@ -134,7 +136,10 @@ export const startInvestigation = mutation({
 
 export const getRecords = query({
   args: { taskId: v.string(), scope: validators.scope }, returns: validators.records,
-  handler: async (ctx, args) => readRecords(ctx, await requireTask(ctx, args.taskId), args.scope),
+  handler: async (ctx, args) => {
+    const task = await requireTask(ctx, args.taskId);
+    return task.accountId ? (await readIntakeRecords(ctx, task, args.scope)).records : await readRecords(ctx, task, args.scope);
+  },
 });
 
 export const getTaskInvestigation = query({
@@ -272,9 +277,26 @@ export const recordResult = internalMutation({
       await appendBoundary(ctx, completed, "finance.question.raised", item.question, { questionId });
     }
     await appendBoundary(ctx, completed, "finance.investigation.completed", result.summary, { externalRunId: args.externalRunId });
+    if (task.accountId && result.outcome === "proposal_ready") await queueAgentAllocations(ctx, task.accountId, completed, result);
     return null;
   },
 });
+
+/** Validated agent allocations enter the approval queue through the same lock rules as a person's. Never auto-posted. */
+async function queueAgentAllocations(ctx: MutationCtx, accountId: string, run: FinanceInvestigationRun, result: FinanceAgentOutput) {
+  const byDeposit = new Map<string, FinanceAgentOutput["proposedAllocations"]>();
+  for (const row of result.proposedAllocations) byDeposit.set(row.transactionId, [...(byDeposit.get(row.transactionId) ?? []), row]);
+  const actor = { identity: `agent:finance-investigator:${run.runId}`, authenticated: false, role: "system" as const };
+  for (const [bankSourceId, rows] of byDeposit) {
+    const now = Date.now();
+    await submitProposal(ctx, {
+      proposalId: await nextProposalId(ctx, accountId, "allocation"), accountId, kind: "allocation", status: "proposed", currency: rows[0].currency,
+      requestedBy: actor.identity, origin: { type: "agent", taskId: run.taskId, runId: run.runId, agentProposalIds: rows.map(r => r.proposalId) },
+      evidenceSourceIds: [...new Set(rows.flatMap(r => r.evidenceSourceIds))], bankSourceId, shares: rows.map(r => ({ ownerId: r.ownerId, amountCents: r.amountCents })),
+      amountCents: rows.reduce((sum, r) => sum + r.amountCents, 0), purpose: `Agent proposal from ${run.runId} (unapproved)`, createdAt: now, updatedAt: now,
+    }, actor);
+  }
+}
 
 export const expireRun = internalMutation({
   args: { runId: v.string() }, returns: v.null(),
