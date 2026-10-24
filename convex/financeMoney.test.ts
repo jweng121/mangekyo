@@ -56,7 +56,8 @@ describe("core money workflow", () => {
     const [proposal] = state.proposals;
     expect(proposal).toMatchObject({ kind: "allocation", status: "pending_approval", origin: { type: "agent", runId }, bankSourceId: "bank:txn:TX-001", shares: [{ ownerId: "erp:owner:CMP-001", amountCents: 325_000 }] });
     expect(state.entries.some(e => e.proposalId === proposal.proposalId)).toBe(false);
-    await expect(t.mutation(api.financeProposals.postProposal, { proposalId: proposal.proposalId, dev: approver })).resolves.toMatchObject({ proposal: { status: "blocked" }, lock: { failures: [expect.objectContaining({ code: "STATE" })] } });
+    await expect(t.mutation(api.financeProposals.postProposal, { proposalId: proposal.proposalId, dev: approver })).resolves.toMatchObject({ proposal: { status: "pending_approval" }, lock: { allowed: false, failures: [expect.objectContaining({ code: "STATE" })] } });
+    expect((await overview(t, ERP)).entries.some(e => e.proposalId === proposal.proposalId)).toBe(false);
   });
 
   it("A: approve then post writes balanced entries atomically, and a second post does nothing", async () => {
@@ -98,8 +99,31 @@ describe("core money workflow", () => {
     expect(proposal.status).toBe("pending_approval");
     await expect(t.mutation(api.financeProposals.approveProposal, { proposalId: proposal.proposalId, dev: requester })).rejects.toThrow("approver role");
     const self = await t.mutation(api.financeProposals.approveProposal, { proposalId: proposal.proposalId, dev: { role: "approver", name: "Riley" } });
-    expect(self.proposal.status).toBe("blocked");
     expect(self.lock?.failures.map(f => f.code)).toEqual(["SELF_APPROVAL"]);
+    expect(self.proposal.status).toBe("pending_approval");
+    const events = await t.query(api.finance.listMoneyEvents, { accountId: DEMO });
+    expect(events.filter(e => e.type === "finance.money.lock_checked").at(-1)?.payload).toMatchObject({ proposalId: proposal.proposalId, allowed: false, reasonCodes: ["SELF_APPROVAL"] });
+  });
+
+  it("a refused self-approval does not end the request: a different approver can still approve and post it once", async () => {
+    const t = await setup();
+    await t.mutation(api.financeIntake.simulateUnrecordedOutflow, {});
+    const { proposal } = await t.mutation(api.financeProposals.requestPayment, { accountId: DEMO, ownerId: "demo:owner:alpha", amountCents: 100_000, purpose: "client instruction", evidenceSourceIds: ["demo:document:agreement-alpha:v1"], dev: requester });
+    expect(proposal.status).toBe("pending_approval");
+    const before = await overview(t, DEMO);
+    const self = await t.mutation(api.financeProposals.approveProposal, { proposalId: proposal.proposalId, dev: { role: "approver", name: "riley" } });
+    expect(self).toMatchObject({ proposal: { status: "pending_approval" }, lock: { allowed: false } });
+    await expect(t.mutation(api.financeProposals.postProposal, { proposalId: proposal.proposalId, dev: { role: "approver", name: "riley" } })).resolves.toMatchObject({ proposal: { status: "pending_approval" } });
+    expect((await t.mutation(api.financeProposals.approveProposal, { proposalId: proposal.proposalId, dev: approver })).proposal.status).toBe("approved");
+    expect((await t.mutation(api.financeProposals.postProposal, { proposalId: proposal.proposalId, dev: approver })).proposal.status).toBe("posted");
+    const after = await overview(t, DEMO);
+    expect(after.entries.filter(e => e.proposalId === proposal.proposalId).map(e => [e.kind, e.ownerId, e.amountCents])).toEqual([["disbursement", "demo:owner:alpha", -100_000]]);
+    expect(after.balances.find(b => b.ownerId === "demo:owner:alpha")!.postedCents).toBe(before.balances.find(b => b.ownerId === "demo:owner:alpha")!.postedCents - 100_000);
+    expect(after.threeWay.bookCents).toBe(before.threeWay.bookCents - 100_000);
+    expect(after.threeWay.bank.adjustedCents).toBe(before.threeWay.bank.adjustedCents);
+    expect(await t.mutation(api.financeProposals.postProposal, { proposalId: proposal.proposalId, dev: approver })).toMatchObject({ alreadyDone: true });
+    expect((await overview(t, DEMO)).entries).toHaveLength(after.entries.length);
+    expect((await t.query(api.financeProposals.listTransitions, { proposalId: proposal.proposalId })).map(r => r.to)).toEqual(["proposed", "pending_approval", "approved", "posted"]);
   });
 
   it("B: unclear deposit → needs_information → answer → resumed attempt", async () => {

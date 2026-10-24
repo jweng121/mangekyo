@@ -181,7 +181,10 @@ export async function gatedStep(ctx: MutationCtx, proposal: MoneyProposal, stage
   lock.allowed = lock.failures.length === 0;
   await appendMoneyEvent(ctx, { accountId: proposal.accountId, type: "finance.money.lock_checked", actor, operationId: proposal.proposalId, message: lock.allowed ? `All lock rules passed at ${stage}.` : lock.failures.map(f => `${f.rule} ${f.code}: ${f.message}`).join(" | "), proposal, lock, threeWay: gateway.threeWay, stage });
   if (!lock.allowed) {
-    const next = canTransition(proposal.status, "blocked")
+    // A refusal of who is acting (L4) or of the action itself (L7) is logged above but must not let
+    // that actor end someone else's request; only failures about the money block the proposal.
+    const refusedActorOrAction = lock.failures.some(f => f.rule === "L4" || f.rule === "L7");
+    const next = !refusedActorOrAction && canTransition(proposal.status, "blocked")
       ? await transition(ctx, proposal, "blocked", actor, lock.failures.map(f => f.code).join(", "), lock, gateway.threeWay, { blockedReasons: lock.failures })
       : proposal;
     return { proposal: next, lock, entryIds: [] };

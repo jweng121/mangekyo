@@ -69,7 +69,9 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
   }
   function show(result: { proposal: MoneyProposal; lock: LockResult | null; alreadyDone: boolean }) {
     if (result.lock) setLastLock({ proposalId: result.proposal.proposalId, lock: result.lock });
-    setNotice(result.alreadyDone ? `${result.proposal.proposalId} was already posted; nothing changed.` : `${result.proposal.proposalId} is now ${result.proposal.status}.`);
+    setNotice(result.alreadyDone ? `${result.proposal.proposalId} was already posted; nothing changed.`
+      : result.lock && !result.lock.allowed && result.proposal.status !== "blocked" ? `${result.proposal.proposalId}: action refused; it stays ${result.proposal.status}.`
+      : `${result.proposal.proposalId} is now ${result.proposal.status}.`);
   }
   function submitPayment(event: FormEvent) {
     event.preventDefault();
