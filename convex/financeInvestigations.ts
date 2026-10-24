@@ -7,15 +7,27 @@ import {
 } from "@mangekyo/contracts";
 import { runDeterministicChecks } from "@mangekyo/finance-core/checks";
 import { validateFinanceAgentOutput, FinanceOutputValidationError } from "@mangekyo/finance-core/agent";
+import { checkClaims, mockClaimChecker, type CheckerAgentMode } from "@mangekyo/finance-core/checker";
 import { internal } from "./_generated/api";
 import { env, internalMutation, internalQuery, mutation, query, type MutationCtx } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
 import * as validators from "./lib/validators";
 import { readRecords, recordOnly, requireTask, validateScope } from "./lib/investigationRecords";
+import { nextProposalId, readIntakeRecords, submitProposal } from "./lib/money";
 
 const ACTIVE = new Set(["queued", "retrieving_evidence", "checking", "provider_starting", "provider_pending", "validating"]);
 const RUN_TIMEOUT_MS = 10 * 60 * 1000;
 const startResult = v.object({ runId: v.string(), created: v.boolean() });
+
+export function providerMode(): "mock" | "creao" | null {
+  return configuration().mode;
+}
+
+/** CHECKER_AGENT_MODE: the claim checker's agent part. Off by default; the code part always runs. */
+export function checkerAgentMode(): CheckerAgentMode {
+  const raw = env.CHECKER_AGENT_MODE?.trim().toLowerCase();
+  return raw === "mock" || raw === "creao" ? raw : "off";
+}
 
 function configuration(): { mode: "mock" | "creao" | null; configured: boolean; message: string } {
   const rawMode = env.FINANCE_AGENT_MODE;
@@ -23,6 +35,25 @@ function configuration(): { mode: "mock" | "creao" | null; configured: boolean; 
   const configured = mode === "mock" || (mode === "creao" && Boolean(env.CREAO_APP_ID?.trim() && /^capi_\S+$/.test(env.CREAO_API_KEY ?? "")));
   return { mode, configured, message: mode === null ? "Set FINANCE_AGENT_MODE explicitly to mock or creao on the Convex deployment." : mode === "mock" ? "SIMULATED: deterministic mock provider; no external model runs." : configured ? "CREAO mode selected. External agent runs use server-side credentials." : "CREAO mode requires CREAO_APP_ID and an app-scoped CREAO_API_KEY (capi_ prefix) on the Convex deployment. No mock fallback." };
 }
+
+export type AutoInvestigationCode = "AUTO_ENABLED" | "MODE_NOT_CONFIGURED" | "PROVIDER_NOT_CONFIGURED" | "AUTO_DISABLED_SETTING" | "AUTO_OFF_IN_CREAO" | "AUTO_SETTING_INVALID";
+
+/** AUTO_INVESTIGATE defaults on in mock mode and off in creao mode; only an explicit "true" opts creao in. */
+export function autoInvestigationSetting(): { enabled: boolean; code: AutoInvestigationCode; message: string } {
+  const config = configuration();
+  const raw = env.AUTO_INVESTIGATE?.trim().toLowerCase() ?? "";
+  if (raw !== "" && raw !== "true" && raw !== "false") return { enabled: false, code: "AUTO_SETTING_INVALID", message: "AUTO_INVESTIGATE must be true or false; auto-investigation is off." };
+  if (!config.mode) return { enabled: false, code: "MODE_NOT_CONFIGURED", message: config.message };
+  if (!config.configured) return { enabled: false, code: "PROVIDER_NOT_CONFIGURED", message: config.message };
+  if (raw === "false") return { enabled: false, code: "AUTO_DISABLED_SETTING", message: "AUTO_INVESTIGATE=false: new deposits wait for a person to start an investigation." };
+  if (config.mode === "creao" && raw !== "true") return { enabled: false, code: "AUTO_OFF_IN_CREAO", message: "Auto-investigation is off in creao mode so no paid run starts without a person. Set AUTO_INVESTIGATE=true to opt in." };
+  return { enabled: true, code: "AUTO_ENABLED", message: `New cleared, unallocated deposits are investigated automatically in ${config.mode} mode. Proposals still need a person to approve.` };
+}
+
+export const getAutoInvestigationSetting = query({
+  args: {}, returns: v.object({ enabled: v.boolean(), code: v.string(), message: v.string() }),
+  handler: async () => autoInvestigationSetting(),
+});
 
 export const getProviderConfiguration = query({
   args: {}, returns: v.object({ mode: v.union(validators.mode, v.null()), configured: v.boolean(), message: v.string() }),
@@ -53,7 +84,7 @@ function timeoutError(run: Doc<"financeInvestigationRuns">): InvestigationError 
 }
 
 /** Every observable boundary appends an event and snapshot in the same transaction. */
-async function appendBoundary(ctx: MutationCtx, run: FinanceInvestigationRun, type: InvestigationEventType, message: string,
+export async function appendBoundary(ctx: MutationCtx, run: FinanceInvestigationRun, type: InvestigationEventType, message: string,
   extra: Partial<InvestigationEvent["payload"]> = {}, actor: InvestigationEvent["actor"] = { type: "system", component: "finance-investigation" }) {
   const task = await requireTask(ctx, run.taskId);
   const last = await ctx.db.query("financeEvents").withIndex("by_taskId_and_sequence", (q) => q.eq("taskId", run.taskId)).order("desc").first();
@@ -73,14 +104,15 @@ async function appendBoundary(ctx: MutationCtx, run: FinanceInvestigationRun, ty
     output: { allocationStatus: "unallocated", allocatedAmountCents: 0, approved: false, investigationStatus: run.status,
       providerMode: run.mode, simulated: run.simulated, result: run.result,
       deterministicChecks: run.resultChecks ?? run.providerInput?.deterministicChecks ?? null,
-      error: run.error, ...(run.reportSource ? { reportSource: run.reportSource } : {}) },
+      error: run.error, ...(run.reportSource ? { reportSource: run.reportSource } : {}), ...(run.claimCheck ? { claimCheck: run.claimCheck } : {}) },
   });
 }
 
 async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requestedScope: InvestigationStartScope, parent: Doc<"financeInvestigationRuns"> | null): Promise<{ runId: string; created: boolean }> {
   const now = Date.now();
   const scope: InvestigationScope = { ...requestedScope, cutoff: requestedScope.cutoff ?? now };
-  try { validateScope(scope); } catch (error) {
+  let intake: Awaited<ReturnType<typeof readIntakeRecords>> | null = null;
+  try { if (task.accountId) intake = await readIntakeRecords(ctx, task, scope); else validateScope(scope); } catch (error) {
     throw new ConvexError(error instanceof Error ? error.message : "Choose a valid investigation period.");
   }
   if (scope.cutoff > now) throw new ConvexError("Investigation cutoff cannot be in the future. Choose a time at or before the current server time, or leave the cutoff blank.");
@@ -92,7 +124,7 @@ async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requeste
   if (!config.mode) throw new Error(config.message);
   const attempt = (parent?.attempt ?? 0) + 1;
   const runId = `${task.taskId}:investigation:${attempt}`;
-  const records = await readRecords(ctx, task, scope);
+  const records = intake ? intake.records : await readRecords(ctx, task, scope);
   const humanClarifications = (await ctx.db.query("financeClarifications")
     .withIndex("by_taskId_and_timestamp", (q) => q.eq("taskId", task.taskId).lte("timestamp", now)).take(101)).map(recordOnly);
   const approvedPolicies = (await ctx.db.query("financeApprovedPolicies")
@@ -101,7 +133,7 @@ async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requeste
   const evidenceRefs = records.documents.map((document) => ({ documentId: document.documentId, sourceId: document.sourceId, excerpt: document.excerpt }));
   const providerInput: FinanceAgentInput = {
     schemaVersion: FINANCE_INPUT_VERSION, instructionVersion: FINANCE_INSTRUCTION_VERSION, caseId: task.caseId,
-    taskId: task.taskId, runId, scope, contextAsOf: now, records, evidenceRefs, deterministicChecks: runDeterministicChecks(records, scope), approvedPolicies, humanClarifications,
+    taskId: task.taskId, runId, scope, contextAsOf: now, records, evidenceRefs, deterministicChecks: { ...runDeterministicChecks(records, scope), ...(intake ? { threeWay: intake.threeWay } : {}) }, approvedPolicies, humanClarifications,
   };
   if (JSON.stringify(providerInput).length > 180_000) throw new Error("Evidence context exceeds the safe development snapshot size; narrow the source adapter");
   const run: FinanceInvestigationRun = {
@@ -134,7 +166,10 @@ export const startInvestigation = mutation({
 
 export const getRecords = query({
   args: { taskId: v.string(), scope: validators.scope }, returns: validators.records,
-  handler: async (ctx, args) => readRecords(ctx, await requireTask(ctx, args.taskId), args.scope),
+  handler: async (ctx, args) => {
+    const task = await requireTask(ctx, args.taskId);
+    return task.accountId ? (await readIntakeRecords(ctx, task, args.scope)).records : await readRecords(ctx, task, args.scope);
+  },
 });
 
 export const getTaskInvestigation = query({
@@ -175,6 +210,34 @@ export const answerQuestion = mutation({
     });
     await ctx.db.patch("financeInvestigationQuestions", question._id, { status: "answered", clarificationId });
     await appendBoundary(ctx, publicRun(run), "finance.clarification.saved", "Human clarification saved as task-scoped evidence, without financial authorization.", { questionId: question.questionId, clarificationId }, { type: "human", component: "finance-dev", ...respondent });
+    return await makeAttempt(ctx, task, latest.scope, latest);
+  },
+});
+
+export const correctAndRerun = mutation({
+  args: { runId: v.string(), choice: v.union(v.literal("cite_clarification"), v.literal("checker_wrong"), v.literal("add_document")), note: v.string(), dev: v.object({ role: v.union(v.literal("requester"), v.literal("approver")), name: v.string() }) },
+  returns: startResult,
+  handler: async (ctx, args) => {
+    const run = await findRun(ctx, args.runId);
+    if (run.status !== "checker_rejected") throw new ConvexError("Only a run the checker stopped can be corrected and rerun.");
+    const task = await requireTask(ctx, run.taskId);
+    const latest = await ctx.db.query("financeInvestigationRuns").withIndex("by_taskId_and_attempt", (q) => q.eq("taskId", task.taskId)).order("desc").first();
+    if (!latest || latest.runId !== run.runId) throw new ConvexError("A newer attempt exists; correct the latest run.");
+    if (task.activeRunId) throw new ConvexError("Wait for the active investigation to finish.");
+    const note = args.note.trim();
+    if (args.choice !== "cite_clarification" && (!note || note.length > 4000)) throw new ConvexError(args.choice === "checker_wrong" ? "Give the reason the checker is wrong (required)." : "Paste the document text (required).");
+    const earlier = (await ctx.db.query("financeClarifications").withIndex("by_taskId_and_timestamp", (q) => q.eq("taskId", task.taskId)).take(100)).filter(c => !c.questionId.endsWith(":correction"));
+    if (args.choice === "cite_clarification" && earlier.length === 0) throw new ConvexError("There is no saved answer to cite yet.");
+    const identity = await ctx.auth.getUserIdentity();
+    const name = args.dev.name.trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "-").slice(0, 40) || "unknown";
+    const respondent = { identity: identity?.tokenIdentifier ?? `dev-unverified:${name}`, authenticated: identity !== null };
+    const clarificationId = `${run.runId}:correction`;
+    const question = args.choice === "cite_clarification" ? `Correction after the checker stopped run ${run.attempt}: cite the person's saved answer (${earlier.map(c => c.sourceId).join(", ")}) as the source for the owner claim.`
+      : args.choice === "checker_wrong" ? `A person disputes the checker's verdict on run ${run.attempt}. Code-found contradictions still apply.`
+      : `Document added by a person after the checker stopped run ${run.attempt}.`;
+    const answer = args.choice === "cite_clarification" ? (note || earlier.map(c => c.answer).join(" / ")) : note;
+    await ctx.db.insert("financeClarifications", { clarificationId, sourceId: `clarification:${clarificationId}`, questionId: clarificationId, question, answer, caseId: task.caseId, taskId: task.taskId, runId: run.runId, timestamp: Date.now(), respondent, evidenceRefs: [] });
+    await appendBoundary(ctx, publicRun(run), "finance.clarification.saved", `${respondent.identity} chose "${args.choice.replace(/_/g, " ")}" and reran from step 3. Run ${run.attempt} stays as it was.`, { clarificationId }, { type: "human", component: "finance-dev", ...respondent });
     return await makeAttempt(ctx, task, latest.scope, latest);
   },
 });
@@ -260,21 +323,51 @@ export const recordResult = internalMutation({
       await failRun(ctx, run, { code: "validation_failed", message: "Provider result failed validation. No proposal was accepted.", retryable: false, details }, true);
       return null;
     }
-    const status = result.outcome === "needs_information" ? "needs_information" : result.outcome === "proposal_ready" ? "review_required" : "completed";
     const resultChecks = runDeterministicChecks(run.providerInput!.records, run.scope, result.proposedAllocations);
-    const completed: FinanceInvestigationRun = { ...publicRun(run), status, result, resultChecks, updatedAt: Date.now() };
-    await ctx.db.patch("financeInvestigationRuns", run._id, { status, result, resultChecks, updatedAt: completed.updatedAt });
+    // Agent 2 runs before anything reaches a person. Code verdicts always apply; the CREAO checker agent is not connected yet.
+    const agentMode = checkerAgentMode();
+    const claimCheck = await checkClaims(run.providerInput!, result, agentMode, agentMode === "mock" ? mockClaimChecker : null, Date.now());
+    const rejected = claimCheck.status === "rejected";
+    const status = rejected ? "checker_rejected" : result.outcome === "needs_information" ? "needs_information" : result.outcome === "proposal_ready" ? "review_required" : "completed";
+    const completed: FinanceInvestigationRun = { ...publicRun(run), status, result, resultChecks, claimCheck, updatedAt: Date.now() };
+    await ctx.db.patch("financeInvestigationRuns", run._id, { status, result, resultChecks, claimCheck, updatedAt: completed.updatedAt });
     const task = await requireTask(ctx, run.taskId);
     if (task.activeRunId === run.runId) await ctx.db.patch("financeTasks", task._id, { status: status === "completed" ? "investigation_completed" : status, activeRunId: undefined });
+    const counts = (v: string) => claimCheck.claims.filter(c => c.verdict === v).length;
+    const tally = `${counts("supported")} supported, ${counts("not_supported")} not supported, ${counts("not_checkable")} not checkable`;
+    if (rejected) {
+      const first = claimCheck.claims.find(c => c.verdict === "not_supported")!;
+      await appendBoundary(ctx, completed, "finance.checker.rejected", `Checker stopped this run (${tally}): "${first.claim}" ${first.reason}`, { errorCode: "checker_rejected" });
+      await appendBoundary(ctx, completed, "finance.investigation.completed", "Stopped by the claim checker. Nothing was sent for approval and no money moved.", { externalRunId: args.externalRunId });
+      return null;
+    }
+    await appendBoundary(ctx, completed, "finance.checker.completed", `Checker passed every claim it could judge (${tally}).`);
     for (const item of result.questions) {
       const questionId = `${run.runId}:question:${item.key}`;
       await ctx.db.insert("financeInvestigationQuestions", { caseId: run.caseId, taskId: run.taskId, runId: run.runId, questionId, ...item, status: "open", clarificationId: null });
       await appendBoundary(ctx, completed, "finance.question.raised", item.question, { questionId });
     }
     await appendBoundary(ctx, completed, "finance.investigation.completed", result.summary, { externalRunId: args.externalRunId });
+    if (task.accountId && result.outcome === "proposal_ready") await queueAgentAllocations(ctx, task.accountId, completed, result);
     return null;
   },
 });
+
+/** Validated agent allocations enter the approval queue through the same lock rules as a person's. Never auto-posted. */
+async function queueAgentAllocations(ctx: MutationCtx, accountId: string, run: FinanceInvestigationRun, result: FinanceAgentOutput) {
+  const byDeposit = new Map<string, FinanceAgentOutput["proposedAllocations"]>();
+  for (const row of result.proposedAllocations) byDeposit.set(row.transactionId, [...(byDeposit.get(row.transactionId) ?? []), row]);
+  const actor = { identity: `agent:finance-investigator:${run.runId}`, authenticated: false, role: "system" as const };
+  for (const [bankSourceId, rows] of byDeposit) {
+    const now = Date.now();
+    await submitProposal(ctx, {
+      proposalId: await nextProposalId(ctx, accountId, "allocation"), accountId, kind: "allocation", status: "proposed", currency: rows[0].currency,
+      requestedBy: actor.identity, origin: { type: "agent", taskId: run.taskId, runId: run.runId, agentProposalIds: rows.map(r => r.proposalId) },
+      evidenceSourceIds: [...new Set(rows.flatMap(r => r.evidenceSourceIds))], bankSourceId, shares: rows.map(r => ({ ownerId: r.ownerId, amountCents: r.amountCents })),
+      amountCents: rows.reduce((sum, r) => sum + r.amountCents, 0), purpose: `Agent proposal from ${run.runId} (unapproved)`, createdAt: now, updatedAt: now,
+    }, actor);
+  }
+}
 
 export const expireRun = internalMutation({
   args: { runId: v.string() }, returns: v.null(),

@@ -22,7 +22,8 @@ export interface TaskCreatedEvent extends SyntheticRecord {
 export type InvestigationEventType = "finance.investigation.started" | "finance.evidence.retrieved" |
   "finance.checks.completed" | "finance.provider.started" | "finance.provider.result_received" |
   "finance.validation.failed" | "finance.investigation.failed" | "finance.question.raised" |
-  "finance.clarification.saved" | "finance.investigation.resumed" | "finance.investigation.completed";
+  "finance.clarification.saved" | "finance.investigation.resumed" | "finance.investigation.completed" |
+  "finance.checker.completed" | "finance.checker.rejected";
 
 export interface InvestigationEvent extends SyntheticRecord {
   eventId: string;
@@ -51,3 +52,32 @@ export interface InvestigationEvent extends SyntheticRecord {
 }
 
 export type FinanceEvent = TaskCreatedEvent | InvestigationEvent;
+
+export type MoneyEventType = "finance.money.import_completed" | "finance.money.lock_checked" |
+  "finance.money.proposal_transitioned" | "finance.money.ledger_posted" | "finance.money.bank_item_recorded" |
+  "finance.money.auto_investigation" | "finance.money.hold_updated" |
+  "finance.money.policy_approved" | "finance.money.feed_step";
+
+/** Account-level money stream. taskId is the stream key `money:<accountId>`; runId is the operation ID. */
+export interface MoneyEvent extends SyntheticRecord {
+  eventId: string;
+  taskId: string;
+  runId: string;
+  sequence: number;
+  type: MoneyEventType;
+  timestamp: number;
+  actor: { type: "system"; component: "finance-money" } |
+    { type: "human"; component: "finance-dev"; identity: string; authenticated: boolean };
+  evidenceRefs: EvidenceReference[];
+  payload: {
+    accountId: string;
+    message: string;
+    proposalId: string | null;
+    allowed: boolean | null;
+    reasonCodes: string[];
+    sourceIds: string[];
+    entryIds: string[];
+  };
+}
+
+export type AnyFinanceEvent = FinanceEvent | MoneyEvent;

@@ -1,0 +1,2 @@
+/* Global reset shared by every route; page styles live in mk.css (.mk) and dev/dev.css (.dev-root). */
+html, body { margin: 0; padding: 0; }

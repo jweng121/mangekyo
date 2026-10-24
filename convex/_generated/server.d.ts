@@ -30,9 +30,12 @@ import type { DataModel } from "./dataModel.js";
 type Env = {
   readonly CONVEX_CLOUD_URL: string;
   readonly CONVEX_SITE_URL: string;
+  readonly AUTO_INVESTIGATE: string | undefined;
+  readonly CHECKER_AGENT_MODE: string | undefined;
   readonly CREAO_API_KEY: string | undefined;
   readonly CREAO_APP_ID: string | undefined;
   readonly FINANCE_AGENT_MODE: string | undefined;
+  readonly OUTSTANDING_MAX_DAYS: string | undefined;
 };
 
 /**
