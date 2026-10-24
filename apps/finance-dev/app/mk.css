@@ -124,6 +124,7 @@
 .mk .dot { flex: none; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font: 600 12px var(--mono); }
 .mk .claim { display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid var(--hair); align-items: flex-start; }
 .mk .claim:first-of-type { border-top: 0; }
+.mk .quote { background: #F6F4EF; border-left: 3px solid #9AA4AA; padding: 8px 10px; font-size: 13px; overflow-wrap: anywhere; }
 .mk .ids { font: 500 12px var(--mono); color: var(--muted); overflow-wrap: anywhere; }
 
 /* agent view */

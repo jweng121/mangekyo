@@ -12,7 +12,7 @@ import { api } from "../../../../convex/_generated/api";
 import { MotionRoot, prefersReducedMotion } from "../components/MotionRoot";
 import { Money } from "../components/Money";
 import AnimatedList from "../components/reactbits/AnimatedList";
-import { causeLine, describeEvent, money, ownerStatus, personName, progressText, reasonWords, type Activity, type Names } from "../lib/desk";
+import { causeLine, describeEvent, money, ownerStatus, personName, progressText, reasonWords, usedPolicy, type Activity, type Names } from "../lib/desk";
 import "../mk.css";
 
 type Acting = "sam" | "riley";
@@ -59,7 +59,21 @@ export default function Desk() {
     post: useMutation(api.financeProposals.postProposal), reject: useMutation(api.financeProposals.rejectProposal), propose: useMutation(api.financeProposals.proposeAllocation),
     recheck: useMutation(api.financeProposals.recheckHeld), wait: useMutation(api.financeProposals.keepWaiting), cancel: useMutation(api.financeProposals.cancelHeld),
     resume: useMutation(api.financeProposals.continueHeld), answer: useMutation(api.financeInvestigations.answerQuestion),
+    feed: useMutation(api.financeIntake.feedNext), policy: useMutation(api.financeProposals.approvePolicy), allProven: useMutation(api.financeProposals.approveAllProven),
   };
+  // Live feed: play/pause steps through the scripted DEMO sequence, one import every few seconds. Mock mode only.
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => {
+    if (!playing || !accountId) return;
+    let stop = false;
+    const tick = async () => {
+      try { const r = await m.feed({ accountId }); if (r.done) { setPlaying(false); setToast("Live feed finished. Break it, or request a payment, to keep going."); return; } }
+      catch (e) { setPlaying(false); setToast(errorText(e)); return; }
+      if (!stop) timer = setTimeout(tick, 4500);
+    };
+    let timer = setTimeout(tick, 300);
+    return () => { stop = true; clearTimeout(timer); };
+  }, [playing, accountId]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(null), 3600); return () => clearTimeout(t); }, [toast]);
   async function act(fn: () => Promise<unknown>, done?: string) {
     setBusy(true);
@@ -73,7 +87,8 @@ export default function Desk() {
     owner: id => overview?.owners.find(o => o.ownerId === id)?.name ?? (id === null ? "Not yet assigned" : "an owner"),
     deposit: sourceId => { const t = overview?.deposits.find(d => d.transaction.sourceId === sourceId)?.transaction; return t ? `${money(t.amountCents)} from ${t.counterparty}` : "a deposit"; },
     proposal: id => overview?.proposals.find(p => p.proposalId === id),
-  }), [overview]);
+    policy: sourceId => { const p = desk?.approvedPolicies.find(x => x.sourceId === sourceId); return p ? { policyId: p.policyId, approvedBy: p.approvedBy } : undefined; },
+  }), [overview, desk]);
 
   const tw = overview?.threeWay;
   const matched = tw?.status === "matched";
@@ -111,6 +126,14 @@ export default function Desk() {
       <div className="acts">{reasonBox(`cancel:${p.proposalId}`, "Reason to cancel (required)")}<button className="btn alt sm" disabled={busy || !(inputs[`cancel:${p.proposalId}`] ?? "").trim()} onClick={() => act(() => m.cancel({ proposalId: p.proposalId, reason: inputs[`cancel:${p.proposalId}`] ?? "", dev }), "Cancelled. Nothing moved.")}>Cancel with reason</button></div>
     </Card> });
 
+  for (const s of desk?.checkerStopped ?? []) queue.push({ key: `checker:${s.runId}`, node:
+    <Card tone="bad" tag="Agent 2 · checker stopped a proposal" tagTone="t-bad" title="A claim isn't supported by its source">
+      <p>&ldquo;{s.claim}&rdquo;</p>
+      {s.sourceSays && <div className="quote"><span style={{ color: "var(--muted)" }}>What the source actually says:</span><br /><span className="m">{s.sourceSays}</span></div>}
+      <p>{s.reason} Nothing was proposed for {names.deposit(s.bankSourceId ?? "")} and no money moved.</p>
+      <div className="acts"><Link className="btn sm" href={`/runs/${encodeURIComponent(s.runId)}`}>Open run and fix</Link></div>
+    </Card> });
+
   for (const c of tw?.causes.filter(c => c.code === "BANK_TXN_WITHOUT_LEDGER_ENTRY") ?? []) {
     const txn = overview?.deposits.find(d => d.transaction.sourceId === c.sourceIds[0])?.transaction;
     queue.push({ key: `fix:${c.sourceIds[0]}`, node: <Card tone="bad" tag="Code · fixes the gap" tagTone="t-code" title={`Record the ${money(Math.abs(c.amountCents ?? 0))} bank item against ${c.ownerIds.map(names.owner).join(", ") || "an owner"}`}>
@@ -122,9 +145,12 @@ export default function Desk() {
 
   for (const p of proposals.filter(p => p.kind === "allocation" && (p.status === "pending_approval" || p.status === "approved"))) {
     const run = p.origin.type === "agent" ? p.origin.runId : null;
+    const checked = run ? desk?.tasks.find(t => t.latestRun?.runId === run)?.latestRun?.checker ?? null : null;
+    const policyNote = usedPolicy(p.evidenceSourceIds, names);
     queue.push({ key: p.proposalId, node: <Card tag={p.origin.type === "agent" ? "AI proposal · needs sign-off" : "Person's proposal · needs sign-off"} tagTone={p.origin.type === "agent" ? "t-ai" : "t-wait"} title={`${money(p.amountCents)} → ${p.shares?.map(s => names.owner(s.ownerId)).join(", ")}`}>
+      {policyNote && <span className="tag t-ok">{policyNote}</span>}
       <p>{names.deposit(p.bankSourceId ?? "")}. {p.status === "approved" ? `Approved by ${personName(p.approvedBy ?? "")}; posting re-runs every lock rule.` : "Every lock rule passed when it was proposed. Nothing posts until a person approves and posts it."}</p>
-      <span className="meta">Cites {p.evidenceSourceIds.length} source{p.evidenceSourceIds.length === 1 ? "" : "s"} · requested by {personName(p.requestedBy)}</span>
+      <span className="meta">Cites {p.evidenceSourceIds.length} source{p.evidenceSourceIds.length === 1 ? "" : "s"}{checked ? ` · checker confirmed ${checked.supported} of ${checked.total} claim${checked.total === 1 ? "" : "s"}` : ""} · requested by {personName(p.requestedBy)}</span>
       <div className="acts">
         {p.status === "pending_approval"
           ? <button className="btn sm" disabled={busy} onClick={() => act(async () => setToast(outcome(await m.approve({ proposalId: p.proposalId, dev }))))}>Approve allocation</button>
@@ -179,8 +205,8 @@ export default function Desk() {
 
   for (const pol of desk?.policies ?? []) queue.push({ key: `${pol.runId}:${pol.policyId}`, node:
     <Card tag="AI · proposed policy" tagTone="t-ai" title={`“${pol.statement.replace(/^For human review: /, "")}”`}>
-      <p>Proposed by the investigator. Approving policies is not built yet, so this stays a proposal and is never used automatically.</p>
-      <div className="acts"><Link className="btn alt sm" href={`/runs/${encodeURIComponent(pol.runId)}`}>Open run</Link></div>
+      <p>Based on a deposit the investigator matched. Once approved, the next matching investigation uses it and says so; it never approves money by itself.</p>
+      <div className="acts"><button className="btn sm" disabled={busy} onClick={() => act(async () => { const r = await m.policy({ runId: pol.runId, candidatePolicyId: pol.policyId, dev }); setToast(`Policy ${r.policyId} saved. The agent uses it on the next matching deposit.`); })}>Approve policy</button><Link className="btn alt sm" href={`/runs/${encodeURIComponent(pol.runId)}`}>Open run</Link></div>
     </Card> });
 
   const working = (desk?.tasks ?? []).flatMap(t => {
@@ -197,6 +223,8 @@ export default function Desk() {
       <div className="ctl">
         <label>Acting as (dev only)<select value={acting} onChange={e => setActing(e.target.value as Acting)}><option value="sam">sam, approver</option><option value="riley">riley, requester</option></select></label>
         <label>Account<select value={accountId ?? ""} onChange={e => setChosen(e.target.value)}>{accounts?.map(a => <option key={a.accountId} value={a.accountId}>{a.name.replace("Sandbox ERP pooled trust accounts (TRUST-01 + TRUST-02)", "Sandbox ERP (seed 42)")}</option>)}</select></label>
+        {accountId && isDemo(accountId) && <button className="btn alt" disabled={desk?.feed.mode !== "mock" || (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7)} title={desk?.feed.mode !== "mock" ? "Mock mode only: in CREAO mode investigations cost money" : undefined} onClick={() => setPlaying(!playing)}>
+          {desk?.feed.mode !== "mock" ? "Live feed (mock only)" : (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7) ? "Feed finished" : playing ? "Pause live feed" : desk?.feed.stepsDone ? `Resume live feed (${desk.feed.stepsDone}/${desk.feed.total})` : "Start live feed"}</button>}
         {accountId && isDemo(accountId) && <select aria-label="Break it" value="" disabled={busy} onChange={e => {
           const v = e.target.value;
           if (v === "outflow") void act(() => m.outflow({ accountId }), "A wire left the bank with no ledger entry.");
@@ -232,7 +260,8 @@ export default function Desk() {
 
         <div className="cols">
           <section className="col-side" aria-label="Needs a person">
-            <div className="colhead"><h2>Needs a person <span className="m" style={{ fontSize: 14, color: "var(--muted)" }}>{queue.length}</span></h2></div>
+            <div className="colhead"><h2>Needs a person <span className="m" style={{ fontSize: 14, color: "var(--muted)" }}>{queue.length}</span></h2>
+              <button className="btn alt sm" disabled={busy || !proposals.some(p => p.kind === "allocation" && p.status === "pending_approval" && usedPolicy(p.evidenceSourceIds, names))} onClick={() => act(async () => { const r = await m.allProven({ accountId: accountId!, dev }); setToast(`Approved ${r.approved.length} proven item${r.approved.length === 1 ? "" : "s"} as ${dev.name}. ${r.skipped.length} still need one-by-one review.`); })}>Approve all proven items</button></div>
             {queue.length === 0 ? <div className="empty">Nothing needs a person right now.</div> : queue.map(item => <div key={item.key}>{item.node}</div>)}
           </section>
           <section className="col-main" aria-label="Activity">

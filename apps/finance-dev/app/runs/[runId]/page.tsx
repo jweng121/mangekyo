@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useQuery } from "convex/react";
+import { useParams, useRouter } from "next/navigation";
+import { useMutation, useQuery } from "convex/react";
+import { ConvexError } from "convex/values";
 import { api } from "../../../../../convex/_generated/api";
 import { MotionRoot } from "../../components/MotionRoot";
-import { money } from "../../lib/desk";
+import { money, personName } from "../../lib/desk";
 import "../../mk.css";
 
 const STEP: Record<string, { title: string; who: string; tone: "ok" | "ai" | "bad" | "q" }> = {
@@ -20,15 +22,50 @@ const STEP: Record<string, { title: string; who: string; tone: "ok" | "ai" | "ba
   "finance.question.raised": { title: "Asked a question instead of guessing", who: "Agent", tone: "q" },
   "finance.clarification.saved": { title: "A person answered", who: "Person", tone: "ok" },
   "finance.investigation.completed": { title: "Finished", who: "Agent", tone: "ai" },
+  "finance.checker.completed": { title: "Checker confirmed the claims it could judge", who: "Agent 2", tone: "ok" },
+  "finance.checker.rejected": { title: "Checker found an unsupported claim", who: "Agent 2", tone: "bad" },
 };
 const DOT = { ok: ["var(--ok-soft)", "var(--ok)", "passed"], ai: ["var(--ai-soft)", "var(--ai)", "agent step"], bad: ["var(--bad)", "#fff", "failed"], q: ["var(--wait-soft)", "var(--wait)", "waiting on a person"] } as const;
 const OUTCOME: Record<string, string> = { proposal_ready: "Ready for approval", needs_information: "Asked a question", findings: "Findings only" };
-const runOutcome = (r: { status: string; outcome: string | null }) => r.outcome ? OUTCOME[r.outcome] : r.status === "failed" ? "Failed" : r.status.replace(/_/g, " ");
+const runOutcome = (r: { status: string; outcome: string | null }) => r.status === "checker_rejected" ? "Stopped by the checker" : r.outcome ? OUTCOME[r.outcome] : r.status === "failed" ? "Failed" : r.status.replace(/_/g, " ");
+const VERDICT = { supported: ["t-ok", "Supported"], not_supported: ["t-bad", "Not supported"], not_checkable: ["t-wait", "Not checkable"] } as const;
+const CHOICES = [
+  { id: "cite_clarification", label: "Cite the person's answer as the source for the claim", needs: "Optional note" },
+  { id: "checker_wrong", label: "The checker is wrong, keep the claim (needs a reason)", needs: "Why the checker is wrong (required)" },
+  { id: "add_document", label: "Add a document and rerun", needs: "Paste the document text (required)" },
+] as const;
+
+function FixIt({ runId, creao }: { runId: string; creao: boolean }) {
+  const router = useRouter();
+  const rerun = useMutation(api.financeInvestigations.correctAndRerun);
+  const [choice, setChoice] = useState<(typeof CHOICES)[number]["id"]>("cite_clarification");
+  const [note, setNote] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  return <section className="card bad" aria-label="Fix it">
+    <h2 style={{ fontSize: 18, margin: 0 }}>Fix it</h2>
+    <p>Correct what went wrong, then rerun from step 3. This run stays exactly as it is, and the new run links back to it.</p>
+    <fieldset style={{ border: 0, padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+      <legend className="eyebrow" style={{ marginBottom: 6 }}>What was wrong</legend>
+      {CHOICES.map(c => <label key={c.id} style={{ display: "flex", gap: 10, fontSize: 14, alignItems: "flex-start" }}><input type="radio" name="fix" checked={choice === c.id} onChange={() => setChoice(c.id)} style={{ minHeight: 0, marginTop: 3 }} />{c.label}</label>)}
+    </fieldset>
+    <label className="field">{CHOICES.find(c => c.id === choice)!.needs}<textarea value={note} onChange={e => setNote(e.target.value)} rows={3} /></label>
+    {error && <p role="alert" style={{ color: "var(--bad)" }}>{error}</p>}
+    <p className="meta">Recorded as sam, approver (dev only).{creao ? " In CREAO mode the rerun is a real, paid run." : ""}</p>
+    <div className="acts"><button className="btn" disabled={busy} onClick={async () => {
+      setBusy(true); setError(null);
+      try { const r = await rerun({ runId, choice, note, dev: { role: "approver", name: "sam" } }); router.push(`/runs/${encodeURIComponent(r.runId)}`); }
+      catch (e) { setError(e instanceof ConvexError && typeof e.data === "string" ? e.data : "Couldn't rerun. Try again."); }
+      finally { setBusy(false); }
+    }}>Rerun from step 3{creao ? " (starts a CREAO run)" : ""}</button></div>
+  </section>;
+}
 const plain = (text: string) => text.replace(/^SIMULATED: /, "Mock agent: ");
 
 export default function RunInspector() {
   const runId = decodeURIComponent(String(useParams<{ runId: string }>().runId));
   const view = useQuery(api.financeDesk.getRunView, { runId });
+  const config = useQuery(api.financeInvestigations.getProviderConfiguration);
   if (view === undefined) return <MotionRoot className=""><p className="wrap empty" style={{ marginTop: 24 }}>Loading the run…</p></MotionRoot>;
   if (view === null) return <MotionRoot className=""><p className="wrap empty" style={{ marginTop: 24 }}>No run with this ID. <Link href="/desk">Back to the desk</Link></p></MotionRoot>;
   const { run, runs, steps } = view;
@@ -41,6 +78,9 @@ export default function RunInspector() {
   input?.records.invoices.forEach(i => sources.set(i.sourceId, i.excerpt));
   input?.humanClarifications.forEach(c => sources.set(c.sourceId, `Answer: “${c.answer}”`));
   const claims = run.result?.findings ?? [];
+  const verdicts = new Map((run.claimCheck?.claims ?? []).map(c => [c.findingId, c]));
+  const policies = (input?.approvedPolicies ?? []).filter(p => run.result?.proposedAllocations.some(a => a.evidenceSourceIds.includes(p.sourceId)));
+  const latest = runs.reduce((a, b) => (b.attempt > a.attempt ? b : a), runs[0]);
   return <MotionRoot className="">
     <header className="bar"><div className="wrap bar-in">
       <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", minWidth: 0 }}>
@@ -52,9 +92,9 @@ export default function RunInspector() {
     <main className="wrap" style={{ display: "flex", flexDirection: "column", gap: 22, paddingBlock: "22px 64px" }}>
       <section style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <span className="eyebrow">Every run is kept · nothing is overwritten</span>
-        <div className="runs">{runs.map(r => <Link key={r.runId} className={`run${r.status === "failed" ? " failed" : ""}`} href={`/runs/${encodeURIComponent(r.runId)}`} aria-current={r.runId === runId ? "page" : undefined}>
+        <div className="runs">{runs.map(r => <Link key={r.runId} className={`run${r.status === "failed" || r.status === "checker_rejected" ? " failed" : ""}`} href={`/runs/${encodeURIComponent(r.runId)}`} aria-current={r.runId === runId ? "page" : undefined}>
           <span className="m" style={{ fontSize: 12, color: "var(--muted)" }}>Run {r.attempt}{r.parentRunId ? ` · follows run ${runs.find(x => x.runId === r.parentRunId)?.attempt ?? "?"}` : ""}</span>
-          <b style={{ color: r.status === "failed" ? "var(--bad)" : r.outcome === "proposal_ready" ? "var(--ok)" : "var(--wait)" }}>{runOutcome(r)}</b>
+          <b style={{ color: r.status === "failed" || r.status === "checker_rejected" ? "var(--bad)" : r.outcome === "proposal_ready" ? "var(--ok)" : "var(--wait)" }}>{runOutcome(r)}</b>
           <span style={{ fontSize: 12, color: "var(--muted)" }}>{r.simulated ? "Mock agent" : "CREAO agent"} · {new Date(r.createdAt).toLocaleString("en-US")}</span>
         </Link>)}</div>
       </section>
@@ -75,14 +115,22 @@ export default function RunInspector() {
           })}
         </section>
         <aside style={{ flex: "1 1 400px", minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+          {run.status === "checker_rejected" && latest?.runId === runId && <FixIt runId={runId} creao={config?.mode === "creao"} />}
           <section className="card" aria-label="Claim by claim"><h2 style={{ fontSize: 18, margin: 0 }}>Claim by claim</h2>
-            {claims.length === 0 ? <p>No claims in this run{run.status === "failed" ? "; it failed before a valid answer" : ""}.</p> : claims.map(c => <div key={c.findingId} className="claim">
-              <span className="tag t-wait" style={{ flex: "none" }}>Not checked yet</span>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 0 }}>
-                <span style={{ fontSize: 14 }}>&ldquo;{c.summary.replace(/^SIMULATED: /, "")}&rdquo;</span>
-                {c.sourceRefs.map(ref => <span key={ref} className="ids">Cites {ref}{sources.has(ref) ? ` · ${sources.get(ref)}` : ""}</span>)}
-              </div></div>)}
-            <p className="meta">Validation already confirmed every cited source exists in the frozen input. Whether each claim is supported by its source is the claim checker&apos;s job, which isn&apos;t connected yet.</p>
+            {policies.map(p => <span key={p.sourceId} className="tag t-ok">Used policy {p.policyId}{p.approvedBy ? `, approved by ${personName(p.approvedBy)}` : ""}</span>)}
+            {claims.length === 0 ? <p>No claims in this run{run.status === "failed" ? "; it failed before a valid answer" : ""}.</p> : claims.map(c => {
+              const v = verdicts.get(c.findingId);
+              const [tone, label] = v ? VERDICT[v.verdict] : ["t-wait", "Not checked yet"];
+              return <div key={c.findingId} className="claim">
+                <span className={`tag ${tone}`} style={{ flex: "none" }}>{label}</span>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 0 }}>
+                  <span style={{ fontSize: 14, fontWeight: v?.verdict === "not_supported" ? 600 : 400 }}>&ldquo;{c.summary.replace(/^SIMULATED: /, "")}&rdquo;</span>
+                  {v?.verdict === "not_supported" && v.sourceSays && <div className="quote"><span style={{ color: "var(--muted)" }}>What the source actually says:</span><br /><span className="m">{v.sourceSays}</span></div>}
+                  {v && <span style={{ fontSize: 13, color: "#33424A" }}>{v.reason}{v.checkedBy !== "none" ? ` (checked by ${v.checkedBy})` : ""}</span>}
+                  {c.sourceRefs.map(ref => <span key={ref} className="ids">Cites {ref}{sources.has(ref) ? ` · ${sources.get(ref)}` : ""}</span>)}
+                </div></div>;
+            })}
+            <p className="meta">{run.claimCheck ? `Checked by code${run.claimCheck.agentMode !== "off" ? ` and the ${run.claimCheck.agentMode} checker agent` : ""} at ${new Date(run.claimCheck.checkedAt).toLocaleString("en-US")}. Any unsupported claim stops the run before a person sees a proposal.` : "This run finished before the claim checker existed, so its claims weren't checked."}</p>
           </section>
           {run.result && <section className="card" aria-label="Outcome"><h2 style={{ fontSize: 18, margin: 0 }}>Outcome</h2>
             <p>{run.result.proposedAllocations.length ? `Proposed ${run.result.proposedAllocations.length} allocation(s); none is approved until a person signs off.` : run.result.questions.length ? `Asked ${run.result.questions.length} question(s) instead of guessing (steps above). No money moved.` : "Findings only. No money moved."}</p>

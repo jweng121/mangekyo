@@ -18,10 +18,12 @@ const runSummary = v.object({
   runId: v.string(), taskId: v.string(), attempt: v.number(), parentRunId: v.union(v.string(), v.null()), status: validators.investigationStatus,
   mode: validators.mode, simulated: v.boolean(), createdAt: v.number(), updatedAt: v.number(),
   outcome: v.union(v.literal("findings"), v.literal("needs_information"), v.literal("proposal_ready"), v.null()), summary: v.union(v.string(), v.null()),
+  checker: v.union(v.null(), v.object({ status: v.union(v.literal("passed"), v.literal("rejected")), supported: v.number(), total: v.number() })),
 });
 function summarize(run: FinanceInvestigationRun) {
   return { runId: run.runId, taskId: run.taskId, attempt: run.attempt, parentRunId: run.parentRunId, status: run.status, mode: run.mode, simulated: run.simulated,
-    createdAt: run.createdAt, updatedAt: run.updatedAt, outcome: run.result?.outcome ?? null, summary: run.result?.summary ?? null };
+    createdAt: run.createdAt, updatedAt: run.updatedAt, outcome: run.result?.outcome ?? null, summary: run.result?.summary ?? null,
+    checker: run.claimCheck ? { status: run.claimCheck.status, supported: run.claimCheck.claims.filter(c => c.verdict === "supported").length, total: run.claimCheck.claims.length } : null };
 }
 
 export const getDeskData = query({

@@ -18,7 +18,13 @@ export function personName(identity: string): string {
 export type Tone = "agent" | "code" | "system" | "person" | "bad";
 export interface Activity { id: string; at: number; who: string; tone: Tone; text: string; sub?: string }
 
-export interface Names { owner(id: string | null | undefined): string; deposit(sourceId: string): string; proposal(id: string | null): MoneyProposal | undefined }
+export interface Names { owner(id: string | null | undefined): string; deposit(sourceId: string): string; proposal(id: string | null): MoneyProposal | undefined; policy?(sourceId: string): { policyId: string; approvedBy: string | null } | undefined }
+
+/** "Used policy P-1, approved by sam" when a proposal cites an approved policy. */
+export function usedPolicy(evidence: string[], names: Names): string | null {
+  for (const id of evidence) { const p = names.policy?.(id); if (p) return `Used policy ${p.policyId}${p.approvedBy ? `, approved by ${personName(p.approvedBy)}` : ""}`; }
+  return null;
+}
 
 const REASON: Record<string, string> = {
   OWNER_INSUFFICIENT_FUNDS: "the owner doesn't have enough money",
@@ -77,14 +83,20 @@ function describeRaw(e: AnyFinanceEvent, names: Names): Activity {
         const to = /→ (\w+)/.exec(m.payload.message)?.[1] ?? "";
         const verbs: Record<string, string> = { proposed: "Created", pending_approval: "Sent for sign-off:", approved: "Approved", posted: "Posted", rejected: "Rejected", blocked: "Blocked by the lock:", on_hold: "Put on hold:", cancelled: "Cancelled" };
         const who = actor ?? (p?.requestedBy.startsWith("agent:") ? { who: "Agent", tone: "agent" as Tone } : { who: "System", tone: "system" as Tone });
-        return { ...base, ...who, tone: to === "blocked" ? "bad" : who.tone, text: `${verbs[to] ?? to} ${label}`, sub: to === "posted" ? "New ledger entry · nothing deleted" : undefined };
+        const policyNote = p ? usedPolicy(p.evidenceSourceIds, names) : null;
+        return { ...base, ...who, tone: to === "blocked" ? "bad" : who.tone, text: `${verbs[to] ?? to} ${label}`, sub: to === "posted" ? "New ledger entry · nothing deleted" : policyNote ?? undefined };
       }
       case "finance.money.ledger_posted": return { ...base, ...(actor ?? { who: "System", tone: "system" as Tone }), text: m.payload.message.replace(/; three-way check is (\w+)\./, " · bank, books and owners $1"), sub: `For the ${label}` };
       case "finance.money.bank_item_recorded": return { ...base, ...(actor ?? { who: "Bank feed", tone: "code" as Tone }), text: m.payload.message.replace(/demo:[^ ]*:?bank:txn:/g, "").replace(/\(simulated\)/, "· simulated") };
+      case "finance.money.policy_approved": return { ...base, ...(actor ?? { who: "System", tone: "system" as Tone }), text: m.payload.message.replace(/ The next matching investigation will use it\.$/, ""), sub: "The next matching investigation uses it." };
+      case "finance.money.feed_step": return { ...base, who: "Live feed", tone: "system", text: m.payload.message, sub: "Scripted DEMO activity · mock mode" };
       case "finance.money.hold_updated": return { ...base, ...(actor ?? { who: "System", tone: "system" as Tone }), text: `Hold on the ${label}: ${m.payload.message.split(": ").slice(1).join(": ") || m.payload.message}` };
     }
   }
   const message = "payload" in e && "message" in e.payload ? e.payload.message : "";
+  if (e.type === "finance.checker.completed" || e.type === "finance.checker.rejected") {
+    return { ...base, who: "Agent 2 · checker", tone: e.type === "finance.checker.rejected" ? "bad" : "agent", text: e.type === "finance.checker.rejected" ? "Checker stopped a proposal" : "Checker confirmed the claims it could judge", sub: message };
+  }
   const agentTypes = new Set(["finance.provider.result_received", "finance.investigation.completed", "finance.question.raised"]);
   const codeTypes = new Set(["finance.evidence.retrieved", "finance.checks.completed", "finance.validation.failed"]);
   const titles: Record<string, string> = {

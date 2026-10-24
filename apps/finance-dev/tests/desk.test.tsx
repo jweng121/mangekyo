@@ -12,7 +12,7 @@ vi.mock("convex/react", () => ({
   useQuery: (ref: Parameters<typeof getFunctionName>[0], args: unknown) => args === "skip" ? undefined : results[getFunctionName(ref)],
   useMutation: () => async () => { throw new Error("not used in render test"); },
 }));
-vi.mock("next/navigation", () => ({ useParams: () => ({ runId: encodeURIComponent(String(results.runId)) }) }));
+vi.mock("next/navigation", () => ({ useParams: () => ({ runId: encodeURIComponent(String(results.runId)) }), useRouter: () => ({ push: () => undefined }) }));
 
 const decode = (html: string) => html.replace(/<!-- -->/g, "").replace(/&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
 const modules = import.meta.glob(["../../../convex/**/*.{ts,js}", "!../../../convex/**/*.test.ts"]);
@@ -85,9 +85,29 @@ describe("desk render with real backend query results", () => {
     results["financeDesk:getRunView"] = await t.query(api.financeDesk.getRunView, { runId });
     const { default: Inspector } = await import("../app/runs/[runId]/page");
     const inspector = decode(renderToString(<Inspector />));
-    for (const text of ["Every run is kept", "Ready for approval", "Claim by claim", "Not checked yet", "Gathered and froze the evidence", "What the agent saw"]) expect(inspector).toContain(text);
+    for (const text of ["Every run is kept", "Ready for approval", "Claim by claim", "Supported", "Checker confirmed the claims it could judge", "Gathered and froze the evidence", "What the agent saw"]) expect(inspector).toContain(text);
     const { default: AgentView } = await import("../app/runs/[runId]/view/page");
     const seen = decode(renderToString(<AgentView />));
     for (const text of ["PLACEHOLDER · VISUAL AUDIT", "Exactly what it was given", "demo:bank:txn:A-001", "demo:document:remit-a-001:v1", "finance-investigator/v1", "context as of"]) expect(seen).toContain(text);
+  });
+
+  it("shows a checker-stopped run on the desk and the Fix it choices in the inspector", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.financeIntake.loadDemoFixture, {});
+    for (let round = 0; round < 5; round++) { vi.advanceTimersByTime(1); await t.finishInProgressScheduledFunctions(); }
+    const q = (await t.query(api.financeDesk.getDeskData, { accountId: DEMO })).questions[0];
+    const rerun = await t.mutation(api.financeInvestigations.answerQuestion, { runId: q.runId, questionId: q.questionId, answer: "J Smith pays rent for DEMO Owner Y — Yankee Trust." });
+    for (let round = 0; round < 5; round++) { vi.advanceTimersByTime(1); await t.finishInProgressScheduledFunctions(); }
+    Object.assign(results, {
+      "financeIntake:listAccounts": await t.query(api.financeIntake.listAccounts, {}), "financeIntake:getAccountOverview": await t.query(api.financeIntake.getAccountOverview, { accountId: DEMO }),
+      "financeDesk:getDeskData": await t.query(api.financeDesk.getDeskData, { accountId: DEMO }), "financeInvestigations:getProviderConfiguration": await t.query(api.financeInvestigations.getProviderConfiguration, {}),
+      runId: rerun.runId, "financeDesk:getRunView": await t.query(api.financeDesk.getRunView, { runId: rerun.runId }),
+    });
+    const { default: Desk } = await import("../app/desk/page");
+    const html = decode(renderToString(<Desk />));
+    for (const text of ["Agent 2 · checker stopped a proposal", "What the source actually says:", "Open run and fix", "Start live feed", "Approve all proven items"]) expect(html).toContain(text);
+    const { default: Inspector } = await import("../app/runs/[runId]/page");
+    const inspector = decode(renderToString(<Inspector />));
+    for (const text of ["Stopped by the checker", "Fix it", "Cite the person's answer as the source for the claim", "The checker is wrong, keep the claim (needs a reason)", "Add a document and rerun", "Rerun from step 3", "Not supported", "Checker found an unsupported claim"]) expect(inspector).toContain(text);
   });
 });
