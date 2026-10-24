@@ -25,6 +25,25 @@ function configuration(): { mode: "mock" | "creao" | null; configured: boolean; 
   return { mode, configured, message: mode === null ? "Set FINANCE_AGENT_MODE explicitly to mock or creao on the Convex deployment." : mode === "mock" ? "SIMULATED: deterministic mock provider; no external model runs." : configured ? "CREAO mode selected. External agent runs use server-side credentials." : "CREAO mode requires CREAO_APP_ID and an app-scoped CREAO_API_KEY (capi_ prefix) on the Convex deployment. No mock fallback." };
 }
 
+export type AutoInvestigationCode = "AUTO_ENABLED" | "MODE_NOT_CONFIGURED" | "PROVIDER_NOT_CONFIGURED" | "AUTO_DISABLED_SETTING" | "AUTO_OFF_IN_CREAO" | "AUTO_SETTING_INVALID";
+
+/** AUTO_INVESTIGATE defaults on in mock mode and off in creao mode; only an explicit "true" opts creao in. */
+export function autoInvestigationSetting(): { enabled: boolean; code: AutoInvestigationCode; message: string } {
+  const config = configuration();
+  const raw = env.AUTO_INVESTIGATE?.trim().toLowerCase() ?? "";
+  if (raw !== "" && raw !== "true" && raw !== "false") return { enabled: false, code: "AUTO_SETTING_INVALID", message: "AUTO_INVESTIGATE must be true or false; auto-investigation is off." };
+  if (!config.mode) return { enabled: false, code: "MODE_NOT_CONFIGURED", message: config.message };
+  if (!config.configured) return { enabled: false, code: "PROVIDER_NOT_CONFIGURED", message: config.message };
+  if (raw === "false") return { enabled: false, code: "AUTO_DISABLED_SETTING", message: "AUTO_INVESTIGATE=false: new deposits wait for a person to start an investigation." };
+  if (config.mode === "creao" && raw !== "true") return { enabled: false, code: "AUTO_OFF_IN_CREAO", message: "Auto-investigation is off in creao mode so no paid run starts without a person. Set AUTO_INVESTIGATE=true to opt in." };
+  return { enabled: true, code: "AUTO_ENABLED", message: `New cleared, unallocated deposits are investigated automatically in ${config.mode} mode. Proposals still need a person to approve.` };
+}
+
+export const getAutoInvestigationSetting = query({
+  args: {}, returns: v.object({ enabled: v.boolean(), code: v.string(), message: v.string() }),
+  handler: async () => autoInvestigationSetting(),
+});
+
 export const getProviderConfiguration = query({
   args: {}, returns: v.object({ mode: v.union(validators.mode, v.null()), configured: v.boolean(), message: v.string() }),
   handler: async () => configuration(),

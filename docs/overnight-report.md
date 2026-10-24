@@ -123,6 +123,8 @@ modify code running on the deployment. I did not run `convex dev`, `deploy` or
 3. In a second terminal, run `npx.cmd --yes pnpm@10.20.0 dev:finance` and open http://localhost:3001. Do not run his demo-erp at the same time: it also uses port 3001.
 4. Click **Import ERP sandbox (seed 42)**, then **Load DEMO fixture**. Clicking either again changes nothing ("0 inserted").
 
+**Follow-up (auto-investigation):** in mock mode with `AUTO_INVESTIGATE` unset, importing now starts one investigation per new cleared, unallocated deposit (TX-001, TX-002, A-001, B-001). In A and B below, **Investigate** then opens a task that already has its result, so you don't need to click Run investigation. In creao mode this is off unless `AUTO_INVESTIGATE=true`. See [finance-money-workflow.md](finance-money-workflow.md#auto-investigation).
+
 Role switcher: requester `riley`, approver `sam`. Using the same name in both roles counts as the same person.
 
 **A. Clear deposit → proposal → approve → posted (ERP)**

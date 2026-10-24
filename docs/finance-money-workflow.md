@@ -62,6 +62,27 @@ pass or fail, appends a `finance.money.lock_checked` event and snapshot to the
 account stream `money:<accountId>`. A failure never throws, so the blocked
 attempt is saved rather than rolled back.
 
+## Auto-investigation
+
+An import can make a deposit newly investigable in two ways: by inserting a new
+`deposit_received` entry, or by changing a recorded deposit from pending to cleared
+on re-import. The import then checks `AUTO_INVESTIGATE` together with
+`FINANCE_AGENT_MODE`:
+
+| Mode | `AUTO_INVESTIGATE` unset | `true` | `false` |
+| --- | --- | --- | --- |
+| `mock` | on | on | off |
+| `creao` | **off**, so no paid run starts without a person | on (explicit opt-in) | off |
+| unset / invalid provider config | off | off | off |
+
+Any value other than `true`/`false` turns it off (`AUTO_SETTING_INVALID`).
+
+- **When on**: the import schedules `financeIntake.autoInvestigateDeposit`. When that runs, it rechecks the setting and the deposit's eligibility, and starts the investigation through the existing `financeInvestigations.startInvestigation`.
+- **One investigation per deposit**: if the deposit's task already has any run, it is skipped with `ALREADY_INVESTIGATED`.
+- **Events**: every start or skip appends a `finance.money.auto_investigation` event with `allowed` and the reason code in the snapshot's lock facts. Codes: `AUTO_STARTED`, `ALREADY_INVESTIGATED`, `AUTO_OFF_IN_CREAO`, `AUTO_DISABLED_SETTING`, `AUTO_SETTING_INVALID`, `MODE_NOT_CONFIGURED`, `PROVIDER_NOT_CONFIGURED`, `AWAITING_CLEARANCE`, `NOT_RECORDED`, `ALREADY_ALLOCATED`, `START_FAILED`.
+- **Approval**: resulting allocation proposals still wait for a person to approve.
+- **Checking the setting**: `financeInvestigations.getAutoInvestigationSetting` reports it, and the money panel shows it.
+
 ## API
 
 | Function | Purpose |

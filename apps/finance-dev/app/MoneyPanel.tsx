@@ -39,6 +39,7 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
   const accounts = useQuery(api.financeIntake.listAccounts);
   const [accountId, setAccountId] = useState(DEMO_ACCOUNT);
   const overview = useQuery(api.financeIntake.getAccountOverview, accounts?.some(a => a.accountId === accountId) ? { accountId } : "skip");
+  const autoSetting = useQuery(api.financeInvestigations.getAutoInvestigationSetting);
   const events = useQuery(api.finance.listMoneyEvents, accounts?.some(a => a.accountId === accountId) ? { accountId } : "skip");
   const importErp = useMutation(api.financeIntake.importErpSandbox);
   const loadDemo = useMutation(api.financeIntake.loadDemoFixture);
@@ -102,6 +103,7 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
       {accounts && accounts.length > 0 && <label>Account<select value={accountId} onChange={e => { setAccountId(e.target.value); setTaskId(null); }}>
         {accounts.map(a => <option key={a.accountId} value={a.accountId}>{a.name}</option>)}</select></label>}
     </div>
+    {autoSetting && <p role="note">Auto-investigation: <strong>{autoSetting.enabled ? "on" : "off"}</strong> <code>{autoSetting.code}</code> · {autoSetting.message}</p>}
     {notice && <p role="status">{notice}</p>}
     {error && <p role="alert">{error}</p>}
     {accounts?.length === 0 && <p>No accounts yet. Import the ERP sandbox or load the DEMO fixture.</p>}
