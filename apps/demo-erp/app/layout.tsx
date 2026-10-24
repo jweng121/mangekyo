@@ -1,0 +1,3 @@
+import "./globals.css";
+const links=[["/","Dashboard"],["/companies","Companies"],["/transactions","Bank Transactions"],["/invoices","Invoices"],["/documents","Documents"],["/trust-accounts","Trust Ledger"],["/reconciliation","Reconciliation"],["/allocations","Pending Allocations"],["/activity","Activity History"]];
+export default function Layout({children}:{children:React.ReactNode}){return <html lang="en"><body><div className="shell"><aside className="sidebar"><div className="brand">Northstar Trust<small>DEMO ERP · SYNTHETIC</small></div><nav className="nav" aria-label="Primary">{links.map(([href,label])=><a key={href} href={href}>{label}</a>)}</nav></aside><main className="main">{children}</main></div></body></html>}

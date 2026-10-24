@@ -1,0 +1,4 @@
+import {NextRequest,NextResponse} from "next/server";
+import {mutate,activity} from "../../../lib/store";
+import {propose,approve,post} from "../../../lib/financial-controls";
+export async function POST(request:NextRequest){const body=await request.json();try{if(process.env.DEMO_ERP_ALLOW_WRITES==="false")throw Error("Synthetic writes disabled");const result=await mutate(state=>{try{if(body.action==="propose")return propose(state,body);if(body.action==="approve")return approve(state,body.id,body.role);if(body.action==="post")return post(state,body.id,body.idempotencyKey,body.role);throw Error("Unknown action")}catch(e){activity(state,"tool","Write denied",String((e as Error).message),body.runId);return {error:(e as Error).message}}});if("error" in result)return NextResponse.json(result,{status:422});return NextResponse.json(result)}catch(e){return NextResponse.json({error:(e as Error).message},{status:403})}}
