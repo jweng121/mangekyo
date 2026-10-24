@@ -1,0 +1,9 @@
+{
+  "name": "mangekyo",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @mangekyo/visual-audit-playground dev",
+    "build": "pnpm --filter @mangekyo/visual-audit-playground build",
+    "typecheck": "pnpm -r --if-present typecheck"
+  }
+}
