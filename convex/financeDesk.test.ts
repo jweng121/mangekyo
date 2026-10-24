@@ -25,6 +25,7 @@ describe("desk read queries", () => {
     expect(desk.tasks.map(task => [task.bankSourceId, task.latestRun?.outcome])).toEqual(expect.arrayContaining([["demo:bank:txn:A-001", "proposal_ready"], ["demo:bank:txn:B-001", "needs_information"]]));
     expect(desk.questions).toEqual([expect.objectContaining({ bankSourceId: "demo:bank:txn:B-001", question: expect.stringContaining("$980.00") })]);
     expect(desk.policies.length).toBeGreaterThan(0);
+    expect(new Set(desk.policies.map(p => p.statement)).size).toBe(desk.policies.length);
     const types = desk.activity.map(e => e.type);
     expect(types).toEqual(expect.arrayContaining(["finance.money.auto_investigation", "finance.investigation.completed", "finance.money.proposal_transitioned"]));
     expect(desk.activity.map(e => e.timestamp)).toEqual([...desk.activity.map(e => e.timestamp)].sort((a, b) => b - a));

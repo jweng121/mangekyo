@@ -42,7 +42,7 @@ export const getDeskData = query({
     const tasks = await ctx.db.query("financeTasks").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(100);
     const taskRows = [];
     const questions = [];
-    const policies = [];
+    const policies: Array<{ policyId: string; runId: string; statement: string; sourceRefs: string[] }> = [];
     const checkerStopped = [];
     const taskEvents: AnyFinanceEvent[] = [];
     for (const task of tasks) {
@@ -69,7 +69,8 @@ export const getDeskData = query({
     const feedSteps = money.filter(e => e.type === "finance.money.feed_step").length;
     return {
       tasks: taskRows, questions, activity, checkerStopped,
-      policies: policies.filter(p => !approvedStatements.has(p.statement.replace(/^For human review: /, ""))),
+      // One card per distinct statement; several runs often propose the same policy.
+      policies: policies.filter((p, i) => !approvedStatements.has(p.statement.replace(/^For human review: /, "")) && policies.findIndex(q => q.statement === p.statement) === i),
       approvedPolicies: approved.map(p => ({ policyId: p.policyId, statement: p.statement, sourceId: p.sourceId, approvedBy: p.approvedBy ?? null, approvedAt: p.approvedAt })),
       feed: { mode: providerMode(), stepsDone: feedSteps, total: FEED_LENGTH },
       counts: { autoStarted, blocked: proposals.filter(p => p.status === "blocked").length, posted: proposals.filter(p => p.status === "posted").length },
