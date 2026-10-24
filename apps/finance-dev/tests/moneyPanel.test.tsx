@@ -37,6 +37,9 @@ describe("MoneyPanel render smoke test with real backend query results", () => {
     const { MoneyPanel } = await import("../app/MoneyPanel");
     const html = renderToString(<MoneyPanel connected />).replace(/<!-- -->/g, "");
     expect(html).toContain("DEV ONLY role switcher");
+    expect(html).toContain("Start fresh DEMO run");
+    expect(html).toContain("Needs a person");
+    expect(html).toContain("DEV: simulate clearing");
     expect(html).toContain("three-numbers mismatched");
     expect(html).toContain("BANK_TXN_WITHOUT_LEDGER_ENTRY");
     expect(html).toContain("Reconciling items");

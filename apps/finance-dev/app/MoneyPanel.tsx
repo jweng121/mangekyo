@@ -38,6 +38,13 @@ function DepositInvestigation({ taskId, connected }: { taskId: string; connected
 export function MoneyPanel({ connected }: { connected: boolean }) {
   const accounts = useQuery(api.financeIntake.listAccounts);
   const [accountId, setAccountId] = useState(DEMO_ACCOUNT);
+  const [accountChosen, setAccountChosen] = useState(false);
+  // Default to the newest DEMO run until the viewer picks an account.
+  useEffect(() => {
+    if (accountChosen || !accounts) return;
+    const newest = accounts.map(a => a.accountId).filter(id => /^demo:account:pool-\d+$/.test(id)).sort().at(-1);
+    if (newest && newest !== accountId) setAccountId(newest);
+  }, [accounts, accountChosen, accountId]);
   // Outstanding items age against the viewer's clock; rounding to the minute keeps the subscription stable.
   const [minute, setMinute] = useState(() => Math.floor(Date.now() / 60_000) * 60_000);
   useEffect(() => { const timer = setInterval(() => setMinute(Math.floor(Date.now() / 60_000) * 60_000), 60_000); return () => clearInterval(timer); }, []);
@@ -46,6 +53,7 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
   const events = useQuery(api.finance.listMoneyEvents, accounts?.some(a => a.accountId === accountId) ? { accountId } : "skip");
   const importErp = useMutation(api.financeIntake.importErpSandbox);
   const loadDemo = useMutation(api.financeIntake.loadDemoFixture);
+  const freshDemo = useMutation(api.financeIntake.startFreshDemoRun);
   const ensureTask = useMutation(api.financeIntake.ensureDepositTask);
   const requestPayment = useMutation(api.financeProposals.requestPayment);
   const approve = useMutation(api.financeProposals.approveProposal);
@@ -112,7 +120,8 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
     <div className="row">
       <button disabled={busy || !connected} onClick={() => run(async () => { const r = await importErp({}); setAccountId(r.accountId); setNotice(`ERP import: ${r.inserted} inserted, ${r.updated} updated, ${r.unchanged} unchanged, ${r.entriesInserted} ledger entries, ${r.issues.length} issue(s).`); })}>Import ERP sandbox (seed 42)</button>
       <button disabled={busy || !connected} onClick={() => run(async () => { const r = await loadDemo({}); setAccountId(r.accountId); setNotice(`DEMO fixture: ${r.inserted} inserted, ${r.unchanged} unchanged, ${r.entriesInserted} ledger entries.`); })}>Load DEMO fixture</button>
-      {accounts && accounts.length > 0 && <label>Account<select value={accountId} onChange={e => { setAccountId(e.target.value); setTaskId(null); }}>
+      <button disabled={busy || !connected} onClick={() => run(async () => { const r = await freshDemo({}); setAccountId(r.accountId); setAccountChosen(true); setTaskId(null); setLastLock(null); setNotice(`Fresh DEMO run ${r.accountId}: ${r.inserted} records, ${r.entriesInserted} ledger entries. Earlier runs are unchanged.`); })}>Start fresh DEMO run</button>
+      {accounts && accounts.length > 0 && <label>Account<select value={accountId} onChange={e => { setAccountId(e.target.value); setAccountChosen(true); setTaskId(null); }}>
         {accounts.map(a => <option key={a.accountId} value={a.accountId}>{a.name}</option>)}</select></label>}
     </div>
     {autoSetting && <p role="note">Auto-investigation: <strong>{autoSetting.enabled ? "on" : "off"}</strong> <code>{autoSetting.code}</code> · {autoSetting.message}</p>}
@@ -138,7 +147,7 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
       {mismatches.length > 0 && <><h4>Causes found by code</h4><ul>{mismatches.map((c, i) => <li key={i}><code>{c.code}</code> {c.message} <code>{c.sourceIds.join(", ")}</code>{c.ownerIds.length > 0 && <> · affects {c.ownerIds.map(ownerName).join(", ")}</>}{c.unattributed && <> · not attributable: all outflows blocked</>}
         {c.code === "BANK_TXN_WITHOUT_LEDGER_ENTRY" && role === "approver" && <> <button className="secondary" disabled={busy || !connected} onClick={() => run(async () => { const r = await recordBankItem({ accountId, bankSourceId: c.sourceIds[0], dev }); setNotice(`Recorded ${c.sourceIds[0]} in the ledger as ${r.entryId}.`); })}>Record in ledger</button></>}</li>)}</ul></>}
       {warnings.length > 0 && <><h4>Warnings</h4><ul>{warnings.map((c, i) => <li key={i}><code>{c.code}</code> {c.message} <code>{c.sourceIds.join(", ")}</code></li>)}</ul></>}
-      {overview.account.accountId === DEMO_ACCOUNT && <p><button className="secondary" disabled={busy || !connected} onClick={() => run(async () => { const r = await simulateOutflow({}); setNotice(r.created ? "Simulated DEMO bank outflow E-001 arrived without a ledger entry." : "E-001 already exists."); })}>DEV: simulate unrecorded bank outflow (scenario E)</button></p>}
+      {overview.account.accountId.startsWith("demo:account:") && <p><button className="secondary" disabled={busy || !connected} onClick={() => run(async () => { const r = await simulateOutflow({ accountId }); setNotice(r.created ? `Simulated DEMO bank outflow ${r.sourceId} arrived without a ledger entry.` : `${r.sourceId} already exists.`); })}>DEV: simulate unrecorded bank outflow (scenario E)</button></p>}
 
       <h3>Owner balances</h3>
       <table><thead><tr><th>Owner</th><th>Posted</th><th>Uncleared</th><th>Holds</th><th>Available</th></tr></thead>
@@ -190,7 +199,7 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
             <input aria-label={`Reversal reason for ${p.proposalId}`} placeholder="Reason for reversal (required)" value={reasons[p.proposalId] ?? ""} onChange={e => setReasons({ ...reasons, [p.proposalId]: e.target.value })} />
             <button className="danger" disabled={busy || !(reasons[p.proposalId] ?? "").trim()} onClick={() => run(async () => { const r = await reverse({ proposalId: p.proposalId, reason: reasons[p.proposalId] ?? "", dev }); setNotice(r.alreadyDone ? "Already reversed." : `Appended ${r.entryIds.length} reversal entries.`); })}>Reverse posting</button>
           </div>}
-          {p.status === "posted" && p.kind === "payment" && overview.account.accountId === DEMO_ACCOUNT &&<button className="secondary" disabled={busy} onClick={() => run(async () => { const r = await simulateSettlement({ proposalId: p.proposalId }); setNotice(r.created ? "Simulated DEMO bank settlement arrived." : "Settlement already recorded."); })}>DEV: simulate bank settlement</button>}
+          {p.status === "posted" && p.kind === "payment" && overview.account.accountId.startsWith("demo:account:") &&<button className="secondary" disabled={busy} onClick={() => run(async () => { const r = await simulateSettlement({ proposalId: p.proposalId }); setNotice(r.created ? "Simulated DEMO bank settlement arrived." : "Settlement already recorded."); })}>DEV: simulate bank settlement</button>}
           {lastLock?.proposalId === p.proposalId && <LockView lock={lastLock.lock} />}
           {(p.status === "pending_approval" || p.status === "approved") && role !== "approver" && <p className="hint">Switch to the approver role to act.</p>}
         </article>)}

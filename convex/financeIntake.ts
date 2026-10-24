@@ -2,7 +2,7 @@ import { ConvexError, v } from "convex/values";
 import type { NormalizedAccountBundle, NormalizedBankTransaction } from "@mangekyo/contracts";
 import { candidateOwnerSourceIds, depositCaseId, formatCents, normalizeErpState, type ErpState } from "@mangekyo/finance-core/intake";
 import { activeAllocations, importLedgerEntries, ownerBalances } from "@mangekyo/finance-core/ledger";
-import { DEMO_ACCOUNT_ID, demoMoneyBundle, demoSettlement, demoUnrecordedOutflow } from "@mangekyo/finance-core/fixtures/demo-money";
+import { DEMO_ACCOUNT_ID, demoMoneyBundle, demoRunOf, demoSettlement, demoUnrecordedOutflow } from "@mangekyo/finance-core/fixtures/demo-money";
 // Read-only use of the teammate's deterministic generator; his runtime state file is never touched.
 import { createSeed } from "../apps/demo-erp/data/seed";
 import { api, internal } from "./_generated/api";
@@ -82,6 +82,16 @@ export const loadDemoFixture = mutation({
   handler: async (ctx) => await importBundle(ctx, demoMoneyBundle(), "demo"),
 });
 
+/** A new DEMO account (next pool number) with the fixture loaded clean. Earlier accounts and their history are untouched. */
+export const startFreshDemoRun = mutation({
+  args: {}, returns: importResult,
+  handler: async (ctx) => {
+    const accounts = await ctx.db.query("financeAccounts").take(500);
+    const runs = accounts.map(a => demoRunOf(a.accountId)).filter((run): run is number => run !== null);
+    return await importBundle(ctx, demoMoneyBundle(runs.length ? Math.max(...runs) + 1 : 1), "demo");
+  },
+});
+
 async function insertDemoBankItem(ctx: MutationCtx, txn: NormalizedBankTransaction, message: string) {
   const existing = await ctx.db.query("financeBankTransactions").withIndex("by_sourceId", (q) => q.eq("sourceId", txn.sourceId)).unique();
   if (existing) return { sourceId: txn.sourceId, created: false };
@@ -96,10 +106,12 @@ const simulated = v.object({ sourceId: v.string(), created: v.boolean() });
 
 /** DEV ONLY, DEMO account only: a bank-feed outflow nobody recorded (scenario E). */
 export const simulateUnrecordedOutflow = mutation({
-  args: {}, returns: simulated,
-  handler: async (ctx) => {
-    await requireAccount(ctx, DEMO_ACCOUNT_ID);
-    return await insertDemoBankItem(ctx, demoUnrecordedOutflow(Date.now()), "DEMO bank feed: unrecorded outflow arrived (simulated).");
+  args: { accountId: v.optional(v.string()) }, returns: simulated,
+  handler: async (ctx, args) => {
+    const accountId = args.accountId ?? DEMO_ACCOUNT_ID;
+    if (demoRunOf(accountId) === null) throw new ConvexError("Bank-feed items can only be simulated on DEMO accounts.");
+    await requireAccount(ctx, accountId);
+    return await insertDemoBankItem(ctx, demoUnrecordedOutflow(Date.now(), accountId), "DEMO bank feed: unrecorded outflow arrived (simulated).");
   },
 });
 
@@ -108,11 +120,11 @@ export const simulateSettlement = mutation({
   args: { proposalId: v.string() }, returns: simulated,
   handler: async (ctx, { proposalId }) => {
     const proposal = await getProposal(ctx, proposalId);
-    if (proposal.accountId !== DEMO_ACCOUNT_ID) throw new ConvexError("Bank settlement can only be simulated on the DEMO account; the ERP bank feed is the teammate's data.");
+    if (demoRunOf(proposal.accountId) === null) throw new ConvexError("Bank settlement can only be simulated on the DEMO account; the ERP bank feed is the teammate's data.");
     if (proposal.kind !== "payment" || proposal.status !== "posted") throw new ConvexError("Only posted payments settle at the bank.");
     const loaded = await loadAccount(ctx, proposal.accountId);
     const ownerSourceId = loaded.state.owners.find(o => o.ownerId === proposal.ownerId)?.sourceId ?? null;
-    return await insertDemoBankItem(ctx, demoSettlement(proposalId, proposal.amountCents, Date.now(), ownerSourceId), `DEMO bank feed: settlement of ${proposalId} arrived (simulated).`);
+    return await insertDemoBankItem(ctx, demoSettlement(proposalId, proposal.amountCents, Date.now(), ownerSourceId, proposal.accountId), `DEMO bank feed: settlement of ${proposalId} arrived (simulated).`);
   },
 });
 

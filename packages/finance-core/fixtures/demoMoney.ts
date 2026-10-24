@@ -45,7 +45,39 @@ function txn(id: string, fields: Omit<NormalizedBankTransaction, "sourceId" | "a
   return { sourceId: `demo:bank:txn:${id}`, accountId: DEMO_ACCOUNT_ID, subAccount: "DEMO-POOL", currency: "USD", duplicateOfSourceId: null, raw: raw("bank-transaction", id), ...fields };
 }
 
-export function demoMoneyBundle(): NormalizedAccountBundle {
+const pad = (run: number) => String(run).padStart(3, "0");
+export const demoAccountId = (run: number) => `demo:account:pool-${pad(run)}`;
+
+/** Run number of a DEMO pooled account ID, or null for anything else. */
+export function demoRunOf(accountId: string): number | null {
+  const match = /^demo:account:pool-(\d{3,})$/.exec(accountId);
+  return match ? Number(match[1]) : null;
+}
+
+/** Run 1 keeps the original IDs; later runs namespace every demo: ID so no row of an earlier run is touched. */
+function forRun<T>(value: T, run: number): T {
+  if (run === 1) return value;
+  const map = (item: unknown): unknown => {
+    if (typeof item === "string") return item === DEMO_ACCOUNT_ID ? demoAccountId(run) : item.startsWith("demo:") ? `demo:run-${pad(run)}:${item.slice(5)}` : item;
+    if (Array.isArray(item)) return item.map(map);
+    if (item && typeof item === "object") return Object.fromEntries(Object.entries(item).map(([k, v]) => [k, map(v)]));
+    return item;
+  };
+  return map(value) as T;
+}
+
+function runFor(accountId: string): number {
+  const run = demoRunOf(accountId);
+  if (run === null) throw new Error(`${accountId} is not a DEMO pooled account`);
+  return run;
+}
+
+export function demoMoneyBundle(run = 1): NormalizedAccountBundle {
+  const bundle = forRun(baseDemoBundle(), run);
+  return run === 1 ? bundle : { ...bundle, account: { ...bundle.account, name: `${bundle.account.name} (run ${pad(run)})` } };
+}
+
+function baseDemoBundle(): NormalizedAccountBundle {
   return {
     account: { accountId: DEMO_ACCOUNT_ID, sourceId: DEMO_ACCOUNT_ID, name: "DEMO pooled client account", currency: "USD", openingAsOf: OPENING_AS_OF, synthetic: true, raw: raw("account", "pool-001") },
     owners,
@@ -73,11 +105,12 @@ export function demoMoneyBundle(): NormalizedAccountBundle {
 }
 
 /** Scenario E: an outflow on the bank feed that nobody recorded in the ledger. */
-export function demoUnrecordedOutflow(bookedAt: number): NormalizedBankTransaction {
-  return txn("E-001", { direction: "outflow", amountCents: 200_000, bookedAt, clearing: "cleared", reference: "DEMO-WIRE-Y-9001", counterparty: "DEMO Vendor Yankee Movers", ownerHintSourceId: "demo:owner-record:yankee", documentSourceIds: [] });
+export function demoUnrecordedOutflow(bookedAt: number, accountId = DEMO_ACCOUNT_ID): NormalizedBankTransaction {
+  return forRun(txn("E-001", { direction: "outflow", amountCents: 200_000, bookedAt, clearing: "cleared", reference: "DEMO-WIRE-Y-9001", counterparty: "DEMO Vendor Yankee Movers", ownerHintSourceId: "demo:owner-record:yankee", documentSourceIds: [] }), runFor(accountId));
 }
 
 /** Simulated bank settlement of a posted payment, carrying the reference the ledger entry expects. */
-export function demoSettlement(proposalId: string, amountCents: number, bookedAt: number, ownerSourceId: string | null): NormalizedBankTransaction {
-  return txn(`SETTLE-${proposalId.replace(/[^A-Za-z0-9-]/g, "-")}`, { direction: "outflow", amountCents, bookedAt, clearing: "cleared", reference: `PAY:${proposalId}`, counterparty: "DEMO simulated payee bank", ownerHintSourceId: ownerSourceId, documentSourceIds: [] });
+export function demoSettlement(proposalId: string, amountCents: number, bookedAt: number, ownerSourceId: string | null, accountId = DEMO_ACCOUNT_ID): NormalizedBankTransaction {
+  const settlement = forRun(txn(`SETTLE-${proposalId.replace(/[^A-Za-z0-9-]/g, "-")}`, { direction: "outflow", amountCents, bookedAt, clearing: "cleared", reference: "", counterparty: "DEMO simulated payee bank", ownerHintSourceId: null, documentSourceIds: [] }), runFor(accountId));
+  return { ...settlement, reference: `PAY:${proposalId}`, ownerHintSourceId: ownerSourceId };
 }
