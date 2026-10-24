@@ -39,5 +39,5 @@ export function lawFirmFeedBundle(step: number, accountId: string, now: number):
   }
   if (step === 6) bundle.bankTransactions = [txn("bayview-first", 4_000_000, "Bayview Title", "ESC-2291", "bayview-escrow"), txn("bayview-second", 4_000_000, "Bayview Title", "ESC-2291", "bayview-escrow", "cleared", "demo:bank:txn:bayview-first")];
   if (step === 9) bundle.bankTransactions = [txn("harborline-westbrook", 1_800_000, "Harborline Insurance", "Claim HL-50210", "westbrook-settlement")];
-  return forDemoAccount(bundle, accountId);
+  return { ...forDemoAccount(bundle, accountId), account: lawFirmBundle(accountId).account };
 }

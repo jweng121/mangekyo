@@ -177,7 +177,7 @@ In CREAO mode, auto-investigation is off unless `AUTO_INVESTIGATE=true`, and the
 - **Gate**: `npx.cmd --yes pnpm@10.20.0 typecheck` exit 0; `… test` 16 files, 151 tests, all pass; `… build:finance` pass.
 - **Earlier DEMO runs**: `pool-005` to `pool-008` are left from earlier click-through attempts. Nothing is deleted.
 
-## How to demo the agents (about 4 minutes, mock mode)
+## Earlier generic-fixture walkthrough (historical)
 
 1. **Open `/desk` and click Fresh DEMO run.** Activity shows both deposits investigated automatically: one proposal ("AI proposal · needs sign-off", checker confirmed 1 of 1 claim) and one question.
 2. **Start live feed.** Deposits arrive every few seconds, and each is investigated automatically. Activity says who did what: Agent, Agent 2 · checker, Code · the lock, Live feed.
@@ -188,3 +188,44 @@ In CREAO mode, auto-investigation is off unless `AUTO_INVESTIGATE=true`, and the
 7. **The checker.** Answer the $615 question with "J Smith pays rent for DEMO Owner D — Delta Trust." The rerun is stopped: "Agent 2 · checker stopped a proposal", with what the memo actually says. Nothing reached approval.
 8. **Fix it.** Open run and fix, choose "Cite the person's answer", then **Rerun from step 3**. Run 3 links to run 2 and is ready for approval. Run 2 is kept exactly as it was. Then **What the agent saw** shows your answer in the frozen input.
 9. **Approve all proven items.** Only the policy-cited, fully supported proposals are approved; the rest stay one by one. Approve and post one more allocation and the equation stays matched.
+
+## Current law-firm demo walkthrough
+
+Use mock mode at `/desk`. The fixture opens with $339,500 in a fictional law
+firm's trust account. Use **Next step** to pause for the human decisions;
+the nine feed steps are separate from approval and posting actions.
+
+1. **Fresh DEMO run, then Next step.** Harborline's $85,000 Delgado check arrives
+   pending. The investigator reviews evidence but proposes no allocation.
+2. **Next step.** Riley's $56,000 client-share request is blocked while funds
+   are unavailable. This request remains blocked in history.
+3. **Next step.** The check clears. As Sam, approve and post the $85,000
+   allocation. Switch to Riley, select **Make a new request as riley**, then
+   **Check and request**. As Sam, approve and post the new payment. Delgado
+   retains $29,000; the payment is outstanding.
+4. **Next step.** Answer Okafor's question with “Yes, a partial retainer
+   payment.” As Sam, approve and post the $2,500 allocation.
+5. **Next step.** Answer the Nguyen question with “James”. The checker stops
+   the unsupported citation. Select **Open run and fix**, retain **Cite the
+   person's answer as the source for the claim**, and **Rerun from step 3**.
+   Return to the desk and approve/post the corrected $1,200 allocation.
+6. **Next step.** Two $40,000 Bayview wires arrive. As Riley, choose **Mark
+   duplicate for refund as riley**. Sam approves/posts the refund-payable
+   allocation. Riley selects **Request refund as riley** and submits it; Sam
+   approves/posts the refund. The first wire's Chen & Park allocation remains
+   a separate item for individual review.
+7. **Next step.** Cho's $6,000 request is blocked by L1: only $1,800 belongs to
+   Cho, regardless of the pooled account's cash.
+8. **Next step.** As Sam, approve the insurance claim-number policy.
+9. **Next step.** Westbrook's $18,000 allocation cites the approved policy.
+   **Approve all proven items** selects it; **Post to ledger** remains a human
+   action. The first Bayview allocation stays pending.
+
+For the correction demonstration, switch to Riley and select **Break it… →
+Client check bounces**. The return creates a $2,500 mismatch for Okafor. Switch
+to Sam and **Approve entry**. Adjusted bank, books and owners match at $427,700.
+Both outgoing payments remain outstanding until bank settlement. **Load older
+activity** reveals earlier saved events.
+
+Verified on dev run 011 on 2026-10-24. See [results and screenshots](lawfirm-progress.md)
+for observed outcomes, the mobile-header fix, and the state left behind.

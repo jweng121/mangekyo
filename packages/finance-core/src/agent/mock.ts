@@ -152,7 +152,7 @@ function mockLawFirm(input: FinanceAgentInput): FinanceAgentOutput | null {
 }
 
 export function mockInvestigation(input: FinanceAgentInput): FinanceAgentOutput {
-  const pending = input.records.bankTransactions?.find(t => t.sourceId === input.records.bankTransactions?.[0]?.sourceId && t.direction === "inflow" && t.clearing === "pending");
+  const pending = input.records.bankTransactions?.find(t => t.direction === "inflow" && t.clearing === "pending" && t.bookedAt <= input.scope.cutoff && (input.scope.from === null || t.bookedAt >= input.scope.from));
   if (input.records.sourceAdapter && input.records.transactions.length === 0 && pending) {
     return output({ outcome: "findings", summary: "Waiting for the check to clear. Ownership evidence can be reviewed now; an allocation can only be proposed after clearing.",
       findings: [{ findingId: "waiting-for-clearance", summary: `The ${formatCents(pending.amountCents)} deposit from ${pending.counterparty} has not cleared.`, sourceRefs: [pending.sourceId] }] });

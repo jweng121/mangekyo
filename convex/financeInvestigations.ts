@@ -349,6 +349,13 @@ export const recordResult = internalMutation({
     }
     await appendBoundary(ctx, completed, "finance.investigation.completed", result.summary, { externalRunId: args.externalRunId });
     if (task.accountId && result.outcome === "proposal_ready") await queueAgentAllocations(ctx, task.accountId, completed, result);
+    // Clearing may race the pending mock review. Recheck after saving it so the cleared review isn't lost.
+    if (run.mode === "mock" && status === "completed" && task.accountId && task.bankSourceId
+      && run.providerInput?.records.transactions.length === 0
+      && run.providerInput.records.bankTransactions?.some(t => t.sourceId === task.bankSourceId && t.clearing === "pending")) {
+      const bank = await ctx.db.query("financeBankTransactions").withIndex("by_sourceId", q => q.eq("sourceId", task.bankSourceId!)).unique();
+      if (bank?.clearing === "cleared") await ctx.scheduler.runAfter(0, internal.financeIntake.autoInvestigateDeposit, { accountId: task.accountId, bankSourceId: task.bankSourceId });
+    }
     return null;
   },
 });

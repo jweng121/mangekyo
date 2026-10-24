@@ -110,6 +110,66 @@ async function insertDemoBankItem(ctx: MutationCtx, txn: NormalizedBankTransacti
 
 const simulated = v.object({ sourceId: v.string(), created: v.boolean() });
 
+/** Mock bank return: the bank moved first. Books wait for a different person to record the return. */
+export const simulateClientBounce = mutation({
+  args: { accountId: v.string(), dev: money.devIdentity }, returns: simulated,
+  handler: async (ctx, { accountId, dev }) => {
+    const loaded = await loadAccount(ctx, accountId);
+    if (providerMode() !== "mock" || loaded.account.datasetVersion !== "law-firm-demo-v1") throw new ConvexError("Client returns are simulated only in the mock law-firm demo.");
+    const actor = await resolveActor(ctx, dev);
+    if (actor.role !== "requester") throw new ConvexError("Switch to riley, requester, to simulate the return; sam can then approve the return entry.");
+    const candidates = ["okafor-retainer", "nguyen-zelle"].map(key => loaded.state.bankTransactions.find(t => t.sourceId === lawId(accountId, `bank:txn:${key}`)));
+    const original = candidates.find(t => t && activeAllocations(loaded.state.entries, t.sourceId).length > 0);
+    if (!original) throw new ConvexError("First approve and post the Okafor or James Nguyen allocation.");
+    const allocations = activeAllocations(loaded.state.entries, original.sourceId);
+    if (allocations.length !== 1 || allocations[0].amountCents !== original.amountCents) throw new ConvexError("This demo return requires one complete owner allocation.");
+    const owner = loaded.state.owners.find(o => o.ownerId === allocations[0].ownerId)!;
+    const sourceId = `${original.sourceId}:returned`;
+    const existing = await ctx.db.query("financeBankTransactions").withIndex("by_sourceId", q => q.eq("sourceId", sourceId)).unique();
+    if (existing) return { sourceId, created: false };
+    await ctx.db.insert("financeBankTransactions", { ...original, sourceId, direction: "outflow", clearing: "cleared", bookedAt: Date.now(), reference: `RETURN ${original.reference}`, ownerHintSourceId: owner.sourceId, duplicateOfSourceId: null, raw: { ...original.raw, recordType: "client-check-return", rawId: sourceId } });
+    const after = await loadAccount(ctx, accountId);
+    await appendMoneyEvent(ctx, { accountId, type: "finance.money.bank_item_recorded", actor, operationId: sourceId, stage: "bank_return",
+      message: `Simulated bank return: ${formatCents(original.amountCents)} from ${original.counterparty} for ${owner.name}. A different person must approve the return entry.`, sourceIds: [sourceId, original.sourceId], threeWay: checkAccount(after.state, Date.now()) });
+    await recheckHeldProposals(ctx, accountId);
+    return { sourceId, created: true };
+  },
+});
+
+/** A person's duplicate decision creates a refund-payable allocation through the ordinary gates. */
+export const confirmDuplicate = mutation({
+  args: { accountId: v.string(), bankSourceId: v.string(), dev: money.devIdentity }, returns: v.object({ proposalId: v.string() }),
+  handler: async (ctx, args) => {
+    const loaded = await loadAccount(ctx, args.accountId);
+    if (providerMode() !== "mock" || loaded.account.datasetVersion !== "law-firm-demo-v1") throw new ConvexError("Duplicate decisions here are mock law-firm demo only.");
+    const actor = await resolveActor(ctx, args.dev);
+    const deposit = loaded.state.bankTransactions.find(t => t.sourceId === args.bankSourceId);
+    if (!deposit?.duplicateOfSourceId || deposit.sourceId !== lawId(args.accountId, "bank:txn:bayview-second")) throw new ConvexError("Choose the second Bayview wire flagged as a possible duplicate.");
+    const previous = loaded.proposals.find(p => p.bankSourceId === deposit.sourceId);
+    if (previous) return { proposalId: previous.proposalId };
+    const ownerId = lawId(args.accountId, "owner:bayview-refund");
+    const sourceId = lawId(args.accountId, "document:bayview-duplicate-decision:v1");
+    const text = `${actor.identity} confirmed the second $40,000.00 Bayview Title wire with reference ESC-2291 is a duplicate and must be returned to Bayview Title (refund payable).`;
+    await ctx.db.insert("financeAccountOwners", { ownerId, sourceId: lawId(args.accountId, "owner-record:bayview-refund"), accountId: args.accountId, subAccount: "IOLTA", name: "Bayview Title (refund payable)", raw: { ...deposit.raw, recordType: "refund-payee", rawId: ownerId } });
+    await ctx.db.insert("financeSourceDocuments", { sourceId, accountId: args.accountId, title: "Human duplicate and refund decision", documentType: "Human instruction", text, excerpt: text, version: "v1", namedOwnerSourceIds: [lawId(args.accountId, "owner-record:bayview-refund")], raw: { ...deposit.raw, recordType: "human-instruction", rawId: sourceId } });
+    const taskId = depositTaskId(args.accountId, deposit.sourceId);
+    const questions = await ctx.db.query("financeInvestigationQuestions").withIndex("by_taskId", q => q.eq("taskId", taskId)).take(100);
+    for (const question of questions.filter(q => q.status === "open" && q.key === "duplicate-or-installment")) {
+      const clarificationId = `${question.questionId}:clarification`;
+      await ctx.db.insert("financeClarifications", { clarificationId, sourceId: `clarification:${clarificationId}`, questionId: question.questionId, question: question.question,
+        answer: text, caseId: question.caseId, taskId, runId: question.runId, timestamp: Date.now(), respondent: { identity: actor.identity, authenticated: actor.authenticated }, evidenceRefs: [] });
+      await ctx.db.patch(question._id, { status: "answered", clarificationId });
+    }
+    const now = Date.now();
+    const proposalId = await nextProposalId(ctx, args.accountId, "allocation");
+    await submitProposal(ctx, { proposalId, accountId: args.accountId, kind: "allocation", status: "proposed", currency: deposit.currency, requestedBy: actor.identity,
+      origin: { type: "person" }, bankSourceId: deposit.sourceId, shares: [{ ownerId, amountCents: deposit.amountCents }], amountCents: deposit.amountCents,
+      purpose: "Bayview duplicate refund payable", evidenceSourceIds: [deposit.sourceId, deposit.duplicateOfSourceId, sourceId], createdAt: now, updatedAt: now }, actor);
+    await appendMoneyEvent(ctx, { accountId: args.accountId, type: "finance.money.bank_item_recorded", actor, operationId: proposalId, stage: "duplicate_decision", message: text, sourceIds: [sourceId, deposit.sourceId, deposit.duplicateOfSourceId] });
+    return { proposalId };
+  },
+});
+
 /** DEV ONLY, DEMO account only: a bank-feed outflow nobody recorded (scenario E). */
 export const simulateUnrecordedOutflow = mutation({
   args: { accountId: v.optional(v.string()) }, returns: simulated,
@@ -250,6 +310,11 @@ export const recordBankItem = mutation({
     const loaded = await loadAccount(ctx, args.accountId);
     const txn = loaded.state.bankTransactions.find(t => t.sourceId === args.bankSourceId);
     if (!txn) throw new ConvexError("Unknown bank transaction for this account.");
+    if (txn.raw.recordType === "client-check-return") {
+      const events = await ctx.db.query("financeEvents").withIndex("by_taskId_and_sequence", q => q.eq("taskId", `money:${args.accountId}`)).take(2000);
+      const decision = events.find(e => e.type === "finance.money.bank_item_recorded" && e.runId === txn.sourceId);
+      if (!decision || decision.actor.type !== "human" || decision.actor.identity === actor.identity) throw new ConvexError("L4: a different person must approve the bank return entry.");
+    }
     const linked = loaded.state.entries.some(e => e.sourceRefs.includes(txn.sourceId) || e.fundsSourceId === txn.sourceId || (!!e.bankReference && e.bankReference === txn.reference));
     if (linked) throw new ConvexError("This bank item is already recorded in the ledger.");
     const ownerId = args.ownerId ?? loaded.state.owners.find(o => o.sourceId === txn.ownerHintSourceId)?.ownerId;
@@ -326,7 +391,7 @@ const depositRow = v.object({
 
 export const listAccounts = query({
   args: {}, returns: v.array(money.storedAccount),
-  handler: async (ctx) => (await ctx.db.query("financeAccounts").take(20)).map(recordOnly),
+  handler: async (ctx) => (await ctx.db.query("financeAccounts").order("desc").take(500)).map(recordOnly),
 });
 
 /** Everything the money panel shows for one account. Omit cutoff for the latest recorded state. */

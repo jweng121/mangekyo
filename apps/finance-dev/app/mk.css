@@ -56,8 +56,8 @@
 .mk .bar-in { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding-block: 12px; }
 .mk .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; letter-spacing: -.02em; color: var(--ink); text-decoration: none; }
 .mk .brand img { width: 34px; height: 34px; border-radius: 6px; display: block; }
-.mk .ctl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.mk .ctl label { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mk .ctl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; min-width: 0; max-width: 100%; }
+.mk .ctl label { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; max-width: 100%; }
 .mk .ctl select { max-width: min(320px, 100%); }
 .mk .proto { font: 500 12px var(--mono); color: var(--muted); padding-block: 8px; border-bottom: 1px solid var(--hair); }
 

@@ -1,5 +1,5 @@
 import type { NormalizedAccountBundle, NormalizedDocument, RawPointer } from "@mangekyo/contracts";
-import { DEMO_ACCOUNT_ID, forDemoAccount } from "./demoMoney";
+import { DEMO_ACCOUNT_ID, forDemoAccount, demoRunOf } from "./demoMoney";
 
 const AS_OF = Date.UTC(2026, 9, 1);
 const raw = (recordType: string, rawId: string): RawPointer => ({ system: "demo", recordType, rawId, datasetVersion: "law-firm-demo-v1" });
@@ -20,7 +20,7 @@ export function lawFirmBundle(accountId = DEMO_ACCOUNT_ID): NormalizedAccountBun
     namedOwnerSourceIds: owners.filter(owner => text.includes(owner.name)).map(owner => owner.sourceId), raw: raw("document", key),
   });
   return forDemoAccount({
-    account: { accountId: DEMO_ACCOUNT_ID, sourceId: DEMO_ACCOUNT_ID, name: "Hartwell & Moreno LLP client trust account (IOLTA)", currency: "USD", openingAsOf: AS_OF, synthetic: true, raw: raw("account", "law-firm") },
+    account: { accountId: DEMO_ACCOUNT_ID, sourceId: DEMO_ACCOUNT_ID, name: `Hartwell & Moreno LLP client trust account (IOLTA) (run ${String(demoRunOf(accountId)).padStart(3, "0")})`, currency: "USD", openingAsOf: AS_OF, synthetic: true, raw: raw("account", "law-firm") },
     owners, bankTransactions: [], obligations: [], reconcilingItems: [], issues: [],
     documents: [
       document("delgado-settlement", "Settlement agreement", "Delgado v. Ridgeway Logistics settlement agreement", "Maria Delgado receives an $85,000.00 settlement from Harborline Insurance, claim HL-44812. Client share: $56,000.00."),
