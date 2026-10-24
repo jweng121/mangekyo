@@ -136,7 +136,8 @@ describe("core money workflow", () => {
     const resumed = await t.mutation(api.financeInvestigations.answerQuestion, { runId, questionId: view.questions[0].questionId, answer: "J Smith is a trustee of DEMO Alpha Holdings Trust; no agreement yet." });
     await t.action(internal.financeInvestigationActions.execute, { runId: resumed.runId });
     const after = await t.query(api.financeInvestigations.getTaskInvestigation, { taskId });
-    expect(after.runs[0]).toMatchObject({ attempt: 2, parentRunId: runId, status: "needs_information" });
+    // The answer names an owner the memo never mentions; the mock cites the memo anyway, so the checker stops it.
+    expect(after.runs[0]).toMatchObject({ attempt: 2, parentRunId: runId, status: "checker_rejected" });
     expect((await overview(t, DEMO)).proposals).toEqual([]);
   });
 

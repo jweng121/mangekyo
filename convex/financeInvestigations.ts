@@ -7,6 +7,7 @@ import {
 } from "@mangekyo/contracts";
 import { runDeterministicChecks } from "@mangekyo/finance-core/checks";
 import { validateFinanceAgentOutput, FinanceOutputValidationError } from "@mangekyo/finance-core/agent";
+import { checkClaims, mockClaimChecker, type CheckerAgentMode } from "@mangekyo/finance-core/checker";
 import { internal } from "./_generated/api";
 import { env, internalMutation, internalQuery, mutation, query, type MutationCtx } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
@@ -17,6 +18,16 @@ import { nextProposalId, readIntakeRecords, submitProposal } from "./lib/money";
 const ACTIVE = new Set(["queued", "retrieving_evidence", "checking", "provider_starting", "provider_pending", "validating"]);
 const RUN_TIMEOUT_MS = 10 * 60 * 1000;
 const startResult = v.object({ runId: v.string(), created: v.boolean() });
+
+export function providerMode(): "mock" | "creao" | null {
+  return configuration().mode;
+}
+
+/** CHECKER_AGENT_MODE: the claim checker's agent part. Off by default; the code part always runs. */
+export function checkerAgentMode(): CheckerAgentMode {
+  const raw = env.CHECKER_AGENT_MODE?.trim().toLowerCase();
+  return raw === "mock" || raw === "creao" ? raw : "off";
+}
 
 function configuration(): { mode: "mock" | "creao" | null; configured: boolean; message: string } {
   const rawMode = env.FINANCE_AGENT_MODE;
@@ -93,7 +104,7 @@ export async function appendBoundary(ctx: MutationCtx, run: FinanceInvestigation
     output: { allocationStatus: "unallocated", allocatedAmountCents: 0, approved: false, investigationStatus: run.status,
       providerMode: run.mode, simulated: run.simulated, result: run.result,
       deterministicChecks: run.resultChecks ?? run.providerInput?.deterministicChecks ?? null,
-      error: run.error, ...(run.reportSource ? { reportSource: run.reportSource } : {}) },
+      error: run.error, ...(run.reportSource ? { reportSource: run.reportSource } : {}), ...(run.claimCheck ? { claimCheck: run.claimCheck } : {}) },
   });
 }
 
@@ -203,6 +214,34 @@ export const answerQuestion = mutation({
   },
 });
 
+export const correctAndRerun = mutation({
+  args: { runId: v.string(), choice: v.union(v.literal("cite_clarification"), v.literal("checker_wrong"), v.literal("add_document")), note: v.string(), dev: v.object({ role: v.union(v.literal("requester"), v.literal("approver")), name: v.string() }) },
+  returns: startResult,
+  handler: async (ctx, args) => {
+    const run = await findRun(ctx, args.runId);
+    if (run.status !== "checker_rejected") throw new ConvexError("Only a run the checker stopped can be corrected and rerun.");
+    const task = await requireTask(ctx, run.taskId);
+    const latest = await ctx.db.query("financeInvestigationRuns").withIndex("by_taskId_and_attempt", (q) => q.eq("taskId", task.taskId)).order("desc").first();
+    if (!latest || latest.runId !== run.runId) throw new ConvexError("A newer attempt exists; correct the latest run.");
+    if (task.activeRunId) throw new ConvexError("Wait for the active investigation to finish.");
+    const note = args.note.trim();
+    if (args.choice !== "cite_clarification" && (!note || note.length > 4000)) throw new ConvexError(args.choice === "checker_wrong" ? "Give the reason the checker is wrong (required)." : "Paste the document text (required).");
+    const earlier = (await ctx.db.query("financeClarifications").withIndex("by_taskId_and_timestamp", (q) => q.eq("taskId", task.taskId)).take(100)).filter(c => !c.questionId.endsWith(":correction"));
+    if (args.choice === "cite_clarification" && earlier.length === 0) throw new ConvexError("There is no saved answer to cite yet.");
+    const identity = await ctx.auth.getUserIdentity();
+    const name = args.dev.name.trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "-").slice(0, 40) || "unknown";
+    const respondent = { identity: identity?.tokenIdentifier ?? `dev-unverified:${name}`, authenticated: identity !== null };
+    const clarificationId = `${run.runId}:correction`;
+    const question = args.choice === "cite_clarification" ? `Correction after the checker stopped run ${run.attempt}: cite the person's saved answer (${earlier.map(c => c.sourceId).join(", ")}) as the source for the owner claim.`
+      : args.choice === "checker_wrong" ? `A person disputes the checker's verdict on run ${run.attempt}. Code-found contradictions still apply.`
+      : `Document added by a person after the checker stopped run ${run.attempt}.`;
+    const answer = args.choice === "cite_clarification" ? (note || earlier.map(c => c.answer).join(" / ")) : note;
+    await ctx.db.insert("financeClarifications", { clarificationId, sourceId: `clarification:${clarificationId}`, questionId: clarificationId, question, answer, caseId: task.caseId, taskId: task.taskId, runId: run.runId, timestamp: Date.now(), respondent, evidenceRefs: [] });
+    await appendBoundary(ctx, publicRun(run), "finance.clarification.saved", `${respondent.identity} chose "${args.choice.replace(/_/g, " ")}" and reran from step 3. Run ${run.attempt} stays as it was.`, { clarificationId }, { type: "human", component: "finance-dev", ...respondent });
+    return await makeAttempt(ctx, task, latest.scope, latest);
+  },
+});
+
 export const claimExecution = internalMutation({
   args: { runId: v.string() }, returns: v.union(validators.run, v.null()),
   handler: async (ctx, { runId }) => {
@@ -284,12 +323,25 @@ export const recordResult = internalMutation({
       await failRun(ctx, run, { code: "validation_failed", message: "Provider result failed validation. No proposal was accepted.", retryable: false, details }, true);
       return null;
     }
-    const status = result.outcome === "needs_information" ? "needs_information" : result.outcome === "proposal_ready" ? "review_required" : "completed";
     const resultChecks = runDeterministicChecks(run.providerInput!.records, run.scope, result.proposedAllocations);
-    const completed: FinanceInvestigationRun = { ...publicRun(run), status, result, resultChecks, updatedAt: Date.now() };
-    await ctx.db.patch("financeInvestigationRuns", run._id, { status, result, resultChecks, updatedAt: completed.updatedAt });
+    // Agent 2 runs before anything reaches a person. Code verdicts always apply; the CREAO checker agent is not connected yet.
+    const agentMode = checkerAgentMode();
+    const claimCheck = await checkClaims(run.providerInput!, result, agentMode, agentMode === "mock" ? mockClaimChecker : null, Date.now());
+    const rejected = claimCheck.status === "rejected";
+    const status = rejected ? "checker_rejected" : result.outcome === "needs_information" ? "needs_information" : result.outcome === "proposal_ready" ? "review_required" : "completed";
+    const completed: FinanceInvestigationRun = { ...publicRun(run), status, result, resultChecks, claimCheck, updatedAt: Date.now() };
+    await ctx.db.patch("financeInvestigationRuns", run._id, { status, result, resultChecks, claimCheck, updatedAt: completed.updatedAt });
     const task = await requireTask(ctx, run.taskId);
     if (task.activeRunId === run.runId) await ctx.db.patch("financeTasks", task._id, { status: status === "completed" ? "investigation_completed" : status, activeRunId: undefined });
+    const counts = (v: string) => claimCheck.claims.filter(c => c.verdict === v).length;
+    const tally = `${counts("supported")} supported, ${counts("not_supported")} not supported, ${counts("not_checkable")} not checkable`;
+    if (rejected) {
+      const first = claimCheck.claims.find(c => c.verdict === "not_supported")!;
+      await appendBoundary(ctx, completed, "finance.checker.rejected", `Checker stopped this run (${tally}): "${first.claim}" ${first.reason}`, { errorCode: "checker_rejected" });
+      await appendBoundary(ctx, completed, "finance.investigation.completed", "Stopped by the claim checker. Nothing was sent for approval and no money moved.", { externalRunId: args.externalRunId });
+      return null;
+    }
+    await appendBoundary(ctx, completed, "finance.checker.completed", `Checker passed every claim it could judge (${tally}).`);
     for (const item of result.questions) {
       const questionId = `${run.runId}:question:${item.key}`;
       await ctx.db.insert("financeInvestigationQuestions", { caseId: run.caseId, taskId: run.taskId, runId: run.runId, questionId, ...item, status: "open", clarificationId: null });

@@ -48,6 +48,7 @@ export interface InvestigationSnapshot extends SyntheticRecord {
     deterministicChecks: import("./investigation").DeterministicChecks | null;
     error: import("./investigation").InvestigationError | null;
     reportSource?: import("./investigation").FinanceReportSource;
+    claimCheck?: import("./investigation").ClaimCheckResult;
   };
 }
 
