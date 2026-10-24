@@ -1,12 +1,29 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import type { FinanceCaseBundle, HumanClarification, InvestigationScope, InvestigationStartScope, TaskInvestigationView } from "@mangekyo/contracts";
+import type { FinanceCaseBundle, FinanceTask, HumanClarification, InvestigationScope, InvestigationStartScope, TaskInvestigationView } from "@mangekyo/contracts";
 import { investigationPeriod } from "../investigationPeriod";
 
 export interface FinanceProviderConfiguration { mode: "mock" | "creao" | null; configured: boolean; message: string }
+/** What is being investigated: the legacy synthetic case or an intake deposit task. */
+export interface InvestigationSubject {
+  task: FinanceTask;
+  accountId: string;
+  currency: string;
+  evidence: Array<{ sourceId: string; text: string }>;
+  scopeKinds: InvestigationScope["kind"][];
+}
+
+export function subjectFromCase(data: FinanceCaseBundle): InvestigationSubject {
+  return {
+    task: data.task, accountId: "synthetic-bank-account-001", currency: data.transaction.currency,
+    evidence: [{ sourceId: data.document.sourceId, text: data.document.excerpt }, { sourceId: data.transaction.sourceId, text: data.transaction.description }],
+    scopeKinds: ["deposit_investigation", "historical_onboarding"],
+  };
+}
+
 interface Props {
-  data: FinanceCaseBundle;
+  subject: InvestigationSubject;
   investigation: TaskInvestigationView | undefined;
   configuration: FinanceProviderConfiguration | undefined;
   connected: boolean;
@@ -14,16 +31,15 @@ interface Props {
   onAnswer(runId: string, questionId: string, answer: string): Promise<void>;
 }
 
-function EvidenceLink({ sourceId, data, clarifications }: { sourceId: string; data: FinanceCaseBundle; clarifications: HumanClarification[] }) {
-  const clarification = clarifications.find(row => row.sourceId === sourceId);
-  const excerpt = sourceId === data.document.sourceId ? data.document.excerpt : clarification?.answer;
+function EvidenceLink({ sourceId, subject, clarifications }: { sourceId: string; subject: InvestigationSubject; clarifications: HumanClarification[] }) {
+  const text = subject.evidence.find(row => row.sourceId === sourceId)?.text ?? clarifications.find(row => row.sourceId === sourceId)?.answer;
   return <details className="evidence-reference"><summary><code>{sourceId}</code></summary>
-    <p>{excerpt ?? (sourceId === data.transaction.sourceId ? data.transaction.description : "See the immutable provider context for this source version.")}</p>
+    <p>{text ?? "See the immutable provider context for this source version."}</p>
   </details>;
 }
 
-export function FinanceInvestigationView({ data, investigation, configuration, connected, onStart, onAnswer }: Props) {
-  const [kind, setKind] = useState<InvestigationScope["kind"]>("historical_onboarding");
+export function FinanceInvestigationView({ subject, investigation, configuration, connected, onStart, onAnswer }: Props) {
+  const [kind, setKind] = useState<InvestigationScope["kind"]>(subject.scopeKinds.includes("historical_onboarding") ? "historical_onboarding" : "deposit_investigation");
   const [fromDate, setFromDate] = useState("");
   const [cutoffDate, setCutoffDate] = useState("");
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -40,7 +56,7 @@ export function FinanceInvestigationView({ data, investigation, configuration, c
   }
   function start(event: FormEvent) {
     event.preventDefault();
-    void perform(() => onStart({ kind, accountId: "synthetic-bank-account-001", currency: data.transaction.currency, ...investigationPeriod(fromDate, cutoffDate) }));
+    void perform(() => onStart({ kind, accountId: subject.accountId, currency: subject.currency, ...investigationPeriod(fromDate, cutoffDate) }));
   }
 
   return <section aria-label="Finance investigation">
@@ -51,13 +67,13 @@ export function FinanceInvestigationView({ data, investigation, configuration, c
     <form onSubmit={start}>
       <label>Investigation scope<select value={kind} onChange={event => setKind(event.target.value as InvestigationScope["kind"])} disabled={active || busy}>
         <option value="deposit_investigation">Individual deposit</option>
-        <option value="historical_onboarding">Historical onboarding · available records only</option>
+        {subject.scopeKinds.includes("historical_onboarding") && <option value="historical_onboarding">Historical onboarding · available records only</option>}
       </select></label>
       <div className="period-fields">
         <label>Period starts (optional)<input type="datetime-local" value={fromDate} onChange={event => setFromDate(event.target.value)} disabled={active || busy} /></label>
         <label>Cutoff (defaults to now)<input type="datetime-local" value={cutoffDate} onChange={event => setCutoffDate(event.target.value)} disabled={active || busy} /></label>
       </div>
-      <p><code>synthetic-bank-account-001</code> · {data.transaction.currency}</p>
+      <p><code>{subject.accountId}</code> · {subject.currency}</p>
       <button type="submit" disabled={busy || active || !configuration?.configured || !connected || !investigation}>
         {busy ? "Saving request…" : active ? "Investigation running…" : latest ? "Run new investigation attempt" : "Run investigation"}
       </button>
@@ -81,17 +97,17 @@ export function FinanceInvestigationView({ data, investigation, configuration, c
       {latest.result && <>
         <h3>Investigation result · {latest.result.outcome}</h3><p>{latest.result.summary}</p>
         {latest.result.findings.map(finding => <article key={finding.findingId}><h4>Finding</h4><p>{finding.summary}</p>
-          {finding.sourceRefs.map(sourceId => <EvidenceLink key={sourceId} sourceId={sourceId} data={data} clarifications={investigation.clarifications} />)}</article>)}
+          {finding.sourceRefs.map(sourceId => <EvidenceLink key={sourceId} sourceId={sourceId} subject={subject} clarifications={investigation.clarifications} />)}</article>)}
         <h3>Proposed allocations · unapproved</h3>
         {latest.result.proposedAllocations.length === 0 ? <p>No allocation proposed. The deposit remains unallocated.</p> :
           <ul>{latest.result.proposedAllocations.map(proposal => <li key={proposal.proposalId}>{proposal.amountCents} integer cents {proposal.currency} to <code>{proposal.ownerId}</code> for <code>{proposal.transactionId}</code> · unapproved
-            {proposal.evidenceSourceIds.map(sourceId => <EvidenceLink key={sourceId} sourceId={sourceId} data={data} clarifications={investigation.clarifications} />)}</li>)}</ul>}
+            {proposal.evidenceSourceIds.map(sourceId => <EvidenceLink key={sourceId} sourceId={sourceId} subject={subject} clarifications={investigation.clarifications} />)}</li>)}</ul>}
         {latest.result.proposedActions.length > 0 && <><h3>Proposed evidence requests</h3><ul>{latest.result.proposedActions.map((action, index) => <li key={index}>{action.description}</li>)}</ul></>}
         {latest.result.candidatePolicies.length > 0 && <><h3>Candidate policies · proposed for human review</h3><ul>{latest.result.candidatePolicies.map(policy => <li key={policy.policyId}>{policy.statement}</li>)}</ul></>}
       </>}
       {questions.length > 0 && <><h3>Missing-information questions</h3>{questions.map(question => <article key={question.questionId}>
         <p><strong>{question.question}</strong></p>
-        {question.sourceRefs.map(sourceId => <EvidenceLink key={sourceId} sourceId={sourceId} data={data} clarifications={investigation.clarifications} />)}
+        {question.sourceRefs.map(sourceId => <EvidenceLink key={sourceId} sourceId={sourceId} subject={subject} clarifications={investigation.clarifications} />)}
         {question.status === "answered" ? <p>Clarification saved · {investigation.clarifications.find(row => row.clarificationId === question.clarificationId)?.answer}</p> : <form onSubmit={event => { event.preventDefault(); void perform(() => onAnswer(question.runId, question.questionId, answers[question.questionId] ?? "")); }}>
           <label htmlFor={question.questionId}>Task-scoped clarification<textarea id={question.questionId} value={answers[question.questionId] ?? ""} onChange={event => setAnswers({ ...answers, [question.questionId]: event.target.value })} minLength={1} maxLength={4000} required disabled={busy || active} /></label>
           <p>Saved as clarification, without financial authorization. This development app has no sign-in; an unauthenticated respondent is labelled accordingly.</p>

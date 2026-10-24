@@ -1,12 +1,13 @@
 import { ConvexError, v } from "convex/values";
 import type { NormalizedAccountBundle, NormalizedBankTransaction } from "@mangekyo/contracts";
-import { candidateOwnerSourceIds, depositCaseId, normalizeErpState, type ErpState } from "@mangekyo/finance-core/intake";
+import { candidateOwnerSourceIds, depositCaseId, formatCents, normalizeErpState, type ErpState } from "@mangekyo/finance-core/intake";
 import { importLedgerEntries, ownerBalances, threeWayCheck } from "@mangekyo/finance-core/ledger";
 import { DEMO_ACCOUNT_ID, demoMoneyBundle, demoSettlement, demoUnrecordedOutflow } from "@mangekyo/finance-core/fixtures/demo-money";
 // Read-only use of the teammate's deterministic generator; his runtime state file is never touched.
 import { createSeed } from "../apps/demo-erp/data/seed";
 import { mutation, query, type MutationCtx } from "./_generated/server";
 import * as money from "./lib/moneyValidators";
+import * as validators from "./lib/validators";
 import { appendMoneyEvent, compact, LATEST, loadAccount, SYSTEM, getProposal, requireAccount } from "./lib/money";
 import { recordOnly } from "./lib/investigationRecords";
 
@@ -162,5 +163,22 @@ export const getAccountOverview = query({
       entries: [...loaded.state.entries].sort((a, b) => b.effectiveAt - a.effectiveAt || b.entryId.localeCompare(a.entryId)).slice(0, 200),
       proposals: [...loaded.proposals].sort((a, b) => b.createdAt - a.createdAt).slice(0, 100),
     };
+  },
+});
+
+/** Task plus readable evidence text for the investigation view of an intake deposit. */
+export const getDepositSubject = query({
+  args: { taskId: v.string() },
+  returns: v.union(v.null(), v.object({ task: validators.task, accountId: v.string(), currency: v.string(), evidence: v.array(v.object({ sourceId: v.string(), text: v.string() })) })),
+  handler: async (ctx, { taskId }) => {
+    const task = await ctx.db.query("financeTasks").withIndex("by_taskId", (q) => q.eq("taskId", taskId)).unique();
+    if (!task?.accountId) return null;
+    const loaded = await loadAccount(ctx, task.accountId);
+    const evidence = [
+      ...loaded.state.bankTransactions.map(t => ({ sourceId: t.sourceId, text: `${t.direction} ${formatCents(t.amountCents, t.currency)} · ${t.counterparty} · ${t.reference} · ${t.clearing}` })),
+      ...loaded.documents.map(d => ({ sourceId: d.sourceId, text: `${d.title}: ${d.excerpt}` })),
+      ...loaded.obligations.map(o => ({ sourceId: o.sourceId, text: o.excerpt })),
+    ];
+    return { task: recordOnly(task), accountId: task.accountId, currency: loaded.state.account.currency, evidence };
   },
 });

@@ -24,3 +24,29 @@ textarea { min-height: 110px; resize: vertical; }
 article { border-top: 1px solid #dce0e7; padding: .8rem 0; }
 .evidence-reference { padding: .5rem 0; overflow-wrap: anywhere; }
 @media (max-width: 600px) { body { margin: 1rem; } section { padding: 1rem; } }
+.row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; }
+.row label { margin: .5rem 0; }
+.dev-banner { border: 2px dashed #c09229; background: #fffbef; padding: .8rem 1rem; border-radius: 6px; }
+.three-numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; border-radius: 6px; border: 2px solid; }
+.three-numbers.matched { background: #ecf8ef; border-color: #2f8a46; }
+.three-numbers.mismatched, .three-numbers.insufficient_data { background: #fdeeee; border-color: #a12121; }
+.three-numbers span { display: block; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: #506178; }
+.three-numbers strong { display: block; font-size: 1.5rem; margin: .2rem 0; }
+.three-numbers small { background: none; padding: 0; font-size: .75rem; color: #506178; }
+.three-numbers .verdict { grid-column: 1 / -1; margin: 0; font-weight: 700; }
+table { width: 100%; border-collapse: collapse; font-size: .9rem; margin: .5rem 0 1rem; display: block; overflow-x: auto; }
+th, td { text-align: left; padding: .4rem .5rem; border-bottom: 1px solid #dce0e7; vertical-align: top; }
+td code { overflow-wrap: anywhere; }
+.chip { display: inline-block; padding: .1rem .5rem; border-radius: 999px; font-size: .8rem; background: #edf2ff; }
+.chip.posted, .chip.approved { background: #ecf8ef; }
+.chip.blocked, .chip.rejected { background: #fdeeee; }
+.chip.pending_approval, .chip.proposed, .chip.awaiting_clearance { background: #fff0cc; }
+.lock { padding: .6rem .8rem; border-radius: 4px; margin: .5rem 0; }
+.lock.allowed { background: #ecf8ef; }
+.lock.blocked { background: #fdeeee; }
+.lock p { margin: .3rem 0; }
+button.secondary { background: #e4e9f4; color: #20242c; }
+button.danger { background: #a12121; }
+.nested { border-left: 3px solid #244db0; padding-left: 1rem; }
+.nested > section { margin: .5rem 0; }
+.hint { color: #506178; font-size: .85rem; }

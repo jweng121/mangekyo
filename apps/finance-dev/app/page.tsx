@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useMutation, useQuery, useConvexConnectionState } from "convex/react";
 import { ConvexError } from "convex/values";
-import { FinanceCaseView, FinanceInvestigationView } from "@mangekyo/finance-core";
+import { FinanceCaseView, FinanceInvestigationView, subjectFromCase } from "@mangekyo/finance-core";
+import { MoneyPanel } from "./MoneyPanel";
 import { api } from "../../../convex/_generated/api";
 
 export default function FinancePage() {
@@ -42,10 +43,11 @@ export default function FinancePage() {
       </button>
       {message && <p role="status">{message}</p>}
       {error && <p role="alert">{error}</p>}
+      <MoneyPanel connected={connection.isWebSocketConnected} />
       {data === undefined ? <p role="status">Loading saved case…</p> : data === null ?
         <p>No sample case saved yet. Load the synthetic case to create it.</p> : <>
           <FinanceCaseView data={data} />
-          <FinanceInvestigationView data={data} investigation={investigation} configuration={configuration}
+          <FinanceInvestigationView subject={subjectFromCase(data)} investigation={investigation} configuration={configuration}
             connected={connection.isWebSocketConnected}
             onStart={async scope => {
               try { await startInvestigation({ taskId: data.task.taskId, scope }); }
