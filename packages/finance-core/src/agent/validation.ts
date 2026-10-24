@@ -36,6 +36,8 @@ export function validateFinanceAgentOutput(value: unknown, input: FinanceAgentIn
     ...input.records.invoices.map(row => row.sourceId), ...input.records.agreements.map(row => row.sourceId),
     ...input.humanClarifications.map(row => row.sourceId), ...input.approvedPolicies.map(row => row.sourceId),
     ...input.records.timingDifferences.map(row => row.sourceId),
+    ...(input.records.bankTransactions ?? []).map(row => row.sourceId), ...(input.records.obligations ?? []).map(row => row.sourceId),
+    ...(input.records.ownerLedgerBalances ?? []).map(row => row.sourceId),
     ...[input.records.bankBalance, input.records.controlBalance, ...(input.records.ownerBalances ?? [])].flatMap(row => row ? [row.sourceId] : []),
   ]);
   const sourceRefs = (value: unknown, path: string, required = true) => {
