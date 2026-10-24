@@ -4,7 +4,7 @@ import { checkSelfApproval, checkState } from "@mangekyo/finance-core/gateway";
 import { buildReversalEntries } from "@mangekyo/finance-core/ledger";
 import { mutation, query } from "./_generated/server";
 import * as money from "./lib/moneyValidators";
-import { appendMoneyEvent, checkAccount, compact, gatedStep, getProposal, loadAccount, nextProposalId, requireAccount, resolveActor, submitProposal, transition } from "./lib/money";
+import { appendMoneyEvent, checkAccount, compact, gatedStep, getProposal, loadAccount, nextProposalId, recheckHeldProposals, recheckHold, requireAccount, resolveActor, submitProposal, transition, updateHold } from "./lib/money";
 import { recordOnly } from "./lib/investigationRecords";
 import { appendBoundary } from "./financeInvestigations";
 
@@ -133,10 +133,59 @@ export const reversePosting = mutation({
     const existing = await ctx.db.query("financeLedgerEntries").withIndex("by_entryId", (q) => q.eq("entryId", reversals[0].entryId)).unique();
     if (existing) return { entryIds: reversals.map(r => r.entryId), alreadyDone: true };
     for (const entry of reversals) await ctx.db.insert("financeLedgerEntries", compact(entry));
+    await recheckHeldProposals(ctx, proposal.accountId);
     const loaded = await loadAccount(ctx, proposal.accountId);
     await appendMoneyEvent(ctx, { accountId: proposal.accountId, type: "finance.money.ledger_posted", actor, operationId: proposal.proposalId, stage: "reversal",
       message: `Reversed ${reversals.length} entr${reversals.length === 1 ? "y" : "ies"} of ${proposal.proposalId}: ${reason}`, proposal, threeWay: checkAccount(loaded.state, Date.now()), entryIds: reversals.map(r => r.entryId) });
     return { entryIds: reversals.map(r => r.entryId), alreadyDone: false };
+  },
+});
+
+async function heldProposal(ctx: Parameters<typeof getProposal>[0], proposalId: string): Promise<MoneyProposal> {
+  const proposal = await getProposal(ctx, proposalId);
+  if (proposal.status !== "on_hold" || !proposal.hold) throw new ConvexError(`${proposalId} is not on hold.`);
+  return proposal;
+}
+
+/** "Re-check now": re-runs the held step's rules. Passing marks it ready; it still needs a person to continue. */
+export const recheckHeld = mutation({
+  args: { proposalId: v.string(), dev: money.devIdentity }, returns: money.proposal,
+  handler: async (ctx, args) => await recheckHold(ctx, await heldProposal(ctx, args.proposalId), await resolveActor(ctx, args.dev), "recheck"),
+});
+
+/** "Keep waiting": records the person's decision; nothing else changes. */
+export const keepWaiting = mutation({
+  args: { proposalId: v.string(), dev: money.devIdentity }, returns: money.proposal,
+  handler: async (ctx, args) => {
+    const actor = await resolveActor(ctx, args.dev);
+    const proposal = await heldProposal(ctx, args.proposalId);
+    const hold = { ...proposal.hold!, lastCheckedBy: actor.identity, lastCheckedAt: Date.now(), lastDecision: "keep_waiting" as const };
+    return await updateHold(ctx, proposal, hold, actor, null, null, `${actor.identity} chose to keep waiting: ${proposal.hold!.message}`);
+  },
+});
+
+/** "Cancel with reason": ends a held proposal without moving money. */
+export const cancelHeld = mutation({
+  args: { proposalId: v.string(), reason: v.string(), dev: money.devIdentity }, returns: money.proposal,
+  handler: async (ctx, args) => {
+    const actor = await resolveActor(ctx, args.dev);
+    const reason = args.reason.trim();
+    if (!reason || reason.length > 4000) throw new ConvexError("A cancellation reason (1–4000 characters) is required.");
+    const proposal = await heldProposal(ctx, args.proposalId);
+    const loaded = await loadAccount(ctx, proposal.accountId);
+    return await transition(ctx, proposal, "cancelled", actor, reason, null, checkAccount(loaded.state, Date.now()), { cancellationReason: reason });
+  },
+});
+
+/** "Continue": a person resumes the held approve or post step; every rule runs again, including L4. */
+export const continueHeld = mutation({
+  args: { proposalId: v.string(), dev: money.devIdentity }, returns: outcome,
+  handler: async (ctx, args) => {
+    const actor = await resolveActor(ctx, args.dev);
+    if (actor.role !== "approver") throw new ConvexError("Switch to the approver role to continue a held proposal.");
+    const proposal = await heldProposal(ctx, args.proposalId);
+    const { proposal: next, lock } = await gatedStep(ctx, proposal, proposal.hold!.stage, actor);
+    return { proposal: next, lock, alreadyDone: false };
   },
 });
 

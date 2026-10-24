@@ -59,13 +59,14 @@ export const lockResult = v.object({
   facts: v.record(v.string(), v.union(v.number(), v.string(), v.null())),
 });
 
-export const proposalStatus = v.union(v.literal("proposed"), v.literal("pending_approval"), v.literal("approved"), v.literal("posted"), v.literal("rejected"), v.literal("blocked"));
+export const proposalStatus = v.union(v.literal("proposed"), v.literal("pending_approval"), v.literal("approved"), v.literal("posted"), v.literal("rejected"), v.literal("blocked"), v.literal("on_hold"), v.literal("cancelled"));
+export const proposalHold = v.object({ stage: v.union(v.literal("approve"), v.literal("post")), reasonCodes: v.array(v.string()), message: v.string(), since: v.number(), ready: v.boolean(), lastCheckedAt: v.number(), lastCheckedBy: v.string(), lastDecision: v.union(v.literal("placed"), v.literal("recheck"), v.literal("auto_recheck"), v.literal("keep_waiting")) });
 export const proposal = v.object({
   proposalId: v.string(), accountId: v.string(), kind: v.union(v.literal("allocation"), v.literal("payment")), status: proposalStatus, currency: v.string(), requestedBy: v.string(),
   origin: v.union(v.object({ type: v.literal("agent"), taskId: v.string(), runId: v.string(), agentProposalIds: v.array(v.string()) }), v.object({ type: v.literal("person") })),
   evidenceSourceIds: v.array(v.string()), bankSourceId: v.optional(v.string()), shares: v.optional(v.array(v.object({ ownerId: v.string(), amountCents: v.number() }))),
   ownerId: v.optional(v.string()), amountCents: v.number(), purpose: v.string(), fundingSourceId: v.optional(v.string()),
-  approvedBy: v.optional(v.string()), approvalId: v.optional(v.string()), rejectionReason: v.optional(v.string()), blockedReasons: v.optional(v.array(lockFailure)),
+  approvedBy: v.optional(v.string()), approvalId: v.optional(v.string()), rejectionReason: v.optional(v.string()), hold: v.optional(proposalHold), cancellationReason: v.optional(v.string()), blockedReasons: v.optional(v.array(lockFailure)),
   postedEntryIds: v.optional(v.array(v.string())), createdAt: v.number(), updatedAt: v.number(),
 });
 export const transition = v.object({

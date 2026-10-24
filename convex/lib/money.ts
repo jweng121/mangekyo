@@ -1,6 +1,6 @@
-import type { FinanceRecordSet, InvestigationScope, LedgerEntry, LockResult, MoneyEvent, MoneyProposal, MoneySnapshot, ProposalStatus, ThreeWayCheckResult } from "@mangekyo/contracts";
+import type { FinanceRecordSet, InvestigationScope, LedgerEntry, LockResult, MoneyEvent, MoneyProposal, MoneySnapshot, ProposalHold, ProposalStatus, ThreeWayCheckResult } from "@mangekyo/contracts";
 import { ConvexError } from "convex/values";
-import { buildPostingEntries, canTransition, evaluateAllocation, evaluatePayment, type GatewayContext } from "@mangekyo/finance-core/gateway";
+import { buildPostingEntries, canTransition, classifyFailures, evaluateAllocation, evaluatePayment, holdReason, type GatewayContext } from "@mangekyo/finance-core/gateway";
 import { buildDepositRecordSet, depositCaseId } from "@mangekyo/finance-core/intake";
 import { DEFAULT_OUTSTANDING_MAX_DAYS, threeWayCheck, type AccountLedgerState } from "@mangekyo/finance-core/ledger";
 import type { Doc } from "../_generated/dataModel";
@@ -73,7 +73,7 @@ export async function loadAccount(ctx: QueryCtx | MutationCtx, accountId: string
       account: moneyAccount, owners: owners.map(recordOnly), bankTransactions: bank.map(recordOnly),
       statementBalances: statements.map(recordOnly), reconcilingItems: reconciling.map(recordOnly),
       entries: entries.map(recordOnly) as LedgerEntry[],
-      holds: proposalList.filter(p => p.kind === "payment" && (p.status === "pending_approval" || p.status === "approved") && p.ownerId)
+      holds: proposalList.filter(p => p.kind === "payment" && (p.status === "pending_approval" || p.status === "approved" || p.status === "on_hold") && p.ownerId)
         .map(p => ({ proposalId: p.proposalId, ownerId: p.ownerId!, amountCents: p.amountCents })),
     },
     documents: documents.map(recordOnly), obligations: obligations.map(recordOnly), proposals: proposalList, statements: statements.map(recordOnly),
@@ -188,6 +188,9 @@ export async function gatedStep(ctx: MutationCtx, proposal: MoneyProposal, stage
   const loaded = await loadAccount(ctx, proposal.accountId);
   const gateway = await gatewayContext(ctx, loaded, Date.now());
   const lock = evaluate(gateway, proposal, stage, actor.identity, to);
+  if (proposal.status === "on_hold" && proposal.hold?.stage !== stage) {
+    lock.failures.push({ rule: "L7", code: "STATE", message: `Held at the ${proposal.hold?.stage ?? "unknown"} step; continue it from there.`, sourceIds: [proposal.proposalId] });
+  }
   if (stage === "post" && proposal.approvedBy && proposal.approvedBy === proposal.requestedBy) {
     lock.failures.push({ rule: "L4", code: "SELF_APPROVAL", message: "The approval on record was made by the requester.", sourceIds: [proposal.proposalId] });
   }
@@ -197,12 +200,19 @@ export async function gatedStep(ctx: MutationCtx, proposal: MoneyProposal, stage
   lock.allowed = lock.failures.length === 0;
   await appendMoneyEvent(ctx, { accountId: proposal.accountId, type: "finance.money.lock_checked", actor, operationId: proposal.proposalId, message: lock.allowed ? `All lock rules passed at ${stage}.` : lock.failures.map(f => `${f.rule} ${f.code}: ${f.message}`).join(" | "), proposal, lock, threeWay: gateway.threeWay, stage });
   if (!lock.allowed) {
-    // A refusal of who is acting (L4) or of the action itself (L7) is logged above but must not let
-    // that actor end someone else's request; only failures about the money block the proposal.
-    const refusedActorOrAction = lock.failures.some(f => f.rule === "L4" || f.rule === "L7");
-    const next = !refusedActorOrAction && canTransition(proposal.status, "blocked")
-      ? await transition(ctx, proposal, "blocked", actor, lock.failures.map(f => f.code).join(", "), lock, gateway.threeWay, { blockedReasons: lock.failures })
-      : proposal;
+    // Refusals of who is acting (L4) or of the action (L7) are logged above and change nothing, so one
+    // actor cannot end someone else's request. Temporary failures (L2, L5) hold for a person; the rest block.
+    const kind = classifyFailures(lock.failures);
+    const codes = lock.failures.map(f => f.code);
+    let next = proposal;
+    if (kind === "temporary") {
+      const hold: ProposalHold = { stage, reasonCodes: codes, message: holdReason(lock.failures, gateway.state, gateway.threeWay), since: proposal.hold && proposal.status === "on_hold" ? proposal.hold.since : Date.now(), ready: false, lastCheckedAt: Date.now(), lastCheckedBy: actor.identity, lastDecision: "placed" };
+      next = proposal.status === "on_hold"
+        ? await updateHold(ctx, proposal, hold, actor, lock, gateway.threeWay, `Continue attempted; still on hold: ${hold.message}`)
+        : await transition(ctx, proposal, "on_hold", actor, codes.join(", "), lock, gateway.threeWay, { hold });
+    } else if (kind === "permanent" && canTransition(proposal.status, "blocked")) {
+      next = await transition(ctx, proposal, "blocked", actor, codes.join(", "), lock, gateway.threeWay, { blockedReasons: lock.failures });
+    }
     return { proposal: next, lock, entryIds: [] };
   }
   if (stage === "approve") {
@@ -220,7 +230,9 @@ export async function gatedStep(ctx: MutationCtx, proposal: MoneyProposal, stage
   const entryIds = entries.map(e => e.entryId);
   const after = checkAccount({ ...loaded.state, entries: [...loaded.state.entries, ...entries], holds: loaded.state.holds.filter(h => h.proposalId !== proposal.proposalId) }, now);
   await appendMoneyEvent(ctx, { accountId: proposal.accountId, type: "finance.money.ledger_posted", actor, operationId: proposal.proposalId, message: `Posted ${entries.length} ledger entr${entries.length === 1 ? "y" : "ies"}; three-way check is ${after.status}.`, proposal, lock, threeWay: after, entryIds, stage: "post" });
-  return { proposal: await transition(ctx, proposal, "posted", actor, null, lock, after, { postedEntryIds: entryIds }), lock, entryIds };
+  const posted = await transition(ctx, proposal, "posted", actor, null, lock, after, { postedEntryIds: entryIds });
+  await recheckHeldProposals(ctx, proposal.accountId);
+  return { proposal: posted, lock, entryIds };
 }
 
 export async function nextProposalId(ctx: MutationCtx, accountId: string, kind: "allocation" | "payment") {
@@ -241,4 +253,40 @@ export async function readIntakeRecords(ctx: QueryCtx | MutationCtx, task: Doc<"
   if (!deposit) throw new Error("The task's deposit is missing from the imported bank feed");
   const records = buildDepositRecordSet({ state: loaded.state, documents: loaded.documents, obligations: loaded.obligations, deposit, caseId: task.caseId, system: loaded.account.system, datasetVersion: loaded.account.datasetVersion, scope });
   return { records, threeWay: checkAccount(loaded.state, scope.cutoff) };
+}
+
+/** Saves a hold change on the proposal and emits finance.money.hold_updated. Status stays on_hold. */
+export async function updateHold(ctx: MutationCtx, proposal: MoneyProposal, hold: ProposalHold, actor: Actor, lock: LockResult | null, threeWay: ThreeWayCheckResult | null, message: string): Promise<MoneyProposal> {
+  const row = await findProposalRow(ctx, proposal.proposalId);
+  if (!row) throw new Error(`Unknown proposal ${proposal.proposalId}`);
+  const updatedAt = Date.now();
+  await ctx.db.patch("financeProposals", row._id, { hold, updatedAt });
+  const next = { ...proposal, hold, updatedAt };
+  await appendMoneyEvent(ctx, { accountId: proposal.accountId, type: "finance.money.hold_updated", actor, operationId: proposal.proposalId, message, proposal: next, lock, threeWay, stage: `hold:${hold.lastDecision}`, sourceIds: lock?.failures.flatMap(f => f.sourceIds) ?? [] });
+  return next;
+}
+
+/**
+ * Re-runs the held step's rules without moving money. Passing marks the hold ready for a person to
+ * continue. Who may act (L4) is checked when a person continues, not here.
+ */
+export async function recheckHold(ctx: MutationCtx, proposal: MoneyProposal, actor: Actor, decision: "recheck" | "auto_recheck", loaded?: LoadedAccount): Promise<MoneyProposal> {
+  if (proposal.status !== "on_hold" || !proposal.hold) throw new ConvexError(`${proposal.proposalId} is not on hold.`);
+  const account = loaded ?? await loadAccount(ctx, proposal.accountId);
+  const gateway = await gatewayContext(ctx, account, Date.now());
+  const lock = evaluate(gateway, proposal, proposal.hold.stage, "system:hold-recheck", proposal.hold.stage === "approve" ? "approved" : "posted");
+  const kind = classifyFailures(lock.failures);
+  const message = kind === "pass" ? "Ready to continue: every lock rule passes now. A person must continue it; nothing moves on its own."
+    : kind === "temporary" ? holdReason(lock.failures, gateway.state, gateway.threeWay)
+    : `Needs a decision: ${lock.failures.map(f => `${f.rule} ${f.code}: ${f.message}`).join(" ")} Waiting will not fix this; cancel it with a reason.`;
+  const hold: ProposalHold = { ...proposal.hold, ready: kind === "pass", reasonCodes: lock.failures.map(f => f.code), message, lastCheckedAt: Date.now(), lastCheckedBy: actor.identity, lastDecision: decision };
+  // Automatic re-checks only speak up when something changed; a person's re-check is always recorded.
+  if (decision === "auto_recheck" && hold.ready === proposal.hold.ready && hold.message === proposal.hold.message) return proposal;
+  return await updateHold(ctx, proposal, hold, actor, lock, gateway.threeWay, `${decision === "auto_recheck" ? "Automatic re-check" : `Re-check by ${actor.identity}`}: ${message}`);
+}
+
+/** Called after anything that can clear a hold (bank feed, postings, recorded bank items, imports). */
+export async function recheckHeldProposals(ctx: MutationCtx, accountId: string): Promise<void> {
+  const loaded = await loadAccount(ctx, accountId);
+  for (const proposal of loaded.proposals.filter(p => p.status === "on_hold")) await recheckHold(ctx, proposal, SYSTEM, "auto_recheck", loaded);
 }

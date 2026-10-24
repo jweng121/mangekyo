@@ -52,6 +52,12 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
   const post = useMutation(api.financeProposals.postProposal);
   const reject = useMutation(api.financeProposals.rejectProposal);
   const reverse = useMutation(api.financeProposals.reversePosting);
+  const recheckHeld = useMutation(api.financeProposals.recheckHeld);
+  const keepWaiting = useMutation(api.financeProposals.keepWaiting);
+  const cancelHeld = useMutation(api.financeProposals.cancelHeld);
+  const continueHeld = useMutation(api.financeProposals.continueHeld);
+  const recordBankItem = useMutation(api.financeIntake.recordBankItem);
+  const simulateCleared = useMutation(api.financeIntake.simulateDepositCleared);
   const simulateOutflow = useMutation(api.financeIntake.simulateUnrecordedOutflow);
   const simulateSettlement = useMutation(api.financeIntake.simulateSettlement);
 
@@ -73,6 +79,7 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
   function show(result: { proposal: MoneyProposal; lock: LockResult | null; alreadyDone: boolean }) {
     if (result.lock) setLastLock({ proposalId: result.proposal.proposalId, lock: result.lock });
     setNotice(result.alreadyDone ? `${result.proposal.proposalId} was already posted; nothing changed.`
+      : result.proposal.status === "on_hold" ? `${result.proposal.proposalId} is on hold and needs a person. ${result.proposal.hold?.message ?? ""}`
       : result.lock && !result.lock.allowed && result.proposal.status !== "blocked" ? `${result.proposal.proposalId}: action refused; it stays ${result.proposal.status}.`
       : `${result.proposal.proposalId} is now ${result.proposal.status}.`);
   }
@@ -128,7 +135,8 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
         <p className="hint">Included in the adjusted bank balance. Outstanding payments and deposits in transit become mismatches after {overview.outstandingMaxDays} days unsettled.</p>
         <ul>{overview.reconcilingItems.map(r => <li key={r.sourceId}>Reconciling item {money(r.amountCents)} · {r.description} <code>{r.sourceId}</code></li>)}
           {tw.outstanding?.map(o => <li key={o.entryId}>{o.kind === "outstanding_payment" ? "Outstanding payment" : "Deposit in transit"} {money(o.amountCents)} · {ownerName(o.ownerId)} · {o.ageDays} day{o.ageDays === 1 ? "" : "s"} old{o.bankReference && <> · awaiting bank reference <code>{o.bankReference}</code></>} · <code>{o.sourceIds.join(", ")}</code></li>)}</ul></>}
-      {mismatches.length > 0 && <><h4>Causes found by code</h4><ul>{mismatches.map((c, i) => <li key={i}><code>{c.code}</code> {c.message} <code>{c.sourceIds.join(", ")}</code>{c.ownerIds.length > 0 && <> · affects {c.ownerIds.map(ownerName).join(", ")}</>}{c.unattributed && <> · not attributable: all outflows blocked</>}</li>)}</ul></>}
+      {mismatches.length > 0 && <><h4>Causes found by code</h4><ul>{mismatches.map((c, i) => <li key={i}><code>{c.code}</code> {c.message} <code>{c.sourceIds.join(", ")}</code>{c.ownerIds.length > 0 && <> · affects {c.ownerIds.map(ownerName).join(", ")}</>}{c.unattributed && <> · not attributable: all outflows blocked</>}
+        {c.code === "BANK_TXN_WITHOUT_LEDGER_ENTRY" && role === "approver" && <> <button className="secondary" disabled={busy || !connected} onClick={() => run(async () => { const r = await recordBankItem({ accountId, bankSourceId: c.sourceIds[0], dev }); setNotice(`Recorded ${c.sourceIds[0]} in the ledger as ${r.entryId}.`); })}>Record in ledger</button></>}</li>)}</ul></>}
       {warnings.length > 0 && <><h4>Warnings</h4><ul>{warnings.map((c, i) => <li key={i}><code>{c.code}</code> {c.message} <code>{c.sourceIds.join(", ")}</code></li>)}</ul></>}
       {overview.account.accountId === DEMO_ACCOUNT && <p><button className="secondary" disabled={busy || !connected} onClick={() => run(async () => { const r = await simulateOutflow({}); setNotice(r.created ? "Simulated DEMO bank outflow E-001 arrived without a ledger entry." : "E-001 already exists."); })}>DEV: simulate unrecorded bank outflow (scenario E)</button></p>}
 
@@ -141,9 +149,27 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
         <tbody>{overview.deposits.map(({ transaction: t, status, taskId: existing, allocatedTo }) => <tr key={t.sourceId}>
           <td><code>{t.sourceId}</code></td><td>{new Date(t.bookedAt).toISOString().slice(0, 10)}</td><td>{money(t.amountCents)}</td><td>{t.counterparty} · {t.reference}</td><td>{t.clearing}</td>
           <td><span className={`chip ${status}`}>{status === "historical" ? "in opening balance" : status.replace("_", " ")}</span>{allocatedTo.length > 0 && <> → {allocatedTo.map(ownerName).join(", ")}</>}</td>
-          <td>{(status === "unallocated" || status === "proposed" || existing) && <button className="secondary" disabled={busy || !connected} onClick={() => run(async () => { const r = await ensureTask({ accountId, bankSourceId: t.sourceId }); setTaskId(r.taskId); })}>{existing ? "Open investigation" : "Investigate"}</button>}</td>
+          <td>{(status === "unallocated" || status === "proposed" || existing) && <button className="secondary" disabled={busy || !connected} onClick={() => run(async () => { const r = await ensureTask({ accountId, bankSourceId: t.sourceId }); setTaskId(r.taskId); })}>{existing ? "Open investigation" : "Investigate"}</button>}
+            {t.clearing === "pending" && accountId.startsWith("demo:account:") && <button className="secondary" disabled={busy || !connected} onClick={() => run(async () => { const r = await simulateCleared({ bankSourceId: t.sourceId }); setNotice(r.changed ? `Simulated: ${t.sourceId} cleared.` : "Already cleared."); })}>DEV: simulate clearing</button>}</td>
         </tr>)}</tbody></table>
       {taskId && <div className="nested"><p>Investigation task <code>{taskId}</code> <button className="secondary" onClick={() => setTaskId(null)}>Close</button></p><DepositInvestigation taskId={taskId} connected={connected} /></div>}
+
+      <h3>Needs a person</h3>
+      {overview.proposals.filter(p => p.status === "on_hold").length === 0 ? <p>Nothing on hold.</p> :
+        overview.proposals.filter(p => p.status === "on_hold").map(p => <article key={p.proposalId} className={`proposal on_hold ${p.hold?.ready ? "ready" : ""}`} aria-label={`Held ${p.proposalId}`}>
+          <p><span className={`chip ${p.hold?.ready ? "approved" : "on_hold"}`}>{p.hold?.ready ? "ready to continue" : "on hold"}</span> <strong>{p.kind}</strong> · {money(p.amountCents)} · {p.kind === "payment" ? ownerName(p.ownerId) : p.bankSourceId} · <code>{p.proposalId}</code></p>
+          <p className="hold-reason">{p.hold?.message}</p>
+          <p className="hint">Held at the {p.hold?.stage} step since {p.hold ? new Date(p.hold.since).toISOString().slice(0, 16).replace("T", " ") : "?"} · codes <code>{p.hold?.reasonCodes.join(", ") || "none"}</code> · last {p.hold?.lastDecision.replace("_", " ")} by <code>{p.hold?.lastCheckedBy}</code></p>
+          <div className="row">
+            <button className="secondary" disabled={busy || !connected} onClick={() => run(async () => { const r = await recheckHeld({ proposalId: p.proposalId, dev }); setNotice(`Re-checked ${p.proposalId}: ${r.hold?.message}`); })}>Re-check now</button>
+            <button className="secondary" disabled={busy || !connected} onClick={() => run(async () => { await keepWaiting({ proposalId: p.proposalId, dev }); setNotice(`Recorded: keep waiting on ${p.proposalId}.`); })}>Keep waiting</button>
+            <input aria-label={`Cancellation reason for ${p.proposalId}`} placeholder="Reason for cancelling (required)" value={reasons[`cancel:${p.proposalId}`] ?? ""} onChange={e => setReasons({ ...reasons, [`cancel:${p.proposalId}`]: e.target.value })} />
+            <button className="danger" disabled={busy || !connected || !(reasons[`cancel:${p.proposalId}`] ?? "").trim()} onClick={() => run(async () => { const r = await cancelHeld({ proposalId: p.proposalId, reason: reasons[`cancel:${p.proposalId}`] ?? "", dev }); setNotice(`${r.proposalId} cancelled.`); })}>Cancel with reason</button>
+            {p.hold?.ready && <button disabled={busy || !connected || role !== "approver"} onClick={() => run(async () => show(await continueHeld({ proposalId: p.proposalId, dev })))}>Continue ({p.hold.stage === "approve" ? "approve" : "post to ledger"})</button>}
+          </div>
+          {p.hold?.ready && role !== "approver" && <p className="hint">Switch to the approver role to continue.</p>}
+          {lastLock?.proposalId === p.proposalId && <LockView lock={lastLock.lock} />}
+        </article>)}
 
       <h3>Proposals and approvals</h3>
       {overview.proposals.length === 0 ? <p>No proposals yet. Allocation proposals arrive from accepted investigations; payments from the request form.</p> :

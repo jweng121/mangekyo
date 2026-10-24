@@ -8,12 +8,45 @@ export type LockStage = LockResult["stage"];
 
 export const TRANSITIONS: Record<ProposalStatus, ProposalStatus[]> = {
   proposed: ["pending_approval", "blocked"],
-  pending_approval: ["approved", "rejected", "blocked"],
-  approved: ["posted", "blocked"],
+  pending_approval: ["approved", "rejected", "blocked", "on_hold"],
+  approved: ["posted", "blocked", "on_hold"],
+  on_hold: ["approved", "posted", "blocked", "cancelled"],
   posted: [],
   rejected: [],
   blocked: [],
+  cancelled: [],
 };
+
+const TEMPORARY = new Set<LockFailure["rule"]>(["L2", "L5"]);
+
+/**
+ * refused: who is acting (L4) or the action itself (L7) is wrong; nothing about the proposal changes.
+ * temporary: only L2/L5, which can resolve as deposits clear or the books reconcile; hold for a person.
+ * permanent: anything else (L1, L3, L6), which waiting cannot fix.
+ */
+export function classifyFailures(failures: LockFailure[]): "pass" | "refused" | "temporary" | "permanent" {
+  if (failures.length === 0) return "pass";
+  if (failures.some(f => f.rule === "L4" || f.rule === "L7")) return "refused";
+  return failures.every(f => TEMPORARY.has(f.rule)) ? "temporary" : "permanent";
+}
+
+/** Plain-English hold reason for the "Needs a person" list. */
+export function holdReason(failures: LockFailure[], state: AccountLedgerState, threeWay: ThreeWayCheckResult): string {
+  const parts: string[] = [];
+  const money = (cents: number) => formatCents(cents, state.account.currency);
+  for (const failure of failures) {
+    if (failure.rule === "L2") {
+      const pending = [...new Set(failure.sourceIds)].map(id => state.bankTransactions.find(t => t.sourceId === id)).filter(t => t && t.clearing !== "cleared");
+      parts.push(...(pending.length ? pending.map(t => `${money(t!.amountCents)} from ${t!.counterparty} hasn't cleared yet`) : ["the owner doesn't have enough cleared money yet"]));
+    } else if (failure.rule === "L5") {
+      const cause = threeWay.causes.find(c => c.severity === "mismatch" && c.sourceIds.some(id => failure.sourceIds.includes(id)));
+      parts.push(`the bank and the books don't agree yet${cause ? ` (${cause.message.replace(/\.$/, "")})` : ""}`);
+    } else {
+      parts.push(failure.message.replace(/\.$/, ""));
+    }
+  }
+  return `On hold: ${[...new Set(parts)].join("; ")}.`;
+}
 
 export function canTransition(from: ProposalStatus, to: ProposalStatus): boolean {
   return TRANSITIONS[from].includes(to);

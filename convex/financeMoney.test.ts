@@ -206,13 +206,13 @@ describe("core money workflow", () => {
     expect(unrecorded.threeWay.causes).toContainEqual(expect.objectContaining({ code: "BANK_TXN_WITHOUT_LEDGER_ENTRY", sourceIds: ["demo:bank:txn:E-001"], ownerIds: ["demo:owner:yankee"] }));
   });
 
-  it("re-runs the lock at posting time: a mismatch that appears after approval stops the posting", async () => {
+  it("re-runs the lock at posting time: a mismatch that appears after approval stops the posting and holds it", async () => {
     const t = await setup();
     const { proposal } = await t.mutation(api.financeProposals.requestPayment, { accountId: DEMO, ownerId: "demo:owner:yankee", amountCents: 100_000, purpose: "relocation", evidenceSourceIds: ["demo:document:instruction-y-001:v1"], dev: requester });
     await t.mutation(api.financeProposals.approveProposal, { proposalId: proposal.proposalId, dev: approver });
     await t.mutation(api.financeIntake.simulateUnrecordedOutflow, {});
     const late = await t.mutation(api.financeProposals.postProposal, { proposalId: proposal.proposalId, dev: approver });
-    expect(late.proposal.status).toBe("blocked");
+    expect(late.proposal.status).toBe("on_hold");
     expect(late.lock?.failures.map(f => f.code)).toEqual(["RECONCILIATION_MISMATCH"]);
     expect((await overview(t, DEMO)).entries.some(e => e.proposalId === proposal.proposalId)).toBe(false);
   });

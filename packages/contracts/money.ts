@@ -199,7 +199,20 @@ export interface ThreeWayCheckResult {
 }
 
 export type ProposalKind = "allocation" | "payment";
-export type ProposalStatus = "proposed" | "pending_approval" | "approved" | "posted" | "rejected" | "blocked";
+export type ProposalStatus = "proposed" | "pending_approval" | "approved" | "posted" | "rejected" | "blocked" | "on_hold" | "cancelled";
+
+/** A proposal paused by temporary failures (L2, L5) at approval or posting; only a person continues it. */
+export interface ProposalHold {
+  stage: "approve" | "post";
+  reasonCodes: string[];
+  message: string;
+  since: number;
+  /** All rules passed at the last re-check; a person may continue. Money never moves on its own. */
+  ready: boolean;
+  lastCheckedAt: number;
+  lastCheckedBy: string;
+  lastDecision: "placed" | "recheck" | "auto_recheck" | "keep_waiting";
+}
 
 export interface AllocationShare { ownerId: string; amountCents: number }
 
@@ -223,6 +236,8 @@ export interface MoneyProposal {
   approvedBy?: string;
   approvalId?: string;
   rejectionReason?: string;
+  hold?: ProposalHold;
+  cancellationReason?: string;
   blockedReasons?: LockFailure[];
   postedEntryIds?: string[];
   createdAt: number;

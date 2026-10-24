@@ -54,7 +54,7 @@ export type FinanceEvent = TaskCreatedEvent | InvestigationEvent;
 
 export type MoneyEventType = "finance.money.import_completed" | "finance.money.lock_checked" |
   "finance.money.proposal_transitioned" | "finance.money.ledger_posted" | "finance.money.bank_item_recorded" |
-  "finance.money.auto_investigation";
+  "finance.money.auto_investigation" | "finance.money.hold_updated";
 
 /** Account-level money stream. taskId is the stream key `money:<accountId>`; runId is the operation ID. */
 export interface MoneyEvent extends SyntheticRecord {

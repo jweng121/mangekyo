@@ -10,7 +10,7 @@ import { internalMutation, mutation, query, type MutationCtx } from "./_generate
 import { autoInvestigationSetting } from "./financeInvestigations";
 import * as money from "./lib/moneyValidators";
 import * as validators from "./lib/validators";
-import { appendMoneyEvent, checkAccount, compact, LATEST, latestActivity, loadAccount, outstandingMaxDays, SYSTEM, getProposal, requireAccount, type LoadedAccount } from "./lib/money";
+import { appendMoneyEvent, checkAccount, compact, LATEST, latestActivity, loadAccount, outstandingMaxDays, recheckHeldProposals, resolveActor, SYSTEM, getProposal, requireAccount, type LoadedAccount } from "./lib/money";
 import { recordOnly } from "./lib/investigationRecords";
 
 type SourceTable = "financeBankTransactions" | "financeAccountOwners" | "financeObligations" | "financeSourceDocuments" | "financeBankStatements" | "financeReconcilingItems";
@@ -68,6 +68,7 @@ async function importBundle(ctx: MutationCtx, bundle: NormalizedAccountBundle, s
     message: `${system} import: ${counts.inserted} inserted, ${counts.updated} updated, ${counts.unchanged} unchanged source records; ${entriesInserted} new ledger entries; ${issues.length} issue(s).`,
     threeWay: checkAccount(loaded.state, now), sourceIds: issues.map(row => row.rawId) });
   for (const bankSourceId of newlyEligible) await scheduleAutoInvestigation(ctx, loaded, bankSourceId);
+  await recheckHeldProposals(ctx, accountId);
   return { accountId, ...counts, entriesInserted, issues };
 }
 
@@ -87,6 +88,7 @@ async function insertDemoBankItem(ctx: MutationCtx, txn: NormalizedBankTransacti
   await ctx.db.insert("financeBankTransactions", txn);
   const loaded = await loadAccount(ctx, txn.accountId);
   await appendMoneyEvent(ctx, { accountId: txn.accountId, type: "finance.money.bank_item_recorded", actor: SYSTEM, operationId: txn.sourceId, stage: "bank_feed", message, threeWay: checkAccount(loaded.state, Date.now()), sourceIds: [txn.sourceId] });
+  await recheckHeldProposals(ctx, txn.accountId);
   return { sourceId: txn.sourceId, created: true };
 }
 
@@ -146,6 +148,49 @@ async function ensureTaskRow(ctx: MutationCtx, loaded: LoadedAccount, bankSource
   });
   return { taskId, created: true };
 }
+
+/** DEV ONLY, DEMO accounts only: the bank feed reports a pending demo deposit as cleared. */
+export const simulateDepositCleared = mutation({
+  args: { bankSourceId: v.string() }, returns: v.object({ sourceId: v.string(), changed: v.boolean() }),
+  handler: async (ctx, { bankSourceId }) => {
+    const row = await ctx.db.query("financeBankTransactions").withIndex("by_sourceId", (q) => q.eq("sourceId", bankSourceId)).unique();
+    if (!row || !row.accountId.startsWith("demo:account:")) throw new ConvexError("Only DEMO bank-feed deposits can be cleared by simulation.");
+    if (row.direction !== "inflow" || row.clearing === "cleared") return { sourceId: bankSourceId, changed: false };
+    await ctx.db.patch("financeBankTransactions", row._id, { clearing: "cleared" });
+    const loaded = await loadAccount(ctx, row.accountId);
+    await appendMoneyEvent(ctx, { accountId: row.accountId, type: "finance.money.bank_item_recorded", actor: SYSTEM, operationId: bankSourceId, stage: "bank_feed", message: `DEMO bank feed: ${bankSourceId} cleared (simulated).`, threeWay: checkAccount(loaded.state, Date.now()), sourceIds: [bankSourceId] });
+    await recheckHeldProposals(ctx, row.accountId);
+    return { sourceId: bankSourceId, changed: true };
+  },
+});
+
+/** A fix, not a payment: records in the ledger a bank-feed item that already happened. Approver only. */
+export const recordBankItem = mutation({
+  args: { accountId: v.string(), bankSourceId: v.string(), ownerId: v.optional(v.string()), dev: money.devIdentity },
+  returns: v.object({ entryId: v.string() }),
+  handler: async (ctx, args) => {
+    const actor = await resolveActor(ctx, args.dev);
+    if (actor.role !== "approver") throw new ConvexError("Switch to the approver role to record a bank item.");
+    const loaded = await loadAccount(ctx, args.accountId);
+    const txn = loaded.state.bankTransactions.find(t => t.sourceId === args.bankSourceId);
+    if (!txn) throw new ConvexError("Unknown bank transaction for this account.");
+    const linked = loaded.state.entries.some(e => e.sourceRefs.includes(txn.sourceId) || e.fundsSourceId === txn.sourceId || (!!e.bankReference && e.bankReference === txn.reference));
+    if (linked) throw new ConvexError("This bank item is already recorded in the ledger.");
+    const ownerId = args.ownerId ?? loaded.state.owners.find(o => o.sourceId === txn.ownerHintSourceId)?.ownerId;
+    if (txn.direction === "outflow" && (!ownerId || !loaded.state.owners.some(o => o.ownerId === ownerId))) throw new ConvexError("Choose the owner this outflow belongs to.");
+    const now = Date.now();
+    const entryId = `record:${txn.sourceId}`;
+    await ctx.db.insert("financeLedgerEntries", compact({
+      entryId, accountId: args.accountId, ownerId: txn.direction === "outflow" ? ownerId! : null, amountCents: txn.direction === "outflow" ? -txn.amountCents : txn.amountCents,
+      currency: txn.currency, kind: txn.direction === "outflow" ? "disbursement" as const : "deposit_received" as const, status: "posted" as const, sourceRefs: [txn.sourceId],
+      fundsSourceId: txn.direction === "inflow" ? txn.sourceId : undefined, memo: `Recorded from bank feed (${txn.reference}) by ${actor.identity}`, effectiveAt: txn.bookedAt, createdAt: now, createdBy: actor.identity,
+    }));
+    const after = await loadAccount(ctx, args.accountId);
+    await appendMoneyEvent(ctx, { accountId: args.accountId, type: "finance.money.bank_item_recorded", actor, operationId: txn.sourceId, stage: "record_bank_item", message: `Recorded ${txn.sourceId} in the ledger as ${txn.direction === "outflow" ? `a disbursement for ${ownerId}` : "an unallocated deposit"}.`, threeWay: checkAccount(after.state, now), sourceIds: [txn.sourceId], entryIds: [entryId] });
+    await recheckHeldProposals(ctx, args.accountId);
+    return { entryId };
+  },
+});
 
 /** Creates (once) the investigation task for a cleared, recorded, unallocated deposit. */
 export const ensureDepositTask = mutation({

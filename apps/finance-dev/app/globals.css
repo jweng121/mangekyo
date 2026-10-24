@@ -50,3 +50,8 @@ button.danger { background: #a12121; }
 .nested { border-left: 3px solid #244db0; padding-left: 1rem; }
 .nested > section { margin: .5rem 0; }
 .hint { color: #506178; font-size: .85rem; }
+.chip.on_hold { background: #fff0cc; }
+.chip.cancelled { background: #eceef2; }
+article.on_hold { border-left: 4px solid #c09229; padding-left: .8rem; }
+article.on_hold.ready { border-left-color: #2f8a46; }
+.hold-reason { font-weight: 600; }

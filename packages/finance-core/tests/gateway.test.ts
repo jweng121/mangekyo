@@ -1,6 +1,6 @@
 import type { ProposalStatus } from "@mangekyo/contracts";
 import { describe, expect, it } from "vitest";
-import { buildPostingEntries, canTransition, checkEvidence, checkSelfApproval, checkState, evaluateAllocation, evaluatePayment, TRANSITIONS, type GatewayContext } from "../src/gateway";
+import { buildPostingEntries, canTransition, checkEvidence, classifyFailures, holdReason, checkSelfApproval, checkState, evaluateAllocation, evaluatePayment, TRANSITIONS, type GatewayContext } from "../src/gateway";
 import { threeWayCheck, type AccountLedgerState } from "../src/ledger";
 import { demoIds, demoUnrecordedOutflow } from "../fixtures/demoMoney";
 import { demoState, NOW } from "./money";
@@ -145,11 +145,12 @@ describe("L6 amount integrity", () => {
 });
 
 describe("L7 state machine", () => {
-  const all: ProposalStatus[] = ["proposed", "pending_approval", "approved", "posted", "rejected", "blocked"];
+  const all: ProposalStatus[] = ["proposed", "pending_approval", "approved", "posted", "rejected", "blocked", "on_hold", "cancelled"];
   it("allows only the documented transitions", () => {
     const allowed = all.flatMap(from => all.filter(to => canTransition(from, to)).map(to => `${from}->${to}`));
-    expect(allowed).toEqual(["proposed->pending_approval", "proposed->blocked", "pending_approval->approved", "pending_approval->rejected", "pending_approval->blocked", "approved->posted", "approved->blocked"]);
-    for (const terminal of ["posted", "rejected", "blocked"] as const) expect(TRANSITIONS[terminal]).toEqual([]);
+    expect(allowed).toEqual(["proposed->pending_approval", "proposed->blocked", "pending_approval->approved", "pending_approval->rejected", "pending_approval->blocked", "pending_approval->on_hold", "approved->posted", "approved->blocked", "approved->on_hold", "on_hold->approved", "on_hold->posted", "on_hold->blocked", "on_hold->cancelled"]);
+    for (const terminal of ["posted", "rejected", "blocked", "cancelled"] as const) expect(TRANSITIONS[terminal]).toEqual([]);
+    expect(canTransition("proposed", "on_hold")).toBe(false);
     expect(checkState("posted", "posted", "p")?.code).toBe("STATE");
     expect(checkState("pending_approval", "posted", "p")?.rule).toBe("L7");
   });
@@ -163,5 +164,29 @@ describe("posting entries", () => {
     expect(alloc.reduce((s, e) => s + e.amountCents, 0)).toBe(0);
     const pay = buildPostingEntries({ ...base, proposalId: "p1", kind: "payment", ownerId: demoIds.yankee, amountCents: 100 }, 1, "approver", "ap");
     expect(pay).toEqual([expect.objectContaining({ entryId: "p1:entry:1", amountCents: -100, kind: "disbursement", bankReference: "PAY:p1", approvalId: "ap" })]);
+  });
+});
+
+describe("hold classification", () => {
+  const f = (rule: "L1" | "L2" | "L3" | "L4" | "L5" | "L6" | "L7") => ({ rule, code: "STATE" as const, message: `${rule} failed.`, sourceIds: [] });
+  it("holds only when every failure is temporary (L2/L5), refuses actor/action errors, and blocks the rest", () => {
+    expect(classifyFailures([])).toBe("pass");
+    expect(classifyFailures([f("L2")])).toBe("temporary");
+    expect(classifyFailures([f("L5"), f("L2")])).toBe("temporary");
+    expect(classifyFailures([f("L2"), f("L1")])).toBe("permanent");
+    for (const rule of ["L1", "L3", "L6"] as const) expect(classifyFailures([f(rule)])).toBe("permanent");
+    expect(classifyFailures([f("L4"), f("L2")])).toBe("refused");
+    expect(classifyFailures([f("L7")])).toBe("refused");
+  });
+
+  it("explains a hold in plain English", () => {
+    const state = demoState();
+    const ctx = context(state);
+    const l2 = evaluatePayment(ctx, payment(demoIds.delta, 10_000, { fundingSourceId: demoIds.depositD, evidenceSourceIds: ["demo:document:instruction-d-001:v1"] }), request).failures;
+    expect(holdReason(l2, state, ctx.threeWay)).toBe("On hold: $2,500.00 from DEMO Delta Tenant hasn't cleared yet.");
+    state.bankTransactions.push(demoUnrecordedOutflow(NOW - 10));
+    const red = context(state);
+    const l5 = evaluatePayment(red, payment(demoIds.yankee, 100), request).failures;
+    expect(holdReason(l5, state, red.threeWay)).toBe("On hold: the bank and the books don't agree yet (Bank outflow $2,000.00 (DEMO-WIRE-Y-9001) has no ledger entry).");
   });
 });
