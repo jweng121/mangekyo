@@ -1,5 +1,5 @@
 import type {
-  BankStatementBalance, LedgerEntry, MoneyAccount, NormalizedAccountBundle, NormalizedBankTransaction,
+  BankStatementBalance, OutstandingItem, LedgerEntry, MoneyAccount, NormalizedAccountBundle, NormalizedBankTransaction,
   NormalizedOwner, OwnerBalance, ReconcilingItem, ThreeWayCause, ThreeWayCheckResult,
 } from "@mangekyo/contracts";
 import { formatCents } from "../intake/cents";
@@ -78,7 +78,20 @@ function bankLinked(entry: LedgerEntry, txn: NormalizedBankTransaction): boolean
 }
 
 /** Bank = books = owners for one account at a cutoff. Code computes every number; nothing is repaired. */
-export function threeWayCheck(state: AccountLedgerState, cutoff: number): ThreeWayCheckResult {
+export const DEFAULT_OUTSTANDING_MAX_DAYS = 5;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+export interface ThreeWayOptions {
+  /** Outstanding payments and deposits in transit older than this become mismatches. */
+  outstandingMaxDays?: number;
+  /** Clock for ageing outstanding items; defaults to the cutoff. */
+  now?: number;
+}
+
+export function threeWayCheck(state: AccountLedgerState, cutoff: number, options: ThreeWayOptions = {}): ThreeWayCheckResult {
+  const maxDays = options.outstandingMaxDays ?? DEFAULT_OUTSTANDING_MAX_DAYS;
+  const now = options.now ?? cutoff;
+  const outstanding: OutstandingItem[] = [];
   const { account } = state;
   const causes: ThreeWayCause[] = [];
   const ownerIdBySource = new Map(state.owners.map(o => [o.sourceId, o.ownerId]));
@@ -124,8 +137,15 @@ export function threeWayCheck(state: AccountLedgerState, cutoff: number): ThreeW
   for (const entry of bankEntries) {
     if (feed.some(txn => bankLinked(entry, txn))) continue;
     const explicit = entry.sourceRefs.some(ref => state.bankTransactions.some(txn => txn.sourceId === ref)) || !!entry.bankReference;
-    if (entry.effectiveAt > anchor || explicit) {
-      causes.push({ code: "LEDGER_ENTRY_WITHOUT_BANK_TXN", severity: "mismatch", message: `Ledger ${entry.kind} ${formatCents(entry.amountCents)} (${entry.entryId}) has no matching bank transaction${entry.bankReference ? ` with reference ${entry.bankReference}` : ""}.`, amountCents: entry.amountCents, sourceIds: [entry.entryId, ...entry.sourceRefs], ownerIds: entry.ownerId ? [entry.ownerId] : [], unattributed: entry.ownerId === null });
+    if (!(entry.effectiveAt > anchor || explicit)) continue;
+    const ageDays = Math.max(0, Math.floor((now - entry.effectiveAt) / DAY_MS));
+    const kind = entry.amountCents < 0 ? "outstanding_payment" as const : "deposit_in_transit" as const;
+    const label = kind === "outstanding_payment" ? "Outstanding payment" : "Deposit in transit";
+    const sourceIds = [entry.entryId, ...entry.sourceRefs];
+    if (now - entry.effectiveAt > maxDays * DAY_MS) {
+      causes.push({ code: "OUTSTANDING_ITEM_AGED", severity: "mismatch", message: `${label} ${formatCents(entry.amountCents)} (${entry.entryId}) has not reached the bank feed after ${ageDays} days (limit ${maxDays})${entry.bankReference ? `; expected reference ${entry.bankReference}` : ""}.`, amountCents: entry.amountCents, sourceIds, ownerIds: entry.ownerId ? [entry.ownerId] : [], unattributed: entry.ownerId === null });
+    } else {
+      outstanding.push({ kind, entryId: entry.entryId, sourceIds, ownerId: entry.ownerId, amountCents: entry.amountCents, bankReference: entry.bankReference ?? null, effectiveAt: entry.effectiveAt, ageDays });
     }
   }
   const bankById = new Map(state.bankTransactions.map(row => [row.sourceId, row]));
@@ -141,7 +161,8 @@ export function threeWayCheck(state: AccountLedgerState, cutoff: number): ThreeW
   const postAnchorCents = sum(feed.filter(row => row.bookedAt > anchor).map(signed));
   const reconcilingCents = sum(reconciling.map(row => row.amountCents));
   const pendingCents = sum(feed.filter(row => row.clearing === "pending").map(signed));
-  const adjustedCents = statement ? sum([statement.amountCents, postAnchorCents, reconcilingCents]) : null;
+  const outstandingCents = sum(outstanding.map(row => row.amountCents));
+  const adjustedCents = statement ? sum([statement.amountCents, postAnchorCents, reconcilingCents, outstandingCents]) : null;
   if (!statement) causes.push({ code: "NO_OPENING_BALANCE", severity: "mismatch", message: "No bank statement balance at or before the cutoff; the bank figure cannot be computed.", amountCents: null, sourceIds: [], ownerIds: [], unattributed: true });
 
   const bankMinusBook = adjustedCents === null ? null : adjustedCents - bookCents;
@@ -153,8 +174,8 @@ export function threeWayCheck(state: AccountLedgerState, cutoff: number): ThreeW
   const status = !statement ? "insufficient_data" : bankMinusBook === 0 && bookMinusOwners === 0 && !causes.some(row => row.severity === "mismatch") ? "matched" : "mismatched";
   return {
     accountId: account.accountId, currency: account.currency, cutoff, status,
-    bank: { statementCents: statement?.amountCents ?? null, postAnchorCents, reconcilingCents, adjustedCents, clearedCents: adjustedCents === null ? null : adjustedCents - pendingCents, pendingCents },
-    bookCents, ownersTotalCents, unallocatedCents, differences: { bankMinusBook, bookMinusOwners }, causes,
+    bank: { statementCents: statement?.amountCents ?? null, postAnchorCents, reconcilingCents, outstandingCents, adjustedCents, clearedCents: adjustedCents === null ? null : adjustedCents - pendingCents - outstandingCents, pendingCents },
+    bookCents, ownersTotalCents, unallocatedCents, differences: { bankMinusBook, bookMinusOwners }, causes, outstanding, outstandingMaxDays: maxDays,
   };
 }
 

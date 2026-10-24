@@ -7,5 +7,6 @@ export default defineApp({
     CREAO_APP_ID: v.optional(v.string()),
     CREAO_API_KEY: v.optional(v.string()),
     AUTO_INVESTIGATE: v.optional(v.string()),
+    OUTSTANDING_MAX_DAYS: v.optional(v.string()),
   },
 });

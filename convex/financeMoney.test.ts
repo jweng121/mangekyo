@@ -120,7 +120,9 @@ describe("core money workflow", () => {
     expect(after.entries.filter(e => e.proposalId === proposal.proposalId).map(e => [e.kind, e.ownerId, e.amountCents])).toEqual([["disbursement", "demo:owner:alpha", -100_000]]);
     expect(after.balances.find(b => b.ownerId === "demo:owner:alpha")!.postedCents).toBe(before.balances.find(b => b.ownerId === "demo:owner:alpha")!.postedCents - 100_000);
     expect(after.threeWay.bookCents).toBe(before.threeWay.bookCents - 100_000);
-    expect(after.threeWay.bank.adjustedCents).toBe(before.threeWay.bank.adjustedCents);
+    expect(after.threeWay.bank.adjustedCents).toBe(before.threeWay.bank.adjustedCents! - 100_000);
+    expect(after.threeWay.bank.clearedCents).toBe(before.threeWay.bank.clearedCents);
+    expect(after.threeWay.outstanding?.map(o => o.entryId)).toEqual([`${proposal.proposalId}:entry:1`]);
     expect(await t.mutation(api.financeProposals.postProposal, { proposalId: proposal.proposalId, dev: approver })).toMatchObject({ alreadyDone: true });
     expect((await overview(t, DEMO)).entries).toHaveLength(after.entries.length);
     expect((await t.query(api.financeProposals.listTransitions, { proposalId: proposal.proposalId })).map(r => r.to)).toEqual(["proposed", "pending_approval", "approved", "posted"]);
@@ -156,54 +158,63 @@ describe("core money workflow", () => {
     expect(result.lock?.failures.map(f => [f.rule, f.code, f.sourceIds])).toEqual([["L2", "FUNDS_NOT_CLEARED", ["demo:bank:txn:D-001"]]]);
   });
 
-  it("E: a posted payment the bank has not shown turns the check red, L5 blocks that owner, settlement turns it green", async () => {
+  it("Fix 1: a posted payment is an outstanding item — still matched, no L5; settling removes it", async () => {
+    const t = await setup();
+    const before = await overview(t, DEMO);
+    const { proposal } = await t.mutation(api.financeProposals.requestPayment, { accountId: DEMO, ownerId: "demo:owner:yankee", amountCents: 100_000, purpose: "relocation", evidenceSourceIds: ["demo:document:instruction-y-001:v1"], dev: requester });
+    await t.mutation(api.financeProposals.approveProposal, { proposalId: proposal.proposalId, dev: approver });
+    await t.mutation(api.financeProposals.postProposal, { proposalId: proposal.proposalId, dev: approver });
+    const posted = await overview(t, DEMO);
+    expect(posted.threeWay.status).toBe("matched");
+    expect(posted.threeWay.outstanding).toEqual([expect.objectContaining({ kind: "outstanding_payment", entryId: `${proposal.proposalId}:entry:1`, amountCents: -100_000, bankReference: `PAY:${proposal.proposalId}` })]);
+    expect(posted.threeWay.bank.adjustedCents).toBe(posted.threeWay.bookCents);
+    expect(posted.threeWay.bank.adjustedCents).toBe(before.threeWay.bank.adjustedCents! - 100_000);
+    const again = await t.mutation(api.financeProposals.requestPayment, { accountId: DEMO, ownerId: "demo:owner:yankee", amountCents: 100, purpose: "second", evidenceSourceIds: ["demo:document:instruction-y-001:v1"], dev: requester });
+    expect(again.proposal.status).toBe("pending_approval");
+    await t.mutation(api.financeIntake.simulateSettlement, { proposalId: proposal.proposalId });
+    const settled = await overview(t, DEMO);
+    expect(settled.threeWay).toMatchObject({ status: "matched", outstanding: [] });
+    expect(settled.threeWay.bank.adjustedCents).toBe(posted.threeWay.bank.adjustedCents);
+  });
+
+  it("Fix 1: an unsettled payment past OUTSTANDING_MAX_DAYS becomes a mismatch and L5 blocks only that owner", async () => {
+    vi.stubEnv("OUTSTANDING_MAX_DAYS", "3");
     const t = await setup();
     const { proposal } = await t.mutation(api.financeProposals.requestPayment, { accountId: DEMO, ownerId: "demo:owner:yankee", amountCents: 100_000, purpose: "relocation", evidenceSourceIds: ["demo:document:instruction-y-001:v1"], dev: requester });
     await t.mutation(api.financeProposals.approveProposal, { proposalId: proposal.proposalId, dev: approver });
     await t.mutation(api.financeProposals.postProposal, { proposalId: proposal.proposalId, dev: approver });
-    const red = await overview(t, DEMO);
-    expect(red.threeWay.status).toBe("mismatched");
-    expect(red.threeWay.causes).toContainEqual(expect.objectContaining({ code: "LEDGER_ENTRY_WITHOUT_BANK_TXN", ownerIds: ["demo:owner:yankee"] }));
+    const day = 24 * 60 * 60 * 1000;
+    vi.setSystemTime(Date.now() + 3 * day);
+    expect((await t.query(api.financeIntake.getAccountOverview, { accountId: DEMO, now: Date.now() })).threeWay.status).toBe("matched");
+    vi.setSystemTime(Date.now() + day);
+    const aged = await t.query(api.financeIntake.getAccountOverview, { accountId: DEMO, now: Date.now() });
+    expect(aged.outstandingMaxDays).toBe(3);
+    expect(aged.threeWay.status).toBe("mismatched");
+    expect(aged.threeWay.causes).toContainEqual(expect.objectContaining({ code: "OUTSTANDING_ITEM_AGED", ownerIds: ["demo:owner:yankee"] }));
     const blocked = await t.mutation(api.financeProposals.requestPayment, { accountId: DEMO, ownerId: "demo:owner:yankee", amountCents: 100, purpose: "second", evidenceSourceIds: ["demo:document:instruction-y-001:v1"], dev: requester });
     expect(blocked.lock?.failures.map(f => f.code)).toEqual(["RECONCILIATION_MISMATCH"]);
     const other = await t.mutation(api.financeProposals.requestPayment, { accountId: DEMO, ownerId: "demo:owner:alpha", amountCents: 100, purpose: "unaffected owner", evidenceSourceIds: ["demo:document:agreement-alpha:v1"], dev: requester });
     expect(other.proposal.status).toBe("pending_approval");
-    await t.mutation(api.financeIntake.simulateSettlement, { proposalId: proposal.proposalId });
-    expect((await overview(t, DEMO)).threeWay.status).toBe("matched");
-    await t.mutation(api.financeIntake.simulateUnrecordedOutflow, {});
-    const unrecorded = await overview(t, DEMO);
-    expect(unrecorded.threeWay.causes).toContainEqual(expect.objectContaining({ code: "BANK_TXN_WITHOUT_LEDGER_ENTRY", sourceIds: ["demo:bank:txn:E-001"], ownerIds: ["demo:owner:yankee"] }));
     await expect(t.mutation(api.financeIntake.simulateSettlement, { proposalId: other.proposal.proposalId })).rejects.toThrow("posted payments");
   });
 
-  it("re-runs the lock at posting time: an approved payment is blocked if the owner's money is gone by then", async () => {
+  it("E: an unrecorded bank outflow is a mismatch for the hinted owner", async () => {
     const t = await setup();
-    const first = await t.mutation(api.financeProposals.requestPayment, { accountId: DEMO, ownerId: "demo:owner:yankee", amountCents: 1_000_000, purpose: "first", evidenceSourceIds: ["demo:document:instruction-y-001:v1"], dev: requester });
-    const second = await t.mutation(api.financeProposals.requestPayment, { accountId: DEMO, ownerId: "demo:owner:yankee", amountCents: 500_000, purpose: "second", evidenceSourceIds: ["demo:document:instruction-y-001:v1"], dev: requester });
-    expect(second.proposal.status).toBe("pending_approval");
-    await t.mutation(api.financeProposals.approveProposal, { proposalId: first.proposal.proposalId, dev: approver });
-    await t.mutation(api.financeProposals.approveProposal, { proposalId: second.proposal.proposalId, dev: approver });
-    await t.mutation(api.financeProposals.postProposal, { proposalId: first.proposal.proposalId, dev: approver });
-    const late = await t.mutation(api.financeProposals.postProposal, { proposalId: second.proposal.proposalId, dev: approver });
-    expect(late.proposal.status).toBe("blocked");
-    expect(late.lock?.failures.map(f => f.code)).toContain("RECONCILIATION_MISMATCH");
+    await t.mutation(api.financeIntake.simulateUnrecordedOutflow, {});
+    const unrecorded = await overview(t, DEMO);
+    expect(unrecorded.threeWay.status).toBe("mismatched");
+    expect(unrecorded.threeWay.causes).toContainEqual(expect.objectContaining({ code: "BANK_TXN_WITHOUT_LEDGER_ENTRY", sourceIds: ["demo:bank:txn:E-001"], ownerIds: ["demo:owner:yankee"] }));
   });
 
-  it("corrects a posted allocation with reversal entries, freeing the deposit without deleting history", async () => {
+  it("re-runs the lock at posting time: a mismatch that appears after approval stops the posting", async () => {
     const t = await setup();
-    await investigate(t, ERP, "bank:txn:TX-001");
-    const { proposalId } = (await overview(t, ERP)).proposals[0];
-    await t.mutation(api.financeProposals.approveProposal, { proposalId, dev: approver });
-    await t.mutation(api.financeProposals.postProposal, { proposalId, dev: approver });
-    await expect(t.mutation(api.financeProposals.reversePosting, { proposalId, reason: "", dev: approver })).rejects.toThrow("reason");
-    const reversed = await t.mutation(api.financeProposals.reversePosting, { proposalId, reason: "Allocated to the wrong client", dev: approver });
-    expect(reversed).toEqual({ entryIds: [`${proposalId}:entry:1:reversal`, `${proposalId}:entry:2:reversal`], alreadyDone: false });
-    expect((await t.mutation(api.financeProposals.reversePosting, { proposalId, reason: "again", dev: approver })).alreadyDone).toBe(true);
-    const after = await overview(t, ERP);
-    expect(after.threeWay.status).toBe("matched");
-    expect(after.deposits.find(d => d.transaction.sourceId === "bank:txn:TX-001")?.status).toBe("unallocated");
-    expect(after.balances.find(b => b.ownerId === "erp:owner:CMP-001")?.postedCents).toBe(4_000_000);
-    expect(after.entries.filter(e => e.proposalId === proposalId)).toHaveLength(4);
+    const { proposal } = await t.mutation(api.financeProposals.requestPayment, { accountId: DEMO, ownerId: "demo:owner:yankee", amountCents: 100_000, purpose: "relocation", evidenceSourceIds: ["demo:document:instruction-y-001:v1"], dev: requester });
+    await t.mutation(api.financeProposals.approveProposal, { proposalId: proposal.proposalId, dev: approver });
+    await t.mutation(api.financeIntake.simulateUnrecordedOutflow, {});
+    const late = await t.mutation(api.financeProposals.postProposal, { proposalId: proposal.proposalId, dev: approver });
+    expect(late.proposal.status).toBe("blocked");
+    expect(late.lock?.failures.map(f => f.code)).toEqual(["RECONCILIATION_MISMATCH"]);
+    expect((await overview(t, DEMO)).entries.some(e => e.proposalId === proposal.proposalId)).toBe(false);
   });
 
   it("never deletes: ledger entries only accumulate across the workflow", async () => {

@@ -2,12 +2,28 @@ import type { FinanceRecordSet, InvestigationScope, LedgerEntry, LockResult, Mon
 import { ConvexError } from "convex/values";
 import { buildPostingEntries, canTransition, evaluateAllocation, evaluatePayment, type GatewayContext } from "@mangekyo/finance-core/gateway";
 import { buildDepositRecordSet, depositCaseId } from "@mangekyo/finance-core/intake";
-import { threeWayCheck, type AccountLedgerState } from "@mangekyo/finance-core/ledger";
+import { DEFAULT_OUTSTANDING_MAX_DAYS, threeWayCheck, type AccountLedgerState } from "@mangekyo/finance-core/ledger";
 import type { Doc } from "../_generated/dataModel";
-import type { MutationCtx, QueryCtx } from "../_generated/server";
+import { env, type MutationCtx, type QueryCtx } from "../_generated/server";
 import { recordOnly } from "./investigationRecords";
 
 const MAX_ROWS = 2000;
+
+/** OUTSTANDING_MAX_DAYS: positive whole days before an unsettled item is a mismatch; anything else uses the default. */
+export function outstandingMaxDays(): number {
+  const raw = env.OUTSTANDING_MAX_DAYS?.trim();
+  return raw && /^[1-9]\d{0,3}$/.test(raw) ? Number(raw) : DEFAULT_OUTSTANDING_MAX_DAYS;
+}
+
+/** The one three-way check every Convex path uses, so the age limit is applied consistently. */
+/** Latest timestamp in the account's data: the ageing clock for queries, which cannot read the wall clock. */
+export function latestActivity(loaded: LoadedAccount): number {
+  return Math.max(loaded.state.account.openingAsOf, ...loaded.state.entries.map(e => Math.max(e.effectiveAt, e.createdAt)), ...loaded.state.bankTransactions.map(t => t.bookedAt));
+}
+
+export function checkAccount(state: AccountLedgerState, cutoff: number, now?: number) {
+  return threeWayCheck(state, cutoff, { outstandingMaxDays: outstandingMaxDays(), now: now ?? cutoff });
+}
 export const LATEST = Number.MAX_SAFE_INTEGER;
 
 /** Convex rejects undefined field values; posting builders may leave optional fields undefined. */
@@ -118,7 +134,7 @@ export async function appendMoneyEvent(ctx: MutationCtx, args: {
 }
 
 export async function gatewayContext(ctx: MutationCtx, loaded: LoadedAccount, cutoff: number): Promise<GatewayContext> {
-  return { state: loaded.state, threeWay: threeWayCheck(loaded.state, cutoff), knownSourceIds: await knownSourceIds(ctx, loaded), proposals: loaded.proposals, cutoff };
+  return { state: loaded.state, threeWay: checkAccount(loaded.state, cutoff), knownSourceIds: await knownSourceIds(ctx, loaded), proposals: loaded.proposals, cutoff };
 }
 
 export function evaluate(gateway: GatewayContext, proposal: MoneyProposal, stage: LockResult["stage"], actor: string, to: ProposalStatus): LockResult {
@@ -202,7 +218,7 @@ export async function gatedStep(ctx: MutationCtx, proposal: MoneyProposal, stage
     await ctx.db.insert("financeLedgerEntries", compact(entry));
   }
   const entryIds = entries.map(e => e.entryId);
-  const after = threeWayCheck({ ...loaded.state, entries: [...loaded.state.entries, ...entries], holds: loaded.state.holds.filter(h => h.proposalId !== proposal.proposalId) }, now);
+  const after = checkAccount({ ...loaded.state, entries: [...loaded.state.entries, ...entries], holds: loaded.state.holds.filter(h => h.proposalId !== proposal.proposalId) }, now);
   await appendMoneyEvent(ctx, { accountId: proposal.accountId, type: "finance.money.ledger_posted", actor, operationId: proposal.proposalId, message: `Posted ${entries.length} ledger entr${entries.length === 1 ? "y" : "ies"}; three-way check is ${after.status}.`, proposal, lock, threeWay: after, entryIds, stage: "post" });
   return { proposal: await transition(ctx, proposal, "posted", actor, null, lock, after, { postedEntryIds: entryIds }), lock, entryIds };
 }
@@ -224,5 +240,5 @@ export async function readIntakeRecords(ctx: QueryCtx | MutationCtx, task: Doc<"
   const deposit = loaded.state.bankTransactions.find(t => t.sourceId === task.bankSourceId);
   if (!deposit) throw new Error("The task's deposit is missing from the imported bank feed");
   const records = buildDepositRecordSet({ state: loaded.state, documents: loaded.documents, obligations: loaded.obligations, deposit, caseId: task.caseId, system: loaded.account.system, datasetVersion: loaded.account.datasetVersion, scope });
-  return { records, threeWay: threeWayCheck(loaded.state, scope.cutoff) };
+  return { records, threeWay: checkAccount(loaded.state, scope.cutoff) };
 }

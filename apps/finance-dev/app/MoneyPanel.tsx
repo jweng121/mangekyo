@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { ConvexError } from "convex/values";
 import type { LockResult, MoneyProposal } from "@mangekyo/contracts";
@@ -38,7 +38,10 @@ function DepositInvestigation({ taskId, connected }: { taskId: string; connected
 export function MoneyPanel({ connected }: { connected: boolean }) {
   const accounts = useQuery(api.financeIntake.listAccounts);
   const [accountId, setAccountId] = useState(DEMO_ACCOUNT);
-  const overview = useQuery(api.financeIntake.getAccountOverview, accounts?.some(a => a.accountId === accountId) ? { accountId } : "skip");
+  // Outstanding items age against the viewer's clock; rounding to the minute keeps the subscription stable.
+  const [minute, setMinute] = useState(() => Math.floor(Date.now() / 60_000) * 60_000);
+  useEffect(() => { const timer = setInterval(() => setMinute(Math.floor(Date.now() / 60_000) * 60_000), 60_000); return () => clearInterval(timer); }, []);
+  const overview = useQuery(api.financeIntake.getAccountOverview, accounts?.some(a => a.accountId === accountId) ? { accountId, now: minute + 59_999 } : "skip");
   const autoSetting = useQuery(api.financeInvestigations.getAutoInvestigationSetting);
   const events = useQuery(api.finance.listMoneyEvents, accounts?.some(a => a.accountId === accountId) ? { accountId } : "skip");
   const importErp = useMutation(api.financeIntake.importErpSandbox);
@@ -116,11 +119,15 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
 
       <h3>Three numbers</h3>
       <div className={`three-numbers ${tw.status}`} role={tw.status === "matched" ? "status" : "alert"}>
-        <div><span>Bank</span><strong>{money(tw.bank.adjustedCents)}</strong><small>statement {money(tw.bank.statementCents)} {tw.bank.postAnchorCents !== 0 && `+ feed ${money(tw.bank.postAnchorCents)}`} {tw.bank.reconcilingCents !== 0 && `+ reconciling ${money(tw.bank.reconcilingCents)}`} · cleared {money(tw.bank.clearedCents)} · pending {money(tw.bank.pendingCents)}</small></div>
+        <div><span>Bank</span><strong>{money(tw.bank.adjustedCents)}</strong><small>statement {money(tw.bank.statementCents)} {tw.bank.postAnchorCents !== 0 && `+ feed ${money(tw.bank.postAnchorCents)}`} {tw.bank.reconcilingCents !== 0 && `+ reconciling ${money(tw.bank.reconcilingCents)}`} {(tw.bank.outstandingCents ?? 0) !== 0 && `+ outstanding ${money(tw.bank.outstandingCents ?? 0)}`} · cleared {money(tw.bank.clearedCents)} · pending {money(tw.bank.pendingCents)}</small></div>
         <div><span>Books</span><strong>{money(tw.bookCents)}</strong><small>sum of ledger entries</small></div>
         <div><span>Owners total</span><strong>{money(tw.ownersTotalCents)}</strong><small>includes unallocated {money(tw.unallocatedCents)}</small></div>
         <p className="verdict">{tw.status === "matched" ? "Matched" : tw.status === "mismatched" ? `Mismatched · bank − books ${money(tw.differences.bankMinusBook)} · books − owners ${money(tw.differences.bookMinusOwners)}` : "Insufficient data"}</p>
       </div>
+      {(overview.reconcilingItems.length > 0 || (tw.outstanding?.length ?? 0) > 0) && <><h4>Reconciling items</h4>
+        <p className="hint">Included in the adjusted bank balance. Outstanding payments and deposits in transit become mismatches after {overview.outstandingMaxDays} days unsettled.</p>
+        <ul>{overview.reconcilingItems.map(r => <li key={r.sourceId}>Reconciling item {money(r.amountCents)} · {r.description} <code>{r.sourceId}</code></li>)}
+          {tw.outstanding?.map(o => <li key={o.entryId}>{o.kind === "outstanding_payment" ? "Outstanding payment" : "Deposit in transit"} {money(o.amountCents)} · {ownerName(o.ownerId)} · {o.ageDays} day{o.ageDays === 1 ? "" : "s"} old{o.bankReference && <> · awaiting bank reference <code>{o.bankReference}</code></>} · <code>{o.sourceIds.join(", ")}</code></li>)}</ul></>}
       {mismatches.length > 0 && <><h4>Causes found by code</h4><ul>{mismatches.map((c, i) => <li key={i}><code>{c.code}</code> {c.message} <code>{c.sourceIds.join(", ")}</code>{c.ownerIds.length > 0 && <> · affects {c.ownerIds.map(ownerName).join(", ")}</>}{c.unattributed && <> · not attributable: all outflows blocked</>}</li>)}</ul></>}
       {warnings.length > 0 && <><h4>Warnings</h4><ul>{warnings.map((c, i) => <li key={i}><code>{c.code}</code> {c.message} <code>{c.sourceIds.join(", ")}</code></li>)}</ul></>}
       {overview.account.accountId === DEMO_ACCOUNT && <p><button className="secondary" disabled={busy || !connected} onClick={() => run(async () => { const r = await simulateOutflow({}); setNotice(r.created ? "Simulated DEMO bank outflow E-001 arrived without a ledger entry." : "E-001 already exists."); })}>DEV: simulate unrecorded bank outflow (scenario E)</button></p>}

@@ -3,6 +3,8 @@ import { affectedOwners, buildReversalEntries, ownerBalances, threeWayCheck } fr
 import { demoIds, demoSettlement, demoUnrecordedOutflow } from "../fixtures/demoMoney";
 import { demoState, entry, erpState, NOW } from "./money";
 
+const LATEST_CUTOFF = Number.MAX_SAFE_INTEGER;
+
 const codes = (result: ReturnType<typeof threeWayCheck>) => result.causes.map(c => c.code);
 
 describe("three-way check on the real ERP import", () => {
@@ -39,13 +41,43 @@ describe("three-way check causes", () => {
     expect(affectedOwners(result)).toEqual(new Set([demoIds.yankee]));
   });
 
-  it("finds a ledger entry with no bank transaction, then clears it when the bank settles", () => {
+  it("treats a posted payment the bank has not shown as an outstanding item, not a mismatch", () => {
     const state = demoState();
-    state.entries.push(entry({ entryId: "pay-1:entry:1", ownerId: demoIds.yankee, amountCents: -100_000, kind: "disbursement", bankReference: "PAY:pay-1" }));
-    const red = threeWayCheck(state, NOW);
-    expect(red.causes).toContainEqual(expect.objectContaining({ code: "LEDGER_ENTRY_WITHOUT_BANK_TXN", ownerIds: [demoIds.yankee] }));
+    const before = threeWayCheck(state, NOW);
+    state.entries.push(entry({ entryId: "pay-1:entry:1", ownerId: demoIds.yankee, amountCents: -100_000, kind: "disbursement", bankReference: "PAY:pay-1", sourceRefs: ["demo:document:instruction-y-001:v1"] }));
+    const posted = threeWayCheck(state, NOW);
+    expect(posted.status).toBe("matched");
+    expect(posted.outstanding).toEqual([expect.objectContaining({ kind: "outstanding_payment", entryId: "pay-1:entry:1", amountCents: -100_000, bankReference: "PAY:pay-1", ageDays: 0 })]);
+    expect(posted.bank.outstandingCents).toBe(-100_000);
+    expect(posted.bank.adjustedCents).toBe(before.bank.adjustedCents! - 100_000);
+    expect(posted.bank.clearedCents).toBe(before.bank.clearedCents);
+    expect(affectedOwners(posted)).toEqual(new Set());
     state.bankTransactions.push(demoSettlement("pay-1", 100_000, NOW - 5, "demo:owner-record:yankee"));
+    const settled = threeWayCheck(state, NOW);
+    expect(settled).toMatchObject({ status: "matched", outstanding: [] });
+    expect(settled.bank.adjustedCents).toBe(posted.bank.adjustedCents);
+  });
+
+  it("turns an outstanding item into a mismatch once it is older than the limit", () => {
+    const state = demoState();
+    state.entries.push(entry({ entryId: "pay-1:entry:1", ownerId: demoIds.yankee, amountCents: -100_000, kind: "disbursement", bankReference: "PAY:pay-1", effectiveAt: NOW }));
+    const day = 24 * 60 * 60 * 1000;
+    expect(threeWayCheck(state, NOW + 5 * day, { outstandingMaxDays: 5 }).status).toBe("matched");
+    const aged = threeWayCheck(state, NOW + 5 * day + 1, { outstandingMaxDays: 5 });
+    expect(aged.status).toBe("mismatched");
+    expect(aged.outstanding).toEqual([]);
+    expect(aged.causes).toContainEqual(expect.objectContaining({ code: "OUTSTANDING_ITEM_AGED", ownerIds: [demoIds.yankee], sourceIds: ["pay-1:entry:1"] }));
+    expect(affectedOwners(aged)).toEqual(new Set([demoIds.yankee]));
+    expect(threeWayCheck(state, NOW + 2 * day, { outstandingMaxDays: 1 }).status).toBe("mismatched");
+    expect(threeWayCheck(state, LATEST_CUTOFF, { now: NOW + day }).status).toBe("matched");
+  });
+
+  it("treats a recorded deposit the bank has not shown as a deposit in transit, with the same age limit", () => {
+    const state = demoState();
+    state.entries.push(entry({ entryId: "dit", amountCents: 40_000, kind: "deposit_received", bankReference: "DEMO-LOCKBOX-1", effectiveAt: NOW }));
+    expect(threeWayCheck(state, NOW).outstanding).toEqual([expect.objectContaining({ kind: "deposit_in_transit", amountCents: 40_000 })]);
     expect(threeWayCheck(state, NOW).status).toBe("matched");
+    expect(threeWayCheck(state, NOW + 6 * 24 * 60 * 60 * 1000).causes.map(c => c.code)).toContain("OUTSTANDING_ITEM_AGED");
   });
 
   it("finds amount mismatches between the bank and its ledger entry", () => {

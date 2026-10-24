@@ -156,7 +156,7 @@ export interface OwnerBalance {
 export type ThreeWayCauseCode =
   | "BANK_TXN_WITHOUT_LEDGER_ENTRY" | "LEDGER_ENTRY_WITHOUT_BANK_TXN" | "AMOUNT_MISMATCH"
   | "DUPLICATE_POSTING" | "UNCLEARED_DEPOSIT_ALLOCATED" | "UNKNOWN_OWNER_ENTRY"
-  | "CURRENCY_MISMATCH" | "RECONCILING_ITEM_WITHOUT_DETAIL" | "NO_OPENING_BALANCE";
+  | "CURRENCY_MISMATCH" | "RECONCILING_ITEM_WITHOUT_DETAIL" | "NO_OPENING_BALANCE" | "OUTSTANDING_ITEM_AGED";
 
 export interface ThreeWayCause {
   code: ThreeWayCauseCode;
@@ -170,17 +170,32 @@ export interface ThreeWayCause {
   unattributed: boolean;
 }
 
+/** A posted entry the bank feed has not shown yet: a reconciling item, not a mismatch, until it ages. */
+export interface OutstandingItem {
+  kind: "outstanding_payment" | "deposit_in_transit";
+  entryId: string;
+  sourceIds: string[];
+  ownerId: string | null;
+  amountCents: number;
+  bankReference: string | null;
+  effectiveAt: number;
+  ageDays: number;
+}
+
 export interface ThreeWayCheckResult {
   accountId: string;
   currency: string;
   cutoff: number;
   status: "matched" | "mismatched" | "insufficient_data";
-  bank: { statementCents: number | null; postAnchorCents: number; reconcilingCents: number; adjustedCents: number | null; clearedCents: number | null; pendingCents: number };
+  /** adjustedCents = statement + post-cutover feed + reconciling items + outstanding items (optional on legacy snapshots). */
+  bank: { statementCents: number | null; postAnchorCents: number; reconcilingCents: number; outstandingCents?: number; adjustedCents: number | null; clearedCents: number | null; pendingCents: number };
   bookCents: number;
   ownersTotalCents: number;
   unallocatedCents: number;
   differences: { bankMinusBook: number | null; bookMinusOwners: number };
   causes: ThreeWayCause[];
+  outstanding?: OutstandingItem[];
+  outstandingMaxDays?: number;
 }
 
 export type ProposalKind = "allocation" | "payment";

@@ -29,15 +29,19 @@ describe("MoneyPanel render smoke test with real backend query results", () => {
     const pay = await t.mutation(api.financeProposals.requestPayment, { accountId: DEMO, ownerId: "demo:owner:yankee", amountCents: 100_000, purpose: "relocation", evidenceSourceIds: ["demo:document:instruction-y-001:v1"], dev: requester });
     await t.mutation(api.financeProposals.approveProposal, { proposalId: pay.proposal.proposalId, dev: approver });
     await t.mutation(api.financeProposals.postProposal, { proposalId: pay.proposal.proposalId, dev: approver });
+    await t.mutation(api.financeIntake.simulateUnrecordedOutflow, {});
     results["financeIntake:listAccounts"] = await t.query(api.financeIntake.listAccounts, {});
     results["financeIntake:getAccountOverview"] = await t.query(api.financeIntake.getAccountOverview, { accountId: DEMO });
     results["finance:listMoneyEvents"] = await t.query(api.finance.listMoneyEvents, { accountId: DEMO });
 
     const { MoneyPanel } = await import("../app/MoneyPanel");
-    const html = renderToString(<MoneyPanel connected />);
+    const html = renderToString(<MoneyPanel connected />).replace(/<!-- -->/g, "");
     expect(html).toContain("DEV ONLY role switcher");
     expect(html).toContain("three-numbers mismatched");
-    expect(html).toContain("LEDGER_ENTRY_WITHOUT_BANK_TXN");
+    expect(html).toContain("BANK_TXN_WITHOUT_LEDGER_ENTRY");
+    expect(html).toContain("Reconciling items");
+    expect(html).toContain(`Outstanding payment -$1,000.00`);
+    expect(html).toContain(`PAY:${pay.proposal.proposalId}`);
     expect(html).toContain("DEMO Owner X — Xavier Trust");
     expect(html).toContain("OWNER_INSUFFICIENT_FUNDS");
     expect(html).toContain("demo:bank:txn:B-001");

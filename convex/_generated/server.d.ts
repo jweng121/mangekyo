@@ -34,6 +34,7 @@ type Env = {
   readonly CREAO_API_KEY: string | undefined;
   readonly CREAO_APP_ID: string | undefined;
   readonly FINANCE_AGENT_MODE: string | undefined;
+  readonly OUTSTANDING_MAX_DAYS: string | undefined;
 };
 
 /**

@@ -1,7 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import type { NormalizedAccountBundle, NormalizedBankTransaction } from "@mangekyo/contracts";
 import { candidateOwnerSourceIds, depositCaseId, formatCents, normalizeErpState, type ErpState } from "@mangekyo/finance-core/intake";
-import { activeAllocations, importLedgerEntries, ownerBalances, threeWayCheck } from "@mangekyo/finance-core/ledger";
+import { activeAllocations, importLedgerEntries, ownerBalances } from "@mangekyo/finance-core/ledger";
 import { DEMO_ACCOUNT_ID, demoMoneyBundle, demoSettlement, demoUnrecordedOutflow } from "@mangekyo/finance-core/fixtures/demo-money";
 // Read-only use of the teammate's deterministic generator; his runtime state file is never touched.
 import { createSeed } from "../apps/demo-erp/data/seed";
@@ -10,7 +10,7 @@ import { internalMutation, mutation, query, type MutationCtx } from "./_generate
 import { autoInvestigationSetting } from "./financeInvestigations";
 import * as money from "./lib/moneyValidators";
 import * as validators from "./lib/validators";
-import { appendMoneyEvent, compact, LATEST, loadAccount, SYSTEM, getProposal, requireAccount, type LoadedAccount } from "./lib/money";
+import { appendMoneyEvent, checkAccount, compact, LATEST, latestActivity, loadAccount, outstandingMaxDays, SYSTEM, getProposal, requireAccount, type LoadedAccount } from "./lib/money";
 import { recordOnly } from "./lib/investigationRecords";
 
 type SourceTable = "financeBankTransactions" | "financeAccountOwners" | "financeObligations" | "financeSourceDocuments" | "financeBankStatements" | "financeReconcilingItems";
@@ -66,7 +66,7 @@ async function importBundle(ctx: MutationCtx, bundle: NormalizedAccountBundle, s
   const loaded = await loadAccount(ctx, accountId);
   await appendMoneyEvent(ctx, { accountId, type: "finance.money.import_completed", actor: SYSTEM, operationId: `import:${accountId}:${now}`, stage: "import",
     message: `${system} import: ${counts.inserted} inserted, ${counts.updated} updated, ${counts.unchanged} unchanged source records; ${entriesInserted} new ledger entries; ${issues.length} issue(s).`,
-    threeWay: threeWayCheck(loaded.state, now), sourceIds: issues.map(row => row.rawId) });
+    threeWay: checkAccount(loaded.state, now), sourceIds: issues.map(row => row.rawId) });
   for (const bankSourceId of newlyEligible) await scheduleAutoInvestigation(ctx, loaded, bankSourceId);
   return { accountId, ...counts, entriesInserted, issues };
 }
@@ -86,7 +86,7 @@ async function insertDemoBankItem(ctx: MutationCtx, txn: NormalizedBankTransacti
   if (existing) return { sourceId: txn.sourceId, created: false };
   await ctx.db.insert("financeBankTransactions", txn);
   const loaded = await loadAccount(ctx, txn.accountId);
-  await appendMoneyEvent(ctx, { accountId: txn.accountId, type: "finance.money.bank_item_recorded", actor: SYSTEM, operationId: txn.sourceId, stage: "bank_feed", message, threeWay: threeWayCheck(loaded.state, Date.now()), sourceIds: [txn.sourceId] });
+  await appendMoneyEvent(ctx, { accountId: txn.accountId, type: "finance.money.bank_item_recorded", actor: SYSTEM, operationId: txn.sourceId, stage: "bank_feed", message, threeWay: checkAccount(loaded.state, Date.now()), sourceIds: [txn.sourceId] });
   return { sourceId: txn.sourceId, created: true };
 }
 
@@ -205,13 +205,15 @@ export const listAccounts = query({
 
 /** Everything the money panel shows for one account. Omit cutoff for the latest recorded state. */
 export const getAccountOverview = query({
-  args: { accountId: v.string(), cutoff: v.optional(v.number()) },
+  // `now` ages outstanding items (queries cannot read the clock); the client passes its time, rounded to the minute.
+  args: { accountId: v.string(), cutoff: v.optional(v.number()), now: v.optional(v.number()) },
   returns: v.object({
+    outstandingMaxDays: v.number(), reconcilingItems: v.array(money.reconcilingItem),
     account: money.storedAccount, threeWay: money.threeWay, balances: v.array(money.ownerBalance), deposits: v.array(depositRow),
     owners: v.array(money.owner), documents: v.array(v.object({ sourceId: v.string(), title: v.string(), documentType: v.string(), excerpt: v.string() })),
     obligations: v.array(money.obligation), entries: v.array(money.ledgerEntry), proposals: v.array(money.proposal),
   }),
-  handler: async (ctx, { accountId, cutoff }) => {
+  handler: async (ctx, { accountId, cutoff, now }) => {
     const loaded = await loadAccount(ctx, accountId);
     const at = cutoff ?? LATEST;
     const tasks = await ctx.db.query("financeTasks").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(200);
@@ -224,7 +226,8 @@ export const getAccountOverview = query({
     });
     const { _id, _creationTime, ...account } = loaded.account;
     return {
-      account, threeWay: threeWayCheck(loaded.state, at), balances: ownerBalances(loaded.state, at), deposits,
+      outstandingMaxDays: outstandingMaxDays(), reconcilingItems: loaded.state.reconcilingItems,
+      account, threeWay: checkAccount(loaded.state, at, now ?? latestActivity(loaded)), balances: ownerBalances(loaded.state, at), deposits,
       owners: loaded.state.owners, documents: loaded.documents.map(d => ({ sourceId: d.sourceId, title: d.title, documentType: d.documentType, excerpt: d.excerpt })),
       obligations: loaded.obligations,
       entries: [...loaded.state.entries].sort((a, b) => b.effectiveAt - a.effectiveAt || b.entryId.localeCompare(a.entryId)).slice(0, 200),

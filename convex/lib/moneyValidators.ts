@@ -38,13 +38,15 @@ export const ledgerEntry = v.object({
 export const ownerBalance = v.object({
   ownerId: v.union(v.string(), v.null()), name: v.string(), postedCents: v.number(), clearedCents: v.number(), unclearedCents: v.number(), holdsCents: v.number(), availableCents: v.number(),
 });
-export const causeCode = v.union(...(["BANK_TXN_WITHOUT_LEDGER_ENTRY", "LEDGER_ENTRY_WITHOUT_BANK_TXN", "AMOUNT_MISMATCH", "DUPLICATE_POSTING", "UNCLEARED_DEPOSIT_ALLOCATED", "UNKNOWN_OWNER_ENTRY", "CURRENCY_MISMATCH", "RECONCILING_ITEM_WITHOUT_DETAIL", "NO_OPENING_BALANCE"] as const).map(code => v.literal(code)));
+export const causeCode = v.union(...(["BANK_TXN_WITHOUT_LEDGER_ENTRY", "LEDGER_ENTRY_WITHOUT_BANK_TXN", "AMOUNT_MISMATCH", "DUPLICATE_POSTING", "UNCLEARED_DEPOSIT_ALLOCATED", "UNKNOWN_OWNER_ENTRY", "CURRENCY_MISMATCH", "RECONCILING_ITEM_WITHOUT_DETAIL", "NO_OPENING_BALANCE", "OUTSTANDING_ITEM_AGED"] as const).map(code => v.literal(code)));
 export const threeWay = v.object({
   accountId: v.string(), currency: v.string(), cutoff: v.number(), status: v.union(v.literal("matched"), v.literal("mismatched"), v.literal("insufficient_data")),
-  bank: v.object({ statementCents: v.union(v.number(), v.null()), postAnchorCents: v.number(), reconcilingCents: v.number(), adjustedCents: v.union(v.number(), v.null()), clearedCents: v.union(v.number(), v.null()), pendingCents: v.number() }),
+  bank: v.object({ statementCents: v.union(v.number(), v.null()), postAnchorCents: v.number(), reconcilingCents: v.number(), outstandingCents: v.optional(v.number()), adjustedCents: v.union(v.number(), v.null()), clearedCents: v.union(v.number(), v.null()), pendingCents: v.number() }),
   bookCents: v.number(), ownersTotalCents: v.number(), unallocatedCents: v.number(),
   differences: v.object({ bankMinusBook: v.union(v.number(), v.null()), bookMinusOwners: v.number() }),
   causes: v.array(v.object({ code: causeCode, severity: v.union(v.literal("mismatch"), v.literal("warning")), message: v.string(), amountCents: v.union(v.number(), v.null()), sourceIds: v.array(v.string()), ownerIds: v.array(v.string()), unattributed: v.boolean() })),
+  outstanding: v.optional(v.array(v.object({ kind: v.union(v.literal("outstanding_payment"), v.literal("deposit_in_transit")), entryId: v.string(), sourceIds: v.array(v.string()), ownerId: v.union(v.string(), v.null()), amountCents: v.number(), bankReference: v.union(v.string(), v.null()), effectiveAt: v.number(), ageDays: v.number() }))),
+  outstandingMaxDays: v.optional(v.number()),
 });
 
 export const lockRule = v.union(...(["L1", "L2", "L3", "L4", "L5", "L6", "L7"] as const).map(rule => v.literal(rule)));

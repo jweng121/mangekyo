@@ -1,10 +1,10 @@
 import { ConvexError, v } from "convex/values";
 import type { MoneyProposal } from "@mangekyo/contracts";
 import { checkSelfApproval, checkState } from "@mangekyo/finance-core/gateway";
-import { buildReversalEntries, threeWayCheck } from "@mangekyo/finance-core/ledger";
+import { buildReversalEntries } from "@mangekyo/finance-core/ledger";
 import { mutation, query } from "./_generated/server";
 import * as money from "./lib/moneyValidators";
-import { appendMoneyEvent, compact, gatedStep, getProposal, loadAccount, nextProposalId, requireAccount, resolveActor, submitProposal, transition } from "./lib/money";
+import { appendMoneyEvent, checkAccount, compact, gatedStep, getProposal, loadAccount, nextProposalId, requireAccount, resolveActor, submitProposal, transition } from "./lib/money";
 import { recordOnly } from "./lib/investigationRecords";
 import { appendBoundary } from "./financeInvestigations";
 
@@ -84,7 +84,7 @@ export const rejectProposal = mutation({
     if (!reason || reason.length > 4000) throw new ConvexError("A rejection reason (1–4000 characters) is required.");
     const proposal = await getProposal(ctx, args.proposalId);
     const loaded = await loadAccount(ctx, proposal.accountId);
-    const threeWay = threeWayCheck(loaded.state, Date.now());
+    const threeWay = checkAccount(loaded.state, Date.now());
     const failure = checkState(proposal.status, "rejected", proposal.proposalId);
     if (failure) {
       const lock = { allowed: false, stage: "approve" as const, failures: [failure], evaluated: ["L7" as const], facts: {} };
@@ -135,7 +135,7 @@ export const reversePosting = mutation({
     for (const entry of reversals) await ctx.db.insert("financeLedgerEntries", compact(entry));
     const loaded = await loadAccount(ctx, proposal.accountId);
     await appendMoneyEvent(ctx, { accountId: proposal.accountId, type: "finance.money.ledger_posted", actor, operationId: proposal.proposalId, stage: "reversal",
-      message: `Reversed ${reversals.length} entr${reversals.length === 1 ? "y" : "ies"} of ${proposal.proposalId}: ${reason}`, proposal, threeWay: threeWayCheck(loaded.state, Date.now()), entryIds: reversals.map(r => r.entryId) });
+      message: `Reversed ${reversals.length} entr${reversals.length === 1 ? "y" : "ies"} of ${proposal.proposalId}: ${reason}`, proposal, threeWay: checkAccount(loaded.state, Date.now()), entryIds: reversals.map(r => r.entryId) });
     return { entryIds: reversals.map(r => r.entryId), alreadyDone: false };
   },
 });
