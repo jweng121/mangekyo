@@ -66,3 +66,82 @@ The UI now reports "action refused; it stays pending_approval" instead of "is no
 - `npx.cmd --yes pnpm@10.20.0 typecheck`: exit 0.
 - `npx.cmd --yes pnpm@10.20.0 test`: 13 files, 115 tests, all pass.
 - `npx.cmd --yes pnpm@10.20.0 build:finance`: pass.
+
+---
+
+# Follow-up: three fixes (2026-10-24)
+
+The fixes were clicked through in the real UI on a fresh DEMO run, `demo:account:pool-004`, using the same never-investigate guard. Screenshots are in `docs/screenshots/fixes/`. No lock rule was relaxed.
+
+## Fix 1: outstanding payments are reconciling items, not mismatches
+
+**Change**: a posted disbursement the bank feed hasn't shown yet is an *outstanding payment*. A recorded deposit the bank hasn't shown is a *deposit in transit*. Both now count in the adjusted bank balance: statement + feed + reconciling items + outstanding items = books. They are listed under **Reconciling items** with their entry and source IDs, age and expected bank reference. They are not mismatch causes, so they don't trigger L5.
+
+**Ageing**: once an item is older than `OUTSTANDING_MAX_DAYS` (Convex env, default 5; invalid values use 5), it becomes the mismatch `OUTSTANDING_ITEM_AGED`. L5 then blocks the affected owner. Queries can't read the clock, so the panel passes its own time rounded to the minute.
+
+**Files**: `packages/finance-core/src/ledger/index.ts` (`threeWayCheck` options), `convex/lib/money.ts` (`checkAccount`, `outstandingMaxDays`), `convex/financeIntake.ts`, `MoneyPanel.tsx`.
+
+| Clicked | Expected | Actual | Screenshot |
+| --- | --- | --- | --- |
+| Fresh run | Matched | Bank = Books = Owners = $270,600.00, matched, no reconciling items | `1a-fresh-run-matched.png` |
+| riley requests Alpha $1,000; sam approves, then posts | Still matched, one outstanding item | Bank $269,600.00 (statement + feed − $1,000.00 outstanding) = Books = Owners $269,600.00, **matched**. Reconciling items: "Outstanding payment −$1,000.00 · DEMO Alpha · 0 days old · awaiting bank reference PAY:…pay:0001". No causes, no L5 | `1b-posted-outstanding-still-matched.png` |
+| DEV: simulate bank settlement | Item gone, still matched | Bank still $269,600.00, now as feed −$1,000 instead of outstanding −$1,000. Matched, no reconciling items | `1c-settled-item-gone-matched.png` |
+| Aged past the limit | Mismatch | **Not clicked** (it needs 5 real days). Tested in `ledger.test.ts` and `financeMoney.test.ts` with `OUTSTANDING_MAX_DAYS=3`: matched at day 3, `OUTSTANDING_ITEM_AGED` at day 4, L5 blocks that owner only | — |
+
+## Fix 2: hold instead of kill
+
+**Change**: at approval or posting, if the only failures are temporary (L2 funds not cleared, L5 reconciliation mismatch), the proposal moves to `on_hold` with its reason codes and a plain-English reason. It does not move to `blocked`.
+
+**Unchanged**:
+- Permanent failures (L1, L3, L6) still block.
+- Any failure at request time still blocks.
+- L4/L7 refusals change nothing, as in the first fix.
+
+**A person decides**: held proposals appear under **Needs a person** with four choices:
+- **Re-check now**
+- **Keep waiting**
+- **Cancel with reason** (moves to the new terminal status `cancelled`)
+- **Continue**: appears once the hold is ready. It needs the approver role and re-runs every rule, including L4.
+
+Each choice records who made it and emits a `finance.money.hold_updated` event, or a transition for cancel and continue.
+
+**Automatic re-checks**: holds are re-checked after anything that could clear them: bank-feed items, deposit clearing, recorded bank items, postings, reversals and imports. When every rule passes, the hold is marked **ready to continue** and stays in the list. Money never moves without a person continuing it. Held payments keep reserving the owner's funds.
+
+**New fix action**: to resolve the demo mismatch I added **Record in ledger** (approver only). It records an unrecorded bank-feed item as a ledger entry citing that bank transaction. I also added **DEV: simulate clearing** for pending DEMO deposits.
+
+| Clicked | Expected | Actual | Screenshot |
+| --- | --- | --- | --- |
+| riley requests Yankee $1,000 (`pay:0002`) and $500 (`pay:0003`); sam approves both; DEV simulate unrecorded outflow | — | Three-way red: `BANK_TXN_WITHOUT_LEDGER_ENTRY demo:run-004:bank:txn:E-001`, affecting Owner Y | — |
+| sam posts both | Hold, not block | Both **on_hold**: "On hold: the bank and the books don't agree yet (Bank outflow $2,000.00 (DEMO-WIRE-Y-9001) has no ledger entry)." | `2b-held-plain-reason.png` |
+| riley: Re-check now; sam: Keep waiting | Recorded with who | Events #28 "Re-check by dev-unverified:riley: On hold…" and #29 "dev-unverified:sam chose to keep waiting…" | `2c-after-recheck-and-keep-waiting.png` |
+| sam cancels `pay:0003` with "Client asked to drop the smaller transfer" | Cancelled with reason | `on_hold → cancelled` (event #30) with that reason; the card shows it | `2d-cancelled-with-reason.png` |
+| sam: Record in ledger on the E-001 cause | Re-check runs automatically, ready to continue, no money moved | Event #31 records E-001. Event #32 "Automatic re-check: Ready to continue…". `pay:0002` is still on hold with no ledger entry | `2e-ready-to-continue.png` |
+| sam: Continue (post to ledger) | Posted | `on_hold → posted` (event #35). Ledger rows 10 → 11. Bank = Books = Owners $266,600.00, matched, with the new payment shown as an outstanding item | `2f-continued-posted.png`, `2f-three-numbers-after-continue.png`, `2g-money-event-stream.png` |
+
+**Covered by tests only, not clicked**:
+- An L2 hold at approval, with the exact reason "On hold: $2,500.00 from DEMO Delta Tenant hasn't cleared yet."
+  - Simulating D-001 clearing makes it ready; Continue then approves.
+  - Producing it needs an owner's cleared funds to drop between request and approval. The tests set that up by recording a DEMO bank fee.
+- An L1 failure at approval still blocks.
+- An L2 failure at request time still blocks.
+- A requester continuing their own hold is refused.
+
+## Fix 3: Start fresh DEMO run
+
+**Change**: **Start fresh DEMO run** creates the next `demo:account:pool-NNN` and loads the fixture clean. Every fixture ID in run N is namespaced `demo:run-NNN:…` (e.g. `demo:run-004:bank:txn:E-001`), so the sourceId upserts can't touch an earlier run's rows. Nothing old is deleted or edited. Run names get "(run NNN)", and the selector defaults to the newest run.
+
+**Clicked**: the button created `pool-002`, `pool-003` and `pool-004` (`3-fresh-run-selector.png`). `pool-002` and `pool-003` come from two script attempts that stopped on screenshot errors:
+- `pool-002` is untouched.
+- `pool-003` has one posted, unsettled $1,000 Alpha payment.
+
+**Tested**: every pool-001 row (bank, owners, documents, entries, proposals, events, snapshots) is identical before and after a fresh run. The new run is matched with no proposals, and the L1 and E scenarios work on its own IDs.
+
+**Also changed during these UI checks**: the lock result box now says "Did not pass at post" instead of "Blocked at post", because a failed check can now end in a hold.
+
+## Checks run
+
+- `npx.cmd --yes pnpm@10.20.0 typecheck`: exit 0.
+- `npx.cmd --yes pnpm@10.20.0 test`: 15 files, 127 tests, all pass.
+- `npx.cmd --yes pnpm@10.20.0 build:finance`: pass.
+- `node_modules\.bin\convex.cmd codegen --typecheck disable`: run once, for the `OUTSTANDING_MAX_DAYS` env type. Like before, it contacted the dev deployment.
+- `dev:backend` was running and pushed each saved change to `laudable-sturgeon-5` automatically.

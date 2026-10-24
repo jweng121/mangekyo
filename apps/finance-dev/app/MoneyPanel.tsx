@@ -18,7 +18,7 @@ function message(error: unknown): string {
 
 function LockView({ lock }: { lock: LockResult }) {
   return <div className={lock.allowed ? "lock allowed" : "lock blocked"} role={lock.allowed ? "status" : "alert"}>
-    <strong>{lock.allowed ? `Allowed at ${lock.stage}` : `Blocked at ${lock.stage}`}</strong> · rules checked {lock.evaluated.join(", ")}
+    <strong>{lock.allowed ? `Allowed at ${lock.stage}` : `Did not pass at ${lock.stage}`}</strong> · rules checked {lock.evaluated.join(", ")}
     {lock.failures.map((f, i) => <p key={i}><code>{f.rule} {f.code}</code> {f.message}{f.sourceIds.length > 0 && <> · <code>{f.sourceIds.join(", ")}</code></>}</p>)}
   </div>;
 }
@@ -188,6 +188,7 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
             <>Deposit <code>{p.bankSourceId}</code> → {p.shares?.map(s => `${ownerName(s.ownerId)} ${money(s.amountCents)}`).join(", ")}</>}</p>
           <p>Requested by <code>{p.requestedBy}</code>{p.approvedBy && <> · approved by <code>{p.approvedBy}</code></>} · evidence <code>{p.evidenceSourceIds.join(", ") || "none"}</code></p>
           {p.rejectionReason && <p>Rejected: {p.rejectionReason}</p>}
+          {p.cancellationReason && <p>Cancelled while on hold: {p.cancellationReason}</p>}
           {p.blockedReasons && <ul>{p.blockedReasons.map((f, i) => <li key={i}><code>{f.rule} {f.code}</code> {f.message}</li>)}</ul>}
           {p.status === "pending_approval" && <div className="row">
             <button disabled={busy || role !== "approver"} onClick={() => run(async () => show(await approve({ proposalId: p.proposalId, dev })))}>Approve</button>
