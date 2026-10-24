@@ -3,7 +3,7 @@ import type { FinanceAgentProvider } from "./types";
 import { formatCents } from "../intake/cents";
 import { FinanceProviderError } from "./types";
 import { INSURANCE_POLICY } from "../../fixtures/lawFirmFeed";
-import { INVOICE_POLICY } from "../policy";
+import { INVOICE_POLICY, PARTIAL_RETAINER_POLICY, retainerCents, usedPolicyLabel } from "../policy";
 
 function amountTexts(cents: number): string[] {
   const exact = formatCents(cents);
@@ -131,6 +131,42 @@ function mockPlanted(input: FinanceAgentInput): FinanceAgentOutput | null {
   return null;
 }
 
+/**
+ * A deposit smaller than the retainer in a linked engagement letter, from a payer whose surname matches the client the letter names.
+ * The first time, the agent asks. Once a person has confirmed the pattern (on this deposit, or earlier on another deposit of the
+ * account: memory), it proposes and offers the pattern as a candidate policy; with the policy approved, it says which policy it used.
+ */
+function mockPartialRetainer(input: FinanceAgentInput, bank: NonNullable<FinanceAgentInput["records"]["bankTransactions"]>[number]): FinanceAgentOutput | null {
+  const { records } = input;
+  const deposit = records.transactions[0];
+  const surname = bank.counterparty.trim().split(/\s+/).at(-1)?.toLowerCase() ?? "";
+  const letters = records.documents.filter(d => bank.documentSourceIds.includes(d.sourceId) && /engagement letter/i.test(d.title));
+  for (const letter of letters) {
+    const retainer = retainerCents(letter.text);
+    if (retainer === null || deposit.amountCents >= retainer) continue;
+    const named = records.owners.filter(o => letter.text.includes(o.name) && o.name.trim().split(/\s+/).at(-1)?.toLowerCase() === surname);
+    if (named.length !== 1) continue;
+    const [owner] = named;
+    const amount = formatCents(deposit.amountCents, deposit.currency);
+    const retainerText = formatCents(retainer, deposit.currency);
+    const confirmed = (c: FinanceAgentInput["humanClarifications"][number]) => c.questionId.endsWith(":question:partial-retainer") && /^(yes|confirmed)\b/i.test(c.answer.trim());
+    const answers = input.humanClarifications.filter(c => !c.questionId.endsWith(":rejection"));
+    const ownAnswer = answers.find(c => c.taskId === input.taskId && confirmed(c));
+    const memory = answers.find(c => c.taskId !== input.taskId && confirmed(c));
+    const policy = input.approvedPolicies.find(p => p.statement === PARTIAL_RETAINER_POLICY);
+    const propose = (finding: string, refs: string[], summaryPrefix: string, candidate: boolean) => output({ outcome: "proposal_ready",
+      summary: `${summaryPrefix}Proposed ownership requires a person's approval before posting.`,
+      findings: [{ findingId: "ownership-evidence", summary: finding, sourceRefs: refs }],
+      proposedAllocations: [{ proposalId: `mock-allocation:${deposit.transactionId}`, transactionId: deposit.transactionId, ownerId: owner.ownerId, amountCents: deposit.amountCents, currency: deposit.currency, evidenceSourceIds: [deposit.sourceId, ...refs] }],
+      candidatePolicies: candidate && !policy ? [{ policyId: "partial-retainer", statement: PARTIAL_RETAINER_POLICY, sourceRefs: [letter.sourceId, deposit.sourceId], status: "proposed" as const }] : [] });
+    if (policy) return propose(`${letter.title} names ${owner.name} with a ${retainerText} retainer; the ${amount} deposit is a partial payment under the approved policy.`, [letter.sourceId, deposit.sourceId, policy.sourceId], `${usedPolicyLabel(policy)}. `, false);
+    if (ownAnswer) return propose(`A person confirmed the ${amount} deposit as a partial payment of ${owner.name}'s ${retainerText} retainer.`, [letter.sourceId, deposit.sourceId, ownAnswer.sourceId], "", true);
+    if (memory) return propose(`${letter.title} names ${owner.name} with a ${retainerText} retainer; the ${amount} deposit is smaller. A person confirmed the same partial-retainer pattern on an earlier deposit of this account.`, [letter.sourceId, deposit.sourceId, memory.sourceId], "From memory of an earlier answer. ", true);
+    return output({ outcome: "needs_information", summary: "The deposit is smaller than the agreed retainer. Ownership needs confirmation.", questions: [{ key: "partial-retainer", question: `Is ${amount} a partial payment of ${owner.name}'s ${retainerText} retainer?`, sourceRefs: [deposit.sourceId, ...bank.documentSourceIds] }] });
+  }
+  return null;
+}
+
 function mockLawFirm(input: FinanceAgentInput): FinanceAgentOutput | null {
   if (input.records.sourceAdapter?.datasetVersion !== "law-firm-demo-v1") return null;
   const { records } = input;
@@ -148,12 +184,8 @@ function mockLawFirm(input: FinanceAgentInput): FinanceAgentOutput | null {
   const propose = (ownerId: string, finding: string, refs: string[]) => output({ outcome: "proposal_ready", summary: "Proposed ownership requires a person's approval before posting.",
     findings: [{ findingId: "ownership-evidence", summary: finding, sourceRefs: refs }],
     proposedAllocations: [{ proposalId: `mock-allocation:${deposit.transactionId}`, transactionId: deposit.transactionId, ownerId, amountCents: deposit.amountCents, currency: deposit.currency, evidenceSourceIds: [deposit.sourceId, ...refs] }] });
-  if (bank.counterparty === "D OKAFOR") {
-    const owner = records.owners.find(o => o.name === "Daniel Okafor");
-    const confirmation = answers.find(c => c.questionId.endsWith(":question:partial-retainer") && /^(yes|confirmed)\b/i.test(c.answer.trim()));
-    if (owner && confirmation) return propose(owner.ownerId, "A person confirmed the $2,500.00 deposit as a partial payment of Daniel Okafor's $5,000.00 retainer.", [...bank.documentSourceIds, deposit.sourceId, confirmation.sourceId]);
-    return output({ outcome: "needs_information", summary: "The deposit is smaller than the agreed retainer. Ownership needs confirmation.", questions: [{ key: "partial-retainer", question: "Is $2,500.00 a partial payment of Daniel Okafor's $5,000.00 retainer?", sourceRefs: [deposit.sourceId, ...bank.documentSourceIds] }] });
-  }
+  const retainer = mockPartialRetainer(input, bank);
+  if (retainer) return retainer;
   if (bank.counterparty === "J NGUYEN") {
     const answer = answers.find(c => c.questionId.endsWith(":question:which-nguyen"));
     const choice = answer?.answer.trim().toLowerCase();
@@ -169,7 +201,7 @@ function mockLawFirm(input: FinanceAgentInput): FinanceAgentOutput | null {
   proposal.candidatePolicies = [];
   if (bank.reference === "Claim HL-50210" && policy) {
     proposal.proposedAllocations.forEach(p => p.evidenceSourceIds.push(policy.sourceId));
-    proposal.summary = `Used policy ${policy.policyId}, approved by ${policy.approvedBy ?? "a person"}. ${proposal.summary}`;
+    proposal.summary = `${usedPolicyLabel(policy)}. ${proposal.summary}`;
   }
   return proposal;
 }

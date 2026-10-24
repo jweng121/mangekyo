@@ -42,6 +42,8 @@ export interface NormalizedOwner {
   accountId: string;
   subAccount: string;
   name: string;
+  /** "firm" marks the law firm's own money (earned fees, operating funds). Absent means client. Trust rule L8 flags firm money in trust. */
+  ownerKind?: "client" | "firm";
   raw: RawPointer;
 }
 
@@ -55,7 +57,21 @@ export interface NormalizedObligation {
   reference: string;
   status: string;
   excerpt: string;
+  /** Matter the invoice bills, when the source says. Trust rule L9 matches fee transfers to approved invoices by owner and matter. */
+  matterId?: string;
   raw: RawPointer;
+}
+
+/** What a payout is for. Trust rules L9 and L11 read it; integer cents everywhere. */
+export type PayoutKind = "client_share" | "attorney_fee" | "costs" | "lien" | "refund" | "other";
+
+/** One line of a signed settlement statement, as structured by the source adapter. */
+export interface SettlementLine {
+  kind: PayoutKind;
+  label: string;
+  amountCents: number;
+  /** Payee when the statement names one (the firm for fees and costs, a lienholder for liens); null for the client. */
+  payeeOwnerSourceId: string | null;
 }
 
 export interface NormalizedDocument {
@@ -68,6 +84,14 @@ export interface NormalizedDocument {
   excerpt: string;
   /** Owners named in the document text, matched exactly by code. */
   namedOwnerSourceIds: string[];
+  /** True only when the source system records the document as signed. Payouts and fees can rest only on signed documents. */
+  signed?: boolean;
+  /** Matter (case) the document belongs to, when the source says. */
+  matterId?: string;
+  /** Structured lines of a signed settlement statement, so code can compare payouts to it exactly. */
+  lines?: SettlementLine[];
+  /** Contingency fee of a signed fee agreement, in basis points (33% = 3300). Integer only. */
+  feeBasisPoints?: number;
   raw: RawPointer;
 }
 
@@ -156,7 +180,9 @@ export interface OwnerBalance {
 export type ThreeWayCauseCode =
   | "BANK_TXN_WITHOUT_LEDGER_ENTRY" | "LEDGER_ENTRY_WITHOUT_BANK_TXN" | "AMOUNT_MISMATCH"
   | "DUPLICATE_POSTING" | "UNCLEARED_DEPOSIT_ALLOCATED" | "UNKNOWN_OWNER_ENTRY"
-  | "CURRENCY_MISMATCH" | "RECONCILING_ITEM_WITHOUT_DETAIL" | "NO_OPENING_BALANCE" | "OUTSTANDING_ITEM_AGED";
+  | "CURRENCY_MISMATCH" | "RECONCILING_ITEM_WITHOUT_DETAIL" | "NO_OPENING_BALANCE" | "OUTSTANDING_ITEM_AGED"
+  /** Warning: the firm's own money is in the trust account (trust rule L8). */
+  | "COMMINGLING";
 
 export interface ThreeWayCause {
   code: ThreeWayCauseCode;
@@ -198,6 +224,22 @@ export interface ThreeWayCheckResult {
   outstandingMaxDays?: number;
 }
 
+/** A disputed amount a person recorded on a client's trust balance. Only a person records its resolution (L10). */
+export interface TrustDispute {
+  disputeId: string;
+  accountId: string;
+  ownerId: string;
+  amountCents: number;
+  reason: string;
+  status: "open" | "resolved";
+  recordedBy: string;
+  recordedAt: number;
+  resolvedBy?: string;
+  resolvedAt?: number;
+  resolution?: string;
+  sourceIds: string[];
+}
+
 export type ProposalKind = "allocation" | "payment";
 export type ProposalStatus = "proposed" | "pending_approval" | "approved" | "posted" | "rejected" | "blocked" | "on_hold" | "cancelled";
 
@@ -233,6 +275,14 @@ export interface MoneyProposal {
   amountCents: number;
   purpose: string;
   fundingSourceId?: string;
+  /** Payment: what the payout is for (trust rules L9 and L11). Absent on payments made before trust rules existed; treated as "other". */
+  payoutKind?: PayoutKind;
+  /** Payment: the matter the payout settles, when known. */
+  matterId?: string;
+  /** Payment: the signed settlement statement the payout line comes from (L11 compares the line exactly). */
+  settlementSourceId?: string;
+  /** Payment: who receives the money when it is not the client (the firm for fees and costs, a lienholder). */
+  payeeOwnerId?: string;
   approvedBy?: string;
   approvalId?: string;
   rejectionReason?: string;
@@ -246,9 +296,13 @@ export interface MoneyProposal {
 
 export type LockCode =
   | "OWNER_INSUFFICIENT_FUNDS" | "FUNDS_NOT_CLEARED" | "MISSING_EVIDENCE" | "SELF_APPROVAL"
-  | "RECONCILIATION_MISMATCH" | "AMOUNT_INTEGRITY" | "STATE";
+  | "RECONCILIATION_MISMATCH" | "AMOUNT_INTEGRITY" | "STATE"
+  // Trust rules L8–L11
+  | "COMMINGLING" | "FEE_NOT_EARNED" | "DISPUTED_FUNDS" | "SETTLEMENT_MISMATCH";
 
-export interface LockFailure { rule: "L1" | "L2" | "L3" | "L4" | "L5" | "L6" | "L7"; code: LockCode; message: string; sourceIds: string[] }
+export type LockRule = "L1" | "L2" | "L3" | "L4" | "L5" | "L6" | "L7" | "L8" | "L9" | "L10" | "L11";
+
+export interface LockFailure { rule: LockRule; code: LockCode; message: string; sourceIds: string[] }
 
 export interface LockResult {
   allowed: boolean;

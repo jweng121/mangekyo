@@ -5,6 +5,33 @@ import { INSURANCE_POLICY } from "../../fixtures/lawFirmFeed";
 
 /** The invoice rule the mock investigator proposes. Kept here so the backtest and the mock agree on the wording. */
 export const INVOICE_POLICY = "A deposit that quotes an open invoice number for the exact amount goes to that invoice's owner.";
+/** Memory that became a rule: after a person confirms one partial retainer, the pattern is proposed as a policy and backtested. */
+export const PARTIAL_RETAINER_POLICY = "A client's deposit smaller than the retainer in their engagement letter is a partial retainer payment for that client.";
+
+/** Retainer amount an engagement letter states ("Retainer: $5,000.00"), in integer cents, or null. */
+export function retainerCents(text: string): number | null {
+  const match = /Retainer:\s*\$(\d{1,3}(?:,\d{3})*|\d+)(?:\.(\d{2}))?/i.exec(text);
+  return match ? Number(match[1].replace(/,/g, "")) * 100 + Number(match[2] ?? 0) : null;
+}
+
+/** The client whose engagement letter the deposit matches: linked (or named) letter, payer surname matches, deposit smaller than the retainer. */
+export function partialRetainerOwner(deposit: NormalizedBankTransaction, documents: NormalizedDocument[], owners: NormalizedOwner[]): { owner: NormalizedOwner; letter: NormalizedDocument; retainerCents: number } | null {
+  const surname = deposit.counterparty.trim().split(/\s+/).at(-1)?.toLowerCase() ?? "";
+  if (!surname) return null;
+  const letters = documents.filter(d => /engagement/i.test(d.documentType) && (deposit.documentSourceIds.includes(d.sourceId) || d.namedOwnerSourceIds.length > 0));
+  for (const letter of letters) {
+    const retainer = retainerCents(letter.text);
+    if (retainer === null || deposit.amountCents >= retainer) continue;
+    const named = owners.filter(o => letter.namedOwnerSourceIds.includes(o.sourceId) && o.name.trim().split(/\s+/).at(-1)?.toLowerCase() === surname);
+    if (named.length === 1) return { owner: named[0], letter, retainerCents: retainer };
+  }
+  return null;
+}
+
+/** Label shown wherever an approved policy is relied on. */
+export function usedPolicyLabel(policy: { policyId: string; approvedBy?: string | null }): string {
+  return `Used policy ${policy.policyId}, approved by ${policy.approvedBy ?? "a person"}`;
+}
 
 interface History { deposits: NormalizedBankTransaction[]; documents: NormalizedDocument[]; obligations: NormalizedObligation[]; owners: NormalizedOwner[] }
 type Rule = (deposit: NormalizedBankTransaction, history: History) => string | null;
@@ -23,6 +50,7 @@ const RULES: Record<string, Rule> = {
     const invoice = history.obligations.find(o => o.kind === "invoice" && o.status === "open" && !!o.reference && deposit.reference.includes(o.reference) && o.amountCents === deposit.amountCents);
     return invoice ? ownerBySource(history, invoice.ownerSourceId) : null;
   },
+  [PARTIAL_RETAINER_POLICY]: (deposit, history) => partialRetainerOwner(deposit, history.documents, history.owners)?.owner.ownerId ?? null,
 };
 
 export interface BacktestCase { bankSourceId: string; label: string; predictedOwnerId: string; decidedOwnerIds: string[]; agrees: boolean }

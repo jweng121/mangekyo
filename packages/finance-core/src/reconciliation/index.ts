@@ -117,10 +117,11 @@ export function mockReconciliation(input: ReconciliationInput): ReconciliationOu
         questions: [],
         proposedEntry: { kind: "record_bank_item", bankSourceId: txn.sourceId, reversesEntryId: null, ownerId: owner.ownerId, amountCents: -txn.amountCents, memo: `Bounced check: bank returned ${deposit.counterparty}'s ${formatCents(deposit.amountCents, input.currency)} (${deposit.reference})`, evidenceSourceIds: [txn.sourceId, deposit.sourceId, ...(allocation ? [allocation.entryId] : [])] } });
     }
-    if (txn.direction === "outflow" && owner) return out({ outcome: "correction_proposed",
-      explanation: `${formatCents(txn.amountCents, input.currency)} left the bank (${txn.reference}) with no ledger entry. The bank names ${owner.name}, so recording it as ${owner.name}'s disbursement brings the books back in line.`,
+    // An outflow the bank attributes to a client, with nothing saying why it moved: the records don't fully support an entry, so ask one short question.
+    if (txn.direction === "outflow" && owner) return out({ outcome: "needs_information",
+      explanation: `The bank is ${formatCents(txn.amountCents, input.currency)} short: ${txn.reference} left the account with no ledger entry. The bank names ${owner.name}, but nothing in the records says whether a check bounced, a fee was charged or a payment was issued, so no entry is proposed.`,
       findings: [{ findingId: "unrecorded-outflow", summary: `The bank paid out ${formatCents(txn.amountCents, input.currency)} with reference ${txn.reference}.`, sourceRefs: [txn.sourceId] }],
-      questions: [], proposedEntry: { kind: "record_bank_item", bankSourceId: txn.sourceId, reversesEntryId: null, ownerId: owner.ownerId, amountCents: -txn.amountCents, memo: `Recorded from bank feed (${txn.reference})`, evidenceSourceIds: [txn.sourceId] } });
+      questions: [{ key: "bounce-or-fee", question: `The bank is ${formatCents(txn.amountCents, input.currency)} short. Did ${owner.name}'s check bounce, or is this a bank fee?` }], proposedEntry: null });
     if (txn.direction === "inflow") return out({ outcome: "correction_proposed",
       explanation: `${formatCents(txn.amountCents, input.currency)} arrived at the bank (${txn.reference}) with no ledger entry. Recording it as unallocated keeps every dollar visible until a person assigns it.`,
       findings: [{ findingId: "unrecorded-deposit", summary: `The bank received ${formatCents(txn.amountCents, input.currency)} with reference ${txn.reference}.`, sourceRefs: [txn.sourceId] }],
@@ -136,10 +137,17 @@ export function mockReconciliation(input: ReconciliationInput): ReconciliationOu
       findings: [{ findingId: "recorded-twice", summary: `${entry.entryId} repeats the ${formatCents(Math.abs(entry.amountCents), input.currency)} entry for the same bank item.`, sourceRefs: [entry.entryId] }],
       questions: [], proposedEntry: { kind: "reverse_entry", bankSourceId: null, reversesEntryId: entry.entryId, ownerId: entry.ownerId, amountCents: -entry.amountCents, memo: `Reverse duplicate posting ${entry.entryId}`, evidenceSourceIds: [entry.entryId] } });
   }
+  if (cause.code === "LEDGER_ENTRY_WITHOUT_BANK_TXN" || cause.code === "OUTSTANDING_ITEM_AGED") {
+    const entry = records.ledgerEntries.find(e => cause.sourceIds.includes(e.entryId));
+    if (entry) return out({ outcome: "needs_information", explanation: `The books show ${formatCents(Math.abs(entry.amountCents), input.currency)} (${entry.entryId}) that the bank has not shown. No entry is proposed: the records don't say whether the payment was issued, is still in the mail or was voided.`,
+      findings: [{ findingId: "entry-not-at-bank", summary: `The ledger records ${formatCents(Math.abs(entry.amountCents), input.currency)} ${entry.kind}: ${entry.memo}.`, sourceRefs: [entry.entryId] }],
+      questions: [{ key: "issued-or-voided", question: `The bank has not shown the ${formatCents(Math.abs(entry.amountCents), input.currency)} entry ${entry.entryId}. Was the payment issued and still outstanding, or was it voided?` }], proposedEntry: null });
+  }
   return out({ outcome: "needs_information", explanation: `Code found: ${cause.message} The agent has no safe correcting entry for this; a person decides.`, findings: [], questions: [{ key: "how-to-correct", question: `How should ${cause.code.toLowerCase().replace(/_/g, " ")} (${amount}) be corrected?` }], proposedEntry: null });
 }
 
-export interface ReconciliationProvider { mode: "mock" | "creao"; start(input: ReconciliationInput): Promise<ProviderExecution>; poll(externalRunId: string): Promise<ProviderExecution> }
+export const RECON_REPORT_FIELDS = ["schemaVersion", "outcome", "explanation", "findings", "questions", "proposedEntry"] as const;
+export interface ReconciliationProvider { mode: "mock" | "creao" | "external"; start(input: ReconciliationInput): Promise<ProviderExecution>; poll(externalRunId: string): Promise<ProviderExecution> }
 
 /** Same provider interface as the investigator. Mock only for now; a CREAO reconciler would plug in here. */
 export const mockReconciliationProvider: ReconciliationProvider = {
@@ -173,7 +181,7 @@ export function validateReconciliationOutput(value: unknown, input: Reconciliati
   };
   if (!Array.isArray(root.findings) || root.findings.length > 20) bad("Expected at most 20 findings.", "$.findings");
   const findings = root.findings.map((f, i) => { const p = `$.findings[${i}]`; const row = strict(f, ["findingId", "summary", "sourceRefs"], p); return { findingId: str(row.findingId, 200, `${p}.findingId`), summary: str(row.summary, 2000, `${p}.summary`), sourceRefs: refs(row.sourceRefs, `${p}.sourceRefs`) }; });
-  if (!Array.isArray(root.questions) || root.questions.length > 10) bad("Expected at most 10 questions.", "$.questions");
+  if (!Array.isArray(root.questions) || root.questions.length > 3) bad("Expected at most 3 questions.", "$.questions");
   const questions = root.questions.map((q, i) => { const p = `$.questions[${i}]`; const row = strict(q, ["key", "question"], p); return { key: str(row.key, 100, `${p}.key`), question: str(row.question, 2000, `${p}.question`) }; });
   let proposedEntry: CorrectingEntry | null = null;
   if (root.outcome === "correction_proposed") {

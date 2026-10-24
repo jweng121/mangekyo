@@ -1,6 +1,6 @@
 import type {
   BankStatementBalance, OutstandingItem, LedgerEntry, MoneyAccount, NormalizedAccountBundle, NormalizedBankTransaction,
-  NormalizedOwner, OwnerBalance, ReconcilingItem, ThreeWayCause, ThreeWayCheckResult,
+  NormalizedOwner, OwnerBalance, ReconcilingItem, ThreeWayCause, ThreeWayCheckResult, TrustDispute,
 } from "@mangekyo/contracts";
 import { formatCents } from "../intake/cents";
 
@@ -13,6 +13,19 @@ export interface AccountLedgerState {
   entries: LedgerEntry[];
   /** Outflows requested or approved but not yet posted; they reserve owner funds. */
   holds: Array<{ proposalId: string; ownerId: string; amountCents: number }>;
+  /** Disputed amounts people recorded on client balances (trust rule L10). Absent on states built before disputes existed. */
+  disputes?: TrustDispute[];
+}
+
+/** Owners marked as the firm's own money. Their balance in trust is commingling (flagged), and it never funds a client payment (L8). */
+export function firmOwnerIds(state: Pick<AccountLedgerState, "owners">): Set<string> {
+  return new Set(state.owners.filter(o => o.ownerKind === "firm").map(o => o.ownerId));
+}
+
+/** Total of an owner's disputes still open at `at`. Only a person's recorded resolution closes one. */
+export function openDisputedCents(state: Pick<AccountLedgerState, "disputes">, ownerId: string, at: number): { cents: number; disputes: TrustDispute[] } {
+  const open = (state.disputes ?? []).filter(d => d.ownerId === ownerId && d.recordedAt <= at && (d.status === "open" || (d.resolvedAt !== undefined && d.resolvedAt > at)));
+  return { cents: sum(open.map(d => d.amountCents)), disputes: open };
 }
 
 const BANK_KINDS = new Set<LedgerEntry["kind"]>(["deposit_received", "disbursement", "fee"]);
@@ -158,6 +171,12 @@ export function threeWayCheck(state: AccountLedgerState, cutoff: number, options
   const reconciling = statement ? state.reconcilingItems.filter(row => row.appliesTo === "bank") : [];
   for (const item of reconciling.filter(row => !row.detailed)) {
     causes.push({ code: "RECONCILING_ITEM_WITHOUT_DETAIL", severity: "warning", message: `${item.description} (${formatCents(item.amountCents)}).`, amountCents: item.amountCents, sourceIds: [item.sourceId], ownerIds: [], unattributed: false });
+  }
+  // Trust rule L8, the flag: the firm's own money sitting in the trust account is commingling. Totals still agree, so it is a warning.
+  const firm = firmOwnerIds(state);
+  for (const balance of balances.filter(row => row.ownerId !== null && firm.has(row.ownerId) && row.postedCents > 0)) {
+    const owner = state.owners.find(o => o.ownerId === balance.ownerId)!;
+    causes.push({ code: "COMMINGLING", severity: "warning", message: `${formatCents(balance.postedCents)} of the firm's own money (${owner.name}) is in the trust account. It cannot fund client payments and should be moved out.`, amountCents: balance.postedCents, sourceIds: [owner.sourceId], ownerIds: [owner.ownerId], unattributed: false });
   }
   const postAnchorCents = sum(feed.filter(row => row.bookedAt > anchor).map(signed));
   const reconcilingCents = sum(reconciling.map(row => row.amountCents));

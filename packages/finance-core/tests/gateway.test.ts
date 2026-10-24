@@ -66,7 +66,7 @@ describe("L4 self-approval", () => {
     expect(checkSelfApproval("dev:requester:riley", "dev:approver:sam", "p")).toBeNull();
     const result = evaluatePayment(context(), payment(demoIds.yankee, 100), { stage: "approve", actor: "dev:requester:riley", transition: { from: "pending_approval", to: "approved" } });
     expect(codes(result)).toEqual(["SELF_APPROVAL"]);
-    expect(result.evaluated).toEqual(["L7", "L4", "L6", "L3", "L2", "L1", "L5"]);
+    expect(result.evaluated).toEqual(["L7", "L4", "L6", "L3", "L2", "L1", "L5", "L8", "L9", "L10", "L11"]);
   });
 });
 
