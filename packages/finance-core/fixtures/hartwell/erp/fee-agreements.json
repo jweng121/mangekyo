@@ -422,5 +422,41 @@
     "basis": "hourly",
     "hourlyRateCents": 32500,
     "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c41",
+    "documentId": "fee-c41",
+    "clientId": "c41",
+    "matterId": "m26",
+    "signed": true,
+    "basis": "gross",
+    "rateBasisPoints": 3300
+  },
+  {
+    "id": "fee-c42",
+    "documentId": "fee-c42",
+    "clientId": "c42",
+    "matterId": "m27",
+    "signed": true,
+    "basis": "net_after_costs",
+    "rateBasisPoints": 2500
+  },
+  {
+    "id": "fee-c43",
+    "documentId": "fee-c43",
+    "clientId": "c43",
+    "matterId": "m28",
+    "signed": true,
+    "basis": "gross",
+    "rateBasisPoints": 3300
+  },
+  {
+    "id": "fee-c44",
+    "documentId": "fee-c44",
+    "clientId": "c44",
+    "matterId": "m29",
+    "signed": true,
+    "basis": "net_after_costs",
+    "rateBasisPoints": 3000
   }
 ]

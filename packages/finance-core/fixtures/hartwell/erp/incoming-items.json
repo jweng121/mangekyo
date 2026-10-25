@@ -6,7 +6,9 @@
     "amountCents": 12500000,
     "matterId": "m01",
     "claimNumber": "HL-50877",
-    "status": "pending_deposit",
+    "status": "deposited",
+    "depositedDate": "2026-10-22",
+    "transactionId": "harborline-deposit",
     "scenario": "live"
   },
   {
@@ -19,5 +21,15 @@
     "status": "not_posted",
     "scenario": "november_followup",
     "policyId": "policy-hl50877"
+  },
+  {
+    "id": "incoming-castillo",
+    "documentId": "castillo-check",
+    "receivedDate": "2026-11-10",
+    "amountCents": 4000000,
+    "matterId": "m29",
+    "claimNumber": "HL-51340",
+    "status": "not_posted",
+    "scenario": "november_followup"
   }
 ]

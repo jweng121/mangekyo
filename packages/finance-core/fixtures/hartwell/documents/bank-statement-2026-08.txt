@@ -12,7 +12,7 @@
 
    Opening balance                Deposits / credits                Withdrawals / debits              Closing balance
 
-   $127,093.94                    $41,665.55                     $4,671.56                      $164,087.93
+   $127,093.94                    $73,665.55                     $36,671.56                     $164,087.93
 
 
     Posting        Description / check reference                                                  Debit                 Credit              Balance
@@ -36,27 +36,27 @@
 
     08-10      ACH COST REIMB OPER 2290                                                   $134.19                              $140,981.75
 
-    08-11      CHECK FROM FELIX ORTIZ / 6127                                                                   $5,238.47          $146,220.22
+    08-10       DEPOSIT HARBORLINE DRAFT 902033 / 902033                                                    $32,000.00          $172,981.75
 
-    08-12      ACH TO HARTWELL OPER 2290                                                 $422.50                              $145,797.72
+    08-11      CHECK FROM FELIX ORTIZ / 6127                                                                   $5,238.47          $178,220.22
 
-    08-13      ACH REFUND FELIX ORTIZ                                                     $137.36                              $145,660.36
+    08-12      ACH TO HARTWELL OPER 2290                                                 $422.50                              $177,797.72
 
-    08-14       ZELLE FROM RUTH COLEMAN                                                                      $5,290.51          $150,950.87
+    08-13      ACH REFUND FELIX ORTIZ                                                     $137.36                              $177,660.36
+
+    08-14       ZELLE FROM RUTH COLEMAN                                                                      $5,290.51          $182,950.87
+
+    08-14       WIRE OUT BAYSIDE MED GRP                                                   $5,150.00                              $177,800.87
+
+    08-14      ACH TO CORINNE VASQUEZ                                                   $17,500.00                              $160,300.87
+
+    08-14      ACH COST REIMB OPER 2290                                                   $1,800.00                              $158,500.87
+
+    08-14      ACH TO HARTWELL OPER 2290                                                  $7,550.00                              $150,950.87
 
     08-15      ACH TO HARTWELL OPER 2290                                                 $430.00                              $150,520.87
 
     08-16      ACH COST REIMB OPER 2290                                                   $140.53                              $150,380.34
-
-    08-17      ACH FROM LEILA HADDAD                                                                          $5,336.25          $155,716.59
-
-    08-18      MONTHLY SERVICE CHARGE                                                     $25.00                              $155,691.59
-
-    08-18      ACH TO HARTWELL OPER 2290                                                 $487.50                              $155,204.09
-
-    08-19      ACH CR HARTWELL OPER 2290                                                                      $25.00          $155,229.09
-
-    08-19      ACH COST REIMB OPER 2290                                                   $143.70                              $155,085.39
 
 
 
@@ -72,6 +72,16 @@ FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                            
 
     Posting        Description / check reference                                                  Debit                 Credit              Balance
     date
+
+    08-17      ACH FROM LEILA HADDAD                                                                          $5,336.25          $155,716.59
+
+    08-18      MONTHLY SERVICE CHARGE                                                     $25.00                              $155,691.59
+
+    08-18      ACH TO HARTWELL OPER 2290                                                 $487.50                              $155,204.09
+
+    08-19      ACH CR HARTWELL OPER 2290                                                                      $25.00          $155,229.09
+
+    08-19      ACH COST REIMB OPER 2290                                                   $143.70                              $155,085.39
 
     08-20       WIRE FROM SIMON BLAKE                                                                          $5,002.22          $160,087.61
 

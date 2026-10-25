@@ -40,10 +40,12 @@ def enrich_documents(data, docs):
                           dict(description='Expert analysis and testimony preparation',quantity=5,unitCents=75000,amountCents=375000)]
         for i,line in enumerate(inv['lines']):
             line['serviceDate'] = str(date.fromisoformat(inv['date']) - timedelta(days=len(inv['lines'])-i))
+    byletter = {l['id']: l for l in data['lien-letters']}
     for letter in data['lien-letters']:
         total = letter['amountCents']
         # The revised quote includes the same original services plus a late charge.
-        base = 1200000 if letter['id'] in ['bayside-v1', 'bayside-v2'] else total
+        prior = byletter.get(letter.get('supersedes'))
+        base = 1200000 if letter['id'] in ['bayside-v1', 'bayside-v2'] else prior['amountCents'] if prior else total
         first = base * 3 // 5
         charges = [dict(serviceDate='2026-02-18',description='Clinical evaluation and diagnostic imaging',
                         billedCents=first+125000,adjustmentCents=125000,payoffCents=first),
@@ -52,6 +54,16 @@ def enrich_documents(data, docs):
         if letter['id']=='bayside-v2':
             charges.append(dict(serviceDate='2026-04-02',description='Supplemental therapy charge; posted 10/21/2026',
                                 billedCents=300000,adjustmentCents=50000,payoffCents=250000))
+        elif total != base:
+            # Other revisions re-quote the same services: a later charge added, or a further negotiated reduction.
+            posted = date.fromisoformat(letter['date']).strftime('%m/%d/%Y')
+            if total > base:
+                extra = total-base
+                charges.append(dict(serviceDate='2026-04-02',description='Supplemental therapy charge; posted '+posted,
+                                    billedCents=extra+extra//5,adjustmentCents=extra//5,payoffCents=extra))
+            else:
+                charges[0]['adjustmentCents'] += base-total; charges[0]['payoffCents'] -= base-total
+                charges[0]['description'] += '; further reduction posted '+posted
         letter['charges'] = charges
         letter['totalBilledCents'] = sum(c['billedCents'] for c in charges)
         letter['totalAdjustmentCents'] = sum(c['adjustmentCents'] for c in charges)
@@ -190,6 +202,33 @@ def content(d,data,width):
             story += [p('Medicare-style conditional payment summary - synthetic claim MC-260318. This fictional training agency is not affiliated with any government program. This form creates no payment obligation and contains no actual beneficiary data.',9),
                       p('Recovery reference: MC-260318 | Remittance account ****6320 | Routing withheld',9),
                       p('Case review officer: Nora Ellis | Fictional Recovery Desk',9)]
+    elif kind=='settlement_statement' and d['id'] not in ['settlement-v1','settlement-v2']:
+        rec=next(r for r in data['settlement-statements'] if r['id']==d['id'])
+        cid=rec['lines'][0]['clientId'];client=next(c['name'] for c in data['clients'] if c['id']==cid)
+        matter=next(m['name'] for m in data['matters'] if m['id']==rec['matterId'])
+        fee=next(f for f in data['fee-agreements'] if f['clientId']==cid);pct=fee['rateBasisPoints']//100
+        lines={l['kind']:l['amountCents'] for l in rec['lines']};gross=rec['grossCents']
+        if fee['basis']=='gross':
+            rate=f'{pct}% of gross';calc=f'{pct}% x {money(gross)} = {money(lines["attorney_fee"])}'
+        else:
+            rate=f'{pct}% of net after costs';calc=f'{pct}% x ({money(gross)} - {money(lines["costs"])}) = {pct}% x {money(gross-lines["costs"])} = {money(lines["attorney_fee"])}'
+        letter=next((l for l in data['lien-letters'] if l['id']==rec['lienLetterId']),None)
+        story += [p(client+' | '+matter,11,'Times-Bold'),
+                  p(rec['insurer']+' claim '+rec['claimNumber']+' | Gross recovery: '+money(gross),9),
+                  p('SIGNED CLIENT DISTRIBUTION' if not rec['supersedes'] else 'REVISED DISTRIBUTION - CLIENT RE-SIGNED',9,'Helvetica-Bold')]
+        if rec['supersedes']:
+            prior=next(r for r in data['settlement-statements'] if r['id']==rec['supersedes'])
+            old=next(l['amountCents'] for l in prior['lines'] if l['kind']=='lien')
+            story.append(p(f'This statement replaces version {prior["version"]} signed {prior["signedDate"]}, which showed the earlier Bayside payoff of {money(old)}. Bayside issued revision {letter["version"]} on {letter["date"]}; the client reviewed the revised payoff and signed again before any distribution.',9,'Times-Roman'))
+        story += [table([['Allocation / fee basis','Attorney fee','Costs','Liens','Net to client'],
+                         ['100% / '+rate,money(lines['attorney_fee']),money(lines['costs']),money(lines.get('lien',0)),money(lines['client_share'])]],
+                        [width-308,77,69,78,84],small=8,align_right=(1,2,3,4)),
+                  p('Fee calculation per signed agreement: '+calc,8,after=4),
+                  p('Lien payee: '+(f'Bayside Medical Group | payoff letter {letter["id"].upper()}, revision {letter["version"]} dated {letter["date"]}' if letter else 'None')+' | Fees and cost reimbursement payable to Hartwell & Moreno LLP.',7.5,after=4),
+                  table([['Client signature: /s/ '+client,'Date: '+rec['signedDate']]],[width*.73,width*.27],header=False,small=9),Spacer(1,7),
+                  p('Total distributions: '+money(gross),11,'Helvetica-Bold'),
+                  table([['Attorney signature: /s/ Luis Moreno','Date: '+rec['signedDate']]],[width*.73,width*.27],header=False,small=9),Spacer(1,7),
+                  p('By signing, the client acknowledges review of the recovery and listed deductions and authorizes distribution as shown, subject to cleared funds and final payment approval. A copy of this statement will be retained in the matter file.',9,'Times-Roman')]
     elif kind=='settlement_statement':
         rec=next(r for r in data['settlement-statements'] if r['id']==d['id'])
         story += [p('Delgado, Reyes & Bello v. Ridgeway Logistics',11,'Times-Bold'),
@@ -224,6 +263,12 @@ def content(d,data,width):
             clause='If recovery is obtained before a complaint is filed, the attorney fee is thirty-three percent (33%) of the client\'s gross recovery. Once a complaint is filed, the fee is forty percent (40%) of gross recovery, including a settlement reached after filing and before trial. Filing suit is the event that changes the tier; the fee is not reduced because trial does not occur. Gross recovery is measured before costs and liens.'
         elif rec['clientId']=='c03':
             clause='The attorney fee is twenty-five percent (25%) of NET recovery after deduction of this client\'s allocated litigation costs. First allocate the gross recovery to the client, then subtract the client\'s share of litigation costs, then multiply that remainder by 25%. Medical liens, if any, are paid separately and do not change the stated fee basis. No fee may be calculated on the gross allocation before costs.'
+        elif rec['basis']=='gross':
+            pct=rec['rateBasisPoints']//100;words={25:'twenty-five',30:'thirty',33:'thirty-three'}[pct]
+            clause=f'The attorney fee is {words} percent ({pct}%) of the client\'s gross recovery. Gross recovery means the amount recovered before deduction of litigation costs, medical liens, or other disbursements. Costs and liens are deducted separately from the client share.'
+        elif rec['basis']=='net_after_costs':
+            pct=rec['rateBasisPoints']//100;words={25:'twenty-five',30:'thirty',33:'thirty-three'}[pct]
+            clause=f'The attorney fee is {words} percent ({pct}%) of NET recovery after deduction of the litigation costs advanced for this client. First take the gross recovery, then subtract those costs, then multiply that remainder by {pct}%. Medical liens, if any, are paid separately and do not change the stated fee basis. No fee may be calculated on the gross recovery before costs.'
         else:
             clause=d['body'][2]+' Deposits are advances held in trust, not earned fees on receipt. The client receives an itemized invoice describing the completed work before a fee transfer is made.'
         story += [p(clause,10,'Times-Roman'),p('3. Costs and shared recoveries',11,'Times-Bold'),

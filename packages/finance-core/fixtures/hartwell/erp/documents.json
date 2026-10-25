@@ -3950,6 +3950,629 @@
     "pageCount": 1
   },
   {
+    "id": "fee-c41",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-02-09",
+    "scanned": true,
+    "amountCents": [],
+    "pdf": "documents/fee-c41.pdf",
+    "text": "documents/fee-c41.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.575
+    ]
+  },
+  {
+    "id": "fee-c42",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-03-02",
+    "scanned": true,
+    "amountCents": [],
+    "pdf": "documents/fee-c42.pdf",
+    "text": "documents/fee-c42.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.6878
+    ]
+  },
+  {
+    "id": "fee-c43",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-06",
+    "scanned": true,
+    "amountCents": [],
+    "pdf": "documents/fee-c43.pdf",
+    "text": "documents/fee-c43.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4857
+    ]
+  },
+  {
+    "id": "fee-c44",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-11",
+    "scanned": true,
+    "amountCents": [],
+    "pdf": "documents/fee-c44.pdf",
+    "text": "documents/fee-c44.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.2081
+    ]
+  },
+  {
+    "id": "ames-police-report",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Fictional County Filing Desk",
+    "date": "2026-03-04",
+    "scanned": true,
+    "amountCents": [
+      18500
+    ],
+    "pdf": "documents/ames-police-report.pdf",
+    "text": "documents/ames-police-report.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.4168
+    ]
+  },
+  {
+    "id": "ames-reconstruction",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Marlowe Forensic Services",
+    "date": "2026-05-20",
+    "scanned": true,
+    "amountCents": [
+      126500
+    ],
+    "pdf": "documents/ames-reconstruction.pdf",
+    "text": "documents/ames-reconstruction.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.318
+    ]
+  },
+  {
+    "id": "ames-bayside-v1",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-06-29",
+    "scanned": true,
+    "amountCents": [
+      75000,
+      125000,
+      200000,
+      328000,
+      403000,
+      492000,
+      617000,
+      820000,
+      1020000
+    ],
+    "pdf": "documents/ames-bayside-v1.pdf",
+    "text": "documents/ames-bayside-v1.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.6112
+    ]
+  },
+  {
+    "id": "ames-settlement",
+    "kind": "settlement_advice",
+    "title": "Bodily Injury Settlement",
+    "issuer": "Tidemark Casualty Cooperative",
+    "date": "2026-07-02",
+    "scanned": true,
+    "amountCents": [
+      6000000
+    ],
+    "pdf": "documents/ames-settlement.pdf",
+    "text": "documents/ames-settlement.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.3326
+    ]
+  },
+  {
+    "id": "ames-statement-v1",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 1",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-06",
+    "scanned": false,
+    "amountCents": [
+      145000,
+      820000,
+      1980000,
+      3055000,
+      6000000
+    ],
+    "pdf": "documents/ames-statement-v1.pdf",
+    "text": "documents/ames-statement-v1.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "ames-bayside-v2",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-07-09",
+    "scanned": true,
+    "amountCents": [
+      15500,
+      75000,
+      77500,
+      93000,
+      125000,
+      215500,
+      328000,
+      403000,
+      492000,
+      617000,
+      897500,
+      1113000
+    ],
+    "pdf": "documents/ames-bayside-v2.pdf",
+    "text": "documents/ames-bayside-v2.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.3548
+    ]
+  },
+  {
+    "id": "ames-statement-v2",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 2",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-10",
+    "scanned": false,
+    "amountCents": [
+      145000,
+      820000,
+      897500,
+      1980000,
+      2977500,
+      6000000
+    ],
+    "pdf": "documents/ames-statement-v2.pdf",
+    "text": "documents/ames-statement-v2.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "ames-bayside-wire",
+    "kind": "bank_advice",
+    "title": "Executed Wire Confirmation",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-07-13",
+    "scanned": false,
+    "amountCents": [
+      897500
+    ],
+    "pdf": "documents/ames-bayside-wire.pdf",
+    "text": "documents/ames-bayside-wire.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "vasquez-records",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Fictional County Filing Desk",
+    "date": "2026-04-14",
+    "scanned": true,
+    "amountCents": [
+      34000
+    ],
+    "pdf": "documents/vasquez-records.pdf",
+    "text": "documents/vasquez-records.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.2654
+    ]
+  },
+  {
+    "id": "vasquez-deposition",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-06-23",
+    "scanned": true,
+    "amountCents": [
+      146000
+    ],
+    "pdf": "documents/vasquez-deposition.pdf",
+    "text": "documents/vasquez-deposition.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4544
+    ]
+  },
+  {
+    "id": "vasquez-bayside-v1",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-08-03",
+    "scanned": true,
+    "amountCents": [
+      75000,
+      125000,
+      200000,
+      216000,
+      291000,
+      324000,
+      449000,
+      540000,
+      740000
+    ],
+    "pdf": "documents/vasquez-bayside-v1.pdf",
+    "text": "documents/vasquez-bayside-v1.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4884
+    ]
+  },
+  {
+    "id": "vasquez-check",
+    "kind": "check",
+    "title": "Settlement Draft",
+    "issuer": "Harborline Mutual Insurance",
+    "date": "2026-08-07",
+    "scanned": true,
+    "amountCents": [
+      3200000
+    ],
+    "pdf": "documents/vasquez-check.pdf",
+    "text": "documents/vasquez-check.txt",
+    "checkNumber": "902033",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      0.9027
+    ]
+  },
+  {
+    "id": "vasquez-statement-v1",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 1",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-10",
+    "scanned": false,
+    "amountCents": [
+      180000,
+      540000,
+      755000,
+      1725000,
+      3020000,
+      3200000
+    ],
+    "pdf": "documents/vasquez-statement-v1.pdf",
+    "text": "documents/vasquez-statement-v1.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "vasquez-bayside-v2",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-08-12",
+    "scanned": true,
+    "amountCents": [
+      75000,
+      150000,
+      216000,
+      225000,
+      291000,
+      299000,
+      449000,
+      515000,
+      740000
+    ],
+    "pdf": "documents/vasquez-bayside-v2.pdf",
+    "text": "documents/vasquez-bayside-v2.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.3337
+    ]
+  },
+  {
+    "id": "vasquez-statement-v2",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 2",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-13",
+    "scanned": false,
+    "amountCents": [
+      180000,
+      515000,
+      540000,
+      755000,
+      1750000,
+      3020000,
+      3200000
+    ],
+    "pdf": "documents/vasquez-statement-v2.pdf",
+    "text": "documents/vasquez-statement-v2.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "vasquez-bayside-wire",
+    "kind": "bank_advice",
+    "title": "Executed Wire Confirmation",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-08-14",
+    "scanned": false,
+    "amountCents": [
+      515000
+    ],
+    "pdf": "documents/vasquez-bayside-wire.pdf",
+    "text": "documents/vasquez-bayside-wire.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "ford-records",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Fictional County Filing Desk",
+    "date": "2026-05-12",
+    "scanned": true,
+    "amountCents": [
+      21500
+    ],
+    "pdf": "documents/ford-records.pdf",
+    "text": "documents/ford-records.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.1377
+    ]
+  },
+  {
+    "id": "ford-scene",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Marlowe Forensic Services",
+    "date": "2026-07-21",
+    "scanned": true,
+    "amountCents": [
+      73500
+    ],
+    "pdf": "documents/ford-scene.pdf",
+    "text": "documents/ford-scene.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.1041
+    ]
+  },
+  {
+    "id": "ford-settlement",
+    "kind": "settlement_advice",
+    "title": "Bodily Injury Settlement",
+    "issuer": "Tidemark Casualty Cooperative",
+    "date": "2026-09-02",
+    "scanned": true,
+    "amountCents": [
+      4800000
+    ],
+    "pdf": "documents/ford-settlement.pdf",
+    "text": "documents/ford-settlement.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.1693
+    ]
+  },
+  {
+    "id": "ford-statement-v1",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 1",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-08",
+    "scanned": false,
+    "amountCents": [
+      0,
+      95000,
+      1584000,
+      3121000,
+      4800000
+    ],
+    "pdf": "documents/ford-statement-v1.pdf",
+    "text": "documents/ford-statement-v1.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "castillo-records",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Fictional County Filing Desk",
+    "date": "2026-07-15",
+    "scanned": true,
+    "amountCents": [
+      26000
+    ],
+    "pdf": "documents/castillo-records.pdf",
+    "text": "documents/castillo-records.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.2357
+    ]
+  },
+  {
+    "id": "castillo-deposition",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-10-06",
+    "scanned": true,
+    "amountCents": [
+      94000
+    ],
+    "pdf": "documents/castillo-deposition.pdf",
+    "text": "documents/castillo-deposition.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.1352
+    ]
+  },
+  {
+    "id": "castillo-bayside-v1",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-11-02",
+    "scanned": true,
+    "amountCents": [
+      75000,
+      125000,
+      200000,
+      272000,
+      347000,
+      408000,
+      533000,
+      680000,
+      880000
+    ],
+    "pdf": "documents/castillo-bayside-v1.pdf",
+    "text": "documents/castillo-bayside-v1.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.5179
+    ]
+  },
+  {
+    "id": "castillo-bayside-v2",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-11-09",
+    "scanned": true,
+    "amountCents": [
+      11000,
+      55000,
+      66000,
+      75000,
+      125000,
+      211000,
+      272000,
+      347000,
+      408000,
+      533000,
+      735000,
+      946000
+    ],
+    "pdf": "documents/castillo-bayside-v2.pdf",
+    "text": "documents/castillo-bayside-v2.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.6743
+    ]
+  },
+  {
+    "id": "castillo-check",
+    "kind": "check",
+    "title": "Settlement Draft",
+    "issuer": "Harborline Mutual Insurance",
+    "date": "2026-11-10",
+    "scanned": true,
+    "amountCents": [
+      4000000
+    ],
+    "pdf": "documents/castillo-check.pdf",
+    "text": "documents/castillo-check.txt",
+    "checkNumber": "902655",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.0396
+    ]
+  },
+  {
+    "id": "castillo-statement-v1",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 1",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-11-12",
+    "scanned": false,
+    "amountCents": [
+      120000,
+      735000,
+      1164000,
+      1981000,
+      3880000,
+      4000000
+    ],
+    "pdf": "documents/castillo-statement-v1.pdf",
+    "text": "documents/castillo-statement-v1.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
     "id": "recon-05",
     "kind": "reconciliation",
     "title": "Monthly Three-Way Reconciliation",
@@ -4048,7 +4671,7 @@
     "amountCents": [
       0,
       20473658,
-      24373149
+      36873149
     ],
     "pdf": "documents/recon-10.pdf",
     "text": "documents/recon-10.txt",
@@ -4221,6 +4844,7 @@
       43250,
       48750,
       55250,
+      145000,
       512573,
       514001,
       521070,
@@ -4230,27 +4854,22 @@
       565219,
       568309,
       734125,
-      1198781,
-      5786985,
+      897500,
+      1980000,
+      2977500,
+      6000000,
+      7198781,
       8121190,
       8624694,
       8637479,
       8679979,
-      9088415,
-      9101517,
       9137267,
-      9822540,
-      10331590,
-      10387759,
       10789605,
       10803341,
-      10845591,
-      11065715,
-      11079134,
-      11121884,
       11282845,
       11296898,
       11339898,
+      11786985,
       11788034,
       11802404,
       11851154,
@@ -4259,7 +4878,21 @@
       12309104,
       12709394,
       12724398,
-      12779648
+      12779648,
+      12783341,
+      12928341,
+      15088415,
+      15101517,
+      15137267,
+      15822540,
+      15905841,
+      16331590,
+      16387759,
+      16803341,
+      16845591,
+      17065715,
+      17079134,
+      17121884
     ],
     "notes": [],
     "receivedStamp": false,
@@ -4292,16 +4925,21 @@
       43250,
       48750,
       55250,
-      467156,
+      180000,
       500222,
       505071,
+      515000,
       518665,
       523847,
       525351,
       528223,
       529051,
       533625,
-      4166555,
+      755000,
+      1750000,
+      3200000,
+      3667156,
+      7366555,
       12709394,
       13179460,
       13192245,
@@ -4312,9 +4950,6 @@
       14098175,
       14111594,
       14154344,
-      14566036,
-      14579772,
-      14622022,
       15038034,
       15052087,
       15095087,
@@ -4323,12 +4958,20 @@
       15522909,
       15569159,
       15571659,
+      15850087,
       15950824,
       15965511,
       16008761,
+      16030087,
       16408793,
       16423797,
-      16479047
+      16479047,
+      17298175,
+      17766036,
+      17779772,
+      17780087,
+      17822022,
+      18295087
     ],
     "notes": [],
     "receivedStamp": false,
@@ -4360,6 +5003,7 @@
       43250,
       48750,
       55250,
+      95000,
       125000,
       519339,
       532063,
@@ -4369,16 +5013,15 @@
       560958,
       572729,
       589908,
+      1584000,
       1867341,
-      2331997,
-      6396862,
+      3121000,
+      4800000,
+      7131997,
+      11196862,
       16408793,
-      16900751,
       16913536,
       16956036,
-      17385937,
-      17399039,
-      17434789,
       17878011,
       17891430,
       17934180,
@@ -4390,6 +5033,8 @@
       19396552,
       19410922,
       19459672,
+      19518180,
+      19613180,
       19914260,
       19957510,
       20024573,
@@ -4399,7 +5044,13 @@
       20543912,
       20794950,
       20809003,
-      20852003
+      20852003,
+      21700751,
+      21713536,
+      22185937,
+      22199039,
+      22234789,
+      22734180
     ],
     "notes": [],
     "receivedStamp": false,
@@ -4443,7 +5094,8 @@
       580761,
       600000,
       1064656,
-      4964147,
+      12500000,
+      17464147,
       20473658,
       20937157,
       20949942,
@@ -4468,10 +5120,11 @@
       23342642,
       23357329,
       23400579,
-      23853149,
-      23868153,
-      23923403,
-      24373149
+      35842642,
+      36353149,
+      36368153,
+      36423403,
+      36873149
     ],
     "notes": [],
     "receivedStamp": false,

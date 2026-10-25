@@ -1,0 +1,47 @@
+     BAYSIDE                                                     PATIENT FINANCIAL SERVICES
+        MEDICAL GROUP                                                          726 Lantern Wharf, Suite 230
+                                                                                                                Oakland, CA 94607
+                                                                                                          Telephone: (510) 555-0186
+
+
+  Final Payoff Letter
+   Date: 2026-06-29 | Reference: AMES-BAYSIDE-V1
+
+  Patient: Harold Ames
+
+   Patient account: BG-62307 | Revision 1
+  To: Sam Whitfield, Hartwell & Moreno LLP
+
+  The following account detail supports the payoff quotation for your client. Adjustments reflect the negotiated reductions
+   applied to the listed services. This quotation supersedes earlier payoff figures for this account.
+
+     Service date / description                                                        Billed             Adjustments       Payoff
+
+    2026-02-18                                                                $6,170.00         $1,250.00         $4,920.00
+      Clinical evaluation and diagnostic imaging
+
+    2026-03-10                                                                $4,030.00          $750.00         $3,280.00
+     Outpatient treatment and follow-up care
+
+   TOTAL                                                                  $10,200.00         $2,000.00         $8,200.00
+
+  Payoff valid through: 2026-07-15
+
+   Please identify the patient reference on your remittance. Contact the office if payment will arrive after the valid-through date.
+
+    Remittance instructions on file                                     Contact
+
+    Cedar Inlet Bank | Account ****1264                                billing@baysidemedical.com
+     Routing: withheld in this copy                                     Telephone: (510) 555-0186
+   Sincerely,
+  Nora Ellis | Accounts Resolution
+
+
+
+                                                    JUNRECEIVED29                                                                     2026
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                         ames-bayside-v1 | Paqe 1

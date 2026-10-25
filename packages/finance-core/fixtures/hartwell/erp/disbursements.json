@@ -658,6 +658,75 @@
     "approvedBy": "sam"
   },
   {
+    "id": "disb-ames-bayside-paid",
+    "transactionId": "ames-bayside-paid",
+    "date": "2026-07-13",
+    "clientId": "c41",
+    "matterId": "m26",
+    "amountCents": 897500,
+    "kind": "lien",
+    "payeeId": "bayside",
+    "status": "posted",
+    "documentIds": [
+      "ames-bayside-v2",
+      "ames-bayside-wire",
+      "ames-statement-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "bankAccount": "****1264"
+  },
+  {
+    "id": "disb-ames-client-share",
+    "transactionId": "ames-client-share",
+    "date": "2026-07-13",
+    "clientId": "c41",
+    "matterId": "m26",
+    "amountCents": 2977500,
+    "kind": "client_share",
+    "payeeId": "c41",
+    "status": "posted",
+    "documentIds": [
+      "ames-statement-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-ames-costs",
+    "transactionId": "ames-costs",
+    "date": "2026-07-13",
+    "clientId": "c41",
+    "matterId": "m26",
+    "amountCents": 145000,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "ames-statement-v2",
+      "ames-police-report",
+      "ames-reconstruction"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-ames-fee",
+    "transactionId": "ames-fee",
+    "date": "2026-07-13",
+    "clientId": "c41",
+    "matterId": "m26",
+    "amountCents": 1980000,
+    "kind": "settlement_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "ames-statement-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
     "id": "disb-h07-04-out",
     "transactionId": "h07-04-out",
     "date": "2026-07-13",
@@ -930,6 +999,75 @@
     "approvedBy": "sam"
   },
   {
+    "id": "disb-vasquez-bayside-paid",
+    "transactionId": "vasquez-bayside-paid",
+    "date": "2026-08-14",
+    "clientId": "c42",
+    "matterId": "m27",
+    "amountCents": 515000,
+    "kind": "lien",
+    "payeeId": "bayside",
+    "status": "posted",
+    "documentIds": [
+      "vasquez-bayside-v2",
+      "vasquez-bayside-wire",
+      "vasquez-statement-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "bankAccount": "****1264"
+  },
+  {
+    "id": "disb-vasquez-client-share",
+    "transactionId": "vasquez-client-share",
+    "date": "2026-08-14",
+    "clientId": "c42",
+    "matterId": "m27",
+    "amountCents": 1750000,
+    "kind": "client_share",
+    "payeeId": "c42",
+    "status": "posted",
+    "documentIds": [
+      "vasquez-statement-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-vasquez-costs",
+    "transactionId": "vasquez-costs",
+    "date": "2026-08-14",
+    "clientId": "c42",
+    "matterId": "m27",
+    "amountCents": 180000,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "vasquez-statement-v2",
+      "vasquez-records",
+      "vasquez-deposition"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-vasquez-fee",
+    "transactionId": "vasquez-fee",
+    "date": "2026-08-14",
+    "clientId": "c42",
+    "matterId": "m27",
+    "amountCents": 755000,
+    "kind": "settlement_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "vasquez-statement-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
     "id": "disb-h08-05-fee",
     "transactionId": "h08-05-fee",
     "date": "2026-08-15",
@@ -1133,6 +1271,56 @@
     "status": "posted",
     "documentIds": [
       "h09-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-ford-client-share",
+    "transactionId": "ford-client-share",
+    "date": "2026-09-09",
+    "clientId": "c43",
+    "matterId": "m28",
+    "amountCents": 3121000,
+    "kind": "client_share",
+    "payeeId": "c43",
+    "status": "posted",
+    "documentIds": [
+      "ford-statement-v1"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-ford-costs",
+    "transactionId": "ford-costs",
+    "date": "2026-09-09",
+    "clientId": "c43",
+    "matterId": "m28",
+    "amountCents": 95000,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "ford-statement-v1",
+      "ford-records",
+      "ford-scene"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-ford-fee",
+    "transactionId": "ford-fee",
+    "date": "2026-09-09",
+    "clientId": "c43",
+    "matterId": "m28",
+    "amountCents": 1584000,
+    "kind": "settlement_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "ford-statement-v1"
     ],
     "initiatedBy": "riley",
     "approvedBy": "sam"
@@ -1630,6 +1818,74 @@
     "documentIds": [
       "bayside-v2",
       "bayside-bank-change"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": null
+  },
+  {
+    "id": "planned-castillo-attorney-fee",
+    "date": "2026-11-13",
+    "clientId": "c44",
+    "matterId": "m29",
+    "amountCents": 1164000,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "draft_unapproved",
+    "statementId": "castillo-statement-v1",
+    "documentIds": [
+      "castillo-statement-v1"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": null
+  },
+  {
+    "id": "planned-castillo-costs",
+    "date": "2026-11-13",
+    "clientId": "c44",
+    "matterId": "m29",
+    "amountCents": 120000,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "draft_unapproved",
+    "statementId": "castillo-statement-v1",
+    "documentIds": [
+      "castillo-statement-v1",
+      "castillo-records",
+      "castillo-deposition"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": null
+  },
+  {
+    "id": "planned-castillo-lien",
+    "date": "2026-11-13",
+    "clientId": "c44",
+    "matterId": "m29",
+    "amountCents": 735000,
+    "kind": "lien",
+    "payeeId": "bayside",
+    "status": "draft_unapproved",
+    "statementId": "castillo-statement-v1",
+    "documentIds": [
+      "castillo-statement-v1",
+      "castillo-bayside-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": null,
+    "bankAccount": "****1264"
+  },
+  {
+    "id": "planned-castillo-client-share",
+    "date": "2026-11-13",
+    "clientId": "c44",
+    "matterId": "m29",
+    "amountCents": 1981000,
+    "kind": "client_share",
+    "payeeId": "c44",
+    "status": "draft_unapproved",
+    "statementId": "castillo-statement-v1",
+    "documentIds": [
+      "castillo-statement-v1"
     ],
     "initiatedBy": "riley",
     "approvedBy": null

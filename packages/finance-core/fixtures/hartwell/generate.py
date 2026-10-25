@@ -156,8 +156,11 @@ def live():
         body+=['/s/ Maria Delgado    /s/ Tomas Reyes    /s/ Ana Bello','Signed October 19, 2026'] if version==1 else ['Maria Delgado: __________________  Date: __________','Tomas Reyes: _____________________  Date: __________','Ana Bello: _______________________  Date: __________']
         doc(id,'settlement_statement',f'Settlement Statement - Version {version}',FIRM,day,body,amounts=[12500000]+[l['amountCents'] for l in lines]+[6250000,3750000,2500000])
     check('global-check','2026-10-22',12500000,'One hundred twenty-five thousand and 00/100','Claim HL-50877 global settlement','902174')
+    # Deposited the day it arrived; the signed allocation splits the one bank line across three client ledgers.
+    tx('harborline-deposit','2026-10-22','c01',12500000,'DEPOSIT HARBORLINE DRAFT 902174',['global-check','allocation-global'],'settlement',checkNo='902174')
+    TX[-1].update(clientId=None,allocations=[dict(clientId=a['clientId'],amountCents=a['amountCents']) for a in alloc])
     check('supplemental-check','2026-11-06',500000,'Five thousand and 00/100','Supplemental claim HL50877','902618')
-    DATA['incoming-items']=[dict(id='incoming-global',documentId='global-check',receivedDate='2026-10-22',amountCents=12500000,matterId='m01',claimNumber='HL-50877',status='pending_deposit',scenario='live'),dict(id='incoming-supplement',documentId='supplemental-check',receivedDate='2026-11-06',amountCents=500000,matterId='m01',claimNumber='HL-50877',status='not_posted',scenario='november_followup',policyId='policy-hl50877')]
+    DATA['incoming-items']=[dict(id='incoming-global',documentId='global-check',receivedDate='2026-10-22',amountCents=12500000,matterId='m01',claimNumber='HL-50877',status='deposited',depositedDate='2026-10-22',transactionId='harborline-deposit',scenario='live'),dict(id='incoming-supplement',documentId='supplemental-check',receivedDate='2026-11-06',amountCents=500000,matterId='m01',claimNumber='HL-50877',status='not_posted',scenario='november_followup',policyId='policy-hl50877')]
     doc('policy-hl50877','policy','Approved Supplemental Allocation',FIRM,'2026-10-23',['Policy P-HL50877. Scope: supplemental receipts for claim HL-50877 only.','Allocate Maria Delgado 50%, Tomas Reyes 30%, Ana Bello 20%.','Authority: signed October 15 joint allocation agreement.','This policy allocates ownership only. It does not approve fees or payments.','Approved: /s/ Sam Whitfield | October 23, 2026'])
     DATA['policies']=[dict(id='policy-hl50877',documentId='policy-hl50877',status='approved',approvedBy='sam',approvedDate='2026-10-23',claimNumber='HL-50877',allocationAgreementId='allocation-global',allocations=[dict(clientId=a['clientId'],basisPoints=a['basisPoints']) for a in alloc])]
     body=['From: Bayside Medical Group <billing@baysidemedlcal.com>','To: Sam Whitfield <sam@hartwell-moreno.example.test>','Date: Thu, 22 Oct 2026 16:42:00 -0700','Subject: BG-50877-D payoff - updated wire details','Sam,','We changed receiving banks this week. Please send tomorrow\'s $14,500.00 payoff to the account below.','Beneficiary: Bayside Medical Group','Bank: Juniper Channel Bank','Routing: withheld','Account: ****5521','The prior account is being closed. Please reply when the transfer has been released.','Thank you,','Nora Ellis | Billing','Bayside Medical Group']
@@ -165,15 +168,80 @@ def live():
     DATA['communications']=[dict(id='bayside-bank-change',documentId='bayside-bank-change',receivedAt='2026-10-22T16:42:00-07:00',fromAddress='billing@baysidemedlcal.com',payeeId='bayside',requestedAmountCents=1450000,requestedBank=dict(bank='Juniper Channel Bank',routing='withheld',account='****5521'),scheduledPaymentDate='2026-10-23')]
     (ROOT/'documents').mkdir(exist_ok=True)
     (ROOT/'documents/bayside-bank-change.eml').write_bytes(('\r\n'.join(body[:4]+['Message-ID: <bg50877-20261022@example.test>','MIME-Version: 1.0','Content-Type: text/plain; charset=utf-8','']+body[4:])+'\r\n').encode())
+# Single-client contingency matters for the learning demo: three settled May-Sep, one arriving in November.
+LEARNING=[('c41','Harold Ames','m26','Ames collision','gross',3300,'2026-02-09','TC-61822'),('c42','Corinne Vasquez','m27','Vasquez premises injury','net_after_costs',2500,'2026-03-02','HL-48215'),('c43','Wesley Ford','m28','Ford collision','gross',3300,'2026-04-06','TC-63090'),('c44','Owen Castillo','m29','Castillo collision','net_after_costs',3000,'2026-05-11','HL-51340')]
+PLANNED=[]
+def statement(id,cid,version,day,gross,fee,cost,lien_cents,insurer,sources,lien_id=None,supersedes=None):
+    lines=[dict(clientId=cid,kind=k,amountCents=a,payeeId='firm' if k in ['attorney_fee','costs'] else 'bayside' if k=='lien' else cid) for k,a in zip(['attorney_fee','costs','lien','client_share'],[fee,cost,lien_cents,gross-fee-cost-lien_cents]) if a]
+    claim=next(m['claimNumber'] for m in DATA['matters'] if m['id']==matter(cid))
+    DATA['settlement-statements'].append(dict(id=id,documentId=id,matterId=matter(cid),version=version,signed=True,signedDate=day,date=day,grossCents=gross,lines=lines,insurer=insurer,claimNumber=claim,lienLetterId=lien_id,supersedes=supersedes,sourceDocumentIds=sources+([lien_id] if lien_id else [])))
+    doc(id,'settlement_statement',f'Settlement Statement - Version {version}',FIRM,day,[],amounts=[gross]+[l['amountCents'] for l in lines])
+    return DATA['settlement-statements'][-1]
+def wire_confirmation(id,cid,day,amount,account):
+    return doc(id,'bank_advice','Executed Wire Confirmation','Bay Commerce Bank',day,['Beneficiary: Bayside Medical Group','Bank: Cedar Inlet Bank','Account: ****1264','Routing: withheld',f'Client: {name(cid)} / Account {account}',f'Wire amount: {money(amount)}','Status: settled; beneficiary acknowledged receipt.'],amounts=[amount])
+def settlement_advice(id,cid,day,amount,number):
+    claim=next(m['claimNumber'] for m in DATA['matters'] if m['id']==matter(cid))
+    return doc(id,'settlement_advice','Bodily Injury Settlement','Tidemark Casualty Cooperative',day,[f'Claimant: {name(cid)}',f'Claim: {claim}',f'Settlement amount: {money(amount)}',f'Payable to: {FIRM} Client Trust',f'Check No. {number}','Release executed by the claimant; this payment resolves the claim.','NON-NEGOTIABLE - FICTIONAL DEMO CHECK'],scanned=True,amounts=[amount])
+def payout(prefix,cid,day,st,receipts,wire=None):
+    lines={l['kind']:l['amountCents'] for l in st['lines']}
+    tx(prefix+'-fee',day,cid,-lines['attorney_fee'],'ACH TO HARTWELL OPER 2290',[st['id']],'settlement_fee',payeeId='firm')
+    tx(prefix+'-costs',day,cid,-lines['costs'],'ACH COST REIMB OPER 2290',[st['id'],*receipts],'costs',payeeId='firm')
+    if 'lien' in lines:tx(prefix+'-bayside-paid',day,cid,-lines['lien'],'WIRE OUT BAYSIDE MED GRP',[st['lienLetterId'],wire,st['id']],'lien',payeeId='bayside',bankAccount='****1264')
+    tx(prefix+'-client-share',day,cid,-lines['client_share'],f'ACH TO {name(cid)}',[st['id']],'client_share',payeeId=cid)
+def learning():
+    for cid,n,mid,subject,basis,bp,day,claim in LEARNING:
+        i=int(cid[1:])
+        DATA['clients'].append(dict(id=cid,name=n,aliases=[n],email=f'client{i:02}@example.test',phone=f'(510) 555-{99+i:04}'))
+        DATA['matters'].append(dict(id=mid,name=subject,clientIds=[cid],practiceArea='personal injury',openedDate=day,claimNumber=claim))
+        DATA['payees'].append(dict(id=cid,name=n,phone=f'(510) 555-{99+i:04}',bank=dict(bank='Cedar Inlet Bank',account=f'****{i:04}',routing='withheld')))
+        did=f'fee-{cid}';wording=f'{bp//100}% of the client\'s gross recovery.' if basis=='gross' else f'{bp//100}% of net recovery AFTER deducting this client\'s litigation costs.'
+        doc(did,'fee_agreement','Agreement for Legal Services',FIRM,day,[f'Client: {n}',f'Matter: {mid}',wording,'Client funds remain in trust until earned or paid for authorized expenses.','Litigation costs are separate from fees. An itemized statement precedes each transfer.',*signed(n,day),'Accepted: /s/ Luis Moreno'],scanned=True)
+        DATA['fee-agreements'].append(dict(id=did,documentId=did,clientId=cid,matterId=mid,signed=True,basis=basis,rateBasisPoints=bp))
+    # July: Ames, 33% of gross. Bayside revises the payoff upward after the first signature; client re-signs, the firm pays revision 2.
+    costs=[receipt('ames-police-report','c41','2026-03-04',18500,'Collision report and certified records','Fictional County Filing Desk'),receipt('ames-reconstruction','c41','2026-05-20',126500,'Collision reconstruction consult','Marlowe Forensic Services')]
+    lien('ames-bayside-v1','c41','2026-06-29',820000,1,'2026-07-15','BG-62307')
+    settlement_advice('ames-settlement','c41','2026-07-02',6000000,'8117')
+    tx('ames-deposit','2026-07-06','c41',6000000,'CHECK TIDEMARK CASUALTY',['ames-settlement'],'settlement',checkNo='8117')
+    sources=['fee-c41','ames-settlement',*costs]
+    statement('ames-statement-v1','c41',1,'2026-07-06',6000000,1980000,145000,820000,'Tidemark Casualty Cooperative',sources,'ames-bayside-v1')
+    lien('ames-bayside-v2','c41','2026-07-09',897500,2,'2026-07-31','BG-62307');DATA['lien-letters'][-1]['supersedes']='ames-bayside-v1'
+    st=statement('ames-statement-v2','c41',2,'2026-07-10',6000000,1980000,145000,897500,'Tidemark Casualty Cooperative',sources,'ames-bayside-v2','ames-statement-v1')
+    payout('ames','c41','2026-07-13',st,costs,wire_confirmation('ames-bayside-wire','c41','2026-07-13',897500,'BG-62307'))
+    # August: Vasquez, 25% of recovery after costs. Bayside lowers the payoff; client re-signs, the firm pays revision 2.
+    costs=[receipt('vasquez-records','c42','2026-04-14',34000,'Certified incident and code-inspection records','Fictional County Filing Desk'),receipt('vasquez-deposition','c42','2026-06-23',146000,'Deposition transcript and attendance')]
+    lien('vasquez-bayside-v1','c42','2026-08-03',540000,1,'2026-08-20','BG-63518')
+    check('vasquez-check','2026-08-07',3200000,'Thirty-two thousand and 00/100','Claim HL-48215 premises settlement','902033')
+    tx('vasquez-deposit','2026-08-10','c42',3200000,'DEPOSIT HARBORLINE DRAFT 902033',['vasquez-check'],'settlement',checkNo='902033')
+    sources=['fee-c42','vasquez-check',*costs]
+    statement('vasquez-statement-v1','c42',1,'2026-08-10',3200000,755000,180000,540000,'Harborline Mutual Insurance',sources,'vasquez-bayside-v1')
+    lien('vasquez-bayside-v2','c42','2026-08-12',515000,2,'2026-08-31','BG-63518');DATA['lien-letters'][-1]['supersedes']='vasquez-bayside-v1'
+    st=statement('vasquez-statement-v2','c42',2,'2026-08-13',3200000,755000,180000,515000,'Harborline Mutual Insurance',sources,'vasquez-bayside-v2','vasquez-statement-v1')
+    payout('vasquez','c42','2026-08-14',st,costs,wire_confirmation('vasquez-bayside-wire','c42','2026-08-14',515000,'BG-63518'))
+    # September: Ford, 33% of gross, no lien.
+    costs=[receipt('ford-records','c43','2026-05-12',21500,'Collision report and certified records','Fictional County Filing Desk'),receipt('ford-scene','c43','2026-07-21',73500,'Scene photographs and diagram','Marlowe Forensic Services')]
+    settlement_advice('ford-settlement','c43','2026-09-02',4800000,'8204')
+    tx('ford-deposit','2026-09-04','c43',4800000,'CHECK TIDEMARK CASUALTY',['ford-settlement'],'settlement',checkNo='8204')
+    st=statement('ford-statement-v1','c43',1,'2026-09-08',4800000,1584000,95000,0,'Tidemark Casualty Cooperative',['fee-c43','ford-settlement',*costs])
+    payout('ford','c43','2026-09-09',st,costs)
+    # November: Castillo, 30% after costs, revised Bayside payoff before the only statement is signed. Not in the bank history.
+    costs=[receipt('castillo-records','c44','2026-07-15',26000,'Collision report and certified records','Fictional County Filing Desk'),receipt('castillo-deposition','c44','2026-10-06',94000,'Deposition transcript and attendance')]
+    lien('castillo-bayside-v1','c44','2026-11-02',680000,1,'2026-11-20','BG-65102')
+    lien('castillo-bayside-v2','c44','2026-11-09',735000,2,'2026-11-30','BG-65102');DATA['lien-letters'][-1]['supersedes']='castillo-bayside-v1'
+    check('castillo-check','2026-11-10',4000000,'Forty thousand and 00/100','Claim HL-51340 collision settlement','902655')
+    DATA['incoming-items'].append(dict(id='incoming-castillo',documentId='castillo-check',receivedDate='2026-11-10',amountCents=4000000,matterId='m29',claimNumber='HL-51340',status='not_posted',scenario='november_followup'))
+    st=statement('castillo-statement-v1','c44',1,'2026-11-12',4000000,1164000,120000,735000,'Harborline Mutual Insurance',['fee-c44','castillo-check',*costs],'castillo-bayside-v2')
+    for l in st['lines']:
+        PLANNED.append(dict(id=f'planned-castillo-{l["kind"].replace("_","-")}',date='2026-11-13',clientId='c44',matterId='m29',amountCents=l['amountCents'],kind=l['kind'],payeeId=l['payeeId'],status='draft_unapproved',statementId=st['id'],documentIds=[st['id']]+([st['lienLetterId']] if l['kind']=='lien' else costs if l['kind']=='costs' else []),initiatedBy='riley',approvedBy=None,**({'bankAccount':'****1264'} if l['kind']=='lien' else {})))
 def book():
     TX.sort(key=lambda t:(t['postedDate'],t['id']))
     balance=0;ledgers=defaultdict(int,{c['id']:0 for c in DATA['clients']});ledgers['firm']=0;journal=[];disbursements=[];recs=[]
     for month in range(5,11):
         rows=[];opening=balance
         for t in [t for t in TX if t['postedDate'].startswith(f'2026-{month:02}')]:
-            a=t['amountCents'];balance+=a;ledgers[t['clientId']]+=a;t['balanceCents']=balance
+            a=t['amountCents'];balance+=a;t['balanceCents']=balance;legs=t.get('allocations') or [dict(clientId=t['clientId'],amountCents=a)]
+            for leg in legs:ledgers[leg['clientId']]+=leg['amountCents']
             rows.append([date.fromisoformat(t['postedDate']).strftime('%m/%d/%Y'),t['description'],f'{-a//100}.{(-a)%100:02}' if a<0 else '',f'{a//100}.{a%100:02}' if a>0 else '',f'{balance//100}.{balance%100:02}',t.get('checkNo','')])
-            journal.append(dict(id='je-'+t['id'],transactionId=t['id'],date=t['ledgerDate'],clientId=t['clientId'],matterId=t['matterId'],documentIds=t['documentIds'],initiatedBy=t['initiatedBy'],approvedBy=t['approvedBy'],lines=[dict(account='asset:trust:4417',debitCents=max(a,0),creditCents=max(-a,0)),dict(account='liability:'+t['clientId'],debitCents=max(-a,0),creditCents=max(a,0))]))
+            journal.append(dict(id='je-'+t['id'],transactionId=t['id'],date=t['ledgerDate'],clientId=t['clientId'],matterId=t['matterId'],documentIds=t['documentIds'],initiatedBy=t['initiatedBy'],approvedBy=t['approvedBy'],lines=[dict(account='asset:trust:4417',debitCents=max(a,0),creditCents=max(-a,0))]+[dict(account='liability:'+leg['clientId'],debitCents=max(-leg['amountCents'],0),creditCents=max(leg['amountCents'],0)) for leg in legs]))
             if a<0:disbursements.append(dict(id='disb-'+t['id'],transactionId=t['id'],date=t['postedDate'],clientId=t['clientId'],matterId=t['matterId'],amountCents=-a,kind=t['kind'],payeeId=t.get('payeeId',t['clientId']),status='posted',documentIds=t['documentIds'],initiatedBy=t['initiatedBy'],approvedBy=t['approvedBy'],**({'bankAccount':t['bankAccount']} if 'bankAccount' in t else {})))
         path=ROOT/f'bank/bay-commerce-4417-2026-{month:02}.csv';path.parent.mkdir(exist_ok=True)
         with path.open('w',newline='',encoding='utf-8') as f:
@@ -183,6 +251,7 @@ def book():
         recs.append(r)
         doc(r['documentId'],'reconciliation','Monthly Three-Way Reconciliation',FIRM,r['signedDate'],[f'Period ended: {end} | Bay Commerce Bank IOLTA ending 4417',f'Opening bank balance: {money(opening)}',f'Closing bank balance: {money(balance)}','Outstanding checks: $0.00 | Deposits in transit: $0.00',f'Adjusted bank balance: {money(balance)}',f'Trust book balance: {money(balance)}',f'Total client subsidiary ledgers: {money(r["clientLedgerTotalCents"])}',f'Firm charge clearing ledger: {money(ledgers["firm"])}','Difference: $0.00',f'Reviewed and signed: /s/ Sam Whitfield | {r["signedDate"]}','This reconciliation compares ending balances; retain daily activity with the working papers.'],amounts=[opening,balance,r['clientLedgerTotalCents'],ledgers['firm'],0])
     disbursements.append(dict(id='planned-bayside',date='2026-10-23',clientId='c01',matterId='m01',amountCents=1450000,kind='lien',payeeId='bayside',status='draft_unapproved',statementId='settlement-v2',documentIds=['bayside-v2','bayside-bank-change'],initiatedBy='riley',approvedBy=None))
+    disbursements+=PLANNED
     DATA['bank-transactions']=TX;DATA['trust-ledger-entries']=journal;DATA['disbursements']=disbursements;DATA['reconciliations']=recs
 
 def answer_key():
@@ -196,10 +265,37 @@ def answer_key():
     dict(id='E2',agents=['Trust Compliance Auditor','Three-Way Reconciler'],expected='accept_replacement',documents=['bank-service-fee','firm-fee-replacement'],amountCents=2500,answer='Firm replaced the $25.00 bank fee next day. No client was charged; firm clearing ledger returns to zero.'),
     dict(id='E3',agents=['Trust Intake'],expected='resolve_with_receipt',documents=['noise-1','noise-2'],clientIds=['c06','c07'],answer='J NGUYEN is ambiguous in bank text. Portal receipts identify Jamie and Jordan separately; do not merge them.'),
     dict(id='E4',agents=['Trust Intake'],expected='accept_partial',documents=['noise-3','noise-4','fee-c05'],amountsCents=[125000,87500],answer='Okafor\'s partial deposits are separate advances, not a duplicate or a paid-in-full retainer.')]
-    dump(ROOT/'answer-key.json',dict(fictional=True,cases=cases))
+    # Learning demo: onboarding reads May-Sep, one October correction becomes a policy, November runs on it.
+    fee_cases=[dict(statementId=s,clientId=c,basis=b,rateBasisPoints=bp,grossCents=g,costCents=k,expectedFeeCents=f,paidFeeCents=f,paidTransactionId=t,agrees=True) for s,c,b,bp,g,k,f,t in [('ames-statement-v2','c41','gross',3300,6000000,145000,1980000,'ames-fee'),('vasquez-statement-v2','c42','net_after_costs',2500,3200000,180000,755000,'vasquez-fee'),('ford-statement-v1','c43','gross',3300,4800000,95000,1584000,'ford-fee')]]
+    learning=dict(
+        onboarding=dict(historyFrom='2026-05-01',historyThrough='2026-09-30',agents=['Disbursement','Evidence Checker'],
+            proposedPolicies=[
+                dict(id='L1',kind='payee_bank_account',payeeId='bayside',bank='Cedar Inlet Bank',account='****1264',phone='(510) 555-0186',statement='Bayside Medical Group payoffs are wired to Cedar Inlet Bank ****1264. Hold any request to pay Bayside at another account until it is confirmed by phone at (510) 555-0186, the number on file.',
+                     evidenceTransactionIds=['bayside-prior-paid','ames-bayside-paid','vasquez-bayside-paid'],documents=['bayside-prior-letter','bayside-prior-confirmation','ames-bayside-v2','ames-bayside-wire','vasquez-bayside-v2','vasquez-bayside-wire'],
+                     backtest=dict(handled=3,agree=3,disagree=0,summary='Would have handled 3 past Bayside payoffs: 3 agree with what people decided, 0 disagree.'),appliesInOctober='C'),
+                dict(id='L2',kind='lien_payoff_revision',payeeId='bayside',statement='When Bayside Medical Group revises a payoff, pay the latest revision, and only after the client has signed a settlement statement showing that revised payoff.',
+                     evidenceMatterIds=['m26','m27'],documents=['ames-bayside-v1','ames-bayside-v2','ames-statement-v1','ames-statement-v2','vasquez-bayside-v1','vasquez-bayside-v2','vasquez-statement-v1','vasquez-statement-v2'],
+                     backtest=dict(handled=2,agree=2,disagree=0,notApplicable=['m06'],summary='Would have handled 2 past revised payoffs: 2 agree with what people decided, 0 disagree. Park (one letter, no revision) does not apply.'),appliesInOctober='B2')],
+            notProposed=[dict(statement='Attorney fees are charged on gross recovery.',reason='Only 2 of 3 past settlements charge the fee on gross. Vasquez\'s agreement charges 25% after costs and the firm paid it that way, so the rule disagrees with history.',
+                     backtest=dict(handled=3,agree=2,disagree=1,disagreeingStatementIds=['vasquez-statement-v2']))]),
+        correction=dict(triggerCase='B1',agent='Evidence Checker',documentId='settlement-v1',clientId='c03',statedFeeCents=625000,correctFeeCents=602500,overchargeCents=22500,
+            note='Bello\'s agreement charges 25% of her recovery after her $900.00 share of costs: 25% x ($25,000.00 - $900.00) = $6,025.00, not 25% of gross ($6,250.00).',
+            resultingPolicy=dict(id='L3',kind='fee_basis',statement='Check every settlement fee against that client\'s own signed fee agreement: rate x gross recovery when the agreement says gross, rate x (recovery minus that client\'s costs) when it says after costs.',
+                backtest=dict(handled=3,agree=3,disagree=0,cases=fee_cases,summary='Would have checked 3 past settlements: 3 agree with what the firm paid, 0 disagree.'),
+                october=dict(statementId='settlement-v1',agree=['c01','c02'],flag=['c03']))),
+        november=dict(matterId='m29',clientId='c44',incomingItemId='incoming-castillo',statementId='castillo-statement-v1',grossCents=4000000,
+            items=[dict(id='N1',agent='Trust Intake',subject='incoming-castillo',expected='allocate',needsPerson=False,amountCents=4000000,clientId='c44',answer='Single-client matter and claim HL-51340 match; allocate the full $40,000.00 to Castillo when deposited.'),
+                   dict(id='N2',agent='Evidence Checker',subject='attorney_fee',expected='accept',needsPerson=False,policyId='L3',feeCents=1164000,grossBasisFeeCents=1200000,answer='30% x ($40,000.00 - $1,200.00) = $11,640.00 matches the after-costs agreement. Charging gross would have been $12,000.00.'),
+                   dict(id='N3',agent='Evidence Checker',subject='lien',expected='accept',needsPerson=False,policyId='L2',lienLetterId='castillo-bayside-v2',supersededLetterId='castillo-bayside-v1',lienCents=735000,answer='Statement signed November 12 uses the November 9 revised payoff of $7,350.00, so no re-signature is needed.'),
+                   dict(id='N4',agent='Disbursement',subject='planned-castillo-lien',expected='accept',needsPerson=False,policyId='L1',account='****1264',answer='Wire goes to the Bayside account on file; no bank-change request, so no phone verification hold.'),
+                   dict(id='N5',agent='Evidence Checker',subject='costs',expected='accept',needsPerson=False,costCents=120000,documents=['castillo-records','castillo-deposition'],answer='$260.00 + $940.00 receipts equal the $1,200.00 cost line.'),
+                   dict(id='N6',agent='Disbursement',subject='planned-castillo-client-share',expected='accept',needsPerson=False,clientShareCents=1981000,answer='Net to client $19,810.00 balances the $40,000.00 statement.'),
+                   dict(id='N7',agent='Disbursement',subject='release',expected='await_approver',needsPerson=True,answer='Posting the four payments still needs Sam as approver: a policy clears the checks, it never moves money.')],
+            alsoNoPerson=['D']))
+    dump(ROOT/'answer-key.json',dict(fictional=True,cases=cases,learning=learning))
 
 def main():
-    setup();history();live();book();answer_key();enrich_documents(DATA,DOCS)
+    setup();history();live();learning();book();answer_key();enrich_documents(DATA,DOCS)
     samples={'bayside-v2':'scanned-lien-letter','settlement-v1':'settlement-statement-v1','global-check':'settlement-check','bayside-bank-change':'fraud-email','fee-c02':'fee-agreement','bank-statement-2026-10':'bank-statement'}
     screenshot=REPO/'docs/screenshots/hartwell-data';screenshot.mkdir(parents=True,exist_ok=True)
     for d in DOCS:

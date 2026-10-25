@@ -12,7 +12,7 @@
 
    Opening balance                Deposits / credits                Withdrawals / debits              Closing balance
 
-   $164,087.93                    $63,968.62                     $23,319.97                     $204,736.58
+   $164,087.93                    $111,968.62                    $71,319.97                     $204,736.58
 
 
     Posting        Description / check reference                                                  Debit                 Credit              Balance
@@ -22,15 +22,23 @@
 
     09-03      ACH TO HARTWELL OPER 2290                                                 $425.00                              $169,135.36
 
-    09-04      ACH REFUND ADRIAN MOSS                                                   $127.85                              $169,007.51
+    09-04      CHECK TIDEMARK CASUALTY / 8204                                                              $48,000.00          $217,135.36
 
-    09-05      ACH FROM NINA PETROV                                                                           $5,340.38          $174,347.89
+    09-04      ACH REFUND ADRIAN MOSS                                                   $127.85                              $217,007.51
 
-    09-06      ACH TO HARTWELL OPER 2290                                                 $357.50                              $173,990.39
+    09-05      ACH FROM NINA PETROV                                                                           $5,340.38          $222,347.89
 
-    09-07      ACH COST REIMB OPER 2290                                                   $131.02                              $173,859.37
+    09-06      ACH TO HARTWELL OPER 2290                                                 $357.50                              $221,990.39
 
-    09-08       WIRE FROM CALEB ROSS                                                                          $5,482.43          $179,341.80
+    09-07      ACH COST REIMB OPER 2290                                                   $131.02                              $221,859.37
+
+    09-08       WIRE FROM CALEB ROSS                                                                          $5,482.43          $227,341.80
+
+    09-09      ACH TO WESLEY FORD                                                       $31,210.00                              $196,131.80
+
+    09-09      ACH COST REIMB OPER 2290                                                   $950.00                              $195,181.80
+
+    09-09      ACH TO HARTWELL OPER 2290                                                $15,840.00                              $179,341.80
 
     09-09      ACH TO HARTWELL OPER 2290                                                 $427.50                              $178,914.30
 
@@ -50,14 +58,6 @@
 
     09-16      ACH COST REIMB OPER 2290                                                   $140.53                              $207,949.50
 
-    09-17      ACH TO LENA BROOKS                                                        $18,673.41                              $189,276.09
-
-    09-17      ACH FROM JAMIE NGUYEN                                                                         $5,320.63          $194,596.72
-
-    09-18      ACH TO HARTWELL OPER 2290                                                 $487.50                              $194,109.22
-
-    09-19      ACH COST REIMB OPER 2290                                                   $143.70                              $193,965.52
-
 
 
 
@@ -72,6 +72,14 @@ FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                            
 
     Posting        Description / check reference                                                  Debit                 Credit              Balance
     date
+
+    09-17      ACH TO LENA BROOKS                                                        $18,673.41                              $189,276.09
+
+    09-17      ACH FROM JAMIE NGUYEN                                                                         $5,320.63          $194,596.72
+
+    09-18      ACH TO HARTWELL OPER 2290                                                 $487.50                              $194,109.22
+
+    09-19      ACH COST REIMB OPER 2290                                                   $143.70                              $193,965.52
 
     09-20       WIRE FROM JORDAN NGUYEN                                                                      $5,609.58          $199,575.10
 

@@ -11,23 +11,23 @@ The Bay Commerce Bank IOLTA ends in 4417; operating ends in 2290.
 
 | Export | Count / purpose |
 | --- | --- |
-| `bank/bay-commerce-4417-2026-<MM>.csv` | 6 monthly exports, 160 posted transactions |
-| `erp/clients.json`, `matters.json` | 40 clients, 25 matters, explicit client membership |
-| `erp/fee-agreements.json` | 40 signed agreements: gross, net-after-costs, tiers, hourly, flat |
-| `erp/invoices.json`, `cost-receipts.json` | 49 approved invoices, 33 receipts |
-| `erp/lien-letters.json` | 4 payoff letters, including both Bayside revisions and a prior paid case |
+| `bank/bay-commerce-4417-2026-<MM>.csv` | 6 monthly exports, 175 posted transactions |
+| `erp/clients.json`, `matters.json` | 44 clients, 29 matters, explicit client membership |
+| `erp/fee-agreements.json` | 44 signed agreements: gross, net-after-costs, tiers, hourly, flat |
+| `erp/invoices.json`, `cost-receipts.json` | 49 approved invoices, 41 receipts |
+| `erp/lien-letters.json` | 10 payoff letters: Bayside revisions for Delgado, Ames, Vasquez and Castillo, plus Park and Reyes |
 | `erp/allocation-agreements.json` | Signed global recovery and supplemental allocation |
-| `erp/settlement-statements.json` | Signed v1 and unsigned corrected v2, each with 11 structured lines |
-| `erp/payees.json` | 48 payees with synthetic bank details; Bayside includes verification sources |
-| `erp/trust-ledger-entries.json` | 160 balanced two-leg journal entries |
-| `erp/disbursements.json` | 101 posted outflows, 1 unapproved live request |
+| `erp/settlement-statements.json` | Ridgeway signed v1 and unsigned corrected v2; 5 past and 1 November single-client statements |
+| `erp/payees.json` | 52 payees with synthetic bank details; Bayside includes verification sources |
+| `erp/trust-ledger-entries.json` | 175 balanced journal entries; the Harborline deposit has one leg per client |
+| `erp/disbursements.json` | 112 posted outflows, 1 unapproved live request, 4 November drafts |
 | `erp/bank-statements.json` | 6 bank statement PDFs with opening/closing summaries and transaction tables |
 | `erp/reconciliations.json` | 6 signed month-end three-way reconciliations and every client balance |
-| `erp/incoming-items.json` | Unposted global check and separate November supplemental check |
+| `erp/incoming-items.json` | Deposited global check; November supplemental and Castillo checks, not posted |
 | `erp/policies.json`, `communications.json` | Approved claim-scoped allocation policy; suspicious email request |
 | `erp/documents.json` | Document index with PDF and text paths, dates, kinds, scan flags, monetary inventory |
-| `documents/` | 227 PDFs (233 pages), 227 OCR-style text sidecars, 1 raw `.eml` |
-| `answer-key.json` | 10 cases including correct behavior / noise controls, evidence and responsible agents |
+| `documents/` | 257 PDFs (263 pages), 257 OCR-style text sidecars, 1 raw `.eml` |
+| `answer-key.json` | 10 cases including correct behavior / noise controls, plus the `learning` demo key |
 | `manifest.json` | Seed, counts, SHA-256 hashes for every generated artifact and screenshot |
 
 All monetary values are integer cents. CSV debit/credit/balance columns are
@@ -68,16 +68,53 @@ details for a planned October 23 payout, using `baysidemedlcal.com` instead of
 instructions within this fictional scenario. Hold the request and verify
 using the on-file phone number. The email never updates the payee master.
 
-These live records are intentionally not mixed into the historical bank or
-ledger exports. The proposed October 23 payment remains unapproved and never
-posts. For a chronological demonstration, select the live scenario separately
-from the full October close; do not treat the later historical rows as facts
-already available on October 22. The check is not represented as cleared cash.
+The $125,000 Harborline draft 902174 is deposited October 22 and appears in the
+bank feed and October statement. Its one bank line posts to three client ledgers
+by the signed 50/30/20 allocation, so the October close rises by $125,000.00 and
+still reconciles. Nothing is paid out: the proposed October 23 payment remains
+unapproved and never posts. The endorsed complaint (`complaint-filed`, clerk
+stamped 03/03/2026) and the $450.00 filing fee receipt (`global-filing`, also
+03/03/2026) prove Reyes's tier. For a chronological demonstration, do not treat
+later October rows as facts already available on October 22.
 
 **D: November follow-up.** A November 6 supplemental $5,000 check uses the
 October 23 approved policy to allocate $2,500 / $1,500 / $1,000. This is ownership
 allocation only, not permission to disburse or reuse unsigned v2. It is not in
 the May-October bank history.
+
+## Learning demo
+
+Onboarding reads May to September; a person corrects one October case; the
+correction becomes a policy that is backtested on history; a November case then
+passes every check with no person. The `learning` section of `answer-key.json`
+holds the expected results, and `verify.py` recomputes each one from the exports.
+
+**History.** Three Bayside payoffs were wired to Cedar Inlet Bank ****1264: Park
+(June, one letter) and two settlements where Bayside revised the payoff after
+the client signed. In both, the client re-signed a version 2 statement and the
+firm paid the latest payoff. Ames (July, 33% of gross) went up from $8,200.00
+to $8,975.00; Vasquez (August, 25% after costs) went down from $5,400.00 to
+$5,150.00. Ford (September, 33% of gross, no lien) is the third settlement.
+Each settlement is deposited, paid exactly as signed and fully disbursed within
+its month, so May to September month-end balances are unchanged.
+
+**Onboarding proposes** L1 (pay Bayside only at ****1264; any other account is
+held for a phone check at (510) 555-0186) and L2 (pay the latest Bayside revision,
+only after the client signs a statement showing it). It should not propose
+"fees are charged on gross": Vasquez contradicts it, so it disagrees 1 of 3.
+
+**Correction.** Case B1 triggers it: settlement v1 charges Bello $6,250.00, but
+her agreement charges 25% of ($25,000.00 - $900.00) = $6,025.00. The resulting
+policy L3 checks each fee against the client's own agreement basis. Backtest:
+3 of 3 past settlements agree with what the firm paid, 0 disagree. In October
+it accepts Delgado and Reyes and flags only Bello.
+
+**November.** Castillo (one client) settles for $40,000.00 on a 30% after-costs
+agreement; Bayside revises $6,800.00 to $7,350.00 before the only statement is
+signed on November 12. Intake allocation, the $11,640.00 fee (L3), the $7,350.00
+payoff (L2), the wire to ****1264 (L1), $1,200.00 costs and the $19,810.00 net
+all clear with no person. Posting the four draft payments still needs Sam as
+approver. The check is not in the May to October bank history.
 
 All people, addresses, organizations, account numbers and signatures are
 invented demo records. The requested Medicare label denotes a fictional
@@ -107,7 +144,7 @@ the named fixture outputs and six sample images. Generated text is LF; the
 raw email is CRLF. Byte reproducibility was checked with the pinned Windows
 Python 3.11 environment; other PDF/image library versions can change bytes.
 
-108 of 227 PDFs (47.6%) are rasterized scans with seeded 0.8-1.7 degree
+130 of 257 PDFs (50.6%) are rasterized scans with seeded 0.8-1.7 degree
 rotation, visible paper grain, a shaded edge, JPEG artifacts and angled colored
 RECEIVED stamps. A few pages carry portable pen-style review notes; none assert
 that the suspicious email was verified. Digital firm and bank records remain

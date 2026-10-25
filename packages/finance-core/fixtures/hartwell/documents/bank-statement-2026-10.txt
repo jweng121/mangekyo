@@ -12,7 +12,7 @@
 
    Opening balance                Deposits / credits                Withdrawals / debits              Closing balance
 
-   $204,736.58                    $49,641.47                     $10,646.56                     $243,731.49
+   $204,736.58                    $174,641.47                    $10,646.56                     $368,731.49
 
 
     Posting        Description / check reference                                                  Debit                 Credit              Balance
@@ -79,13 +79,15 @@ FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                            
 
     10-22      ACH REFUND MARCUS REED                                                   $146.87                              $233,426.42
 
-    10-23      CHECK FROM GRACE KIM / 6147                                                                    $5,807.61          $239,234.03
+    10-22       DEPOSIT HARBORLINE DRAFT 902174 / 902174                                                   $125,000.00          $358,426.42
 
-    10-24      ACH TO HARTWELL OPER 2290                                                 $552.50                              $238,681.53
+    10-23      CHECK FROM GRACE KIM / 6147                                                                    $5,807.61          $364,234.03
 
-    10-25      ACH COST REIMB OPER 2290                                                   $150.04                              $238,531.49
+    10-24      ACH TO HARTWELL OPER 2290                                                 $552.50                              $363,681.53
 
-    10-30      ACH CR RAYMOND CHO                                                                            $5,200.00          $243,731.49
+    10-25      ACH COST REIMB OPER 2290                                                   $150.04                              $363,531.49
+
+    10-30      ACH CR RAYMOND CHO                                                                            $5,200.00          $368,731.49
 
  Please compare this statement with your account records. This statement reports posted bank activity; it does not certify individual client ledger
   balances. Questions: (510) 555-0120.

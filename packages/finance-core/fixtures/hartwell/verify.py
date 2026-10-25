@@ -15,12 +15,84 @@ def dollars(s):return int(Decimal(s.replace('$','').replace(',',''))*100)
 def amounts(text):return [dollars(s) for s in re.findall(r'-?\$[\d,]+\.\d{2}',text)]
 def check(ok,message):
     if not ok:raise AssertionError(message)
+def learning(data,docs,cases,payees,bytx,fees):
+    """Recompute the learning demo from the exports: onboarding patterns, the Bello policy backtest, November."""
+    key=load('answer-key.json')['learning'];txs=data['bank-transactions']
+    statements={s['id']:s for s in data['settlement-statements']};liens={l['id']:l for l in data['lien-letters']}
+    def line(s,kind):return next((l['amountCents'] for l in s['lines'] if l['kind']==kind),0)
+    def fee_for(s):
+        f=fees[s['lines'][0]['clientId']];base=s['grossCents']-(line(s,'costs') if f['basis']=='net_after_costs' else 0)
+        return base*f['rateBasisPoints']//10000
+    past=[s for s in statements.values() if s['matterId']!='m01' and s['date']<'2026-10-01']
+    final={}
+    for s in sorted(past,key=lambda s:s['version']):final[s['matterId']]=s
+    check(len(final)==3 and all(s['signed'] for s in past),'three signed past settlements')
+    check(sorted(fees[s['lines'][0]['clientId']]['basis'] for s in final.values())==['gross','gross','net_after_costs'],'two gross, one after costs')
+    for s in statements.values():
+        if s['matterId']=='m01':continue
+        check(sum(l['amountCents'] for l in s['lines'])==s['grossCents'],'history statement balances')
+        text=(ROOT/docs[s['documentId']]['text']).read_text(encoding='utf-8')
+        check({s['grossCents'],*[l['amountCents'] for l in s['lines']]}<=set(amounts(text)),'history statement amounts printed')
+    # Each final statement was paid exactly, from a bank line, in the month it was signed.
+    for s in final.values():
+        cid=s['lines'][0]['clientId'];paid=[t for t in txs if t['clientId']==cid and t['amountCents']<0]
+        check(sorted(-t['amountCents'] for t in paid)==sorted(l['amountCents'] for l in s['lines']),'settlement paid as signed')
+        check(any(t['clientId']==cid and t['amountCents']==s['grossCents'] and t['kind']=='settlement' for t in txs),'settlement deposited')
+        check(all(t['postedDate']>=s['signedDate'] and t['postedDate'][:7]==s['signedDate'][:7] for t in paid),'paid after signature, same month')
+    # L1: every past Bayside wire went to the account on file.
+    l1,l2=key['onboarding']['proposedPolicies']
+    wires=[t for t in txs if t.get('payeeId')=='bayside']
+    check(sorted(t['id'] for t in wires)==sorted(l1['evidenceTransactionIds']) and all(t['bankAccount']==l1['account']==payees['bayside']['bank']['account'] for t in wires),'L1 Bayside account pattern')
+    check(l1['backtest']['handled']==l1['backtest']['agree']==len(wires)==3 and l1['phone']==payees['bayside']['phone'],'L1 backtest')
+    check(cases[l1['appliesInOctober']]['requestedAccount']!=l1['account'],'L1 would hold the October email')
+    # L2: in the revised matters the client re-signed after the revision and the latest payoff was paid.
+    revised=sorted({next(s['matterId'] for s in statements.values() if s.get('lienLetterId')==l['id']) for l in liens.values() if l.get('supersedes') and l['date']<'2026-10-01'})
+    check(revised==l2['evidenceMatterIds'],'L2 revised matters')
+    for mid in revised:
+        s=final[mid];letter=liens[s['lienLetterId']];earlier=statements[s['supersedes']]
+        check(letter['supersedes']==earlier['lienLetterId'] and earlier['signedDate']<letter['date']<s['signedDate'],'re-signed after revision')
+        check(any(t['id'] in l1['evidenceTransactionIds'] and -t['amountCents']==letter['amountCents']==line(s,'lien') and t['clientId']==s['lines'][0]['clientId'] for t in wires),'latest payoff paid')
+    check(l2['backtest']['handled']==l2['backtest']['agree']==2 and l2['backtest']['disagree']==0,'L2 backtest')
+    # Fees on gross is not a firm rule: Vasquez disagrees.
+    gross_rule=[s['id'] for s in final.values() if s['grossCents']*fees[s['lines'][0]['clientId']]['rateBasisPoints']//10000!=line(s,'attorney_fee')]
+    np=key['onboarding']['notProposed'][0]
+    check(gross_rule==np['backtest']['disagreeingStatementIds'] and np['backtest']['agree']==3-len(gross_rule),'gross rule rejected by history')
+    # L3 from the Bello correction: agrees with all three past settlements and flags only Bello in October.
+    c=key['correction'];l3=c['resultingPolicy'];b1=cases[c['triggerCase']]
+    check(c['statedFeeCents']==b1['wrongFeeCents'] and c['correctFeeCents']==b1['correctFeeCents'] and c['overchargeCents']==b1['overchargeCents'],'correction matches B1')
+    rows=l3['backtest']['cases']
+    check(sorted(r['statementId'] for r in rows)==sorted(s['id'] for s in final.values()),'backtest covers past settlements')
+    for r in rows:
+        s=statements[r['statementId']]
+        check(fee_for(s)==r['expectedFeeCents']==line(s,'attorney_fee')==r['paidFeeCents']==-bytx[r['paidTransactionId']]['amountCents'] and r['agrees'],'L3 backtest case')
+    check(l3['backtest']['agree']==len(rows)==3 and l3['backtest']['disagree']==0,'L3 backtest totals')
+    alloc={a['clientId']:a for a in data['allocation-agreements'][0]['allocations']};v1=statements['settlement-v1']
+    def oct_fee(cid):
+        f=fees[cid];a=alloc[cid];bp=f.get('rateBasisPoints') or f['tiers'][1]['rateBasisPoints']
+        return (a['amountCents']-(a['costCents'] if f['basis']=='net_after_costs' else 0))*bp//10000
+    flagged=[cid for cid in alloc if oct_fee(cid)!=next(l['amountCents'] for l in v1['lines'] if l['clientId']==cid and l['kind']=='attorney_fee')]
+    check(flagged==l3['october']['flag']==['c03'],'L3 flags only Bello in October')
+    # November: one client, after-costs fee, revised Bayside payoff, every check clears without a person.
+    n=key['november'];st=statements[n['statementId']];items={i['id']:i for i in n['items']}
+    incoming=next(i for i in data['incoming-items'] if i['id']==n['incomingItemId'])
+    check(incoming['receivedDate'].startswith('2026-11') and incoming['amountCents']==st['grossCents']==n['grossCents'] and not any(t['matterId']==n['matterId'] for t in txs),'November receipt outside bank history')
+    check(fees[n['clientId']]['basis']=='net_after_costs' and fee_for(st)==line(st,'attorney_fee')==items['N2']['feeCents'],'November after-costs fee')
+    check(st['grossCents']*fees[n['clientId']]['rateBasisPoints']//10000==items['N2']['grossBasisFeeCents'],'November gross alternative')
+    letter=liens[st['lienLetterId']]
+    check(letter['supersedes']==items['N3']['supersededLetterId'] and letter['date']<st['signedDate'] and letter['amountCents']==line(st,'lien')==items['N3']['lienCents'],'November latest payoff signed')
+    planned=[p for p in data['disbursements'] if p.get('statementId')==st['id']]
+    check(all(p['status']=='draft_unapproved' and p['approvedBy'] is None for p in planned) and len(planned)==4,'November payouts unposted')
+    check(all(p['bankAccount']==l1['account'] for p in planned if p['payeeId']=='bayside'),'November wire to account on file')
+    receipts=sum(r['amountCents'] for r in data['cost-receipts'] if r['documentId'] in items['N5']['documents'])
+    check(receipts==line(st,'costs')==items['N5']['costCents'] and line(st,'client_share')==items['N6']['clientShareCents'],'November costs and net')
+    check([i['id'] for i in n['items'] if i['needsPerson']]==['N7'],'only payment release needs a person')
+    return dict(learningPolicies=len(key['onboarding']['proposedPolicies'])+1,backtestAgree=f'{l3["backtest"]["agree"]}/{len(rows)}',novemberNoPerson=sum(not i['needsPerson'] for i in n['items']))
 def main():
     data={p.stem:load('erp/'+p.name) for p in (ROOT/'erp').glob('*.json')}
     docs={d['id']:d for d in data['documents']};cases={c['id']:c for c in load('answer-key.json')['cases']}
     clients={c['id'] for c in data['clients']};matters={m['id']:m for m in data['matters']};payees={p['id']:p for p in data['payees']}
-    check(len(clients)==40 and len(matters)==25,'client/matter counts')
-    check(sum(len(m['clientIds']) for m in matters.values())==40,'every client assigned once')
+    check(len(clients)==44 and len(matters)==29,'client/matter counts')
+    check(sum(len(m['clientIds']) for m in matters.values())==len(clients),'every client assigned once')
     for m in matters.values():check(set(m['clientIds'])<=clients,'matter clients')
     fees={f['clientId']:f for f in data['fee-agreements']}
     check(set(fees)==clients,'per-client fee agreements')
@@ -36,7 +108,7 @@ def main():
         elif isinstance(value,list):
             for v in value:walk(v)
     walk(data)
-    txs=data['bank-transactions'];check(len(txs)==160,'160 posted transactions')
+    txs=data['bank-transactions'];check(len(txs)==175,'175 posted transactions')
     check(len({t['id'] for t in txs})==len(txs),'unique transaction ids')
     bytx={t['id']:t for t in txs};journals={e['transactionId']:e for e in data['trust-ledger-entries']}
     check(set(journals)==set(bytx),'journal coverage')
@@ -48,16 +120,22 @@ def main():
             check(expected==l['amountCents'],'invoice line extension')
     for t in txs:
         check(t['status']=='posted' and t['amountCents']!=0,'posted nonzero entry')
-        if t['clientId']!='firm':check(t['clientId'] in matters[t['matterId']]['clientIds'],'transaction ownership')
+        legs=t.get('allocations') or [dict(clientId=t['clientId'],amountCents=t['amountCents'])]
+        check(sum(l['amountCents'] for l in legs)==t['amountCents'],'allocated legs total')
+        for l in legs:
+            if l['clientId']!='firm':check(l['clientId'] in matters[t['matterId']]['clientIds'],'transaction ownership')
         e=journals[t['id']];lines=e['lines']
         check(sum(l['debitCents'] for l in lines)==sum(l['creditCents'] for l in lines),'balanced journal '+e['id'])
         check(all(l['debitCents']>=0 and l['creditCents']>=0 for l in lines),'nonnegative journal sides')
         check(e['clientId']==t['clientId'] and e['date']==t['ledgerDate'],'journal link')
         check(lines[0]['account']=='asset:trust:4417' and lines[0]['debitCents']-lines[0]['creditCents']==t['amountCents'],'bank leg')
-        check(lines[1]['account']=='liability:'+t['clientId'] and lines[1]['creditCents']-lines[1]['debitCents']==t['amountCents'],'client leg')
+        check([(l['account'],l['creditCents']-l['debitCents']) for l in lines[1:]]==[('liability:'+l['clientId'],l['amountCents']) for l in legs],'client legs')
         if t['kind']=='attorney_fee':
             inv=invoices[t['documentIds'][0]]
             check(inv['amountCents']==-t['amountCents'] and inv['status']=='approved' and inv['clientId']==t['clientId'],'earned fee invoice')
+        if t['kind']=='settlement_fee':
+            st=next(s for s in data['settlement-statements'] if s['id']==t['documentIds'][0])
+            check(st['signed'] and any(l['kind']=='attorney_fee' and l['clientId']==t['clientId'] and l['amountCents']==-t['amountCents'] for l in st['lines']),'settlement fee on signed statement')
     bank=0;book=0;subs=defaultdict(int,{cid:0 for cid in clients});subs['firm']=0;minimum=defaultdict(int);negatives=set();row_count=0
     for rec in data['reconciliations']:
         month=rec['month'];check(rec['openingBalanceCents']==bank,'opening rollforward')
@@ -71,9 +149,11 @@ def main():
             check(row['Posting Date']==date.fromisoformat(t['postedDate']).strftime('%m/%d/%Y'),'bank date')
             check(row['Description']==t['description'] and row['Description']==row['Description'].upper() and len(row['Description'])<=32,'bank description')
             check(row['Check No.']==t.get('checkNo',''),'check number')
-            e=journals[t['id']];book+=e['lines'][0]['debitCents']-e['lines'][0]['creditCents'];subs[e['clientId']]+=e['lines'][1]['creditCents']-e['lines'][1]['debitCents']
-            minimum[e['clientId']]=min(minimum[e['clientId']],subs[e['clientId']])
-            if subs[e['clientId']]<0:negatives.add(e['clientId'])
+            e=journals[t['id']];book+=e['lines'][0]['debitCents']-e['lines'][0]['creditCents']
+            for l in e['lines'][1:]:
+                owner=l['account'].split(':',1)[1];subs[owner]+=l['creditCents']-l['debitCents']
+                minimum[owner]=min(minimum[owner],subs[owner])
+                if subs[owner]<0:negatives.add(owner)
         check(bank==book==sum(subs.values()),'three-way balance '+month)
         check(all(rec[k]==bank for k in ['bankEndingCents','bookEndingCents','adjustedBankCents']),'reported reconciliation '+month)
         check(rec['clientLedgerTotalCents']==sum(v for k,v in subs.items() if k!='firm'),'client control total')
@@ -81,7 +161,7 @@ def main():
         check(rec['ledgerBalancesCents']==dict(subs),'subsidiary balances')
         check(all(v>=0 for v in subs.values()),'all month-end client balances nonnegative')
         check(rec['signedDate']>month+'-31' and rec['signedBy']=='sam' and rec['matched'],'month signed after close')
-    check(row_count==160 and negatives=={'c04','firm'},'only deliberate intramonth exceptions')
+    check(row_count==175 and negatives=={'c04','firm'},'only deliberate intramonth exceptions')
     a=cases['A'];cho=0;daily={};day=date(2026,5,1)
     while day<=date(2026,10,31):
         cho+=sum(t['amountCents'] for t in txs if t['clientId']=='c04' and t['postedDate']==str(day));daily[str(day)]=cho;day+=timedelta(days=1)
@@ -96,7 +176,7 @@ def main():
     for a in alloc.values():
         check(a['amountCents']==allocation['grossCents']*a['basisPoints']//10000,'gross split')
         check(a['costCents']==allocation['sharedCostCents']*a['basisPoints']//10000,'cost split')
-    statements=sorted(data['settlement-statements'],key=lambda s:s['version']);v1,v2=statements
+    statements=sorted([s for s in data['settlement-statements'] if s['matterId']=='m01'],key=lambda s:s['version']);v1,v2=statements
     def line(s,cid,kind):return next(l['amountCents'] for l in s['lines'] if l['clientId']==cid and l['kind']==kind)
     for s in statements:
         check(sum(l['amountCents'] for l in s['lines'])==s['grossCents']==12500000,'statement balances')
@@ -125,7 +205,13 @@ def main():
     check(policy_['status']=='approved' and policy_['approvedBy']=='sam' and policy_['approvedDate']<incoming[1]['receivedDate'],'approved memory')
     check(incoming[1]['amountCents']==d['amountCents']==500000 and incoming[1]['receivedDate'].startswith('2026-11'),'November supplemental')
     check({a['clientId']:a['basisPoints']*d['amountCents']//10000 for a in policy_['allocations']}==d['allocationsCents'],'memory split')
-    check(all(t['matterId']!='m01' for t in txs),'live items excluded from posted history')
+    deposit=[t for t in txs if t['matterId']=='m01']
+    check([t['id'] for t in deposit]==['harborline-deposit'],'only the Harborline deposit posts for the live matter')
+    deposit=deposit[0];global_item=next(i for i in incoming if i['id']=='incoming-global')
+    check(deposit['postedDate']=='2026-10-22' and deposit['checkNo']=='902174' and deposit['amountCents']==global_item['amountCents']==12500000,'Harborline draft deposited October 22')
+    check({l['clientId']:l['amountCents'] for l in deposit['allocations']}=={cid:a['amountCents'] for cid,a in alloc.items()},'deposit follows signed allocation')
+    check(global_item['status']=='deposited' and global_item['transactionId']==deposit['id'],'incoming item linked to deposit')
+    check('902174' in (ROOT/docs['bank-statement-2026-10']['text']).read_text(encoding='utf-8'),'deposit on October statement')
     check(all(p['status']!='posted' for p in data['disbursements'] if p['matterId']=='m01'),'no unsigned payout posted')
     check(bytx['title-wire-1']['reference']==bytx['title-wire-2']['reference']==bytx['title-return']['reference'],'duplicate wire reference')
     check(bytx['title-wire-1']['amountCents']==bytx['title-wire-2']['amountCents']==-bytx['title-return']['amountCents']==cases['E1']['duplicateCents'],'duplicate return')
@@ -164,7 +250,9 @@ def main():
     for payee in payees.values():
         check(re.fullmatch(r'\*{4}\d{4}',payee['bank']['account']) is not None and payee['bank']['routing']=='withheld','masked payee details')
     expected_facts='355f01ff0f35f29522431f67b815d478176485a00dac0f41d490ad3c53b79e80'
-    check(hashlib.sha256(json.dumps(load('answer-key.json'),sort_keys=True,separators=(',',':')).encode()).hexdigest()==expected_facts,'original answer-key facts preserved except masking')
+    original={k:v for k,v in load('answer-key.json').items() if k in ['fictional','cases']}
+    check(hashlib.sha256(json.dumps(original,sort_keys=True,separators=(',',':')).encode()).hexdigest()==expected_facts,'original answer-key facts preserved except masking')
+    learned=learning(data,docs,cases,payees,bytx,fees)
     rendered=0
     for id,d in docs.items():
         text=(ROOT/d['text']).read_text(encoding='utf-8')
@@ -184,8 +272,8 @@ def main():
         with Image.open(p) as im:im.verify()
     manifest=load('manifest.json')
     for relative,digest in manifest['sha256'].items():check(hashlib.sha256((REPO/relative).read_bytes()).hexdigest()==digest,'content hash '+relative)
-    check(len(docs)==227 and sum(d['scanned'] for d in docs.values())==108,'document counts')
-    print(json.dumps(dict(result='PASS',clients=40,matters=25,bankTransactions=row_count,matchedMonths=6,pdfPagesRendered=rendered,scannedPdfs=108,answerKeyCases=len(cases),choMinimumCents=minimum['c04'],closingBankCents=bank),indent=2))
+    check(len(docs)==257 and sum(d['scanned'] for d in docs.values())==130,'document counts')
+    print(json.dumps(dict(result='PASS',clients=len(clients),matters=len(matters),bankTransactions=row_count,matchedMonths=6,pdfPagesRendered=rendered,scannedPdfs=sum(d['scanned'] for d in docs.values()),answerKeyCases=len(cases),choMinimumCents=minimum['c04'],closingBankCents=bank,**learned),indent=2))
 if __name__=='__main__':
     import argparse, subprocess, sys
     parser=argparse.ArgumentParser(description=__doc__)

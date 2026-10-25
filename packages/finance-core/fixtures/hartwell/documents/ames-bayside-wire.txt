@@ -1,0 +1,21 @@
+ BAY COMMERCE BANK
+                                                                        BUSINESS BANKING / TRUST SERVICES
+
+1128 Bracken Plaza, Oakland, CA 94612 | Telephone: (510) 555-0120
+
+ Executed Wire Confirmation
+  Date: 2026-07-13 | Reference: AMES-BAYSIDE-WIRE
+
+ Beneficiary: Bayside Medical Group
+ Bank: Cedar Inlet Bank
+ Account: ****1264
+ Routing: withheld
+ Client: Harold Ames / Account BG-62307
+ Wire amount: $8,975.00
+ Status: settled; beneficiary acknowledged receipt.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                          ames-bayside-wire | Paqe 1

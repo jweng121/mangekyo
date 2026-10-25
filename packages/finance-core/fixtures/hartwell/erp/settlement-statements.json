@@ -178,5 +178,280 @@
       "bayside-v2",
       "reyes-conditional"
     ]
+  },
+  {
+    "id": "ames-statement-v1",
+    "documentId": "ames-statement-v1",
+    "matterId": "m26",
+    "version": 1,
+    "signed": true,
+    "signedDate": "2026-07-06",
+    "date": "2026-07-06",
+    "grossCents": 6000000,
+    "lines": [
+      {
+        "clientId": "c41",
+        "kind": "attorney_fee",
+        "amountCents": 1980000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c41",
+        "kind": "costs",
+        "amountCents": 145000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c41",
+        "kind": "lien",
+        "amountCents": 820000,
+        "payeeId": "bayside"
+      },
+      {
+        "clientId": "c41",
+        "kind": "client_share",
+        "amountCents": 3055000,
+        "payeeId": "c41"
+      }
+    ],
+    "insurer": "Tidemark Casualty Cooperative",
+    "claimNumber": "TC-61822",
+    "lienLetterId": "ames-bayside-v1",
+    "supersedes": null,
+    "sourceDocumentIds": [
+      "fee-c41",
+      "ames-settlement",
+      "ames-police-report",
+      "ames-reconstruction",
+      "ames-bayside-v1"
+    ]
+  },
+  {
+    "id": "ames-statement-v2",
+    "documentId": "ames-statement-v2",
+    "matterId": "m26",
+    "version": 2,
+    "signed": true,
+    "signedDate": "2026-07-10",
+    "date": "2026-07-10",
+    "grossCents": 6000000,
+    "lines": [
+      {
+        "clientId": "c41",
+        "kind": "attorney_fee",
+        "amountCents": 1980000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c41",
+        "kind": "costs",
+        "amountCents": 145000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c41",
+        "kind": "lien",
+        "amountCents": 897500,
+        "payeeId": "bayside"
+      },
+      {
+        "clientId": "c41",
+        "kind": "client_share",
+        "amountCents": 2977500,
+        "payeeId": "c41"
+      }
+    ],
+    "insurer": "Tidemark Casualty Cooperative",
+    "claimNumber": "TC-61822",
+    "lienLetterId": "ames-bayside-v2",
+    "supersedes": "ames-statement-v1",
+    "sourceDocumentIds": [
+      "fee-c41",
+      "ames-settlement",
+      "ames-police-report",
+      "ames-reconstruction",
+      "ames-bayside-v2"
+    ]
+  },
+  {
+    "id": "vasquez-statement-v1",
+    "documentId": "vasquez-statement-v1",
+    "matterId": "m27",
+    "version": 1,
+    "signed": true,
+    "signedDate": "2026-08-10",
+    "date": "2026-08-10",
+    "grossCents": 3200000,
+    "lines": [
+      {
+        "clientId": "c42",
+        "kind": "attorney_fee",
+        "amountCents": 755000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c42",
+        "kind": "costs",
+        "amountCents": 180000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c42",
+        "kind": "lien",
+        "amountCents": 540000,
+        "payeeId": "bayside"
+      },
+      {
+        "clientId": "c42",
+        "kind": "client_share",
+        "amountCents": 1725000,
+        "payeeId": "c42"
+      }
+    ],
+    "insurer": "Harborline Mutual Insurance",
+    "claimNumber": "HL-48215",
+    "lienLetterId": "vasquez-bayside-v1",
+    "supersedes": null,
+    "sourceDocumentIds": [
+      "fee-c42",
+      "vasquez-check",
+      "vasquez-records",
+      "vasquez-deposition",
+      "vasquez-bayside-v1"
+    ]
+  },
+  {
+    "id": "vasquez-statement-v2",
+    "documentId": "vasquez-statement-v2",
+    "matterId": "m27",
+    "version": 2,
+    "signed": true,
+    "signedDate": "2026-08-13",
+    "date": "2026-08-13",
+    "grossCents": 3200000,
+    "lines": [
+      {
+        "clientId": "c42",
+        "kind": "attorney_fee",
+        "amountCents": 755000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c42",
+        "kind": "costs",
+        "amountCents": 180000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c42",
+        "kind": "lien",
+        "amountCents": 515000,
+        "payeeId": "bayside"
+      },
+      {
+        "clientId": "c42",
+        "kind": "client_share",
+        "amountCents": 1750000,
+        "payeeId": "c42"
+      }
+    ],
+    "insurer": "Harborline Mutual Insurance",
+    "claimNumber": "HL-48215",
+    "lienLetterId": "vasquez-bayside-v2",
+    "supersedes": "vasquez-statement-v1",
+    "sourceDocumentIds": [
+      "fee-c42",
+      "vasquez-check",
+      "vasquez-records",
+      "vasquez-deposition",
+      "vasquez-bayside-v2"
+    ]
+  },
+  {
+    "id": "ford-statement-v1",
+    "documentId": "ford-statement-v1",
+    "matterId": "m28",
+    "version": 1,
+    "signed": true,
+    "signedDate": "2026-09-08",
+    "date": "2026-09-08",
+    "grossCents": 4800000,
+    "lines": [
+      {
+        "clientId": "c43",
+        "kind": "attorney_fee",
+        "amountCents": 1584000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c43",
+        "kind": "costs",
+        "amountCents": 95000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c43",
+        "kind": "client_share",
+        "amountCents": 3121000,
+        "payeeId": "c43"
+      }
+    ],
+    "insurer": "Tidemark Casualty Cooperative",
+    "claimNumber": "TC-63090",
+    "lienLetterId": null,
+    "supersedes": null,
+    "sourceDocumentIds": [
+      "fee-c43",
+      "ford-settlement",
+      "ford-records",
+      "ford-scene"
+    ]
+  },
+  {
+    "id": "castillo-statement-v1",
+    "documentId": "castillo-statement-v1",
+    "matterId": "m29",
+    "version": 1,
+    "signed": true,
+    "signedDate": "2026-11-12",
+    "date": "2026-11-12",
+    "grossCents": 4000000,
+    "lines": [
+      {
+        "clientId": "c44",
+        "kind": "attorney_fee",
+        "amountCents": 1164000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c44",
+        "kind": "costs",
+        "amountCents": 120000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c44",
+        "kind": "lien",
+        "amountCents": 735000,
+        "payeeId": "bayside"
+      },
+      {
+        "clientId": "c44",
+        "kind": "client_share",
+        "amountCents": 1981000,
+        "payeeId": "c44"
+      }
+    ],
+    "insurer": "Harborline Mutual Insurance",
+    "claimNumber": "HL-51340",
+    "lienLetterId": "castillo-bayside-v2",
+    "supersedes": null,
+    "sourceDocumentIds": [
+      "fee-c44",
+      "castillo-check",
+      "castillo-records",
+      "castillo-deposition",
+      "castillo-bayside-v2"
+    ]
   }
 ]

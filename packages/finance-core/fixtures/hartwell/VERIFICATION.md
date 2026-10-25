@@ -1,4 +1,33 @@
-﻿# Verification record — document realism pass
+﻿# Verification record — learning demo pass
+
+Run on `main` with Python 3.11 and the pinned `requirements.txt` dependencies.
+No application, Convex deployment, external model, or payment was run.
+
+```powershell
+packages/finance-core/fixtures/hartwell/.venv/Scripts/python.exe packages/finance-core/fixtures/hartwell/verify.py --check-determinism
+```
+
+Result: **PASS** before and after complete regeneration (547 artifact hashes).
+
+- 44 clients, 29 matters, 175 bank transactions and balanced journal entries;
+  all six month ends reconcile. October closes at $368,731.49 (was $243,731.49)
+  because Harborline draft 902174 now deposits October 22.
+- Cho's minimum is still -420000 cents; May to September closing balances are
+  unchanged because each new settlement is fully disbursed in its own month.
+- 257 PDFs / 263 pages; 130 scanned. Every page has the fictional-record footer.
+- The original ten-case answer key still matches its fingerprint; the new
+  `learning` section is checked separately against the exports: L1 and L2
+  onboarding patterns, the rejected gross-fee rule (1 of 3 disagrees), the L3
+  backtest (3 of 3 agree, October flags only Bello), and the November items.
+- Mutating one L3 backtest figure in the answer key fails verification.
+
+Changed existing artifacts: the July to October bank CSVs and statements (new
+lines), `recon-10` (deposit) and the ERP exports that gained records. Every
+other pre-existing PDF and text sidecar is byte-for-byte unchanged. Bello's fee
+agreement already stated 25% of net after costs; the complaint and filing fee
+receipt already existed, dated 03/03/2026, so neither was regenerated.
+
+# Verification record — document realism pass
 
 Run in the isolated `mangekyo-hartwell-data` worktree on `edwin-hartwell-data`,
 with Python 3.11 and the pinned `requirements.txt` dependencies. No application,
