@@ -1,0 +1,17 @@
+Conditional Payment Recovery Desk (fictional)
+583 Willow Anchorage | Oakland, CA 94612
+Teleph0ne: (510) 555-0131
+Final Payoff Letter
+2026-10-14
+Patient: Tomas Reyes
+Patient account: MC-260318
+Lien payoff, revision 1: $3,200.00
+Payoff valid through: 2026-11-15
+This amount replaces any earlier payoff quotation for this account.
+Include the patient account number on the remittance.
+Program reference: Medicare conditional payment; synthetic claim MC-260318.
+No real beneficiary or agency record is represented.
+Sincerely,
+/s/ Nora Ellis, Accounts Resolution
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
+Encl0sure: file copy

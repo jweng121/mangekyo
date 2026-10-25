@@ -1,0 +1,25 @@
+[
+  {
+    "id": "policy-hl50877",
+    "documentId": "policy-hl50877",
+    "status": "approved",
+    "approvedBy": "sam",
+    "approvedDate": "2026-10-23",
+    "claimNumber": "HL-50877",
+    "allocationAgreementId": "allocation-global",
+    "allocations": [
+      {
+        "clientId": "c01",
+        "basisPoints": 5000
+      },
+      {
+        "clientId": "c02",
+        "basisPoints": 3000
+      },
+      {
+        "clientId": "c03",
+        "basisPoints": 2000
+      }
+    ]
+  }
+]

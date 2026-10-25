@@ -1,0 +1,884 @@
+[
+  {
+    "id": "h05-01-invoice",
+    "documentId": "h05-01-invoice",
+    "clientId": "c05",
+    "matterId": "m03",
+    "date": "2026-05-03",
+    "amountCents": 42500,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 42500,
+        "amountCents": 42500
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h05-02-invoice",
+    "documentId": "h05-02-invoice",
+    "clientId": "c06",
+    "matterId": "m04",
+    "date": "2026-05-06",
+    "amountCents": 35750,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 11,
+        "rateCents": 32500,
+        "amountCents": 35750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h05-03-invoice",
+    "documentId": "h05-03-invoice",
+    "clientId": "c07",
+    "matterId": "m05",
+    "date": "2026-05-09",
+    "amountCents": 42750,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 42750,
+        "amountCents": 42750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h05-04-invoice",
+    "documentId": "h05-04-invoice",
+    "clientId": "c08",
+    "matterId": "m06",
+    "date": "2026-05-12",
+    "amountCents": 42250,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 13,
+        "rateCents": 32500,
+        "amountCents": 42250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h05-05-invoice",
+    "documentId": "h05-05-invoice",
+    "clientId": "c09",
+    "matterId": "m07",
+    "date": "2026-05-15",
+    "amountCents": 43000,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 43000,
+        "amountCents": 43000
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h05-06-invoice",
+    "documentId": "h05-06-invoice",
+    "clientId": "c10",
+    "matterId": "m08",
+    "date": "2026-05-18",
+    "amountCents": 48750,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 15,
+        "rateCents": 32500,
+        "amountCents": 48750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h05-07-invoice",
+    "documentId": "h05-07-invoice",
+    "clientId": "c11",
+    "matterId": "m09",
+    "date": "2026-05-21",
+    "amountCents": 43250,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 43250,
+        "amountCents": 43250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h05-08-invoice",
+    "documentId": "h05-08-invoice",
+    "clientId": "c12",
+    "matterId": "m10",
+    "date": "2026-05-24",
+    "amountCents": 55250,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 17,
+        "rateCents": 32500,
+        "amountCents": 55250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h06-01-invoice",
+    "documentId": "h06-01-invoice",
+    "clientId": "c13",
+    "matterId": "m11",
+    "date": "2026-06-03",
+    "amountCents": 42500,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 42500,
+        "amountCents": 42500
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h06-02-invoice",
+    "documentId": "h06-02-invoice",
+    "clientId": "c14",
+    "matterId": "m12",
+    "date": "2026-06-06",
+    "amountCents": 35750,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 11,
+        "rateCents": 32500,
+        "amountCents": 35750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h06-03-invoice",
+    "documentId": "h06-03-invoice",
+    "clientId": "c15",
+    "matterId": "m13",
+    "date": "2026-06-09",
+    "amountCents": 42750,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 42750,
+        "amountCents": 42750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h06-04-invoice",
+    "documentId": "h06-04-invoice",
+    "clientId": "c16",
+    "matterId": "m14",
+    "date": "2026-06-12",
+    "amountCents": 42250,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 13,
+        "rateCents": 32500,
+        "amountCents": 42250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h06-05-invoice",
+    "documentId": "h06-05-invoice",
+    "clientId": "c17",
+    "matterId": "m15",
+    "date": "2026-06-15",
+    "amountCents": 43000,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 43000,
+        "amountCents": 43000
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h06-06-invoice",
+    "documentId": "h06-06-invoice",
+    "clientId": "c18",
+    "matterId": "m16",
+    "date": "2026-06-18",
+    "amountCents": 48750,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 15,
+        "rateCents": 32500,
+        "amountCents": 48750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h06-07-invoice",
+    "documentId": "h06-07-invoice",
+    "clientId": "c19",
+    "matterId": "m17",
+    "date": "2026-06-21",
+    "amountCents": 43250,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 43250,
+        "amountCents": 43250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h06-08-invoice",
+    "documentId": "h06-08-invoice",
+    "clientId": "c20",
+    "matterId": "m18",
+    "date": "2026-06-24",
+    "amountCents": 55250,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 17,
+        "rateCents": 32500,
+        "amountCents": 55250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h07-01-invoice",
+    "documentId": "h07-01-invoice",
+    "clientId": "c21",
+    "matterId": "m19",
+    "date": "2026-07-03",
+    "amountCents": 42500,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 42500,
+        "amountCents": 42500
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h07-02-invoice",
+    "documentId": "h07-02-invoice",
+    "clientId": "c22",
+    "matterId": "m20",
+    "date": "2026-07-06",
+    "amountCents": 35750,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 11,
+        "rateCents": 32500,
+        "amountCents": 35750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h07-03-invoice",
+    "documentId": "h07-03-invoice",
+    "clientId": "c23",
+    "matterId": "m21",
+    "date": "2026-07-09",
+    "amountCents": 42750,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 42750,
+        "amountCents": 42750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h07-04-invoice",
+    "documentId": "h07-04-invoice",
+    "clientId": "c24",
+    "matterId": "m22",
+    "date": "2026-07-12",
+    "amountCents": 42250,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 13,
+        "rateCents": 32500,
+        "amountCents": 42250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h07-05-invoice",
+    "documentId": "h07-05-invoice",
+    "clientId": "c25",
+    "matterId": "m23",
+    "date": "2026-07-15",
+    "amountCents": 43000,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 43000,
+        "amountCents": 43000
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h07-06-invoice",
+    "documentId": "h07-06-invoice",
+    "clientId": "c26",
+    "matterId": "m24",
+    "date": "2026-07-18",
+    "amountCents": 48750,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 15,
+        "rateCents": 32500,
+        "amountCents": 48750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h07-07-invoice",
+    "documentId": "h07-07-invoice",
+    "clientId": "c27",
+    "matterId": "m25",
+    "date": "2026-07-21",
+    "amountCents": 43250,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 43250,
+        "amountCents": 43250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h07-08-invoice",
+    "documentId": "h07-08-invoice",
+    "clientId": "c28",
+    "matterId": "m03",
+    "date": "2026-07-24",
+    "amountCents": 55250,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 17,
+        "rateCents": 32500,
+        "amountCents": 55250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h08-01-invoice",
+    "documentId": "h08-01-invoice",
+    "clientId": "c29",
+    "matterId": "m04",
+    "date": "2026-08-03",
+    "amountCents": 42500,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 42500,
+        "amountCents": 42500
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h08-02-invoice",
+    "documentId": "h08-02-invoice",
+    "clientId": "c30",
+    "matterId": "m05",
+    "date": "2026-08-06",
+    "amountCents": 35750,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 11,
+        "rateCents": 32500,
+        "amountCents": 35750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h08-03-invoice",
+    "documentId": "h08-03-invoice",
+    "clientId": "c31",
+    "matterId": "m06",
+    "date": "2026-08-09",
+    "amountCents": 42750,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 42750,
+        "amountCents": 42750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h08-04-invoice",
+    "documentId": "h08-04-invoice",
+    "clientId": "c32",
+    "matterId": "m07",
+    "date": "2026-08-12",
+    "amountCents": 42250,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 13,
+        "rateCents": 32500,
+        "amountCents": 42250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h08-05-invoice",
+    "documentId": "h08-05-invoice",
+    "clientId": "c33",
+    "matterId": "m08",
+    "date": "2026-08-15",
+    "amountCents": 43000,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 43000,
+        "amountCents": 43000
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h08-06-invoice",
+    "documentId": "h08-06-invoice",
+    "clientId": "c34",
+    "matterId": "m09",
+    "date": "2026-08-18",
+    "amountCents": 48750,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 15,
+        "rateCents": 32500,
+        "amountCents": 48750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h08-07-invoice",
+    "documentId": "h08-07-invoice",
+    "clientId": "c35",
+    "matterId": "m10",
+    "date": "2026-08-21",
+    "amountCents": 43250,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 43250,
+        "amountCents": 43250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h08-08-invoice",
+    "documentId": "h08-08-invoice",
+    "clientId": "c36",
+    "matterId": "m11",
+    "date": "2026-08-24",
+    "amountCents": 55250,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 17,
+        "rateCents": 32500,
+        "amountCents": 55250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h09-01-invoice",
+    "documentId": "h09-01-invoice",
+    "clientId": "c37",
+    "matterId": "m12",
+    "date": "2026-09-03",
+    "amountCents": 42500,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 42500,
+        "amountCents": 42500
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h09-02-invoice",
+    "documentId": "h09-02-invoice",
+    "clientId": "c38",
+    "matterId": "m13",
+    "date": "2026-09-06",
+    "amountCents": 35750,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 11,
+        "rateCents": 32500,
+        "amountCents": 35750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h09-03-invoice",
+    "documentId": "h09-03-invoice",
+    "clientId": "c39",
+    "matterId": "m14",
+    "date": "2026-09-09",
+    "amountCents": 42750,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 42750,
+        "amountCents": 42750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h09-04-invoice",
+    "documentId": "h09-04-invoice",
+    "clientId": "c40",
+    "matterId": "m15",
+    "date": "2026-09-12",
+    "amountCents": 42250,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 13,
+        "rateCents": 32500,
+        "amountCents": 42250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h09-05-invoice",
+    "documentId": "h09-05-invoice",
+    "clientId": "c05",
+    "matterId": "m03",
+    "date": "2026-09-15",
+    "amountCents": 43000,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 43000,
+        "amountCents": 43000
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h09-06-invoice",
+    "documentId": "h09-06-invoice",
+    "clientId": "c06",
+    "matterId": "m04",
+    "date": "2026-09-18",
+    "amountCents": 48750,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 15,
+        "rateCents": 32500,
+        "amountCents": 48750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h09-07-invoice",
+    "documentId": "h09-07-invoice",
+    "clientId": "c07",
+    "matterId": "m05",
+    "date": "2026-09-21",
+    "amountCents": 43250,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 43250,
+        "amountCents": 43250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h09-08-invoice",
+    "documentId": "h09-08-invoice",
+    "clientId": "c08",
+    "matterId": "m06",
+    "date": "2026-09-24",
+    "amountCents": 55250,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 17,
+        "rateCents": 32500,
+        "amountCents": 55250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h10-01-invoice",
+    "documentId": "h10-01-invoice",
+    "clientId": "c09",
+    "matterId": "m07",
+    "date": "2026-10-03",
+    "amountCents": 42500,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 42500,
+        "amountCents": 42500
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h10-02-invoice",
+    "documentId": "h10-02-invoice",
+    "clientId": "c10",
+    "matterId": "m08",
+    "date": "2026-10-06",
+    "amountCents": 35750,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 11,
+        "rateCents": 32500,
+        "amountCents": 35750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h10-03-invoice",
+    "documentId": "h10-03-invoice",
+    "clientId": "c11",
+    "matterId": "m09",
+    "date": "2026-10-09",
+    "amountCents": 42750,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 42750,
+        "amountCents": 42750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h10-04-invoice",
+    "documentId": "h10-04-invoice",
+    "clientId": "c12",
+    "matterId": "m10",
+    "date": "2026-10-12",
+    "amountCents": 42250,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 13,
+        "rateCents": 32500,
+        "amountCents": 42250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h10-05-invoice",
+    "documentId": "h10-05-invoice",
+    "clientId": "c13",
+    "matterId": "m11",
+    "date": "2026-10-15",
+    "amountCents": 43000,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 43000,
+        "amountCents": 43000
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h10-06-invoice",
+    "documentId": "h10-06-invoice",
+    "clientId": "c14",
+    "matterId": "m12",
+    "date": "2026-10-18",
+    "amountCents": 48750,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 15,
+        "rateCents": 32500,
+        "amountCents": 48750
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h10-07-invoice",
+    "documentId": "h10-07-invoice",
+    "clientId": "c15",
+    "matterId": "m13",
+    "date": "2026-10-21",
+    "amountCents": 43250,
+    "lines": [
+      {
+        "description": "Completed milestone: review and written advice",
+        "quantity": 1,
+        "unitCents": 43250,
+        "amountCents": 43250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "h10-08-invoice",
+    "documentId": "h10-08-invoice",
+    "clientId": "c16",
+    "matterId": "m14",
+    "date": "2026-10-24",
+    "amountCents": 55250,
+    "lines": [
+      {
+        "description": "Review records, conference and correspondence",
+        "hoursTenths": 17,
+        "rateCents": 32500,
+        "amountCents": 55250
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "cho-expert-invoice",
+    "documentId": "cho-expert-invoice",
+    "clientId": "c04",
+    "matterId": "m02",
+    "date": "2026-10-08",
+    "amountCents": 600000,
+    "lines": [
+      {
+        "description": "Site inspection and expert testimony preparation",
+        "quantity": 8,
+        "unitCents": 75000,
+        "amountCents": 600000
+      }
+    ],
+    "status": "approved",
+    "approvedBy": "sam"
+  }
+]

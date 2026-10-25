@@ -1,0 +1,3843 @@
+[
+  {
+    "id": "je-h05-01-in",
+    "transactionId": "h05-01-in",
+    "date": "2026-05-02",
+    "clientId": "c05",
+    "matterId": "m03",
+    "documentIds": [
+      "h05-01-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 566032,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c05",
+        "debitCents": 0,
+        "creditCents": 566032
+      }
+    ]
+  },
+  {
+    "id": "je-h05-01-fee",
+    "transactionId": "h05-01-fee",
+    "date": "2026-05-03",
+    "clientId": "c05",
+    "matterId": "m03",
+    "documentIds": [
+      "h05-01-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42500
+      },
+      {
+        "account": "liability:c05",
+        "debitCents": 42500,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-01-out",
+    "transactionId": "h05-01-out",
+    "date": "2026-05-04",
+    "clientId": "c05",
+    "matterId": "m03",
+    "documentIds": [
+      "h05-01-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 12785
+      },
+      {
+        "account": "liability:c05",
+        "debitCents": 12785,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-cho-retainer",
+    "transactionId": "cho-retainer",
+    "date": "2026-05-05",
+    "clientId": "c04",
+    "matterId": "m02",
+    "documentIds": [
+      "cho-retainer"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 180000,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c04",
+        "debitCents": 0,
+        "creditCents": 180000
+      }
+    ]
+  },
+  {
+    "id": "je-h05-02-in",
+    "transactionId": "h05-02-in",
+    "date": "2026-05-05",
+    "clientId": "c06",
+    "matterId": "m04",
+    "documentIds": [
+      "h05-02-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 550596,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c06",
+        "debitCents": 0,
+        "creditCents": 550596
+      }
+    ]
+  },
+  {
+    "id": "je-h05-02-fee",
+    "transactionId": "h05-02-fee",
+    "date": "2026-05-06",
+    "clientId": "c06",
+    "matterId": "m04",
+    "documentIds": [
+      "h05-02-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 35750
+      },
+      {
+        "account": "liability:c06",
+        "debitCents": 35750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-02-out",
+    "transactionId": "h05-02-out",
+    "date": "2026-05-07",
+    "clientId": "c06",
+    "matterId": "m04",
+    "documentIds": [
+      "h05-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13102
+      },
+      {
+        "account": "liability:c06",
+        "debitCents": 13102,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-03-in",
+    "transactionId": "h05-03-in",
+    "date": "2026-05-08",
+    "clientId": "c07",
+    "matterId": "m05",
+    "documentIds": [
+      "h05-03-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 505924,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c07",
+        "debitCents": 0,
+        "creditCents": 505924
+      }
+    ]
+  },
+  {
+    "id": "je-h05-03-fee",
+    "transactionId": "h05-03-fee",
+    "date": "2026-05-09",
+    "clientId": "c07",
+    "matterId": "m05",
+    "documentIds": [
+      "h05-03-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42750
+      },
+      {
+        "account": "liability:c07",
+        "debitCents": 42750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-03-out",
+    "transactionId": "h05-03-out",
+    "date": "2026-05-10",
+    "clientId": "c07",
+    "matterId": "m05",
+    "documentIds": [
+      "h05-03-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13419
+      },
+      {
+        "account": "liability:c07",
+        "debitCents": 13419,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-04-in",
+    "transactionId": "h05-04-in",
+    "date": "2026-05-11",
+    "clientId": "c08",
+    "matterId": "m06",
+    "documentIds": [
+      "h05-04-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 552768,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c08",
+        "debitCents": 0,
+        "creditCents": 552768
+      }
+    ]
+  },
+  {
+    "id": "je-h05-04-fee",
+    "transactionId": "h05-04-fee",
+    "date": "2026-05-12",
+    "clientId": "c08",
+    "matterId": "m06",
+    "documentIds": [
+      "h05-04-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42250
+      },
+      {
+        "account": "liability:c08",
+        "debitCents": 42250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-04-out",
+    "transactionId": "h05-04-out",
+    "date": "2026-05-13",
+    "clientId": "c08",
+    "matterId": "m06",
+    "documentIds": [
+      "h05-04-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13736
+      },
+      {
+        "account": "liability:c08",
+        "debitCents": 13736,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-05-in",
+    "transactionId": "h05-05-in",
+    "date": "2026-05-14",
+    "clientId": "c09",
+    "matterId": "m07",
+    "documentIds": [
+      "h05-05-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 567370,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c09",
+        "debitCents": 0,
+        "creditCents": 567370
+      }
+    ]
+  },
+  {
+    "id": "je-h05-05-fee",
+    "transactionId": "h05-05-fee",
+    "date": "2026-05-15",
+    "clientId": "c09",
+    "matterId": "m07",
+    "documentIds": [
+      "h05-05-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 43000
+      },
+      {
+        "account": "liability:c09",
+        "debitCents": 43000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-05-out",
+    "transactionId": "h05-05-out",
+    "date": "2026-05-16",
+    "clientId": "c09",
+    "matterId": "m07",
+    "documentIds": [
+      "h05-05-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14053
+      },
+      {
+        "account": "liability:c09",
+        "debitCents": 14053,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-06-in",
+    "transactionId": "h05-06-in",
+    "date": "2026-05-17",
+    "clientId": "c10",
+    "matterId": "m08",
+    "documentIds": [
+      "h05-06-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 515951,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c10",
+        "debitCents": 0,
+        "creditCents": 515951
+      }
+    ]
+  },
+  {
+    "id": "je-h05-06-fee",
+    "transactionId": "h05-06-fee",
+    "date": "2026-05-18",
+    "clientId": "c10",
+    "matterId": "m08",
+    "documentIds": [
+      "h05-06-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 48750
+      },
+      {
+        "account": "liability:c10",
+        "debitCents": 48750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-06-out",
+    "transactionId": "h05-06-out",
+    "date": "2026-05-19",
+    "clientId": "c10",
+    "matterId": "m08",
+    "documentIds": [
+      "h05-06-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14370
+      },
+      {
+        "account": "liability:c10",
+        "debitCents": 14370,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-noise-1",
+    "transactionId": "noise-1",
+    "date": "2026-05-19",
+    "clientId": "c06",
+    "matterId": "m04",
+    "documentIds": [
+      "noise-1"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 87525,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c06",
+        "debitCents": 0,
+        "creditCents": 87525
+      }
+    ]
+  },
+  {
+    "id": "je-h05-07-in",
+    "transactionId": "h05-07-in",
+    "date": "2026-05-20",
+    "clientId": "c11",
+    "matterId": "m09",
+    "documentIds": [
+      "h05-07-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 584443,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c11",
+        "debitCents": 0,
+        "creditCents": 584443
+      }
+    ]
+  },
+  {
+    "id": "je-h05-07-fee",
+    "transactionId": "h05-07-fee",
+    "date": "2026-05-21",
+    "clientId": "c11",
+    "matterId": "m09",
+    "documentIds": [
+      "h05-07-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 43250
+      },
+      {
+        "account": "liability:c11",
+        "debitCents": 43250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-07-out",
+    "transactionId": "h05-07-out",
+    "date": "2026-05-22",
+    "clientId": "c11",
+    "matterId": "m09",
+    "documentIds": [
+      "h05-07-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14687
+      },
+      {
+        "account": "liability:c11",
+        "debitCents": 14687,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-08-in",
+    "transactionId": "h05-08-in",
+    "date": "2026-05-23",
+    "clientId": "c12",
+    "matterId": "m10",
+    "documentIds": [
+      "h05-08-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 534417,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c12",
+        "debitCents": 0,
+        "creditCents": 534417
+      }
+    ]
+  },
+  {
+    "id": "je-h05-08-fee",
+    "transactionId": "h05-08-fee",
+    "date": "2026-05-24",
+    "clientId": "c12",
+    "matterId": "m10",
+    "documentIds": [
+      "h05-08-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 55250
+      },
+      {
+        "account": "liability:c12",
+        "debitCents": 55250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h05-08-out",
+    "transactionId": "h05-08-out",
+    "date": "2026-05-25",
+    "clientId": "c12",
+    "matterId": "m10",
+    "documentIds": [
+      "h05-08-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 15004
+      },
+      {
+        "account": "liability:c12",
+        "debitCents": 15004,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-01-in",
+    "transactionId": "h06-01-in",
+    "date": "2026-06-02",
+    "clientId": "c13",
+    "matterId": "m11",
+    "documentIds": [
+      "h06-01-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 514306,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c13",
+        "debitCents": 0,
+        "creditCents": 514306
+      }
+    ]
+  },
+  {
+    "id": "je-h06-01-fee",
+    "transactionId": "h06-01-fee",
+    "date": "2026-06-03",
+    "clientId": "c13",
+    "matterId": "m11",
+    "documentIds": [
+      "h06-01-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42500
+      },
+      {
+        "account": "liability:c13",
+        "debitCents": 42500,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-01-out",
+    "transactionId": "h06-01-out",
+    "date": "2026-06-04",
+    "clientId": "c13",
+    "matterId": "m11",
+    "documentIds": [
+      "h06-01-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 12785
+      },
+      {
+        "account": "liability:c13",
+        "debitCents": 12785,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-02-in",
+    "transactionId": "h06-02-in",
+    "date": "2026-06-05",
+    "clientId": "c14",
+    "matterId": "m12",
+    "documentIds": [
+      "h06-02-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 523408,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c14",
+        "debitCents": 0,
+        "creditCents": 523408
+      }
+    ]
+  },
+  {
+    "id": "je-h06-02-fee",
+    "transactionId": "h06-02-fee",
+    "date": "2026-06-06",
+    "clientId": "c14",
+    "matterId": "m12",
+    "documentIds": [
+      "h06-02-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 35750
+      },
+      {
+        "account": "liability:c14",
+        "debitCents": 35750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-02-out",
+    "transactionId": "h06-02-out",
+    "date": "2026-06-07",
+    "clientId": "c14",
+    "matterId": "m12",
+    "documentIds": [
+      "h06-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13102
+      },
+      {
+        "account": "liability:c14",
+        "debitCents": 13102,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-03-in",
+    "transactionId": "h06-03-in",
+    "date": "2026-06-08",
+    "clientId": "c15",
+    "matterId": "m13",
+    "documentIds": [
+      "h06-03-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 577425,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c15",
+        "debitCents": 0,
+        "creditCents": 577425
+      }
+    ]
+  },
+  {
+    "id": "je-h06-03-fee",
+    "transactionId": "h06-03-fee",
+    "date": "2026-06-09",
+    "clientId": "c15",
+    "matterId": "m13",
+    "documentIds": [
+      "h06-03-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42750
+      },
+      {
+        "account": "liability:c15",
+        "debitCents": 42750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-03-out",
+    "transactionId": "h06-03-out",
+    "date": "2026-06-10",
+    "clientId": "c15",
+    "matterId": "m13",
+    "documentIds": [
+      "h06-03-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13419
+      },
+      {
+        "account": "liability:c15",
+        "debitCents": 13419,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-04-in",
+    "transactionId": "h06-04-in",
+    "date": "2026-06-11",
+    "clientId": "c16",
+    "matterId": "m14",
+    "documentIds": [
+      "h06-04-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 564188,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c16",
+        "debitCents": 0,
+        "creditCents": 564188
+      }
+    ]
+  },
+  {
+    "id": "je-park-funding",
+    "transactionId": "park-funding",
+    "date": "2026-06-11",
+    "clientId": "c08",
+    "matterId": "m06",
+    "documentIds": [
+      "park-funding"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 320075,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c08",
+        "debitCents": 0,
+        "creditCents": 320075
+      }
+    ]
+  },
+  {
+    "id": "je-bayside-prior-paid",
+    "transactionId": "bayside-prior-paid",
+    "date": "2026-06-12",
+    "clientId": "c08",
+    "matterId": "m06",
+    "documentIds": [
+      "bayside-prior-letter",
+      "bayside-prior-confirmation"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 320075
+      },
+      {
+        "account": "liability:c08",
+        "debitCents": 320075,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-04-fee",
+    "transactionId": "h06-04-fee",
+    "date": "2026-06-12",
+    "clientId": "c16",
+    "matterId": "m14",
+    "documentIds": [
+      "h06-04-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42250
+      },
+      {
+        "account": "liability:c16",
+        "debitCents": 42250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-04-out",
+    "transactionId": "h06-04-out",
+    "date": "2026-06-13",
+    "clientId": "c16",
+    "matterId": "m14",
+    "documentIds": [
+      "h06-04-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13736
+      },
+      {
+        "account": "liability:c16",
+        "debitCents": 13736,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-05-in",
+    "transactionId": "h06-05-in",
+    "date": "2026-06-14",
+    "clientId": "c17",
+    "matterId": "m15",
+    "documentIds": [
+      "h06-05-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 581167,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c17",
+        "debitCents": 0,
+        "creditCents": 581167
+      }
+    ]
+  },
+  {
+    "id": "je-h06-05-fee",
+    "transactionId": "h06-05-fee",
+    "date": "2026-06-15",
+    "clientId": "c17",
+    "matterId": "m15",
+    "documentIds": [
+      "h06-05-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 43000
+      },
+      {
+        "account": "liability:c17",
+        "debitCents": 43000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-05-out",
+    "transactionId": "h06-05-out",
+    "date": "2026-06-16",
+    "clientId": "c17",
+    "matterId": "m15",
+    "documentIds": [
+      "h06-05-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14053
+      },
+      {
+        "account": "liability:c17",
+        "debitCents": 14053,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-06-in",
+    "transactionId": "h06-06-in",
+    "date": "2026-06-17",
+    "clientId": "c18",
+    "matterId": "m16",
+    "documentIds": [
+      "h06-06-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 522751,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c18",
+        "debitCents": 0,
+        "creditCents": 522751
+      }
+    ]
+  },
+  {
+    "id": "je-h06-06-fee",
+    "transactionId": "h06-06-fee",
+    "date": "2026-06-18",
+    "clientId": "c18",
+    "matterId": "m16",
+    "documentIds": [
+      "h06-06-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 48750
+      },
+      {
+        "account": "liability:c18",
+        "debitCents": 48750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-noise-2",
+    "transactionId": "noise-2",
+    "date": "2026-06-18",
+    "clientId": "c07",
+    "matterId": "m05",
+    "documentIds": [
+      "noise-2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 92040,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c07",
+        "debitCents": 0,
+        "creditCents": 92040
+      }
+    ]
+  },
+  {
+    "id": "je-h06-06-out",
+    "transactionId": "h06-06-out",
+    "date": "2026-06-19",
+    "clientId": "c18",
+    "matterId": "m16",
+    "documentIds": [
+      "h06-06-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14370
+      },
+      {
+        "account": "liability:c18",
+        "debitCents": 14370,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-07-in",
+    "transactionId": "h06-07-in",
+    "date": "2026-06-20",
+    "clientId": "c19",
+    "matterId": "m17",
+    "documentIds": [
+      "h06-07-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 525584,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c19",
+        "debitCents": 0,
+        "creditCents": 525584
+      }
+    ]
+  },
+  {
+    "id": "je-h06-07-fee",
+    "transactionId": "h06-07-fee",
+    "date": "2026-06-21",
+    "clientId": "c19",
+    "matterId": "m17",
+    "documentIds": [
+      "h06-07-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 43250
+      },
+      {
+        "account": "liability:c19",
+        "debitCents": 43250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-07-out",
+    "transactionId": "h06-07-out",
+    "date": "2026-06-22",
+    "clientId": "c19",
+    "matterId": "m17",
+    "documentIds": [
+      "h06-07-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14687
+      },
+      {
+        "account": "liability:c19",
+        "debitCents": 14687,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-08-in",
+    "transactionId": "h06-08-in",
+    "date": "2026-06-23",
+    "clientId": "c20",
+    "matterId": "m18",
+    "documentIds": [
+      "h06-08-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 504607,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c20",
+        "debitCents": 0,
+        "creditCents": 504607
+      }
+    ]
+  },
+  {
+    "id": "je-h06-08-fee",
+    "transactionId": "h06-08-fee",
+    "date": "2026-06-24",
+    "clientId": "c20",
+    "matterId": "m18",
+    "documentIds": [
+      "h06-08-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 55250
+      },
+      {
+        "account": "liability:c20",
+        "debitCents": 55250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h06-08-out",
+    "transactionId": "h06-08-out",
+    "date": "2026-06-25",
+    "clientId": "c20",
+    "matterId": "m18",
+    "documentIds": [
+      "h06-08-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 15004
+      },
+      {
+        "account": "liability:c20",
+        "debitCents": 15004,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-01-in",
+    "transactionId": "h07-01-in",
+    "date": "2026-07-02",
+    "clientId": "c21",
+    "matterId": "m19",
+    "documentIds": [
+      "h07-01-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 558789,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c21",
+        "debitCents": 0,
+        "creditCents": 558789
+      }
+    ]
+  },
+  {
+    "id": "je-h07-01-fee",
+    "transactionId": "h07-01-fee",
+    "date": "2026-07-03",
+    "clientId": "c21",
+    "matterId": "m19",
+    "documentIds": [
+      "h07-01-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42500
+      },
+      {
+        "account": "liability:c21",
+        "debitCents": 42500,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-01-out",
+    "transactionId": "h07-01-out",
+    "date": "2026-07-04",
+    "clientId": "c21",
+    "matterId": "m19",
+    "documentIds": [
+      "h07-01-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 12785
+      },
+      {
+        "account": "liability:c21",
+        "debitCents": 12785,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-02-in",
+    "transactionId": "h07-02-in",
+    "date": "2026-07-05",
+    "clientId": "c22",
+    "matterId": "m20",
+    "documentIds": [
+      "h07-02-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 512573,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c22",
+        "debitCents": 0,
+        "creditCents": 512573
+      }
+    ]
+  },
+  {
+    "id": "je-h07-02-fee",
+    "transactionId": "h07-02-fee",
+    "date": "2026-07-06",
+    "clientId": "c22",
+    "matterId": "m20",
+    "documentIds": [
+      "h07-02-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 35750
+      },
+      {
+        "account": "liability:c22",
+        "debitCents": 35750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-02-out",
+    "transactionId": "h07-02-out",
+    "date": "2026-07-07",
+    "clientId": "c22",
+    "matterId": "m20",
+    "documentIds": [
+      "h07-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13102
+      },
+      {
+        "account": "liability:c22",
+        "debitCents": 13102,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-title-wire-1",
+    "transactionId": "title-wire-1",
+    "date": "2026-07-07",
+    "clientId": "c06",
+    "matterId": "m04",
+    "documentIds": [
+      "title-wire-1"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 734125,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c06",
+        "debitCents": 0,
+        "creditCents": 734125
+      }
+    ]
+  },
+  {
+    "id": "je-h07-03-in",
+    "transactionId": "h07-03-in",
+    "date": "2026-07-08",
+    "clientId": "c23",
+    "matterId": "m21",
+    "documentIds": [
+      "h07-03-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 565219,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c23",
+        "debitCents": 0,
+        "creditCents": 565219
+      }
+    ]
+  },
+  {
+    "id": "je-title-wire-2",
+    "transactionId": "title-wire-2",
+    "date": "2026-07-08",
+    "clientId": "c06",
+    "matterId": "m04",
+    "documentIds": [
+      "title-wire-2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 734125,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c06",
+        "debitCents": 0,
+        "creditCents": 734125
+      }
+    ]
+  },
+  {
+    "id": "je-h07-03-fee",
+    "transactionId": "h07-03-fee",
+    "date": "2026-07-09",
+    "clientId": "c23",
+    "matterId": "m21",
+    "documentIds": [
+      "h07-03-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42750
+      },
+      {
+        "account": "liability:c23",
+        "debitCents": 42750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-03-out",
+    "transactionId": "h07-03-out",
+    "date": "2026-07-10",
+    "clientId": "c23",
+    "matterId": "m21",
+    "documentIds": [
+      "h07-03-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13419
+      },
+      {
+        "account": "liability:c23",
+        "debitCents": 13419,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-title-return",
+    "transactionId": "title-return",
+    "date": "2026-07-10",
+    "clientId": "c06",
+    "matterId": "m04",
+    "documentIds": [
+      "title-return"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 734125
+      },
+      {
+        "account": "liability:c06",
+        "debitCents": 734125,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-04-in",
+    "transactionId": "h07-04-in",
+    "date": "2026-07-11",
+    "clientId": "c24",
+    "matterId": "m22",
+    "documentIds": [
+      "h07-04-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 514001,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c24",
+        "debitCents": 0,
+        "creditCents": 514001
+      }
+    ]
+  },
+  {
+    "id": "je-h07-04-fee",
+    "transactionId": "h07-04-fee",
+    "date": "2026-07-12",
+    "clientId": "c24",
+    "matterId": "m22",
+    "documentIds": [
+      "h07-04-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42250
+      },
+      {
+        "account": "liability:c24",
+        "debitCents": 42250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-04-out",
+    "transactionId": "h07-04-out",
+    "date": "2026-07-13",
+    "clientId": "c24",
+    "matterId": "m22",
+    "documentIds": [
+      "h07-04-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13736
+      },
+      {
+        "account": "liability:c24",
+        "debitCents": 13736,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-05-in",
+    "transactionId": "h07-05-in",
+    "date": "2026-07-14",
+    "clientId": "c25",
+    "matterId": "m23",
+    "documentIds": [
+      "h07-05-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 550293,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c25",
+        "debitCents": 0,
+        "creditCents": 550293
+      }
+    ]
+  },
+  {
+    "id": "je-h07-05-fee",
+    "transactionId": "h07-05-fee",
+    "date": "2026-07-15",
+    "clientId": "c25",
+    "matterId": "m23",
+    "documentIds": [
+      "h07-05-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 43000
+      },
+      {
+        "account": "liability:c25",
+        "debitCents": 43000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-05-out",
+    "transactionId": "h07-05-out",
+    "date": "2026-07-16",
+    "clientId": "c25",
+    "matterId": "m23",
+    "documentIds": [
+      "h07-05-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14053
+      },
+      {
+        "account": "liability:c25",
+        "debitCents": 14053,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-06-in",
+    "transactionId": "h07-06-in",
+    "date": "2026-07-17",
+    "clientId": "c26",
+    "matterId": "m24",
+    "documentIds": [
+      "h07-06-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 568309,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c26",
+        "debitCents": 0,
+        "creditCents": 568309
+      }
+    ]
+  },
+  {
+    "id": "je-h07-06-fee",
+    "transactionId": "h07-06-fee",
+    "date": "2026-07-18",
+    "clientId": "c26",
+    "matterId": "m24",
+    "documentIds": [
+      "h07-06-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 48750
+      },
+      {
+        "account": "liability:c26",
+        "debitCents": 48750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-06-out",
+    "transactionId": "h07-06-out",
+    "date": "2026-07-19",
+    "clientId": "c26",
+    "matterId": "m24",
+    "documentIds": [
+      "h07-06-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14370
+      },
+      {
+        "account": "liability:c26",
+        "debitCents": 14370,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-07-in",
+    "transactionId": "h07-07-in",
+    "date": "2026-07-20",
+    "clientId": "c27",
+    "matterId": "m25",
+    "documentIds": [
+      "h07-07-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 521070,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c27",
+        "debitCents": 0,
+        "creditCents": 521070
+      }
+    ]
+  },
+  {
+    "id": "je-h07-07-fee",
+    "transactionId": "h07-07-fee",
+    "date": "2026-07-21",
+    "clientId": "c27",
+    "matterId": "m25",
+    "documentIds": [
+      "h07-07-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 43250
+      },
+      {
+        "account": "liability:c27",
+        "debitCents": 43250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-07-out",
+    "transactionId": "h07-07-out",
+    "date": "2026-07-22",
+    "clientId": "c27",
+    "matterId": "m25",
+    "documentIds": [
+      "h07-07-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14687
+      },
+      {
+        "account": "liability:c27",
+        "debitCents": 14687,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-08-in",
+    "transactionId": "h07-08-in",
+    "date": "2026-07-23",
+    "clientId": "c28",
+    "matterId": "m03",
+    "documentIds": [
+      "h07-08-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 528481,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c28",
+        "debitCents": 0,
+        "creditCents": 528481
+      }
+    ]
+  },
+  {
+    "id": "je-h07-08-fee",
+    "transactionId": "h07-08-fee",
+    "date": "2026-07-24",
+    "clientId": "c28",
+    "matterId": "m03",
+    "documentIds": [
+      "h07-08-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 55250
+      },
+      {
+        "account": "liability:c28",
+        "debitCents": 55250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h07-08-out",
+    "transactionId": "h07-08-out",
+    "date": "2026-07-25",
+    "clientId": "c28",
+    "matterId": "m03",
+    "documentIds": [
+      "h07-08-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 15004
+      },
+      {
+        "account": "liability:c28",
+        "debitCents": 15004,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-01-in",
+    "transactionId": "h08-01-in",
+    "date": "2026-08-02",
+    "clientId": "c29",
+    "matterId": "m04",
+    "documentIds": [
+      "h08-01-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 525351,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c29",
+        "debitCents": 0,
+        "creditCents": 525351
+      }
+    ]
+  },
+  {
+    "id": "je-h08-01-fee",
+    "transactionId": "h08-01-fee",
+    "date": "2026-08-03",
+    "clientId": "c29",
+    "matterId": "m04",
+    "documentIds": [
+      "h08-01-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42500
+      },
+      {
+        "account": "liability:c29",
+        "debitCents": 42500,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-01-out",
+    "transactionId": "h08-01-out",
+    "date": "2026-08-04",
+    "clientId": "c29",
+    "matterId": "m04",
+    "documentIds": [
+      "h08-01-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 12785
+      },
+      {
+        "account": "liability:c29",
+        "debitCents": 12785,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-02-in",
+    "transactionId": "h08-02-in",
+    "date": "2026-08-05",
+    "clientId": "c30",
+    "matterId": "m05",
+    "documentIds": [
+      "h08-02-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 518665,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c30",
+        "debitCents": 0,
+        "creditCents": 518665
+      }
+    ]
+  },
+  {
+    "id": "je-h08-02-fee",
+    "transactionId": "h08-02-fee",
+    "date": "2026-08-06",
+    "clientId": "c30",
+    "matterId": "m05",
+    "documentIds": [
+      "h08-02-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 35750
+      },
+      {
+        "account": "liability:c30",
+        "debitCents": 35750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-02-out",
+    "transactionId": "h08-02-out",
+    "date": "2026-08-07",
+    "clientId": "c30",
+    "matterId": "m05",
+    "documentIds": [
+      "h08-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13102
+      },
+      {
+        "account": "liability:c30",
+        "debitCents": 13102,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-03-in",
+    "transactionId": "h08-03-in",
+    "date": "2026-08-08",
+    "clientId": "c31",
+    "matterId": "m06",
+    "documentIds": [
+      "h08-03-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 505071,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c31",
+        "debitCents": 0,
+        "creditCents": 505071
+      }
+    ]
+  },
+  {
+    "id": "je-h08-03-fee",
+    "transactionId": "h08-03-fee",
+    "date": "2026-08-09",
+    "clientId": "c31",
+    "matterId": "m06",
+    "documentIds": [
+      "h08-03-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42750
+      },
+      {
+        "account": "liability:c31",
+        "debitCents": 42750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-03-out",
+    "transactionId": "h08-03-out",
+    "date": "2026-08-10",
+    "clientId": "c31",
+    "matterId": "m06",
+    "documentIds": [
+      "h08-03-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13419
+      },
+      {
+        "account": "liability:c31",
+        "debitCents": 13419,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-04-in",
+    "transactionId": "h08-04-in",
+    "date": "2026-08-11",
+    "clientId": "c32",
+    "matterId": "m07",
+    "documentIds": [
+      "h08-04-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 523847,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c32",
+        "debitCents": 0,
+        "creditCents": 523847
+      }
+    ]
+  },
+  {
+    "id": "je-h08-04-fee",
+    "transactionId": "h08-04-fee",
+    "date": "2026-08-12",
+    "clientId": "c32",
+    "matterId": "m07",
+    "documentIds": [
+      "h08-04-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42250
+      },
+      {
+        "account": "liability:c32",
+        "debitCents": 42250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-04-out",
+    "transactionId": "h08-04-out",
+    "date": "2026-08-13",
+    "clientId": "c32",
+    "matterId": "m07",
+    "documentIds": [
+      "h08-04-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13736
+      },
+      {
+        "account": "liability:c32",
+        "debitCents": 13736,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-05-in",
+    "transactionId": "h08-05-in",
+    "date": "2026-08-14",
+    "clientId": "c33",
+    "matterId": "m08",
+    "documentIds": [
+      "h08-05-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 529051,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c33",
+        "debitCents": 0,
+        "creditCents": 529051
+      }
+    ]
+  },
+  {
+    "id": "je-h08-05-fee",
+    "transactionId": "h08-05-fee",
+    "date": "2026-08-15",
+    "clientId": "c33",
+    "matterId": "m08",
+    "documentIds": [
+      "h08-05-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 43000
+      },
+      {
+        "account": "liability:c33",
+        "debitCents": 43000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-05-out",
+    "transactionId": "h08-05-out",
+    "date": "2026-08-16",
+    "clientId": "c33",
+    "matterId": "m08",
+    "documentIds": [
+      "h08-05-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14053
+      },
+      {
+        "account": "liability:c33",
+        "debitCents": 14053,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-06-in",
+    "transactionId": "h08-06-in",
+    "date": "2026-08-17",
+    "clientId": "c34",
+    "matterId": "m09",
+    "documentIds": [
+      "h08-06-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 533625,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c34",
+        "debitCents": 0,
+        "creditCents": 533625
+      }
+    ]
+  },
+  {
+    "id": "je-bank-service-fee",
+    "transactionId": "bank-service-fee",
+    "date": "2026-08-18",
+    "clientId": "firm",
+    "matterId": null,
+    "documentIds": [
+      "bank-service-fee"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 2500
+      },
+      {
+        "account": "liability:firm",
+        "debitCents": 2500,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-06-fee",
+    "transactionId": "h08-06-fee",
+    "date": "2026-08-18",
+    "clientId": "c34",
+    "matterId": "m09",
+    "documentIds": [
+      "h08-06-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 48750
+      },
+      {
+        "account": "liability:c34",
+        "debitCents": 48750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-firm-fee-replacement",
+    "transactionId": "firm-fee-replacement",
+    "date": "2026-08-19",
+    "clientId": "firm",
+    "matterId": null,
+    "documentIds": [
+      "firm-fee-replacement"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 2500,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:firm",
+        "debitCents": 0,
+        "creditCents": 2500
+      }
+    ]
+  },
+  {
+    "id": "je-h08-06-out",
+    "transactionId": "h08-06-out",
+    "date": "2026-08-19",
+    "clientId": "c34",
+    "matterId": "m09",
+    "documentIds": [
+      "h08-06-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14370
+      },
+      {
+        "account": "liability:c34",
+        "debitCents": 14370,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-07-in",
+    "transactionId": "h08-07-in",
+    "date": "2026-08-20",
+    "clientId": "c35",
+    "matterId": "m10",
+    "documentIds": [
+      "h08-07-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 500222,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c35",
+        "debitCents": 0,
+        "creditCents": 500222
+      }
+    ]
+  },
+  {
+    "id": "je-h08-07-fee",
+    "transactionId": "h08-07-fee",
+    "date": "2026-08-21",
+    "clientId": "c35",
+    "matterId": "m10",
+    "documentIds": [
+      "h08-07-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 43250
+      },
+      {
+        "account": "liability:c35",
+        "debitCents": 43250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-07-out",
+    "transactionId": "h08-07-out",
+    "date": "2026-08-22",
+    "clientId": "c35",
+    "matterId": "m10",
+    "documentIds": [
+      "h08-07-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14687
+      },
+      {
+        "account": "liability:c35",
+        "debitCents": 14687,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-08-in",
+    "transactionId": "h08-08-in",
+    "date": "2026-08-23",
+    "clientId": "c36",
+    "matterId": "m11",
+    "documentIds": [
+      "h08-08-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 528223,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c36",
+        "debitCents": 0,
+        "creditCents": 528223
+      }
+    ]
+  },
+  {
+    "id": "je-h08-08-fee",
+    "transactionId": "h08-08-fee",
+    "date": "2026-08-24",
+    "clientId": "c36",
+    "matterId": "m11",
+    "documentIds": [
+      "h08-08-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 55250
+      },
+      {
+        "account": "liability:c36",
+        "debitCents": 55250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h08-08-out",
+    "transactionId": "h08-08-out",
+    "date": "2026-08-25",
+    "clientId": "c36",
+    "matterId": "m11",
+    "documentIds": [
+      "h08-08-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 15004
+      },
+      {
+        "account": "liability:c36",
+        "debitCents": 15004,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-01-in",
+    "transactionId": "h09-01-in",
+    "date": "2026-09-02",
+    "clientId": "c37",
+    "matterId": "m12",
+    "documentIds": [
+      "h09-01-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 547243,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c37",
+        "debitCents": 0,
+        "creditCents": 547243
+      }
+    ]
+  },
+  {
+    "id": "je-h09-01-fee",
+    "transactionId": "h09-01-fee",
+    "date": "2026-09-03",
+    "clientId": "c37",
+    "matterId": "m12",
+    "documentIds": [
+      "h09-01-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42500
+      },
+      {
+        "account": "liability:c37",
+        "debitCents": 42500,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-01-out",
+    "transactionId": "h09-01-out",
+    "date": "2026-09-04",
+    "clientId": "c37",
+    "matterId": "m12",
+    "documentIds": [
+      "h09-01-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 12785
+      },
+      {
+        "account": "liability:c37",
+        "debitCents": 12785,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-02-in",
+    "transactionId": "h09-02-in",
+    "date": "2026-09-05",
+    "clientId": "c38",
+    "matterId": "m13",
+    "documentIds": [
+      "h09-02-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 534038,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c38",
+        "debitCents": 0,
+        "creditCents": 534038
+      }
+    ]
+  },
+  {
+    "id": "je-h09-02-fee",
+    "transactionId": "h09-02-fee",
+    "date": "2026-09-06",
+    "clientId": "c38",
+    "matterId": "m13",
+    "documentIds": [
+      "h09-02-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 35750
+      },
+      {
+        "account": "liability:c38",
+        "debitCents": 35750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-02-out",
+    "transactionId": "h09-02-out",
+    "date": "2026-09-07",
+    "clientId": "c38",
+    "matterId": "m13",
+    "documentIds": [
+      "h09-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13102
+      },
+      {
+        "account": "liability:c38",
+        "debitCents": 13102,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-03-in",
+    "transactionId": "h09-03-in",
+    "date": "2026-09-08",
+    "clientId": "c39",
+    "matterId": "m14",
+    "documentIds": [
+      "h09-03-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 548243,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c39",
+        "debitCents": 0,
+        "creditCents": 548243
+      }
+    ]
+  },
+  {
+    "id": "je-h09-03-fee",
+    "transactionId": "h09-03-fee",
+    "date": "2026-09-09",
+    "clientId": "c39",
+    "matterId": "m14",
+    "documentIds": [
+      "h09-03-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42750
+      },
+      {
+        "account": "liability:c39",
+        "debitCents": 42750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-03-out",
+    "transactionId": "h09-03-out",
+    "date": "2026-09-10",
+    "clientId": "c39",
+    "matterId": "m14",
+    "documentIds": [
+      "h09-03-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13419
+      },
+      {
+        "account": "liability:c39",
+        "debitCents": 13419,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-04-in",
+    "transactionId": "h09-04-in",
+    "date": "2026-09-11",
+    "clientId": "c40",
+    "matterId": "m15",
+    "documentIds": [
+      "h09-04-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 572729,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c40",
+        "debitCents": 0,
+        "creditCents": 572729
+      }
+    ]
+  },
+  {
+    "id": "je-h09-04-fee",
+    "transactionId": "h09-04-fee",
+    "date": "2026-09-12",
+    "clientId": "c40",
+    "matterId": "m15",
+    "documentIds": [
+      "h09-04-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42250
+      },
+      {
+        "account": "liability:c40",
+        "debitCents": 42250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-04-out",
+    "transactionId": "h09-04-out",
+    "date": "2026-09-13",
+    "clientId": "c40",
+    "matterId": "m15",
+    "documentIds": [
+      "h09-04-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13736
+      },
+      {
+        "account": "liability:c40",
+        "debitCents": 13736,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-05-in",
+    "transactionId": "h09-05-in",
+    "date": "2026-09-14",
+    "clientId": "c05",
+    "matterId": "m03",
+    "documentIds": [
+      "h09-05-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 589908,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c05",
+        "debitCents": 0,
+        "creditCents": 589908
+      }
+    ]
+  },
+  {
+    "id": "je-brooks-settlement",
+    "transactionId": "brooks-settlement",
+    "date": "2026-09-15",
+    "clientId": "c12",
+    "matterId": "m10",
+    "documentIds": [
+      "brooks-settlement"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 1867341,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c12",
+        "debitCents": 0,
+        "creditCents": 1867341
+      }
+    ]
+  },
+  {
+    "id": "je-h09-05-fee",
+    "transactionId": "h09-05-fee",
+    "date": "2026-09-15",
+    "clientId": "c05",
+    "matterId": "m03",
+    "documentIds": [
+      "h09-05-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 43000
+      },
+      {
+        "account": "liability:c05",
+        "debitCents": 43000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-05-out",
+    "transactionId": "h09-05-out",
+    "date": "2026-09-16",
+    "clientId": "c05",
+    "matterId": "m03",
+    "documentIds": [
+      "h09-05-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14053
+      },
+      {
+        "account": "liability:c05",
+        "debitCents": 14053,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-brooks-client-payment",
+    "transactionId": "brooks-client-payment",
+    "date": "2026-09-17",
+    "clientId": "c12",
+    "matterId": "m10",
+    "documentIds": [
+      "brooks-client-payment"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 1867341
+      },
+      {
+        "account": "liability:c12",
+        "debitCents": 1867341,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-06-in",
+    "transactionId": "h09-06-in",
+    "date": "2026-09-17",
+    "clientId": "c06",
+    "matterId": "m04",
+    "documentIds": [
+      "h09-06-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 532063,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c06",
+        "debitCents": 0,
+        "creditCents": 532063
+      }
+    ]
+  },
+  {
+    "id": "je-h09-06-fee",
+    "transactionId": "h09-06-fee",
+    "date": "2026-09-18",
+    "clientId": "c06",
+    "matterId": "m04",
+    "documentIds": [
+      "h09-06-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 48750
+      },
+      {
+        "account": "liability:c06",
+        "debitCents": 48750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-06-out",
+    "transactionId": "h09-06-out",
+    "date": "2026-09-19",
+    "clientId": "c06",
+    "matterId": "m04",
+    "documentIds": [
+      "h09-06-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14370
+      },
+      {
+        "account": "liability:c06",
+        "debitCents": 14370,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-07-in",
+    "transactionId": "h09-07-in",
+    "date": "2026-09-20",
+    "clientId": "c07",
+    "matterId": "m05",
+    "documentIds": [
+      "h09-07-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 560958,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c07",
+        "debitCents": 0,
+        "creditCents": 560958
+      }
+    ]
+  },
+  {
+    "id": "je-h09-07-fee",
+    "transactionId": "h09-07-fee",
+    "date": "2026-09-21",
+    "clientId": "c07",
+    "matterId": "m05",
+    "documentIds": [
+      "h09-07-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 43250
+      },
+      {
+        "account": "liability:c07",
+        "debitCents": 43250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-noise-3",
+    "transactionId": "noise-3",
+    "date": "2026-09-21",
+    "clientId": "c05",
+    "matterId": "m03",
+    "documentIds": [
+      "noise-3"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 125000,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c05",
+        "debitCents": 0,
+        "creditCents": 125000
+      }
+    ]
+  },
+  {
+    "id": "je-h09-07-out",
+    "transactionId": "h09-07-out",
+    "date": "2026-09-22",
+    "clientId": "c07",
+    "matterId": "m05",
+    "documentIds": [
+      "h09-07-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14687
+      },
+      {
+        "account": "liability:c07",
+        "debitCents": 14687,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-08-in",
+    "transactionId": "h09-08-in",
+    "date": "2026-09-23",
+    "clientId": "c08",
+    "matterId": "m06",
+    "documentIds": [
+      "h09-08-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 519339,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c08",
+        "debitCents": 0,
+        "creditCents": 519339
+      }
+    ]
+  },
+  {
+    "id": "je-h09-08-fee",
+    "transactionId": "h09-08-fee",
+    "date": "2026-09-24",
+    "clientId": "c08",
+    "matterId": "m06",
+    "documentIds": [
+      "h09-08-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 55250
+      },
+      {
+        "account": "liability:c08",
+        "debitCents": 55250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h09-08-out",
+    "transactionId": "h09-08-out",
+    "date": "2026-09-25",
+    "clientId": "c08",
+    "matterId": "m06",
+    "documentIds": [
+      "h09-08-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 15004
+      },
+      {
+        "account": "liability:c08",
+        "debitCents": 15004,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-01-in",
+    "transactionId": "h10-01-in",
+    "date": "2026-10-02",
+    "clientId": "c09",
+    "matterId": "m07",
+    "documentIds": [
+      "h10-01-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 518784,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c09",
+        "debitCents": 0,
+        "creditCents": 518784
+      }
+    ]
+  },
+  {
+    "id": "je-h10-01-fee",
+    "transactionId": "h10-01-fee",
+    "date": "2026-10-03",
+    "clientId": "c09",
+    "matterId": "m07",
+    "documentIds": [
+      "h10-01-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42500
+      },
+      {
+        "account": "liability:c09",
+        "debitCents": 42500,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-01-out",
+    "transactionId": "h10-01-out",
+    "date": "2026-10-04",
+    "clientId": "c09",
+    "matterId": "m07",
+    "documentIds": [
+      "h10-01-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 12785
+      },
+      {
+        "account": "liability:c09",
+        "debitCents": 12785,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-02-in",
+    "transactionId": "h10-02-in",
+    "date": "2026-10-05",
+    "clientId": "c10",
+    "matterId": "m08",
+    "documentIds": [
+      "h10-02-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 556708,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c10",
+        "debitCents": 0,
+        "creditCents": 556708
+      }
+    ]
+  },
+  {
+    "id": "je-h10-02-fee",
+    "transactionId": "h10-02-fee",
+    "date": "2026-10-06",
+    "clientId": "c10",
+    "matterId": "m08",
+    "documentIds": [
+      "h10-02-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 35750
+      },
+      {
+        "account": "liability:c10",
+        "debitCents": 35750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-02-out",
+    "transactionId": "h10-02-out",
+    "date": "2026-10-07",
+    "clientId": "c10",
+    "matterId": "m08",
+    "documentIds": [
+      "h10-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13102
+      },
+      {
+        "account": "liability:c10",
+        "debitCents": 13102,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-03-in",
+    "transactionId": "h10-03-in",
+    "date": "2026-10-08",
+    "clientId": "c11",
+    "matterId": "m09",
+    "documentIds": [
+      "h10-03-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 526182,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c11",
+        "debitCents": 0,
+        "creditCents": 526182
+      }
+    ]
+  },
+  {
+    "id": "je-cho-expert-payment",
+    "transactionId": "cho-expert-payment",
+    "date": "2026-10-09",
+    "clientId": "c04",
+    "matterId": "m02",
+    "documentIds": [
+      "cho-expert-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 600000
+      },
+      {
+        "account": "liability:c04",
+        "debitCents": 600000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-03-fee",
+    "transactionId": "h10-03-fee",
+    "date": "2026-10-09",
+    "clientId": "c11",
+    "matterId": "m09",
+    "documentIds": [
+      "h10-03-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42750
+      },
+      {
+        "account": "liability:c11",
+        "debitCents": 42750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-03-out",
+    "transactionId": "h10-03-out",
+    "date": "2026-10-10",
+    "clientId": "c11",
+    "matterId": "m09",
+    "documentIds": [
+      "h10-03-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13419
+      },
+      {
+        "account": "liability:c11",
+        "debitCents": 13419,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-04-in",
+    "transactionId": "h10-04-in",
+    "date": "2026-10-11",
+    "clientId": "c12",
+    "matterId": "m10",
+    "documentIds": [
+      "h10-04-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 547216,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c12",
+        "debitCents": 0,
+        "creditCents": 547216
+      }
+    ]
+  },
+  {
+    "id": "je-h10-04-fee",
+    "transactionId": "h10-04-fee",
+    "date": "2026-10-12",
+    "clientId": "c12",
+    "matterId": "m10",
+    "documentIds": [
+      "h10-04-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 42250
+      },
+      {
+        "account": "liability:c12",
+        "debitCents": 42250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-04-out",
+    "transactionId": "h10-04-out",
+    "date": "2026-10-13",
+    "clientId": "c12",
+    "matterId": "m10",
+    "documentIds": [
+      "h10-04-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 13736
+      },
+      {
+        "account": "liability:c12",
+        "debitCents": 13736,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-05-in",
+    "transactionId": "h10-05-in",
+    "date": "2026-10-14",
+    "clientId": "c13",
+    "matterId": "m11",
+    "documentIds": [
+      "h10-05-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 508690,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c13",
+        "debitCents": 0,
+        "creditCents": 508690
+      }
+    ]
+  },
+  {
+    "id": "je-h10-05-fee",
+    "transactionId": "h10-05-fee",
+    "date": "2026-10-15",
+    "clientId": "c13",
+    "matterId": "m11",
+    "documentIds": [
+      "h10-05-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 43000
+      },
+      {
+        "account": "liability:c13",
+        "debitCents": 43000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-05-out",
+    "transactionId": "h10-05-out",
+    "date": "2026-10-16",
+    "clientId": "c13",
+    "matterId": "m11",
+    "documentIds": [
+      "h10-05-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14053
+      },
+      {
+        "account": "liability:c13",
+        "debitCents": 14053,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-06-in",
+    "transactionId": "h10-06-in",
+    "date": "2026-10-17",
+    "clientId": "c14",
+    "matterId": "m12",
+    "documentIds": [
+      "h10-06-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 551492,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c14",
+        "debitCents": 0,
+        "creditCents": 551492
+      }
+    ]
+  },
+  {
+    "id": "je-h10-06-fee",
+    "transactionId": "h10-06-fee",
+    "date": "2026-10-18",
+    "clientId": "c14",
+    "matterId": "m12",
+    "documentIds": [
+      "h10-06-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 48750
+      },
+      {
+        "account": "liability:c14",
+        "debitCents": 48750,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-06-out",
+    "transactionId": "h10-06-out",
+    "date": "2026-10-19",
+    "clientId": "c14",
+    "matterId": "m12",
+    "documentIds": [
+      "h10-06-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14370
+      },
+      {
+        "account": "liability:c14",
+        "debitCents": 14370,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-07-in",
+    "transactionId": "h10-07-in",
+    "date": "2026-10-20",
+    "clientId": "c15",
+    "matterId": "m13",
+    "documentIds": [
+      "h10-07-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 566814,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c15",
+        "debitCents": 0,
+        "creditCents": 566814
+      }
+    ]
+  },
+  {
+    "id": "je-noise-4",
+    "transactionId": "noise-4",
+    "date": "2026-10-20",
+    "clientId": "c05",
+    "matterId": "m03",
+    "documentIds": [
+      "noise-4"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 87500,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c05",
+        "debitCents": 0,
+        "creditCents": 87500
+      }
+    ]
+  },
+  {
+    "id": "je-h10-07-fee",
+    "transactionId": "h10-07-fee",
+    "date": "2026-10-21",
+    "clientId": "c15",
+    "matterId": "m13",
+    "documentIds": [
+      "h10-07-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 43250
+      },
+      {
+        "account": "liability:c15",
+        "debitCents": 43250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-07-out",
+    "transactionId": "h10-07-out",
+    "date": "2026-10-22",
+    "clientId": "c15",
+    "matterId": "m13",
+    "documentIds": [
+      "h10-07-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 14687
+      },
+      {
+        "account": "liability:c15",
+        "debitCents": 14687,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-08-in",
+    "transactionId": "h10-08-in",
+    "date": "2026-10-23",
+    "clientId": "c16",
+    "matterId": "m14",
+    "documentIds": [
+      "h10-08-deposit"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 580761,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c16",
+        "debitCents": 0,
+        "creditCents": 580761
+      }
+    ]
+  },
+  {
+    "id": "je-h10-08-fee",
+    "transactionId": "h10-08-fee",
+    "date": "2026-10-24",
+    "clientId": "c16",
+    "matterId": "m14",
+    "documentIds": [
+      "h10-08-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 55250
+      },
+      {
+        "account": "liability:c16",
+        "debitCents": 55250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-h10-08-out",
+    "transactionId": "h10-08-out",
+    "date": "2026-10-25",
+    "clientId": "c16",
+    "matterId": "m14",
+    "documentIds": [
+      "h10-08-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 15004
+      },
+      {
+        "account": "liability:c16",
+        "debitCents": 15004,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-cho-topup",
+    "transactionId": "cho-topup",
+    "date": "2026-10-30",
+    "clientId": "c04",
+    "matterId": "m02",
+    "documentIds": [
+      "cho-topup"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 520000,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c04",
+        "debitCents": 0,
+        "creditCents": 520000
+      }
+    ]
+  }
+]
