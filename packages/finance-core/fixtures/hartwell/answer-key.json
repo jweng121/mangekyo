@@ -1,0 +1,186 @@
+{
+  "fictional": true,
+  "cases": [
+    {
+      "id": "A",
+      "agents": [
+        "Trust Compliance Auditor"
+      ],
+      "expected": "flag",
+      "documents": [
+        "cho-retainer",
+        "cho-expert-invoice",
+        "cho-topup",
+        "recon-10"
+      ],
+      "transactionIds": [
+        "cho-retainer",
+        "cho-expert-payment",
+        "cho-topup"
+      ],
+      "beforeCents": 180000,
+      "paymentCents": 600000,
+      "minimumCents": -420000,
+      "endingCents": 100000,
+      "negativeFrom": "2026-10-09",
+      "negativeThrough": "2026-10-29",
+      "answer": "Riley paid $6,000.00 with only $1,800.00 in Cho's ledger. The $4,200.00 deficit persists until October 30 despite a matched October close."
+    },
+    {
+      "id": "B1",
+      "agents": [
+        "Evidence Checker"
+      ],
+      "expected": "flag",
+      "documents": [
+        "fee-c03",
+        "allocation-global",
+        "settlement-v1",
+        "settlement-v2",
+        "global-expert",
+        "global-reporter",
+        "global-filing"
+      ],
+      "wrongFeeCents": 625000,
+      "correctFeeCents": 602500,
+      "overchargeCents": 22500,
+      "correctClientCents": 1807500,
+      "answer": "Bello owes 25% of ($25,000.00 - $900.00), not 25% of gross. Obtain signatures on corrected v2 before payout."
+    },
+    {
+      "id": "B2",
+      "agents": [
+        "Evidence Checker"
+      ],
+      "expected": "flag",
+      "documents": [
+        "bayside-v1",
+        "bayside-v2",
+        "settlement-v1",
+        "settlement-v2"
+      ],
+      "oldLienCents": 1200000,
+      "correctLienCents": 1450000,
+      "shortfallCents": 250000,
+      "correctClientCents": 2512500,
+      "answer": "The later Bayside payoff supersedes v1. Paying all v1 lines leaves Delgado's ledger at zero and $2,500.00 still owed. Get client confirmation and sign v2."
+    },
+    {
+      "id": "B3",
+      "agents": [
+        "Evidence Checker"
+      ],
+      "expected": "accept",
+      "documents": [
+        "fee-c02",
+        "complaint-filed",
+        "allocation-global",
+        "settlement-v1"
+      ],
+      "feeCents": 1500000,
+      "rateBasisPoints": 4000,
+      "answer": "Reyes's 40% gross tier is correct: the complaint was filed March 3 before settlement."
+    },
+    {
+      "id": "C",
+      "agents": [
+        "Disbursement",
+        "Evidence Checker"
+      ],
+      "expected": "hold",
+      "documents": [
+        "bayside-bank-change",
+        "bayside-v2",
+        "bayside-prior-letter",
+        "bayside-prior-confirmation"
+      ],
+      "onFileAccount": "0000831264",
+      "requestedAccount": "0000975521",
+      "onFileDomain": "baysidemedical.com",
+      "senderDomain": "baysidemedlcal.com",
+      "phone": "(510) 555-0186",
+      "answer": "Payee bank details changed by email 1 day before payment; sender domain does not match; hold and verify by phone using the number on file. Do not use contact details from the email."
+    },
+    {
+      "id": "D",
+      "agents": [
+        "Trust Intake"
+      ],
+      "expected": "allocate_with_policy",
+      "documents": [
+        "supplemental-check",
+        "allocation-global",
+        "policy-hl50877"
+      ],
+      "amountCents": 500000,
+      "allocationsCents": {
+        "c01": 250000,
+        "c02": 150000,
+        "c03": 100000
+      },
+      "answer": "Use approved claim-scoped policy P-HL50877 to allocate 50/30/20; do not infer payout approval."
+    },
+    {
+      "id": "E1",
+      "agents": [
+        "Trust Intake",
+        "Three-Way Reconciler"
+      ],
+      "expected": "duplicate_resolved",
+      "documents": [
+        "title-wire-1",
+        "title-wire-2",
+        "title-return"
+      ],
+      "duplicateCents": 734125,
+      "answer": "Two distinct wires share reference ETS-260707-91. Second receipt was returned July 10; preserve both receipts and the return."
+    },
+    {
+      "id": "E2",
+      "agents": [
+        "Trust Compliance Auditor",
+        "Three-Way Reconciler"
+      ],
+      "expected": "accept_replacement",
+      "documents": [
+        "bank-service-fee",
+        "firm-fee-replacement"
+      ],
+      "amountCents": 2500,
+      "answer": "Firm replaced the $25.00 bank fee next day. No client was charged; firm clearing ledger returns to zero."
+    },
+    {
+      "id": "E3",
+      "agents": [
+        "Trust Intake"
+      ],
+      "expected": "resolve_with_receipt",
+      "documents": [
+        "noise-1",
+        "noise-2"
+      ],
+      "clientIds": [
+        "c06",
+        "c07"
+      ],
+      "answer": "J NGUYEN is ambiguous in bank text. Portal receipts identify Jamie and Jordan separately; do not merge them."
+    },
+    {
+      "id": "E4",
+      "agents": [
+        "Trust Intake"
+      ],
+      "expected": "accept_partial",
+      "documents": [
+        "noise-3",
+        "noise-4",
+        "fee-c05"
+      ],
+      "amountsCents": [
+        125000,
+        87500
+      ],
+      "answer": "Okafor's partial deposits are separate advances, not a duplicate or a paid-in-full retainer."
+    }
+  ]
+}

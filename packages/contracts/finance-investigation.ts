@@ -1,9 +1,10 @@
 import type { EvidenceReference, FinanceDocument, FinanceOwner, FinanceTransaction } from "./finance";
+import type { NormalizedBankTransaction, NormalizedObligation, OwnerBalance, ThreeWayCheckResult } from "./money";
 
 export const FINANCE_INPUT_VERSION = "finance-investigation-input/v1" as const;
 export const FINANCE_OUTPUT_VERSION = "finance-investigation-output/v1" as const;
 export const FINANCE_INSTRUCTION_VERSION = "finance-investigator/v1" as const;
-export type FinanceAgentMode = "mock" | "creao";
+export type FinanceAgentMode = "mock" | "creao" | "external";
 export interface FinanceReportSource {
   field: "result.text" | "result.chatText";
   format: "json" | "json_suffix";
@@ -53,6 +54,33 @@ export interface FinanceRecordSet {
   allocationHistoryComplete: boolean;
   missingEvidence: string[];
   coverage: "available_records_only";
+  /** Optional v1 additions from the money source adapter; absent on legacy inputs. */
+  sourceAdapter?: { system: "erp" | "demo"; datasetVersion: string; accountId: string };
+  bankTransactions?: NormalizedBankTransaction[];
+  obligations?: NormalizedObligation[];
+  ownerLedgerBalances?: Array<OwnerBalance & { ownerId: string; sourceId: string; cutoff: number }>;
+}
+export type ClaimVerdict = "supported" | "not_supported" | "not_checkable";
+export interface ClaimCheck {
+  findingId: string;
+  claim: string;
+  sourceRefs: string[];
+  verdict: ClaimVerdict;
+  checkedBy: "code" | "agent" | "none";
+  reason: string;
+  /** Amounts, dates, invoice numbers and names quoted in the claim. */
+  facts: string[];
+  /** Facts that appear in none of the cited records. */
+  missing: string[];
+  /** What the first cited record actually says, when a claim is not supported. */
+  sourceSays: string | null;
+}
+export interface ClaimCheckResult {
+  schemaVersion: "finance-claim-check/v1";
+  agentMode: "off" | "mock" | "creao" | "external";
+  status: "passed" | "rejected";
+  claims: ClaimCheck[];
+  checkedAt: number;
 }
 export interface ApprovedFinancePolicy {
   policyId: string;
@@ -63,6 +91,9 @@ export interface ApprovedFinancePolicy {
   currency: string;
   approvedAt: number;
   sourceId: string;
+  /** Who approved it and which run proposed it; absent on policies created before policy approval existed. */
+  approvedBy?: string;
+  fromRunId?: string;
 }
 export interface HumanClarification {
   clarificationId: string;
@@ -76,6 +107,8 @@ export interface HumanClarification {
   timestamp: number;
   respondent: { identity: string; authenticated: boolean };
   evidenceRefs: EvidenceReference[];
+  /** Memory: the account the answer belongs to, so later runs on other deposits of the account see it. Absent on older rows. */
+  accountId?: string;
 }
 export interface FinancialCheck {
   status: "passed" | "failed" | "insufficient_data" | "not_applicable";
@@ -95,6 +128,8 @@ export interface DeterministicChecks {
   amounts: FinancialCheck;
   proposedAllocations: FinancialCheck;
   reconciliation: ReconciliationResult;
+  /** Code-computed bank = books = owners check for the account; optional v1 addition. */
+  threeWay?: ThreeWayCheckResult;
 }
 export interface ProposedAllocation {
   proposalId: string;
@@ -129,7 +164,7 @@ export interface FinanceAgentOutput {
   proposedActions: Array<{ kind: "request_evidence"; description: string; sourceRefs: string[] }>;
   candidatePolicies: Array<{ policyId: string; statement: string; sourceRefs: string[]; status: "proposed" }>;
 }
-export type InvestigationStatus = "queued" | "retrieving_evidence" | "checking" | "provider_starting" |
+export type InvestigationStatus = "queued" | "retrieving_evidence" | "checking" | "provider_starting" | "checker_rejected" |
   "provider_pending" | "validating" | "needs_information" | "review_required" | "completed" | "failed";
 export interface InvestigationError { code: string; message: string; retryable: boolean; details?: Array<{ path: string; reason: string }> }
 export interface FinanceInvestigationRun {
@@ -151,7 +186,12 @@ export interface FinanceInvestigationRun {
   providerInput: FinanceAgentInput | null;
   result: FinanceAgentOutput | null;
   resultChecks?: DeterministicChecks;
+  /** Agent 2: the claim checker's verdict on every finding, stored with the run. */
+  claimCheck?: ClaimCheckResult;
   error: InvestigationError | null;
+  /** Which agent, mode and model produced this run (and checked it). Absent on runs saved before the five agents existed. */
+  provenance?: { agent: string; mode: FinanceAgentMode; model: string; instructionVersion: string };
+  checkerProvenance?: { agent: string; mode: FinanceAgentMode; model: string; instructionVersion: string };
 }
 export interface FinanceInvestigationQuestion {
   caseId: string;

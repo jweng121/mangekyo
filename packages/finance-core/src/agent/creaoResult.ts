@@ -2,7 +2,7 @@ import type { FinanceReportSource } from "@mangekyo/contracts";
 import { FinanceProviderError } from "./types";
 
 const object = (value: unknown): value is Record<string, unknown> => !!value && typeof value === "object" && !Array.isArray(value);
-const reportFields = ["schemaVersion", "findings", "questions", "proposedAllocations", "proposedActions", "candidatePolicies"];
+export const INVESTIGATION_REPORT_FIELDS = ["schemaVersion", "findings", "questions", "proposedAllocations", "proposedActions", "candidatePolicies"];
 const canonical = (value: unknown): string => {
   if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
   if (object(value)) return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonical(value[key])}`).join(",")}}`;
@@ -10,7 +10,7 @@ const canonical = (value: unknown): string => {
 };
 
 /** Extract transport envelopes only. All report content still requires strict validation. */
-export function extractCreaoReport(result: Record<string, unknown>): { output: unknown; reportSource: FinanceReportSource } {
+export function extractCreaoReport(result: Record<string, unknown>, reportFields: readonly string[] = INVESTIGATION_REPORT_FIELDS): { output: unknown; reportSource: FinanceReportSource } {
   // Do not silently prefer inline content over a potentially different JSON attachment.
   if (result.artifacts !== undefined && !Array.isArray(result.artifacts)) throw new FinanceProviderError("provider_malformed_response", "CREAO result.artifacts must be an array when present.");
   if (Array.isArray(result.artifacts) && result.artifacts.some(item => object(item) &&

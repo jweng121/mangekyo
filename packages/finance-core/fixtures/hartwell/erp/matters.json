@@ -1,0 +1,244 @@
+[
+  {
+    "id": "m01",
+    "name": "Delgado, Reyes & Bello v. Ridgeway Logistics",
+    "clientIds": [
+      "c01",
+      "c02",
+      "c03"
+    ],
+    "practiceArea": "personal injury",
+    "openedDate": "2026-01-12",
+    "claimNumber": "HL-50877",
+    "complaintFiledDate": "2026-03-03"
+  },
+  {
+    "id": "m02",
+    "name": "Cho v. Alder Terrace Properties",
+    "clientIds": [
+      "c04"
+    ],
+    "practiceArea": "real estate",
+    "openedDate": "2026-04-24"
+  },
+  {
+    "id": "m03",
+    "name": "Okafor retainer dispute",
+    "clientIds": [
+      "c05",
+      "c28"
+    ],
+    "practiceArea": "family law",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m04",
+    "name": "Nguyen property purchase",
+    "clientIds": [
+      "c06",
+      "c29"
+    ],
+    "practiceArea": "real estate",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m05",
+    "name": "Nguyen family petition",
+    "clientIds": [
+      "c07",
+      "c30"
+    ],
+    "practiceArea": "personal injury",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m06",
+    "name": "Park premises injury",
+    "clientIds": [
+      "c08",
+      "c31"
+    ],
+    "practiceArea": "family law",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m07",
+    "name": "Chen lease review",
+    "clientIds": [
+      "c09",
+      "c32"
+    ],
+    "practiceArea": "real estate",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m08",
+    "name": "Flores dissolution",
+    "clientIds": [
+      "c10",
+      "c33"
+    ],
+    "practiceArea": "personal injury",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m09",
+    "name": "Hassan boundary dispute",
+    "clientIds": [
+      "c11",
+      "c34"
+    ],
+    "practiceArea": "family law",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m10",
+    "name": "Brooks collision",
+    "clientIds": [
+      "c12",
+      "c35"
+    ],
+    "practiceArea": "real estate",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m11",
+    "name": "Patel custody petition",
+    "clientIds": [
+      "c13",
+      "c36"
+    ],
+    "practiceArea": "personal injury",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m12",
+    "name": "Rivera purchase escrow",
+    "clientIds": [
+      "c14",
+      "c37"
+    ],
+    "practiceArea": "family law",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m13",
+    "name": "Reed premises injury",
+    "clientIds": [
+      "c15",
+      "c38"
+    ],
+    "practiceArea": "real estate",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m14",
+    "name": "Kim support modification",
+    "clientIds": [
+      "c16",
+      "c39"
+    ],
+    "practiceArea": "personal injury",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m15",
+    "name": "Alvarez tenancy",
+    "clientIds": [
+      "c17",
+      "c40"
+    ],
+    "practiceArea": "family law",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m16",
+    "name": "Walsh collision",
+    "clientIds": [
+      "c18"
+    ],
+    "practiceArea": "real estate",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m17",
+    "name": "Saleh property sale",
+    "clientIds": [
+      "c19"
+    ],
+    "practiceArea": "personal injury",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m18",
+    "name": "Bennett dissolution",
+    "clientIds": [
+      "c20"
+    ],
+    "practiceArea": "family law",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m19",
+    "name": "Lin easement dispute",
+    "clientIds": [
+      "c21"
+    ],
+    "practiceArea": "real estate",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m20",
+    "name": "Vega collision",
+    "clientIds": [
+      "c22"
+    ],
+    "practiceArea": "personal injury",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m21",
+    "name": "Yusuf parenting plan",
+    "clientIds": [
+      "c23"
+    ],
+    "practiceArea": "family law",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m22",
+    "name": "Novak purchase escrow",
+    "clientIds": [
+      "c24"
+    ],
+    "practiceArea": "real estate",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m23",
+    "name": "Santos premises injury",
+    "clientIds": [
+      "c25"
+    ],
+    "practiceArea": "personal injury",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m24",
+    "name": "Lewis family petition",
+    "clientIds": [
+      "c26"
+    ],
+    "practiceArea": "family law",
+    "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m25",
+    "name": "Wu property sale",
+    "clientIds": [
+      "c27"
+    ],
+    "practiceArea": "real estate",
+    "openedDate": "2026-04-27"
+  }
+]

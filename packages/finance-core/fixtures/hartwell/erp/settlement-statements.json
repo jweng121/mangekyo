@@ -1,0 +1,182 @@
+[
+  {
+    "id": "settlement-v1",
+    "documentId": "settlement-v1",
+    "matterId": "m01",
+    "version": 1,
+    "signed": true,
+    "signedDate": "2026-10-19",
+    "date": "2026-10-19",
+    "grossCents": 12500000,
+    "lines": [
+      {
+        "clientId": "c01",
+        "kind": "attorney_fee",
+        "amountCents": 2062500,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c01",
+        "kind": "costs",
+        "amountCents": 225000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c01",
+        "kind": "lien",
+        "amountCents": 1200000,
+        "payeeId": "bayside"
+      },
+      {
+        "clientId": "c01",
+        "kind": "client_share",
+        "amountCents": 2762500,
+        "payeeId": "c01"
+      },
+      {
+        "clientId": "c02",
+        "kind": "attorney_fee",
+        "amountCents": 1500000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c02",
+        "kind": "costs",
+        "amountCents": 135000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c02",
+        "kind": "lien",
+        "amountCents": 320000,
+        "payeeId": "medicare"
+      },
+      {
+        "clientId": "c02",
+        "kind": "client_share",
+        "amountCents": 1795000,
+        "payeeId": "c02"
+      },
+      {
+        "clientId": "c03",
+        "kind": "attorney_fee",
+        "amountCents": 625000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c03",
+        "kind": "costs",
+        "amountCents": 90000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c03",
+        "kind": "client_share",
+        "amountCents": 1785000,
+        "payeeId": "c03"
+      }
+    ],
+    "allocationAgreementId": "allocation-global",
+    "sourceDocumentIds": [
+      "fee-c01",
+      "fee-c02",
+      "fee-c03",
+      "complaint-filed",
+      "global-expert",
+      "global-reporter",
+      "global-filing",
+      "bayside-v1",
+      "reyes-conditional"
+    ]
+  },
+  {
+    "id": "settlement-v2",
+    "documentId": "settlement-v2",
+    "matterId": "m01",
+    "version": 2,
+    "signed": false,
+    "signedDate": null,
+    "date": "2026-10-22",
+    "grossCents": 12500000,
+    "lines": [
+      {
+        "clientId": "c01",
+        "kind": "attorney_fee",
+        "amountCents": 2062500,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c01",
+        "kind": "costs",
+        "amountCents": 225000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c01",
+        "kind": "lien",
+        "amountCents": 1450000,
+        "payeeId": "bayside"
+      },
+      {
+        "clientId": "c01",
+        "kind": "client_share",
+        "amountCents": 2512500,
+        "payeeId": "c01"
+      },
+      {
+        "clientId": "c02",
+        "kind": "attorney_fee",
+        "amountCents": 1500000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c02",
+        "kind": "costs",
+        "amountCents": 135000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c02",
+        "kind": "lien",
+        "amountCents": 320000,
+        "payeeId": "medicare"
+      },
+      {
+        "clientId": "c02",
+        "kind": "client_share",
+        "amountCents": 1795000,
+        "payeeId": "c02"
+      },
+      {
+        "clientId": "c03",
+        "kind": "attorney_fee",
+        "amountCents": 602500,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c03",
+        "kind": "costs",
+        "amountCents": 90000,
+        "payeeId": "firm"
+      },
+      {
+        "clientId": "c03",
+        "kind": "client_share",
+        "amountCents": 1807500,
+        "payeeId": "c03"
+      }
+    ],
+    "allocationAgreementId": "allocation-global",
+    "sourceDocumentIds": [
+      "fee-c01",
+      "fee-c02",
+      "fee-c03",
+      "complaint-filed",
+      "global-expert",
+      "global-reporter",
+      "global-filing",
+      "bayside-v2",
+      "reyes-conditional"
+    ]
+  }
+]

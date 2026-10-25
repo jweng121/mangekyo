@@ -1,0 +1,19 @@
+Bayside Medical Group
+726 Lantern Wharf, Suite 230 | Oakland, CA 94607
+Teleph0ne: (510) 555-0186
+Final Payoff Letter
+2026-10-21
+Patient: Maria Delgado-Ruiz
+Patient account: BG-50877-D
+Lien payoff, revision 2: $14,500.00
+Payoff valid through: 2026-11-15
+This amount replaces any earlier payoff quotation for this account.
+Include the patient account number on the remittance.
+Bank on file: Cedar Inlet Bank
+Routing: 000000000   Account: 0000831264
+Billing: billing@baysidemedical.com
+Confirm instructions at (510) 555-0186.
+Sincerely,
+/s/ Nora Ellis, Accounts Resolution
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
+Encl0sure: file copy

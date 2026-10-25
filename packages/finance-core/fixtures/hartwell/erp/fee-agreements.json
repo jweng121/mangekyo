@@ -1,0 +1,426 @@
+[
+  {
+    "id": "fee-c01",
+    "documentId": "fee-c01",
+    "clientId": "c01",
+    "matterId": "m01",
+    "signed": true,
+    "basis": "gross",
+    "rateBasisPoints": 3300
+  },
+  {
+    "id": "fee-c02",
+    "documentId": "fee-c02",
+    "clientId": "c02",
+    "matterId": "m01",
+    "signed": true,
+    "basis": "gross",
+    "tiers": [
+      {
+        "trigger": "before_suit",
+        "rateBasisPoints": 3300
+      },
+      {
+        "trigger": "complaint_filed",
+        "rateBasisPoints": 4000
+      }
+    ]
+  },
+  {
+    "id": "fee-c03",
+    "documentId": "fee-c03",
+    "clientId": "c03",
+    "matterId": "m01",
+    "signed": true,
+    "basis": "net_after_costs",
+    "rateBasisPoints": 2500
+  },
+  {
+    "id": "fee-c04",
+    "documentId": "fee-c04",
+    "clientId": "c04",
+    "matterId": "m02",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c05",
+    "documentId": "fee-c05",
+    "clientId": "c05",
+    "matterId": "m03",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c06",
+    "documentId": "fee-c06",
+    "clientId": "c06",
+    "matterId": "m04",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c07",
+    "documentId": "fee-c07",
+    "clientId": "c07",
+    "matterId": "m05",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c08",
+    "documentId": "fee-c08",
+    "clientId": "c08",
+    "matterId": "m06",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c09",
+    "documentId": "fee-c09",
+    "clientId": "c09",
+    "matterId": "m07",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c10",
+    "documentId": "fee-c10",
+    "clientId": "c10",
+    "matterId": "m08",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c11",
+    "documentId": "fee-c11",
+    "clientId": "c11",
+    "matterId": "m09",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c12",
+    "documentId": "fee-c12",
+    "clientId": "c12",
+    "matterId": "m10",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c13",
+    "documentId": "fee-c13",
+    "clientId": "c13",
+    "matterId": "m11",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c14",
+    "documentId": "fee-c14",
+    "clientId": "c14",
+    "matterId": "m12",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c15",
+    "documentId": "fee-c15",
+    "clientId": "c15",
+    "matterId": "m13",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c16",
+    "documentId": "fee-c16",
+    "clientId": "c16",
+    "matterId": "m14",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c17",
+    "documentId": "fee-c17",
+    "clientId": "c17",
+    "matterId": "m15",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c18",
+    "documentId": "fee-c18",
+    "clientId": "c18",
+    "matterId": "m16",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c19",
+    "documentId": "fee-c19",
+    "clientId": "c19",
+    "matterId": "m17",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c20",
+    "documentId": "fee-c20",
+    "clientId": "c20",
+    "matterId": "m18",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c21",
+    "documentId": "fee-c21",
+    "clientId": "c21",
+    "matterId": "m19",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c22",
+    "documentId": "fee-c22",
+    "clientId": "c22",
+    "matterId": "m20",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c23",
+    "documentId": "fee-c23",
+    "clientId": "c23",
+    "matterId": "m21",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c24",
+    "documentId": "fee-c24",
+    "clientId": "c24",
+    "matterId": "m22",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c25",
+    "documentId": "fee-c25",
+    "clientId": "c25",
+    "matterId": "m23",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c26",
+    "documentId": "fee-c26",
+    "clientId": "c26",
+    "matterId": "m24",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c27",
+    "documentId": "fee-c27",
+    "clientId": "c27",
+    "matterId": "m25",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c28",
+    "documentId": "fee-c28",
+    "clientId": "c28",
+    "matterId": "m03",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c29",
+    "documentId": "fee-c29",
+    "clientId": "c29",
+    "matterId": "m04",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c30",
+    "documentId": "fee-c30",
+    "clientId": "c30",
+    "matterId": "m05",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c31",
+    "documentId": "fee-c31",
+    "clientId": "c31",
+    "matterId": "m06",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c32",
+    "documentId": "fee-c32",
+    "clientId": "c32",
+    "matterId": "m07",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c33",
+    "documentId": "fee-c33",
+    "clientId": "c33",
+    "matterId": "m08",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c34",
+    "documentId": "fee-c34",
+    "clientId": "c34",
+    "matterId": "m09",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c35",
+    "documentId": "fee-c35",
+    "clientId": "c35",
+    "matterId": "m10",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c36",
+    "documentId": "fee-c36",
+    "clientId": "c36",
+    "matterId": "m11",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c37",
+    "documentId": "fee-c37",
+    "clientId": "c37",
+    "matterId": "m12",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c38",
+    "documentId": "fee-c38",
+    "clientId": "c38",
+    "matterId": "m13",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  },
+  {
+    "id": "fee-c39",
+    "documentId": "fee-c39",
+    "clientId": "c39",
+    "matterId": "m14",
+    "signed": true,
+    "basis": "flat",
+    "flatFeeCents": 450000,
+    "initialRetainerCents": 250000,
+    "earnedOn": "completed milestones invoiced separately"
+  },
+  {
+    "id": "fee-c40",
+    "documentId": "fee-c40",
+    "clientId": "c40",
+    "matterId": "m15",
+    "signed": true,
+    "basis": "hourly",
+    "hourlyRateCents": 32500,
+    "initialRetainerCents": 500000
+  }
+]

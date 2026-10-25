@@ -1,0 +1,23 @@
+[
+  {
+    "id": "incoming-global",
+    "documentId": "global-check",
+    "receivedDate": "2026-10-22",
+    "amountCents": 12500000,
+    "matterId": "m01",
+    "claimNumber": "HL-50877",
+    "status": "pending_deposit",
+    "scenario": "live"
+  },
+  {
+    "id": "incoming-supplement",
+    "documentId": "supplemental-check",
+    "receivedDate": "2026-11-06",
+    "amountCents": 500000,
+    "matterId": "m01",
+    "claimNumber": "HL-50877",
+    "status": "not_posted",
+    "scenario": "november_followup",
+    "policyId": "policy-hl50877"
+  }
+]

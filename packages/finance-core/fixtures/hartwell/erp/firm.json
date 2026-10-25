@@ -1,0 +1,49 @@
+{
+  "name": "Hartwell & Moreno LLP",
+  "fictional": true,
+  "attorneyCount": 12,
+  "practiceAreas": [
+    "personal injury",
+    "real estate",
+    "family law"
+  ],
+  "address": "1846 Alder Quay, Suite 400 | Oakland, CA 94612",
+  "phone": "(510) 555-0147",
+  "trustAccount": {
+    "bank": "Bay Commerce Bank",
+    "type": "IOLTA",
+    "ending": "4417",
+    "openingBalanceCents": 0
+  },
+  "operatingAccount": {
+    "bank": "Bay Commerce Bank",
+    "ending": "2290"
+  },
+  "staff": [
+    {
+      "id": "diane",
+      "name": "Diane Hartwell",
+      "role": "partner"
+    },
+    {
+      "id": "luis",
+      "name": "Luis Moreno",
+      "role": "partner"
+    },
+    {
+      "id": "priya",
+      "name": "Priya Raman",
+      "role": "associate"
+    },
+    {
+      "id": "riley",
+      "name": "Riley Okoro",
+      "role": "paralegal"
+    },
+    {
+      "id": "sam",
+      "name": "Sam Whitfield",
+      "role": "paralegal / trust approver"
+    }
+  ]
+}

@@ -1,0 +1,1637 @@
+[
+  {
+    "id": "disb-h05-01-fee",
+    "transactionId": "h05-01-fee",
+    "date": "2026-05-03",
+    "clientId": "c05",
+    "matterId": "m03",
+    "amountCents": 42500,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-01-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-01-out",
+    "transactionId": "h05-01-out",
+    "date": "2026-05-04",
+    "clientId": "c05",
+    "matterId": "m03",
+    "amountCents": 12785,
+    "kind": "refund",
+    "payeeId": "c05",
+    "status": "posted",
+    "documentIds": [
+      "h05-01-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-02-fee",
+    "transactionId": "h05-02-fee",
+    "date": "2026-05-06",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": 35750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-02-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-02-out",
+    "transactionId": "h05-02-out",
+    "date": "2026-05-07",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": 13102,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-03-fee",
+    "transactionId": "h05-03-fee",
+    "date": "2026-05-09",
+    "clientId": "c07",
+    "matterId": "m05",
+    "amountCents": 42750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-03-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-03-out",
+    "transactionId": "h05-03-out",
+    "date": "2026-05-10",
+    "clientId": "c07",
+    "matterId": "m05",
+    "amountCents": 13419,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-03-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-04-fee",
+    "transactionId": "h05-04-fee",
+    "date": "2026-05-12",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": 42250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-04-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-04-out",
+    "transactionId": "h05-04-out",
+    "date": "2026-05-13",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": 13736,
+    "kind": "refund",
+    "payeeId": "c08",
+    "status": "posted",
+    "documentIds": [
+      "h05-04-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-05-fee",
+    "transactionId": "h05-05-fee",
+    "date": "2026-05-15",
+    "clientId": "c09",
+    "matterId": "m07",
+    "amountCents": 43000,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-05-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-05-out",
+    "transactionId": "h05-05-out",
+    "date": "2026-05-16",
+    "clientId": "c09",
+    "matterId": "m07",
+    "amountCents": 14053,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-05-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-06-fee",
+    "transactionId": "h05-06-fee",
+    "date": "2026-05-18",
+    "clientId": "c10",
+    "matterId": "m08",
+    "amountCents": 48750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-06-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-06-out",
+    "transactionId": "h05-06-out",
+    "date": "2026-05-19",
+    "clientId": "c10",
+    "matterId": "m08",
+    "amountCents": 14370,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-06-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-07-fee",
+    "transactionId": "h05-07-fee",
+    "date": "2026-05-21",
+    "clientId": "c11",
+    "matterId": "m09",
+    "amountCents": 43250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-07-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-07-out",
+    "transactionId": "h05-07-out",
+    "date": "2026-05-22",
+    "clientId": "c11",
+    "matterId": "m09",
+    "amountCents": 14687,
+    "kind": "refund",
+    "payeeId": "c11",
+    "status": "posted",
+    "documentIds": [
+      "h05-07-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-08-fee",
+    "transactionId": "h05-08-fee",
+    "date": "2026-05-24",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": 55250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-08-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h05-08-out",
+    "transactionId": "h05-08-out",
+    "date": "2026-05-25",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": 15004,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h05-08-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-01-fee",
+    "transactionId": "h06-01-fee",
+    "date": "2026-06-03",
+    "clientId": "c13",
+    "matterId": "m11",
+    "amountCents": 42500,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-01-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-01-out",
+    "transactionId": "h06-01-out",
+    "date": "2026-06-04",
+    "clientId": "c13",
+    "matterId": "m11",
+    "amountCents": 12785,
+    "kind": "refund",
+    "payeeId": "c13",
+    "status": "posted",
+    "documentIds": [
+      "h06-01-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-02-fee",
+    "transactionId": "h06-02-fee",
+    "date": "2026-06-06",
+    "clientId": "c14",
+    "matterId": "m12",
+    "amountCents": 35750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-02-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-02-out",
+    "transactionId": "h06-02-out",
+    "date": "2026-06-07",
+    "clientId": "c14",
+    "matterId": "m12",
+    "amountCents": 13102,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-03-fee",
+    "transactionId": "h06-03-fee",
+    "date": "2026-06-09",
+    "clientId": "c15",
+    "matterId": "m13",
+    "amountCents": 42750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-03-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-03-out",
+    "transactionId": "h06-03-out",
+    "date": "2026-06-10",
+    "clientId": "c15",
+    "matterId": "m13",
+    "amountCents": 13419,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-03-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-bayside-prior-paid",
+    "transactionId": "bayside-prior-paid",
+    "date": "2026-06-12",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": 320075,
+    "kind": "lien",
+    "payeeId": "bayside",
+    "status": "posted",
+    "documentIds": [
+      "bayside-prior-letter",
+      "bayside-prior-confirmation"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "bankAccount": "0000831264"
+  },
+  {
+    "id": "disb-h06-04-fee",
+    "transactionId": "h06-04-fee",
+    "date": "2026-06-12",
+    "clientId": "c16",
+    "matterId": "m14",
+    "amountCents": 42250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-04-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-04-out",
+    "transactionId": "h06-04-out",
+    "date": "2026-06-13",
+    "clientId": "c16",
+    "matterId": "m14",
+    "amountCents": 13736,
+    "kind": "refund",
+    "payeeId": "c16",
+    "status": "posted",
+    "documentIds": [
+      "h06-04-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-05-fee",
+    "transactionId": "h06-05-fee",
+    "date": "2026-06-15",
+    "clientId": "c17",
+    "matterId": "m15",
+    "amountCents": 43000,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-05-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-05-out",
+    "transactionId": "h06-05-out",
+    "date": "2026-06-16",
+    "clientId": "c17",
+    "matterId": "m15",
+    "amountCents": 14053,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-05-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-06-fee",
+    "transactionId": "h06-06-fee",
+    "date": "2026-06-18",
+    "clientId": "c18",
+    "matterId": "m16",
+    "amountCents": 48750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-06-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-06-out",
+    "transactionId": "h06-06-out",
+    "date": "2026-06-19",
+    "clientId": "c18",
+    "matterId": "m16",
+    "amountCents": 14370,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-06-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-07-fee",
+    "transactionId": "h06-07-fee",
+    "date": "2026-06-21",
+    "clientId": "c19",
+    "matterId": "m17",
+    "amountCents": 43250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-07-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-07-out",
+    "transactionId": "h06-07-out",
+    "date": "2026-06-22",
+    "clientId": "c19",
+    "matterId": "m17",
+    "amountCents": 14687,
+    "kind": "refund",
+    "payeeId": "c19",
+    "status": "posted",
+    "documentIds": [
+      "h06-07-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-08-fee",
+    "transactionId": "h06-08-fee",
+    "date": "2026-06-24",
+    "clientId": "c20",
+    "matterId": "m18",
+    "amountCents": 55250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-08-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h06-08-out",
+    "transactionId": "h06-08-out",
+    "date": "2026-06-25",
+    "clientId": "c20",
+    "matterId": "m18",
+    "amountCents": 15004,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h06-08-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-01-fee",
+    "transactionId": "h07-01-fee",
+    "date": "2026-07-03",
+    "clientId": "c21",
+    "matterId": "m19",
+    "amountCents": 42500,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-01-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-01-out",
+    "transactionId": "h07-01-out",
+    "date": "2026-07-04",
+    "clientId": "c21",
+    "matterId": "m19",
+    "amountCents": 12785,
+    "kind": "refund",
+    "payeeId": "c21",
+    "status": "posted",
+    "documentIds": [
+      "h07-01-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-02-fee",
+    "transactionId": "h07-02-fee",
+    "date": "2026-07-06",
+    "clientId": "c22",
+    "matterId": "m20",
+    "amountCents": 35750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-02-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-02-out",
+    "transactionId": "h07-02-out",
+    "date": "2026-07-07",
+    "clientId": "c22",
+    "matterId": "m20",
+    "amountCents": 13102,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-03-fee",
+    "transactionId": "h07-03-fee",
+    "date": "2026-07-09",
+    "clientId": "c23",
+    "matterId": "m21",
+    "amountCents": 42750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-03-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-03-out",
+    "transactionId": "h07-03-out",
+    "date": "2026-07-10",
+    "clientId": "c23",
+    "matterId": "m21",
+    "amountCents": 13419,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-03-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-title-return",
+    "transactionId": "title-return",
+    "date": "2026-07-10",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": 734125,
+    "kind": "duplicate_return",
+    "payeeId": "title",
+    "status": "posted",
+    "documentIds": [
+      "title-return"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-04-fee",
+    "transactionId": "h07-04-fee",
+    "date": "2026-07-12",
+    "clientId": "c24",
+    "matterId": "m22",
+    "amountCents": 42250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-04-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-04-out",
+    "transactionId": "h07-04-out",
+    "date": "2026-07-13",
+    "clientId": "c24",
+    "matterId": "m22",
+    "amountCents": 13736,
+    "kind": "refund",
+    "payeeId": "c24",
+    "status": "posted",
+    "documentIds": [
+      "h07-04-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-05-fee",
+    "transactionId": "h07-05-fee",
+    "date": "2026-07-15",
+    "clientId": "c25",
+    "matterId": "m23",
+    "amountCents": 43000,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-05-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-05-out",
+    "transactionId": "h07-05-out",
+    "date": "2026-07-16",
+    "clientId": "c25",
+    "matterId": "m23",
+    "amountCents": 14053,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-05-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-06-fee",
+    "transactionId": "h07-06-fee",
+    "date": "2026-07-18",
+    "clientId": "c26",
+    "matterId": "m24",
+    "amountCents": 48750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-06-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-06-out",
+    "transactionId": "h07-06-out",
+    "date": "2026-07-19",
+    "clientId": "c26",
+    "matterId": "m24",
+    "amountCents": 14370,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-06-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-07-fee",
+    "transactionId": "h07-07-fee",
+    "date": "2026-07-21",
+    "clientId": "c27",
+    "matterId": "m25",
+    "amountCents": 43250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-07-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-07-out",
+    "transactionId": "h07-07-out",
+    "date": "2026-07-22",
+    "clientId": "c27",
+    "matterId": "m25",
+    "amountCents": 14687,
+    "kind": "refund",
+    "payeeId": "c27",
+    "status": "posted",
+    "documentIds": [
+      "h07-07-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-08-fee",
+    "transactionId": "h07-08-fee",
+    "date": "2026-07-24",
+    "clientId": "c28",
+    "matterId": "m03",
+    "amountCents": 55250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-08-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h07-08-out",
+    "transactionId": "h07-08-out",
+    "date": "2026-07-25",
+    "clientId": "c28",
+    "matterId": "m03",
+    "amountCents": 15004,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h07-08-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-01-fee",
+    "transactionId": "h08-01-fee",
+    "date": "2026-08-03",
+    "clientId": "c29",
+    "matterId": "m04",
+    "amountCents": 42500,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-01-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-01-out",
+    "transactionId": "h08-01-out",
+    "date": "2026-08-04",
+    "clientId": "c29",
+    "matterId": "m04",
+    "amountCents": 12785,
+    "kind": "refund",
+    "payeeId": "c29",
+    "status": "posted",
+    "documentIds": [
+      "h08-01-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-02-fee",
+    "transactionId": "h08-02-fee",
+    "date": "2026-08-06",
+    "clientId": "c30",
+    "matterId": "m05",
+    "amountCents": 35750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-02-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-02-out",
+    "transactionId": "h08-02-out",
+    "date": "2026-08-07",
+    "clientId": "c30",
+    "matterId": "m05",
+    "amountCents": 13102,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-03-fee",
+    "transactionId": "h08-03-fee",
+    "date": "2026-08-09",
+    "clientId": "c31",
+    "matterId": "m06",
+    "amountCents": 42750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-03-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-03-out",
+    "transactionId": "h08-03-out",
+    "date": "2026-08-10",
+    "clientId": "c31",
+    "matterId": "m06",
+    "amountCents": 13419,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-03-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-04-fee",
+    "transactionId": "h08-04-fee",
+    "date": "2026-08-12",
+    "clientId": "c32",
+    "matterId": "m07",
+    "amountCents": 42250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-04-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-04-out",
+    "transactionId": "h08-04-out",
+    "date": "2026-08-13",
+    "clientId": "c32",
+    "matterId": "m07",
+    "amountCents": 13736,
+    "kind": "refund",
+    "payeeId": "c32",
+    "status": "posted",
+    "documentIds": [
+      "h08-04-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-05-fee",
+    "transactionId": "h08-05-fee",
+    "date": "2026-08-15",
+    "clientId": "c33",
+    "matterId": "m08",
+    "amountCents": 43000,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-05-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-05-out",
+    "transactionId": "h08-05-out",
+    "date": "2026-08-16",
+    "clientId": "c33",
+    "matterId": "m08",
+    "amountCents": 14053,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-05-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-bank-service-fee",
+    "transactionId": "bank-service-fee",
+    "date": "2026-08-18",
+    "clientId": "firm",
+    "matterId": null,
+    "amountCents": 2500,
+    "kind": "bank_fee",
+    "payeeId": "bank",
+    "status": "posted",
+    "documentIds": [
+      "bank-service-fee"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-06-fee",
+    "transactionId": "h08-06-fee",
+    "date": "2026-08-18",
+    "clientId": "c34",
+    "matterId": "m09",
+    "amountCents": 48750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-06-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-06-out",
+    "transactionId": "h08-06-out",
+    "date": "2026-08-19",
+    "clientId": "c34",
+    "matterId": "m09",
+    "amountCents": 14370,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-06-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-07-fee",
+    "transactionId": "h08-07-fee",
+    "date": "2026-08-21",
+    "clientId": "c35",
+    "matterId": "m10",
+    "amountCents": 43250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-07-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-07-out",
+    "transactionId": "h08-07-out",
+    "date": "2026-08-22",
+    "clientId": "c35",
+    "matterId": "m10",
+    "amountCents": 14687,
+    "kind": "refund",
+    "payeeId": "c35",
+    "status": "posted",
+    "documentIds": [
+      "h08-07-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-08-fee",
+    "transactionId": "h08-08-fee",
+    "date": "2026-08-24",
+    "clientId": "c36",
+    "matterId": "m11",
+    "amountCents": 55250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-08-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h08-08-out",
+    "transactionId": "h08-08-out",
+    "date": "2026-08-25",
+    "clientId": "c36",
+    "matterId": "m11",
+    "amountCents": 15004,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h08-08-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-01-fee",
+    "transactionId": "h09-01-fee",
+    "date": "2026-09-03",
+    "clientId": "c37",
+    "matterId": "m12",
+    "amountCents": 42500,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-01-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-01-out",
+    "transactionId": "h09-01-out",
+    "date": "2026-09-04",
+    "clientId": "c37",
+    "matterId": "m12",
+    "amountCents": 12785,
+    "kind": "refund",
+    "payeeId": "c37",
+    "status": "posted",
+    "documentIds": [
+      "h09-01-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-02-fee",
+    "transactionId": "h09-02-fee",
+    "date": "2026-09-06",
+    "clientId": "c38",
+    "matterId": "m13",
+    "amountCents": 35750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-02-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-02-out",
+    "transactionId": "h09-02-out",
+    "date": "2026-09-07",
+    "clientId": "c38",
+    "matterId": "m13",
+    "amountCents": 13102,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-03-fee",
+    "transactionId": "h09-03-fee",
+    "date": "2026-09-09",
+    "clientId": "c39",
+    "matterId": "m14",
+    "amountCents": 42750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-03-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-03-out",
+    "transactionId": "h09-03-out",
+    "date": "2026-09-10",
+    "clientId": "c39",
+    "matterId": "m14",
+    "amountCents": 13419,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-03-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-04-fee",
+    "transactionId": "h09-04-fee",
+    "date": "2026-09-12",
+    "clientId": "c40",
+    "matterId": "m15",
+    "amountCents": 42250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-04-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-04-out",
+    "transactionId": "h09-04-out",
+    "date": "2026-09-13",
+    "clientId": "c40",
+    "matterId": "m15",
+    "amountCents": 13736,
+    "kind": "refund",
+    "payeeId": "c40",
+    "status": "posted",
+    "documentIds": [
+      "h09-04-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-05-fee",
+    "transactionId": "h09-05-fee",
+    "date": "2026-09-15",
+    "clientId": "c05",
+    "matterId": "m03",
+    "amountCents": 43000,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-05-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-05-out",
+    "transactionId": "h09-05-out",
+    "date": "2026-09-16",
+    "clientId": "c05",
+    "matterId": "m03",
+    "amountCents": 14053,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-05-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-brooks-client-payment",
+    "transactionId": "brooks-client-payment",
+    "date": "2026-09-17",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": 1867341,
+    "kind": "client_share",
+    "payeeId": "c12",
+    "status": "posted",
+    "documentIds": [
+      "brooks-client-payment"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-06-fee",
+    "transactionId": "h09-06-fee",
+    "date": "2026-09-18",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": 48750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-06-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-06-out",
+    "transactionId": "h09-06-out",
+    "date": "2026-09-19",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": 14370,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-06-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-07-fee",
+    "transactionId": "h09-07-fee",
+    "date": "2026-09-21",
+    "clientId": "c07",
+    "matterId": "m05",
+    "amountCents": 43250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-07-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-07-out",
+    "transactionId": "h09-07-out",
+    "date": "2026-09-22",
+    "clientId": "c07",
+    "matterId": "m05",
+    "amountCents": 14687,
+    "kind": "refund",
+    "payeeId": "c07",
+    "status": "posted",
+    "documentIds": [
+      "h09-07-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-08-fee",
+    "transactionId": "h09-08-fee",
+    "date": "2026-09-24",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": 55250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-08-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h09-08-out",
+    "transactionId": "h09-08-out",
+    "date": "2026-09-25",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": 15004,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h09-08-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-01-fee",
+    "transactionId": "h10-01-fee",
+    "date": "2026-10-03",
+    "clientId": "c09",
+    "matterId": "m07",
+    "amountCents": 42500,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-01-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-01-out",
+    "transactionId": "h10-01-out",
+    "date": "2026-10-04",
+    "clientId": "c09",
+    "matterId": "m07",
+    "amountCents": 12785,
+    "kind": "refund",
+    "payeeId": "c09",
+    "status": "posted",
+    "documentIds": [
+      "h10-01-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-02-fee",
+    "transactionId": "h10-02-fee",
+    "date": "2026-10-06",
+    "clientId": "c10",
+    "matterId": "m08",
+    "amountCents": 35750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-02-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-02-out",
+    "transactionId": "h10-02-out",
+    "date": "2026-10-07",
+    "clientId": "c10",
+    "matterId": "m08",
+    "amountCents": 13102,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-02-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-cho-expert-payment",
+    "transactionId": "cho-expert-payment",
+    "date": "2026-10-09",
+    "clientId": "c04",
+    "matterId": "m02",
+    "amountCents": 600000,
+    "kind": "costs",
+    "payeeId": "expert",
+    "status": "posted",
+    "documentIds": [
+      "cho-expert-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-03-fee",
+    "transactionId": "h10-03-fee",
+    "date": "2026-10-09",
+    "clientId": "c11",
+    "matterId": "m09",
+    "amountCents": 42750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-03-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-03-out",
+    "transactionId": "h10-03-out",
+    "date": "2026-10-10",
+    "clientId": "c11",
+    "matterId": "m09",
+    "amountCents": 13419,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-03-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-04-fee",
+    "transactionId": "h10-04-fee",
+    "date": "2026-10-12",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": 42250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-04-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-04-out",
+    "transactionId": "h10-04-out",
+    "date": "2026-10-13",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": 13736,
+    "kind": "refund",
+    "payeeId": "c12",
+    "status": "posted",
+    "documentIds": [
+      "h10-04-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-05-fee",
+    "transactionId": "h10-05-fee",
+    "date": "2026-10-15",
+    "clientId": "c13",
+    "matterId": "m11",
+    "amountCents": 43000,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-05-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-05-out",
+    "transactionId": "h10-05-out",
+    "date": "2026-10-16",
+    "clientId": "c13",
+    "matterId": "m11",
+    "amountCents": 14053,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-05-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-06-fee",
+    "transactionId": "h10-06-fee",
+    "date": "2026-10-18",
+    "clientId": "c14",
+    "matterId": "m12",
+    "amountCents": 48750,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-06-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-06-out",
+    "transactionId": "h10-06-out",
+    "date": "2026-10-19",
+    "clientId": "c14",
+    "matterId": "m12",
+    "amountCents": 14370,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-06-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-07-fee",
+    "transactionId": "h10-07-fee",
+    "date": "2026-10-21",
+    "clientId": "c15",
+    "matterId": "m13",
+    "amountCents": 43250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-07-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-07-out",
+    "transactionId": "h10-07-out",
+    "date": "2026-10-22",
+    "clientId": "c15",
+    "matterId": "m13",
+    "amountCents": 14687,
+    "kind": "refund",
+    "payeeId": "c15",
+    "status": "posted",
+    "documentIds": [
+      "h10-07-refund"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-08-fee",
+    "transactionId": "h10-08-fee",
+    "date": "2026-10-24",
+    "clientId": "c16",
+    "matterId": "m14",
+    "amountCents": 55250,
+    "kind": "attorney_fee",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-08-invoice"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "disb-h10-08-out",
+    "transactionId": "h10-08-out",
+    "date": "2026-10-25",
+    "clientId": "c16",
+    "matterId": "m14",
+    "amountCents": 15004,
+    "kind": "costs",
+    "payeeId": "firm",
+    "status": "posted",
+    "documentIds": [
+      "h10-08-cost"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam"
+  },
+  {
+    "id": "planned-bayside",
+    "date": "2026-10-23",
+    "clientId": "c01",
+    "matterId": "m01",
+    "amountCents": 1450000,
+    "kind": "lien",
+    "payeeId": "bayside",
+    "status": "draft_unapproved",
+    "statementId": "settlement-v2",
+    "documentIds": [
+      "bayside-v2",
+      "bayside-bank-change"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": null
+  }
+]

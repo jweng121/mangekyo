@@ -1,0 +1,2883 @@
+[
+  {
+    "id": "h05-01-in",
+    "postedDate": "2026-05-02",
+    "ledgerDate": "2026-05-02",
+    "clientId": "c05",
+    "matterId": "m03",
+    "amountCents": 566032,
+    "description": "ZELLE FROM DANIEL OKAFOR",
+    "documentIds": [
+      "h05-01-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 566032
+  },
+  {
+    "id": "h05-01-fee",
+    "postedDate": "2026-05-03",
+    "ledgerDate": "2026-05-03",
+    "clientId": "c05",
+    "matterId": "m03",
+    "amountCents": -42500,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h05-01-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 523532
+  },
+  {
+    "id": "h05-01-out",
+    "postedDate": "2026-05-04",
+    "ledgerDate": "2026-05-04",
+    "clientId": "c05",
+    "matterId": "m03",
+    "amountCents": -12785,
+    "description": "ACH REFUND DANIEL OKAFOR",
+    "documentIds": [
+      "h05-01-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c05",
+    "balanceCents": 510747
+  },
+  {
+    "id": "cho-retainer",
+    "postedDate": "2026-05-05",
+    "ledgerDate": "2026-05-05",
+    "clientId": "c04",
+    "matterId": "m02",
+    "amountCents": 180000,
+    "description": "ACH CR RAYMOND CHO",
+    "documentIds": [
+      "cho-retainer"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "balanceCents": 690747
+  },
+  {
+    "id": "h05-02-in",
+    "postedDate": "2026-05-05",
+    "ledgerDate": "2026-05-05",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": 550596,
+    "description": "ACH FROM JAMIE NGUYEN",
+    "documentIds": [
+      "h05-02-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 1241343
+  },
+  {
+    "id": "h05-02-fee",
+    "postedDate": "2026-05-06",
+    "ledgerDate": "2026-05-06",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": -35750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h05-02-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 1205593
+  },
+  {
+    "id": "h05-02-out",
+    "postedDate": "2026-05-07",
+    "ledgerDate": "2026-05-07",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": -13102,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h05-02-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 1192491
+  },
+  {
+    "id": "h05-03-in",
+    "postedDate": "2026-05-08",
+    "ledgerDate": "2026-05-08",
+    "clientId": "c07",
+    "matterId": "m05",
+    "amountCents": 505924,
+    "description": "WIRE FROM JORDAN NGUYEN",
+    "documentIds": [
+      "h05-03-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 1698415
+  },
+  {
+    "id": "h05-03-fee",
+    "postedDate": "2026-05-09",
+    "ledgerDate": "2026-05-09",
+    "clientId": "c07",
+    "matterId": "m05",
+    "amountCents": -42750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h05-03-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 1655665
+  },
+  {
+    "id": "h05-03-out",
+    "postedDate": "2026-05-10",
+    "ledgerDate": "2026-05-10",
+    "clientId": "c07",
+    "matterId": "m05",
+    "amountCents": -13419,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h05-03-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 1642246
+  },
+  {
+    "id": "h05-04-in",
+    "postedDate": "2026-05-11",
+    "ledgerDate": "2026-05-11",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": 552768,
+    "description": "CHECK FROM ELENA PARK",
+    "documentIds": [
+      "h05-04-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "6103",
+    "balanceCents": 2195014
+  },
+  {
+    "id": "h05-04-fee",
+    "postedDate": "2026-05-12",
+    "ledgerDate": "2026-05-12",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": -42250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h05-04-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 2152764
+  },
+  {
+    "id": "h05-04-out",
+    "postedDate": "2026-05-13",
+    "ledgerDate": "2026-05-13",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": -13736,
+    "description": "ACH REFUND ELENA PARK",
+    "documentIds": [
+      "h05-04-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c08",
+    "balanceCents": 2139028
+  },
+  {
+    "id": "h05-05-in",
+    "postedDate": "2026-05-14",
+    "ledgerDate": "2026-05-14",
+    "clientId": "c09",
+    "matterId": "m07",
+    "amountCents": 567370,
+    "description": "ZELLE FROM VICTOR CHEN",
+    "documentIds": [
+      "h05-05-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 2706398
+  },
+  {
+    "id": "h05-05-fee",
+    "postedDate": "2026-05-15",
+    "ledgerDate": "2026-05-15",
+    "clientId": "c09",
+    "matterId": "m07",
+    "amountCents": -43000,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h05-05-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 2663398
+  },
+  {
+    "id": "h05-05-out",
+    "postedDate": "2026-05-16",
+    "ledgerDate": "2026-05-16",
+    "clientId": "c09",
+    "matterId": "m07",
+    "amountCents": -14053,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h05-05-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 2649345
+  },
+  {
+    "id": "h05-06-in",
+    "postedDate": "2026-05-17",
+    "ledgerDate": "2026-05-17",
+    "clientId": "c10",
+    "matterId": "m08",
+    "amountCents": 515951,
+    "description": "ACH FROM NADIA FLORES",
+    "documentIds": [
+      "h05-06-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 3165296
+  },
+  {
+    "id": "h05-06-fee",
+    "postedDate": "2026-05-18",
+    "ledgerDate": "2026-05-18",
+    "clientId": "c10",
+    "matterId": "m08",
+    "amountCents": -48750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h05-06-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 3116546
+  },
+  {
+    "id": "h05-06-out",
+    "postedDate": "2026-05-19",
+    "ledgerDate": "2026-05-19",
+    "clientId": "c10",
+    "matterId": "m08",
+    "amountCents": -14370,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h05-06-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 3102176
+  },
+  {
+    "id": "noise-1",
+    "postedDate": "2026-05-19",
+    "ledgerDate": "2026-05-19",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": 87525,
+    "description": "ZELLE FROM J NGUYEN",
+    "documentIds": [
+      "noise-1"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "balanceCents": 3189701
+  },
+  {
+    "id": "h05-07-in",
+    "postedDate": "2026-05-20",
+    "ledgerDate": "2026-05-20",
+    "clientId": "c11",
+    "matterId": "m09",
+    "amountCents": 584443,
+    "description": "WIRE FROM OMAR HASSAN",
+    "documentIds": [
+      "h05-07-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 3774144
+  },
+  {
+    "id": "h05-07-fee",
+    "postedDate": "2026-05-21",
+    "ledgerDate": "2026-05-21",
+    "clientId": "c11",
+    "matterId": "m09",
+    "amountCents": -43250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h05-07-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 3730894
+  },
+  {
+    "id": "h05-07-out",
+    "postedDate": "2026-05-22",
+    "ledgerDate": "2026-05-22",
+    "clientId": "c11",
+    "matterId": "m09",
+    "amountCents": -14687,
+    "description": "ACH REFUND OMAR HASSAN",
+    "documentIds": [
+      "h05-07-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c11",
+    "balanceCents": 3716207
+  },
+  {
+    "id": "h05-08-in",
+    "postedDate": "2026-05-23",
+    "ledgerDate": "2026-05-23",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": 534417,
+    "description": "CHECK FROM LENA BROOKS",
+    "documentIds": [
+      "h05-08-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "6107",
+    "balanceCents": 4250624
+  },
+  {
+    "id": "h05-08-fee",
+    "postedDate": "2026-05-24",
+    "ledgerDate": "2026-05-24",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": -55250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h05-08-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 4195374
+  },
+  {
+    "id": "h05-08-out",
+    "postedDate": "2026-05-25",
+    "ledgerDate": "2026-05-25",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": -15004,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h05-08-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 4180370
+  },
+  {
+    "id": "h06-01-in",
+    "postedDate": "2026-06-02",
+    "ledgerDate": "2026-06-02",
+    "clientId": "c13",
+    "matterId": "m11",
+    "amountCents": 514306,
+    "description": "ZELLE FROM ISAAC PATEL",
+    "documentIds": [
+      "h06-01-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 4694676
+  },
+  {
+    "id": "h06-01-fee",
+    "postedDate": "2026-06-03",
+    "ledgerDate": "2026-06-03",
+    "clientId": "c13",
+    "matterId": "m11",
+    "amountCents": -42500,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h06-01-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 4652176
+  },
+  {
+    "id": "h06-01-out",
+    "postedDate": "2026-06-04",
+    "ledgerDate": "2026-06-04",
+    "clientId": "c13",
+    "matterId": "m11",
+    "amountCents": -12785,
+    "description": "ACH REFUND ISAAC PATEL",
+    "documentIds": [
+      "h06-01-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c13",
+    "balanceCents": 4639391
+  },
+  {
+    "id": "h06-02-in",
+    "postedDate": "2026-06-05",
+    "ledgerDate": "2026-06-05",
+    "clientId": "c14",
+    "matterId": "m12",
+    "amountCents": 523408,
+    "description": "ACH FROM SOFIA RIVERA",
+    "documentIds": [
+      "h06-02-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 5162799
+  },
+  {
+    "id": "h06-02-fee",
+    "postedDate": "2026-06-06",
+    "ledgerDate": "2026-06-06",
+    "clientId": "c14",
+    "matterId": "m12",
+    "amountCents": -35750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h06-02-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 5127049
+  },
+  {
+    "id": "h06-02-out",
+    "postedDate": "2026-06-07",
+    "ledgerDate": "2026-06-07",
+    "clientId": "c14",
+    "matterId": "m12",
+    "amountCents": -13102,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h06-02-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 5113947
+  },
+  {
+    "id": "h06-03-in",
+    "postedDate": "2026-06-08",
+    "ledgerDate": "2026-06-08",
+    "clientId": "c15",
+    "matterId": "m13",
+    "amountCents": 577425,
+    "description": "WIRE FROM MARCUS REED",
+    "documentIds": [
+      "h06-03-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 5691372
+  },
+  {
+    "id": "h06-03-fee",
+    "postedDate": "2026-06-09",
+    "ledgerDate": "2026-06-09",
+    "clientId": "c15",
+    "matterId": "m13",
+    "amountCents": -42750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h06-03-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 5648622
+  },
+  {
+    "id": "h06-03-out",
+    "postedDate": "2026-06-10",
+    "ledgerDate": "2026-06-10",
+    "clientId": "c15",
+    "matterId": "m13",
+    "amountCents": -13419,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h06-03-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 5635203
+  },
+  {
+    "id": "h06-04-in",
+    "postedDate": "2026-06-11",
+    "ledgerDate": "2026-06-11",
+    "clientId": "c16",
+    "matterId": "m14",
+    "amountCents": 564188,
+    "description": "CHECK FROM GRACE KIM",
+    "documentIds": [
+      "h06-04-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "6111",
+    "balanceCents": 6199391
+  },
+  {
+    "id": "park-funding",
+    "postedDate": "2026-06-11",
+    "ledgerDate": "2026-06-11",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": 320075,
+    "description": "ACH CR ELENA PARK",
+    "documentIds": [
+      "park-funding"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "balanceCents": 6519466
+  },
+  {
+    "id": "bayside-prior-paid",
+    "postedDate": "2026-06-12",
+    "ledgerDate": "2026-06-12",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": -320075,
+    "description": "WIRE OUT BAYSIDE MED GRP",
+    "documentIds": [
+      "bayside-prior-letter",
+      "bayside-prior-confirmation"
+    ],
+    "kind": "lien",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "bayside",
+    "bankAccount": "0000831264",
+    "balanceCents": 6199391
+  },
+  {
+    "id": "h06-04-fee",
+    "postedDate": "2026-06-12",
+    "ledgerDate": "2026-06-12",
+    "clientId": "c16",
+    "matterId": "m14",
+    "amountCents": -42250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h06-04-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 6157141
+  },
+  {
+    "id": "h06-04-out",
+    "postedDate": "2026-06-13",
+    "ledgerDate": "2026-06-13",
+    "clientId": "c16",
+    "matterId": "m14",
+    "amountCents": -13736,
+    "description": "ACH REFUND GRACE KIM",
+    "documentIds": [
+      "h06-04-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c16",
+    "balanceCents": 6143405
+  },
+  {
+    "id": "h06-05-in",
+    "postedDate": "2026-06-14",
+    "ledgerDate": "2026-06-14",
+    "clientId": "c17",
+    "matterId": "m15",
+    "amountCents": 581167,
+    "description": "ZELLE FROM ROSA ALVAREZ",
+    "documentIds": [
+      "h06-05-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 6724572
+  },
+  {
+    "id": "h06-05-fee",
+    "postedDate": "2026-06-15",
+    "ledgerDate": "2026-06-15",
+    "clientId": "c17",
+    "matterId": "m15",
+    "amountCents": -43000,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h06-05-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 6681572
+  },
+  {
+    "id": "h06-05-out",
+    "postedDate": "2026-06-16",
+    "ledgerDate": "2026-06-16",
+    "clientId": "c17",
+    "matterId": "m15",
+    "amountCents": -14053,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h06-05-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 6667519
+  },
+  {
+    "id": "h06-06-in",
+    "postedDate": "2026-06-17",
+    "ledgerDate": "2026-06-17",
+    "clientId": "c18",
+    "matterId": "m16",
+    "amountCents": 522751,
+    "description": "ACH FROM ETHAN WALSH",
+    "documentIds": [
+      "h06-06-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 7190270
+  },
+  {
+    "id": "h06-06-fee",
+    "postedDate": "2026-06-18",
+    "ledgerDate": "2026-06-18",
+    "clientId": "c18",
+    "matterId": "m16",
+    "amountCents": -48750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h06-06-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 7141520
+  },
+  {
+    "id": "noise-2",
+    "postedDate": "2026-06-18",
+    "ledgerDate": "2026-06-18",
+    "clientId": "c07",
+    "matterId": "m05",
+    "amountCents": 92040,
+    "description": "ZELLE FROM J NGUYEN",
+    "documentIds": [
+      "noise-2"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "balanceCents": 7233560
+  },
+  {
+    "id": "h06-06-out",
+    "postedDate": "2026-06-19",
+    "ledgerDate": "2026-06-19",
+    "clientId": "c18",
+    "matterId": "m16",
+    "amountCents": -14370,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h06-06-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 7219190
+  },
+  {
+    "id": "h06-07-in",
+    "postedDate": "2026-06-20",
+    "ledgerDate": "2026-06-20",
+    "clientId": "c19",
+    "matterId": "m17",
+    "amountCents": 525584,
+    "description": "WIRE FROM AMIRA SALEH",
+    "documentIds": [
+      "h06-07-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 7744774
+  },
+  {
+    "id": "h06-07-fee",
+    "postedDate": "2026-06-21",
+    "ledgerDate": "2026-06-21",
+    "clientId": "c19",
+    "matterId": "m17",
+    "amountCents": -43250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h06-07-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 7701524
+  },
+  {
+    "id": "h06-07-out",
+    "postedDate": "2026-06-22",
+    "ledgerDate": "2026-06-22",
+    "clientId": "c19",
+    "matterId": "m17",
+    "amountCents": -14687,
+    "description": "ACH REFUND AMIRA SALEH",
+    "documentIds": [
+      "h06-07-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c19",
+    "balanceCents": 7686837
+  },
+  {
+    "id": "h06-08-in",
+    "postedDate": "2026-06-23",
+    "ledgerDate": "2026-06-23",
+    "clientId": "c20",
+    "matterId": "m18",
+    "amountCents": 504607,
+    "description": "CHECK FROM NOAH BENNETT",
+    "documentIds": [
+      "h06-08-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "6115",
+    "balanceCents": 8191444
+  },
+  {
+    "id": "h06-08-fee",
+    "postedDate": "2026-06-24",
+    "ledgerDate": "2026-06-24",
+    "clientId": "c20",
+    "matterId": "m18",
+    "amountCents": -55250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h06-08-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 8136194
+  },
+  {
+    "id": "h06-08-out",
+    "postedDate": "2026-06-25",
+    "ledgerDate": "2026-06-25",
+    "clientId": "c20",
+    "matterId": "m18",
+    "amountCents": -15004,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h06-08-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 8121190
+  },
+  {
+    "id": "h07-01-in",
+    "postedDate": "2026-07-02",
+    "ledgerDate": "2026-07-02",
+    "clientId": "c21",
+    "matterId": "m19",
+    "amountCents": 558789,
+    "description": "ZELLE FROM MEI LIN",
+    "documentIds": [
+      "h07-01-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 8679979
+  },
+  {
+    "id": "h07-01-fee",
+    "postedDate": "2026-07-03",
+    "ledgerDate": "2026-07-03",
+    "clientId": "c21",
+    "matterId": "m19",
+    "amountCents": -42500,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h07-01-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 8637479
+  },
+  {
+    "id": "h07-01-out",
+    "postedDate": "2026-07-04",
+    "ledgerDate": "2026-07-04",
+    "clientId": "c21",
+    "matterId": "m19",
+    "amountCents": -12785,
+    "description": "ACH REFUND MEI LIN",
+    "documentIds": [
+      "h07-01-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c21",
+    "balanceCents": 8624694
+  },
+  {
+    "id": "h07-02-in",
+    "postedDate": "2026-07-05",
+    "ledgerDate": "2026-07-05",
+    "clientId": "c22",
+    "matterId": "m20",
+    "amountCents": 512573,
+    "description": "ACH FROM CARLOS VEGA",
+    "documentIds": [
+      "h07-02-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 9137267
+  },
+  {
+    "id": "h07-02-fee",
+    "postedDate": "2026-07-06",
+    "ledgerDate": "2026-07-06",
+    "clientId": "c22",
+    "matterId": "m20",
+    "amountCents": -35750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h07-02-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 9101517
+  },
+  {
+    "id": "h07-02-out",
+    "postedDate": "2026-07-07",
+    "ledgerDate": "2026-07-07",
+    "clientId": "c22",
+    "matterId": "m20",
+    "amountCents": -13102,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h07-02-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 9088415
+  },
+  {
+    "id": "title-wire-1",
+    "postedDate": "2026-07-07",
+    "ledgerDate": "2026-07-07",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": 734125,
+    "description": "WIRE IN ESTUARY TITLE ETS91",
+    "documentIds": [
+      "title-wire-1"
+    ],
+    "kind": "closing_wire",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "reference": "ETS-260707-91",
+    "payeeId": "title",
+    "balanceCents": 9822540
+  },
+  {
+    "id": "h07-03-in",
+    "postedDate": "2026-07-08",
+    "ledgerDate": "2026-07-08",
+    "clientId": "c23",
+    "matterId": "m21",
+    "amountCents": 565219,
+    "description": "WIRE FROM FATIMA YUSUF",
+    "documentIds": [
+      "h07-03-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 10387759
+  },
+  {
+    "id": "title-wire-2",
+    "postedDate": "2026-07-08",
+    "ledgerDate": "2026-07-08",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": 734125,
+    "description": "WIRE IN ESTUARY TITLE ETS91",
+    "documentIds": [
+      "title-wire-2"
+    ],
+    "kind": "closing_wire",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "reference": "ETS-260707-91",
+    "payeeId": "title",
+    "balanceCents": 11121884
+  },
+  {
+    "id": "h07-03-fee",
+    "postedDate": "2026-07-09",
+    "ledgerDate": "2026-07-09",
+    "clientId": "c23",
+    "matterId": "m21",
+    "amountCents": -42750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h07-03-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 11079134
+  },
+  {
+    "id": "h07-03-out",
+    "postedDate": "2026-07-10",
+    "ledgerDate": "2026-07-10",
+    "clientId": "c23",
+    "matterId": "m21",
+    "amountCents": -13419,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h07-03-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 11065715
+  },
+  {
+    "id": "title-return",
+    "postedDate": "2026-07-10",
+    "ledgerDate": "2026-07-10",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": -734125,
+    "description": "WIRE OUT ESTUARY TITLE ETS91",
+    "documentIds": [
+      "title-return"
+    ],
+    "kind": "duplicate_return",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "reference": "ETS-260707-91",
+    "payeeId": "title",
+    "balanceCents": 10331590
+  },
+  {
+    "id": "h07-04-in",
+    "postedDate": "2026-07-11",
+    "ledgerDate": "2026-07-11",
+    "clientId": "c24",
+    "matterId": "m22",
+    "amountCents": 514001,
+    "description": "CHECK FROM PETER NOVAK",
+    "documentIds": [
+      "h07-04-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "6119",
+    "balanceCents": 10845591
+  },
+  {
+    "id": "h07-04-fee",
+    "postedDate": "2026-07-12",
+    "ledgerDate": "2026-07-12",
+    "clientId": "c24",
+    "matterId": "m22",
+    "amountCents": -42250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h07-04-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 10803341
+  },
+  {
+    "id": "h07-04-out",
+    "postedDate": "2026-07-13",
+    "ledgerDate": "2026-07-13",
+    "clientId": "c24",
+    "matterId": "m22",
+    "amountCents": -13736,
+    "description": "ACH REFUND PETER NOVAK",
+    "documentIds": [
+      "h07-04-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c24",
+    "balanceCents": 10789605
+  },
+  {
+    "id": "h07-05-in",
+    "postedDate": "2026-07-14",
+    "ledgerDate": "2026-07-14",
+    "clientId": "c25",
+    "matterId": "m23",
+    "amountCents": 550293,
+    "description": "ZELLE FROM LUCIA SANTOS",
+    "documentIds": [
+      "h07-05-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 11339898
+  },
+  {
+    "id": "h07-05-fee",
+    "postedDate": "2026-07-15",
+    "ledgerDate": "2026-07-15",
+    "clientId": "c25",
+    "matterId": "m23",
+    "amountCents": -43000,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h07-05-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 11296898
+  },
+  {
+    "id": "h07-05-out",
+    "postedDate": "2026-07-16",
+    "ledgerDate": "2026-07-16",
+    "clientId": "c25",
+    "matterId": "m23",
+    "amountCents": -14053,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h07-05-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 11282845
+  },
+  {
+    "id": "h07-06-in",
+    "postedDate": "2026-07-17",
+    "ledgerDate": "2026-07-17",
+    "clientId": "c26",
+    "matterId": "m24",
+    "amountCents": 568309,
+    "description": "ACH FROM ANDRE LEWIS",
+    "documentIds": [
+      "h07-06-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 11851154
+  },
+  {
+    "id": "h07-06-fee",
+    "postedDate": "2026-07-18",
+    "ledgerDate": "2026-07-18",
+    "clientId": "c26",
+    "matterId": "m24",
+    "amountCents": -48750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h07-06-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 11802404
+  },
+  {
+    "id": "h07-06-out",
+    "postedDate": "2026-07-19",
+    "ledgerDate": "2026-07-19",
+    "clientId": "c26",
+    "matterId": "m24",
+    "amountCents": -14370,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h07-06-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 11788034
+  },
+  {
+    "id": "h07-07-in",
+    "postedDate": "2026-07-20",
+    "ledgerDate": "2026-07-20",
+    "clientId": "c27",
+    "matterId": "m25",
+    "amountCents": 521070,
+    "description": "WIRE FROM HELEN WU",
+    "documentIds": [
+      "h07-07-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 12309104
+  },
+  {
+    "id": "h07-07-fee",
+    "postedDate": "2026-07-21",
+    "ledgerDate": "2026-07-21",
+    "clientId": "c27",
+    "matterId": "m25",
+    "amountCents": -43250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h07-07-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 12265854
+  },
+  {
+    "id": "h07-07-out",
+    "postedDate": "2026-07-22",
+    "ledgerDate": "2026-07-22",
+    "clientId": "c27",
+    "matterId": "m25",
+    "amountCents": -14687,
+    "description": "ACH REFUND HELEN WU",
+    "documentIds": [
+      "h07-07-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c27",
+    "balanceCents": 12251167
+  },
+  {
+    "id": "h07-08-in",
+    "postedDate": "2026-07-23",
+    "ledgerDate": "2026-07-23",
+    "clientId": "c28",
+    "matterId": "m03",
+    "amountCents": 528481,
+    "description": "CHECK FROM MATEO CRUZ",
+    "documentIds": [
+      "h07-08-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "6123",
+    "balanceCents": 12779648
+  },
+  {
+    "id": "h07-08-fee",
+    "postedDate": "2026-07-24",
+    "ledgerDate": "2026-07-24",
+    "clientId": "c28",
+    "matterId": "m03",
+    "amountCents": -55250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h07-08-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 12724398
+  },
+  {
+    "id": "h07-08-out",
+    "postedDate": "2026-07-25",
+    "ledgerDate": "2026-07-25",
+    "clientId": "c28",
+    "matterId": "m03",
+    "amountCents": -15004,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h07-08-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 12709394
+  },
+  {
+    "id": "h08-01-in",
+    "postedDate": "2026-08-02",
+    "ledgerDate": "2026-08-02",
+    "clientId": "c29",
+    "matterId": "m04",
+    "amountCents": 525351,
+    "description": "ZELLE FROM TESSA MORGAN",
+    "documentIds": [
+      "h08-01-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 13234745
+  },
+  {
+    "id": "h08-01-fee",
+    "postedDate": "2026-08-03",
+    "ledgerDate": "2026-08-03",
+    "clientId": "c29",
+    "matterId": "m04",
+    "amountCents": -42500,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h08-01-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 13192245
+  },
+  {
+    "id": "h08-01-out",
+    "postedDate": "2026-08-04",
+    "ledgerDate": "2026-08-04",
+    "clientId": "c29",
+    "matterId": "m04",
+    "amountCents": -12785,
+    "description": "ACH REFUND TESSA MORGAN",
+    "documentIds": [
+      "h08-01-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c29",
+    "balanceCents": 13179460
+  },
+  {
+    "id": "h08-02-in",
+    "postedDate": "2026-08-05",
+    "ledgerDate": "2026-08-05",
+    "clientId": "c30",
+    "matterId": "m05",
+    "amountCents": 518665,
+    "description": "ACH FROM JAMAL PRICE",
+    "documentIds": [
+      "h08-02-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 13698125
+  },
+  {
+    "id": "h08-02-fee",
+    "postedDate": "2026-08-06",
+    "ledgerDate": "2026-08-06",
+    "clientId": "c30",
+    "matterId": "m05",
+    "amountCents": -35750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h08-02-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 13662375
+  },
+  {
+    "id": "h08-02-out",
+    "postedDate": "2026-08-07",
+    "ledgerDate": "2026-08-07",
+    "clientId": "c30",
+    "matterId": "m05",
+    "amountCents": -13102,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h08-02-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 13649273
+  },
+  {
+    "id": "h08-03-in",
+    "postedDate": "2026-08-08",
+    "ledgerDate": "2026-08-08",
+    "clientId": "c31",
+    "matterId": "m06",
+    "amountCents": 505071,
+    "description": "WIRE FROM ANITA SHAH",
+    "documentIds": [
+      "h08-03-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 14154344
+  },
+  {
+    "id": "h08-03-fee",
+    "postedDate": "2026-08-09",
+    "ledgerDate": "2026-08-09",
+    "clientId": "c31",
+    "matterId": "m06",
+    "amountCents": -42750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h08-03-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 14111594
+  },
+  {
+    "id": "h08-03-out",
+    "postedDate": "2026-08-10",
+    "ledgerDate": "2026-08-10",
+    "clientId": "c31",
+    "matterId": "m06",
+    "amountCents": -13419,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h08-03-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 14098175
+  },
+  {
+    "id": "h08-04-in",
+    "postedDate": "2026-08-11",
+    "ledgerDate": "2026-08-11",
+    "clientId": "c32",
+    "matterId": "m07",
+    "amountCents": 523847,
+    "description": "CHECK FROM FELIX ORTIZ",
+    "documentIds": [
+      "h08-04-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "6127",
+    "balanceCents": 14622022
+  },
+  {
+    "id": "h08-04-fee",
+    "postedDate": "2026-08-12",
+    "ledgerDate": "2026-08-12",
+    "clientId": "c32",
+    "matterId": "m07",
+    "amountCents": -42250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h08-04-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 14579772
+  },
+  {
+    "id": "h08-04-out",
+    "postedDate": "2026-08-13",
+    "ledgerDate": "2026-08-13",
+    "clientId": "c32",
+    "matterId": "m07",
+    "amountCents": -13736,
+    "description": "ACH REFUND FELIX ORTIZ",
+    "documentIds": [
+      "h08-04-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c32",
+    "balanceCents": 14566036
+  },
+  {
+    "id": "h08-05-in",
+    "postedDate": "2026-08-14",
+    "ledgerDate": "2026-08-14",
+    "clientId": "c33",
+    "matterId": "m08",
+    "amountCents": 529051,
+    "description": "ZELLE FROM RUTH COLEMAN",
+    "documentIds": [
+      "h08-05-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 15095087
+  },
+  {
+    "id": "h08-05-fee",
+    "postedDate": "2026-08-15",
+    "ledgerDate": "2026-08-15",
+    "clientId": "c33",
+    "matterId": "m08",
+    "amountCents": -43000,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h08-05-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 15052087
+  },
+  {
+    "id": "h08-05-out",
+    "postedDate": "2026-08-16",
+    "ledgerDate": "2026-08-16",
+    "clientId": "c33",
+    "matterId": "m08",
+    "amountCents": -14053,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h08-05-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 15038034
+  },
+  {
+    "id": "h08-06-in",
+    "postedDate": "2026-08-17",
+    "ledgerDate": "2026-08-17",
+    "clientId": "c34",
+    "matterId": "m09",
+    "amountCents": 533625,
+    "description": "ACH FROM LEILA HADDAD",
+    "documentIds": [
+      "h08-06-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 15571659
+  },
+  {
+    "id": "bank-service-fee",
+    "postedDate": "2026-08-18",
+    "ledgerDate": "2026-08-18",
+    "clientId": "firm",
+    "matterId": null,
+    "amountCents": -2500,
+    "description": "MONTHLY SERVICE CHARGE",
+    "documentIds": [
+      "bank-service-fee"
+    ],
+    "kind": "bank_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "bank",
+    "balanceCents": 15569159
+  },
+  {
+    "id": "h08-06-fee",
+    "postedDate": "2026-08-18",
+    "ledgerDate": "2026-08-18",
+    "clientId": "c34",
+    "matterId": "m09",
+    "amountCents": -48750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h08-06-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 15520409
+  },
+  {
+    "id": "firm-fee-replacement",
+    "postedDate": "2026-08-19",
+    "ledgerDate": "2026-08-19",
+    "clientId": "firm",
+    "matterId": null,
+    "amountCents": 2500,
+    "description": "ACH CR HARTWELL OPER 2290",
+    "documentIds": [
+      "firm-fee-replacement"
+    ],
+    "kind": "firm_replacement",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "bank",
+    "balanceCents": 15522909
+  },
+  {
+    "id": "h08-06-out",
+    "postedDate": "2026-08-19",
+    "ledgerDate": "2026-08-19",
+    "clientId": "c34",
+    "matterId": "m09",
+    "amountCents": -14370,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h08-06-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 15508539
+  },
+  {
+    "id": "h08-07-in",
+    "postedDate": "2026-08-20",
+    "ledgerDate": "2026-08-20",
+    "clientId": "c35",
+    "matterId": "m10",
+    "amountCents": 500222,
+    "description": "WIRE FROM SIMON BLAKE",
+    "documentIds": [
+      "h08-07-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 16008761
+  },
+  {
+    "id": "h08-07-fee",
+    "postedDate": "2026-08-21",
+    "ledgerDate": "2026-08-21",
+    "clientId": "c35",
+    "matterId": "m10",
+    "amountCents": -43250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h08-07-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 15965511
+  },
+  {
+    "id": "h08-07-out",
+    "postedDate": "2026-08-22",
+    "ledgerDate": "2026-08-22",
+    "clientId": "c35",
+    "matterId": "m10",
+    "amountCents": -14687,
+    "description": "ACH REFUND SIMON BLAKE",
+    "documentIds": [
+      "h08-07-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c35",
+    "balanceCents": 15950824
+  },
+  {
+    "id": "h08-08-in",
+    "postedDate": "2026-08-23",
+    "ledgerDate": "2026-08-23",
+    "clientId": "c36",
+    "matterId": "m11",
+    "amountCents": 528223,
+    "description": "CHECK FROM DINA FAROUK",
+    "documentIds": [
+      "h08-08-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "6131",
+    "balanceCents": 16479047
+  },
+  {
+    "id": "h08-08-fee",
+    "postedDate": "2026-08-24",
+    "ledgerDate": "2026-08-24",
+    "clientId": "c36",
+    "matterId": "m11",
+    "amountCents": -55250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h08-08-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 16423797
+  },
+  {
+    "id": "h08-08-out",
+    "postedDate": "2026-08-25",
+    "ledgerDate": "2026-08-25",
+    "clientId": "c36",
+    "matterId": "m11",
+    "amountCents": -15004,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h08-08-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 16408793
+  },
+  {
+    "id": "h09-01-in",
+    "postedDate": "2026-09-02",
+    "ledgerDate": "2026-09-02",
+    "clientId": "c37",
+    "matterId": "m12",
+    "amountCents": 547243,
+    "description": "ZELLE FROM ADRIAN MOSS",
+    "documentIds": [
+      "h09-01-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 16956036
+  },
+  {
+    "id": "h09-01-fee",
+    "postedDate": "2026-09-03",
+    "ledgerDate": "2026-09-03",
+    "clientId": "c37",
+    "matterId": "m12",
+    "amountCents": -42500,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h09-01-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 16913536
+  },
+  {
+    "id": "h09-01-out",
+    "postedDate": "2026-09-04",
+    "ledgerDate": "2026-09-04",
+    "clientId": "c37",
+    "matterId": "m12",
+    "amountCents": -12785,
+    "description": "ACH REFUND ADRIAN MOSS",
+    "documentIds": [
+      "h09-01-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c37",
+    "balanceCents": 16900751
+  },
+  {
+    "id": "h09-02-in",
+    "postedDate": "2026-09-05",
+    "ledgerDate": "2026-09-05",
+    "clientId": "c38",
+    "matterId": "m13",
+    "amountCents": 534038,
+    "description": "ACH FROM NINA PETROV",
+    "documentIds": [
+      "h09-02-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 17434789
+  },
+  {
+    "id": "h09-02-fee",
+    "postedDate": "2026-09-06",
+    "ledgerDate": "2026-09-06",
+    "clientId": "c38",
+    "matterId": "m13",
+    "amountCents": -35750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h09-02-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 17399039
+  },
+  {
+    "id": "h09-02-out",
+    "postedDate": "2026-09-07",
+    "ledgerDate": "2026-09-07",
+    "clientId": "c38",
+    "matterId": "m13",
+    "amountCents": -13102,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h09-02-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 17385937
+  },
+  {
+    "id": "h09-03-in",
+    "postedDate": "2026-09-08",
+    "ledgerDate": "2026-09-08",
+    "clientId": "c39",
+    "matterId": "m14",
+    "amountCents": 548243,
+    "description": "WIRE FROM CALEB ROSS",
+    "documentIds": [
+      "h09-03-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 17934180
+  },
+  {
+    "id": "h09-03-fee",
+    "postedDate": "2026-09-09",
+    "ledgerDate": "2026-09-09",
+    "clientId": "c39",
+    "matterId": "m14",
+    "amountCents": -42750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h09-03-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 17891430
+  },
+  {
+    "id": "h09-03-out",
+    "postedDate": "2026-09-10",
+    "ledgerDate": "2026-09-10",
+    "clientId": "c39",
+    "matterId": "m14",
+    "amountCents": -13419,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h09-03-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 17878011
+  },
+  {
+    "id": "h09-04-in",
+    "postedDate": "2026-09-11",
+    "ledgerDate": "2026-09-11",
+    "clientId": "c40",
+    "matterId": "m15",
+    "amountCents": 572729,
+    "description": "CHECK FROM IRIS TRAN",
+    "documentIds": [
+      "h09-04-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "6135",
+    "balanceCents": 18450740
+  },
+  {
+    "id": "h09-04-fee",
+    "postedDate": "2026-09-12",
+    "ledgerDate": "2026-09-12",
+    "clientId": "c40",
+    "matterId": "m15",
+    "amountCents": -42250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h09-04-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 18408490
+  },
+  {
+    "id": "h09-04-out",
+    "postedDate": "2026-09-13",
+    "ledgerDate": "2026-09-13",
+    "clientId": "c40",
+    "matterId": "m15",
+    "amountCents": -13736,
+    "description": "ACH REFUND IRIS TRAN",
+    "documentIds": [
+      "h09-04-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c40",
+    "balanceCents": 18394754
+  },
+  {
+    "id": "h09-05-in",
+    "postedDate": "2026-09-14",
+    "ledgerDate": "2026-09-14",
+    "clientId": "c05",
+    "matterId": "m03",
+    "amountCents": 589908,
+    "description": "ZELLE FROM DANIEL OKAFOR",
+    "documentIds": [
+      "h09-05-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 18984662
+  },
+  {
+    "id": "brooks-settlement",
+    "postedDate": "2026-09-15",
+    "ledgerDate": "2026-09-15",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": 1867341,
+    "description": "CHECK TIDEMARK CASUALTY",
+    "documentIds": [
+      "brooks-settlement"
+    ],
+    "kind": "settlement",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "8032",
+    "payeeId": "c12",
+    "balanceCents": 20852003
+  },
+  {
+    "id": "h09-05-fee",
+    "postedDate": "2026-09-15",
+    "ledgerDate": "2026-09-15",
+    "clientId": "c05",
+    "matterId": "m03",
+    "amountCents": -43000,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h09-05-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 20809003
+  },
+  {
+    "id": "h09-05-out",
+    "postedDate": "2026-09-16",
+    "ledgerDate": "2026-09-16",
+    "clientId": "c05",
+    "matterId": "m03",
+    "amountCents": -14053,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h09-05-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 20794950
+  },
+  {
+    "id": "brooks-client-payment",
+    "postedDate": "2026-09-17",
+    "ledgerDate": "2026-09-17",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": -1867341,
+    "description": "ACH TO LENA BROOKS",
+    "documentIds": [
+      "brooks-client-payment"
+    ],
+    "kind": "client_share",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "payeeId": "c12",
+    "balanceCents": 18927609
+  },
+  {
+    "id": "h09-06-in",
+    "postedDate": "2026-09-17",
+    "ledgerDate": "2026-09-17",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": 532063,
+    "description": "ACH FROM JAMIE NGUYEN",
+    "documentIds": [
+      "h09-06-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 19459672
+  },
+  {
+    "id": "h09-06-fee",
+    "postedDate": "2026-09-18",
+    "ledgerDate": "2026-09-18",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": -48750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h09-06-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 19410922
+  },
+  {
+    "id": "h09-06-out",
+    "postedDate": "2026-09-19",
+    "ledgerDate": "2026-09-19",
+    "clientId": "c06",
+    "matterId": "m04",
+    "amountCents": -14370,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h09-06-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 19396552
+  },
+  {
+    "id": "h09-07-in",
+    "postedDate": "2026-09-20",
+    "ledgerDate": "2026-09-20",
+    "clientId": "c07",
+    "matterId": "m05",
+    "amountCents": 560958,
+    "description": "WIRE FROM JORDAN NGUYEN",
+    "documentIds": [
+      "h09-07-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 19957510
+  },
+  {
+    "id": "h09-07-fee",
+    "postedDate": "2026-09-21",
+    "ledgerDate": "2026-09-21",
+    "clientId": "c07",
+    "matterId": "m05",
+    "amountCents": -43250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h09-07-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 19914260
+  },
+  {
+    "id": "noise-3",
+    "postedDate": "2026-09-21",
+    "ledgerDate": "2026-09-21",
+    "clientId": "c05",
+    "matterId": "m03",
+    "amountCents": 125000,
+    "description": "ACH CR D OKAFOR PART PMT",
+    "documentIds": [
+      "noise-3"
+    ],
+    "kind": "partial_retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "balanceCents": 20039260
+  },
+  {
+    "id": "h09-07-out",
+    "postedDate": "2026-09-22",
+    "ledgerDate": "2026-09-22",
+    "clientId": "c07",
+    "matterId": "m05",
+    "amountCents": -14687,
+    "description": "ACH REFUND JORDAN NGUYEN",
+    "documentIds": [
+      "h09-07-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c07",
+    "balanceCents": 20024573
+  },
+  {
+    "id": "h09-08-in",
+    "postedDate": "2026-09-23",
+    "ledgerDate": "2026-09-23",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": 519339,
+    "description": "CHECK FROM ELENA PARK",
+    "documentIds": [
+      "h09-08-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "6139",
+    "balanceCents": 20543912
+  },
+  {
+    "id": "h09-08-fee",
+    "postedDate": "2026-09-24",
+    "ledgerDate": "2026-09-24",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": -55250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h09-08-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 20488662
+  },
+  {
+    "id": "h09-08-out",
+    "postedDate": "2026-09-25",
+    "ledgerDate": "2026-09-25",
+    "clientId": "c08",
+    "matterId": "m06",
+    "amountCents": -15004,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h09-08-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 20473658
+  },
+  {
+    "id": "h10-01-in",
+    "postedDate": "2026-10-02",
+    "ledgerDate": "2026-10-02",
+    "clientId": "c09",
+    "matterId": "m07",
+    "amountCents": 518784,
+    "description": "ZELLE FROM VICTOR CHEN",
+    "documentIds": [
+      "h10-01-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 20992442
+  },
+  {
+    "id": "h10-01-fee",
+    "postedDate": "2026-10-03",
+    "ledgerDate": "2026-10-03",
+    "clientId": "c09",
+    "matterId": "m07",
+    "amountCents": -42500,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h10-01-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 20949942
+  },
+  {
+    "id": "h10-01-out",
+    "postedDate": "2026-10-04",
+    "ledgerDate": "2026-10-04",
+    "clientId": "c09",
+    "matterId": "m07",
+    "amountCents": -12785,
+    "description": "ACH REFUND VICTOR CHEN",
+    "documentIds": [
+      "h10-01-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c09",
+    "balanceCents": 20937157
+  },
+  {
+    "id": "h10-02-in",
+    "postedDate": "2026-10-05",
+    "ledgerDate": "2026-10-05",
+    "clientId": "c10",
+    "matterId": "m08",
+    "amountCents": 556708,
+    "description": "ACH FROM NADIA FLORES",
+    "documentIds": [
+      "h10-02-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 21493865
+  },
+  {
+    "id": "h10-02-fee",
+    "postedDate": "2026-10-06",
+    "ledgerDate": "2026-10-06",
+    "clientId": "c10",
+    "matterId": "m08",
+    "amountCents": -35750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h10-02-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 21458115
+  },
+  {
+    "id": "h10-02-out",
+    "postedDate": "2026-10-07",
+    "ledgerDate": "2026-10-07",
+    "clientId": "c10",
+    "matterId": "m08",
+    "amountCents": -13102,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h10-02-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 21445013
+  },
+  {
+    "id": "h10-03-in",
+    "postedDate": "2026-10-08",
+    "ledgerDate": "2026-10-08",
+    "clientId": "c11",
+    "matterId": "m09",
+    "amountCents": 526182,
+    "description": "WIRE FROM OMAR HASSAN",
+    "documentIds": [
+      "h10-03-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 21971195
+  },
+  {
+    "id": "cho-expert-payment",
+    "postedDate": "2026-10-09",
+    "ledgerDate": "2026-10-09",
+    "clientId": "c04",
+    "matterId": "m02",
+    "amountCents": -600000,
+    "description": "CHECK 7074 MARLOWE FORENSIC",
+    "documentIds": [
+      "cho-expert-invoice"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "expert",
+    "checkNo": "7074",
+    "balanceCents": 21371195
+  },
+  {
+    "id": "h10-03-fee",
+    "postedDate": "2026-10-09",
+    "ledgerDate": "2026-10-09",
+    "clientId": "c11",
+    "matterId": "m09",
+    "amountCents": -42750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h10-03-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 21328445
+  },
+  {
+    "id": "h10-03-out",
+    "postedDate": "2026-10-10",
+    "ledgerDate": "2026-10-10",
+    "clientId": "c11",
+    "matterId": "m09",
+    "amountCents": -13419,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h10-03-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 21315026
+  },
+  {
+    "id": "h10-04-in",
+    "postedDate": "2026-10-11",
+    "ledgerDate": "2026-10-11",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": 547216,
+    "description": "CHECK FROM LENA BROOKS",
+    "documentIds": [
+      "h10-04-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "6143",
+    "balanceCents": 21862242
+  },
+  {
+    "id": "h10-04-fee",
+    "postedDate": "2026-10-12",
+    "ledgerDate": "2026-10-12",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": -42250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h10-04-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 21819992
+  },
+  {
+    "id": "h10-04-out",
+    "postedDate": "2026-10-13",
+    "ledgerDate": "2026-10-13",
+    "clientId": "c12",
+    "matterId": "m10",
+    "amountCents": -13736,
+    "description": "ACH REFUND LENA BROOKS",
+    "documentIds": [
+      "h10-04-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c12",
+    "balanceCents": 21806256
+  },
+  {
+    "id": "h10-05-in",
+    "postedDate": "2026-10-14",
+    "ledgerDate": "2026-10-14",
+    "clientId": "c13",
+    "matterId": "m11",
+    "amountCents": 508690,
+    "description": "ZELLE FROM ISAAC PATEL",
+    "documentIds": [
+      "h10-05-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 22314946
+  },
+  {
+    "id": "h10-05-fee",
+    "postedDate": "2026-10-15",
+    "ledgerDate": "2026-10-15",
+    "clientId": "c13",
+    "matterId": "m11",
+    "amountCents": -43000,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h10-05-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 22271946
+  },
+  {
+    "id": "h10-05-out",
+    "postedDate": "2026-10-16",
+    "ledgerDate": "2026-10-16",
+    "clientId": "c13",
+    "matterId": "m11",
+    "amountCents": -14053,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h10-05-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 22257893
+  },
+  {
+    "id": "h10-06-in",
+    "postedDate": "2026-10-17",
+    "ledgerDate": "2026-10-17",
+    "clientId": "c14",
+    "matterId": "m12",
+    "amountCents": 551492,
+    "description": "ACH FROM SOFIA RIVERA",
+    "documentIds": [
+      "h10-06-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 22809385
+  },
+  {
+    "id": "h10-06-fee",
+    "postedDate": "2026-10-18",
+    "ledgerDate": "2026-10-18",
+    "clientId": "c14",
+    "matterId": "m12",
+    "amountCents": -48750,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h10-06-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 22760635
+  },
+  {
+    "id": "h10-06-out",
+    "postedDate": "2026-10-19",
+    "ledgerDate": "2026-10-19",
+    "clientId": "c14",
+    "matterId": "m12",
+    "amountCents": -14370,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h10-06-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 22746265
+  },
+  {
+    "id": "h10-07-in",
+    "postedDate": "2026-10-20",
+    "ledgerDate": "2026-10-20",
+    "clientId": "c15",
+    "matterId": "m13",
+    "amountCents": 566814,
+    "description": "WIRE FROM MARCUS REED",
+    "documentIds": [
+      "h10-07-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "",
+    "balanceCents": 23313079
+  },
+  {
+    "id": "noise-4",
+    "postedDate": "2026-10-20",
+    "ledgerDate": "2026-10-20",
+    "clientId": "c05",
+    "matterId": "m03",
+    "amountCents": 87500,
+    "description": "ACH CR D OKAFOR PART PMT",
+    "documentIds": [
+      "noise-4"
+    ],
+    "kind": "partial_retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "balanceCents": 23400579
+  },
+  {
+    "id": "h10-07-fee",
+    "postedDate": "2026-10-21",
+    "ledgerDate": "2026-10-21",
+    "clientId": "c15",
+    "matterId": "m13",
+    "amountCents": -43250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h10-07-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 23357329
+  },
+  {
+    "id": "h10-07-out",
+    "postedDate": "2026-10-22",
+    "ledgerDate": "2026-10-22",
+    "clientId": "c15",
+    "matterId": "m13",
+    "amountCents": -14687,
+    "description": "ACH REFUND MARCUS REED",
+    "documentIds": [
+      "h10-07-refund"
+    ],
+    "kind": "refund",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c15",
+    "balanceCents": 23342642
+  },
+  {
+    "id": "h10-08-in",
+    "postedDate": "2026-10-23",
+    "ledgerDate": "2026-10-23",
+    "clientId": "c16",
+    "matterId": "m14",
+    "amountCents": 580761,
+    "description": "CHECK FROM GRACE KIM",
+    "documentIds": [
+      "h10-08-deposit"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "6147",
+    "balanceCents": 23923403
+  },
+  {
+    "id": "h10-08-fee",
+    "postedDate": "2026-10-24",
+    "ledgerDate": "2026-10-24",
+    "clientId": "c16",
+    "matterId": "m14",
+    "amountCents": -55250,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "h10-08-invoice"
+    ],
+    "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 23868153
+  },
+  {
+    "id": "h10-08-out",
+    "postedDate": "2026-10-25",
+    "ledgerDate": "2026-10-25",
+    "clientId": "c16",
+    "matterId": "m14",
+    "amountCents": -15004,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "h10-08-cost"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 23853149
+  },
+  {
+    "id": "cho-topup",
+    "postedDate": "2026-10-30",
+    "ledgerDate": "2026-10-30",
+    "clientId": "c04",
+    "matterId": "m02",
+    "amountCents": 520000,
+    "description": "ACH CR RAYMOND CHO",
+    "documentIds": [
+      "cho-topup"
+    ],
+    "kind": "retainer",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "balanceCents": 24373149
+  }
+]

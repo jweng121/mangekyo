@@ -1,0 +1,364 @@
+[
+  {
+    "id": "c01",
+    "name": "Maria Delgado",
+    "aliases": [
+      "Maria Delgado",
+      "Ma. Delgado",
+      "Maria Delgado-Ruiz"
+    ],
+    "email": "client01@example.test",
+    "phone": "(510) 555-0100"
+  },
+  {
+    "id": "c02",
+    "name": "Tomas Reyes",
+    "aliases": [
+      "Tomas Reyes"
+    ],
+    "email": "client02@example.test",
+    "phone": "(510) 555-0101"
+  },
+  {
+    "id": "c03",
+    "name": "Ana Bello",
+    "aliases": [
+      "Ana Bello"
+    ],
+    "email": "client03@example.test",
+    "phone": "(510) 555-0102"
+  },
+  {
+    "id": "c04",
+    "name": "Raymond Cho",
+    "aliases": [
+      "Raymond Cho"
+    ],
+    "email": "client04@example.test",
+    "phone": "(510) 555-0103"
+  },
+  {
+    "id": "c05",
+    "name": "Daniel Okafor",
+    "aliases": [
+      "Daniel Okafor"
+    ],
+    "email": "client05@example.test",
+    "phone": "(510) 555-0104"
+  },
+  {
+    "id": "c06",
+    "name": "Jamie Nguyen",
+    "aliases": [
+      "Jamie Nguyen"
+    ],
+    "email": "client06@example.test",
+    "phone": "(510) 555-0105"
+  },
+  {
+    "id": "c07",
+    "name": "Jordan Nguyen",
+    "aliases": [
+      "Jordan Nguyen"
+    ],
+    "email": "client07@example.test",
+    "phone": "(510) 555-0106"
+  },
+  {
+    "id": "c08",
+    "name": "Elena Park",
+    "aliases": [
+      "Elena Park"
+    ],
+    "email": "client08@example.test",
+    "phone": "(510) 555-0107"
+  },
+  {
+    "id": "c09",
+    "name": "Victor Chen",
+    "aliases": [
+      "Victor Chen"
+    ],
+    "email": "client09@example.test",
+    "phone": "(510) 555-0108"
+  },
+  {
+    "id": "c10",
+    "name": "Nadia Flores",
+    "aliases": [
+      "Nadia Flores"
+    ],
+    "email": "client10@example.test",
+    "phone": "(510) 555-0109"
+  },
+  {
+    "id": "c11",
+    "name": "Omar Hassan",
+    "aliases": [
+      "Omar Hassan"
+    ],
+    "email": "client11@example.test",
+    "phone": "(510) 555-0110"
+  },
+  {
+    "id": "c12",
+    "name": "Lena Brooks",
+    "aliases": [
+      "Lena Brooks"
+    ],
+    "email": "client12@example.test",
+    "phone": "(510) 555-0111"
+  },
+  {
+    "id": "c13",
+    "name": "Isaac Patel",
+    "aliases": [
+      "Isaac Patel"
+    ],
+    "email": "client13@example.test",
+    "phone": "(510) 555-0112"
+  },
+  {
+    "id": "c14",
+    "name": "Sofia Rivera",
+    "aliases": [
+      "Sofia Rivera"
+    ],
+    "email": "client14@example.test",
+    "phone": "(510) 555-0113"
+  },
+  {
+    "id": "c15",
+    "name": "Marcus Reed",
+    "aliases": [
+      "Marcus Reed"
+    ],
+    "email": "client15@example.test",
+    "phone": "(510) 555-0114"
+  },
+  {
+    "id": "c16",
+    "name": "Grace Kim",
+    "aliases": [
+      "Grace Kim"
+    ],
+    "email": "client16@example.test",
+    "phone": "(510) 555-0115"
+  },
+  {
+    "id": "c17",
+    "name": "Rosa Alvarez",
+    "aliases": [
+      "Rosa Alvarez"
+    ],
+    "email": "client17@example.test",
+    "phone": "(510) 555-0116"
+  },
+  {
+    "id": "c18",
+    "name": "Ethan Walsh",
+    "aliases": [
+      "Ethan Walsh"
+    ],
+    "email": "client18@example.test",
+    "phone": "(510) 555-0117"
+  },
+  {
+    "id": "c19",
+    "name": "Amira Saleh",
+    "aliases": [
+      "Amira Saleh"
+    ],
+    "email": "client19@example.test",
+    "phone": "(510) 555-0118"
+  },
+  {
+    "id": "c20",
+    "name": "Noah Bennett",
+    "aliases": [
+      "Noah Bennett"
+    ],
+    "email": "client20@example.test",
+    "phone": "(510) 555-0119"
+  },
+  {
+    "id": "c21",
+    "name": "Mei Lin",
+    "aliases": [
+      "Mei Lin"
+    ],
+    "email": "client21@example.test",
+    "phone": "(510) 555-0120"
+  },
+  {
+    "id": "c22",
+    "name": "Carlos Vega",
+    "aliases": [
+      "Carlos Vega"
+    ],
+    "email": "client22@example.test",
+    "phone": "(510) 555-0121"
+  },
+  {
+    "id": "c23",
+    "name": "Fatima Yusuf",
+    "aliases": [
+      "Fatima Yusuf"
+    ],
+    "email": "client23@example.test",
+    "phone": "(510) 555-0122"
+  },
+  {
+    "id": "c24",
+    "name": "Peter Novak",
+    "aliases": [
+      "Peter Novak"
+    ],
+    "email": "client24@example.test",
+    "phone": "(510) 555-0123"
+  },
+  {
+    "id": "c25",
+    "name": "Lucia Santos",
+    "aliases": [
+      "Lucia Santos"
+    ],
+    "email": "client25@example.test",
+    "phone": "(510) 555-0124"
+  },
+  {
+    "id": "c26",
+    "name": "Andre Lewis",
+    "aliases": [
+      "Andre Lewis"
+    ],
+    "email": "client26@example.test",
+    "phone": "(510) 555-0125"
+  },
+  {
+    "id": "c27",
+    "name": "Helen Wu",
+    "aliases": [
+      "Helen Wu"
+    ],
+    "email": "client27@example.test",
+    "phone": "(510) 555-0126"
+  },
+  {
+    "id": "c28",
+    "name": "Mateo Cruz",
+    "aliases": [
+      "Mateo Cruz"
+    ],
+    "email": "client28@example.test",
+    "phone": "(510) 555-0127"
+  },
+  {
+    "id": "c29",
+    "name": "Tessa Morgan",
+    "aliases": [
+      "Tessa Morgan"
+    ],
+    "email": "client29@example.test",
+    "phone": "(510) 555-0128"
+  },
+  {
+    "id": "c30",
+    "name": "Jamal Price",
+    "aliases": [
+      "Jamal Price"
+    ],
+    "email": "client30@example.test",
+    "phone": "(510) 555-0129"
+  },
+  {
+    "id": "c31",
+    "name": "Anita Shah",
+    "aliases": [
+      "Anita Shah"
+    ],
+    "email": "client31@example.test",
+    "phone": "(510) 555-0130"
+  },
+  {
+    "id": "c32",
+    "name": "Felix Ortiz",
+    "aliases": [
+      "Felix Ortiz"
+    ],
+    "email": "client32@example.test",
+    "phone": "(510) 555-0131"
+  },
+  {
+    "id": "c33",
+    "name": "Ruth Coleman",
+    "aliases": [
+      "Ruth Coleman"
+    ],
+    "email": "client33@example.test",
+    "phone": "(510) 555-0132"
+  },
+  {
+    "id": "c34",
+    "name": "Leila Haddad",
+    "aliases": [
+      "Leila Haddad"
+    ],
+    "email": "client34@example.test",
+    "phone": "(510) 555-0133"
+  },
+  {
+    "id": "c35",
+    "name": "Simon Blake",
+    "aliases": [
+      "Simon Blake"
+    ],
+    "email": "client35@example.test",
+    "phone": "(510) 555-0134"
+  },
+  {
+    "id": "c36",
+    "name": "Dina Farouk",
+    "aliases": [
+      "Dina Farouk"
+    ],
+    "email": "client36@example.test",
+    "phone": "(510) 555-0135"
+  },
+  {
+    "id": "c37",
+    "name": "Adrian Moss",
+    "aliases": [
+      "Adrian Moss"
+    ],
+    "email": "client37@example.test",
+    "phone": "(510) 555-0136"
+  },
+  {
+    "id": "c38",
+    "name": "Nina Petrov",
+    "aliases": [
+      "Nina Petrov"
+    ],
+    "email": "client38@example.test",
+    "phone": "(510) 555-0137"
+  },
+  {
+    "id": "c39",
+    "name": "Caleb Ross",
+    "aliases": [
+      "Caleb Ross"
+    ],
+    "email": "client39@example.test",
+    "phone": "(510) 555-0138"
+  },
+  {
+    "id": "c40",
+    "name": "Iris Tran",
+    "aliases": [
+      "Iris Tran"
+    ],
+    "email": "client40@example.test",
+    "phone": "(510) 555-0139"
+  }
+]

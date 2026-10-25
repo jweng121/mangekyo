@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import type { FinanceCaseBundle, FinanceEvent, FinanceSnapshot, FinanceTask } from "@mangekyo/contracts";
+import type { FinanceCaseBundle, FinanceEvent, FinanceSnapshot, FinanceTask, MoneyEvent, MoneySnapshot } from "@mangekyo/contracts";
 import { mutation, query } from "./_generated/server";
 import * as validators from "./lib/validators";
 
@@ -105,20 +105,41 @@ export const getSyntheticCase = query({
 /** Ascending task sequence; independent of client clocks and display timestamps. */
 export const listTaskEvents = query({
   args: { taskId: v.string(), afterSequence: v.optional(v.number()) },
-  returns: v.array(validators.event),
+  returns: v.array(v.union(validators.taskCreatedEvent, validators.investigationEvent)),
   handler: async (ctx, { taskId, afterSequence }): Promise<FinanceEvent[]> => {
     const rows = await ctx.db.query("financeEvents")
       .withIndex("by_taskId_and_sequence", (q) => q.eq("taskId", taskId).gt("sequence", afterSequence ?? 0)).order("asc").take(100);
-    return rows.map(recordOnly);
+    return rows.map(recordOnly).filter((row): row is FinanceEvent => !row.type.startsWith("finance.money."));
   },
 });
 
 export const listTaskSnapshots = query({
   args: { taskId: v.string(), afterSequence: v.optional(v.number()) },
-  returns: v.array(validators.snapshot),
+  returns: v.array(v.union(validators.initialSnapshot, validators.investigationSnapshot)),
   handler: async (ctx, { taskId, afterSequence }): Promise<FinanceSnapshot[]> => {
     const rows = await ctx.db.query("financeSnapshots")
       .withIndex("by_taskId_and_sequence", (q) => q.eq("taskId", taskId).gt("sequence", afterSequence ?? 0)).order("asc").take(100);
-    return rows.map(recordOnly);
+    return rows.map(recordOnly).filter((row): row is FinanceSnapshot => !("kind" in row));
+  },
+});
+
+/** Account money stream (`money:<accountId>`): imports, lock checks, transitions and postings. */
+export const listMoneyEvents = query({
+  args: { accountId: v.string(), afterSequence: v.optional(v.number()) },
+  returns: v.array(validators.moneyEvent),
+  handler: async (ctx, { accountId, afterSequence }): Promise<MoneyEvent[]> => {
+    const rows = await ctx.db.query("financeEvents")
+      .withIndex("by_taskId_and_sequence", (q) => q.eq("taskId", `money:${accountId}`).gt("sequence", afterSequence ?? 0)).order("asc").take(100);
+    return rows.map(recordOnly).filter((row): row is MoneyEvent => row.type.startsWith("finance.money."));
+  },
+});
+
+export const listMoneySnapshots = query({
+  args: { accountId: v.string(), afterSequence: v.optional(v.number()) },
+  returns: v.array(validators.moneySnapshot),
+  handler: async (ctx, { accountId, afterSequence }): Promise<MoneySnapshot[]> => {
+    const rows = await ctx.db.query("financeSnapshots")
+      .withIndex("by_taskId_and_sequence", (q) => q.eq("taskId", `money:${accountId}`).gt("sequence", afterSequence ?? 0)).order("asc").take(100);
+    return rows.map(recordOnly).filter((row): row is MoneySnapshot => "kind" in row);
   },
 });

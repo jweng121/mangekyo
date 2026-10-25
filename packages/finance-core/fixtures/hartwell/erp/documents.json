@@ -1,0 +1,3014 @@
+[
+  {
+    "id": "fee-c01",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-01-12",
+    "scanned": true,
+    "amountCents": [],
+    "pdf": "documents/fee-c01.pdf",
+    "text": "documents/fee-c01.txt"
+  },
+  {
+    "id": "fee-c02",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-01-12",
+    "scanned": true,
+    "amountCents": [],
+    "pdf": "documents/fee-c02.pdf",
+    "text": "documents/fee-c02.txt"
+  },
+  {
+    "id": "fee-c03",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-01-12",
+    "scanned": true,
+    "amountCents": [],
+    "pdf": "documents/fee-c03.pdf",
+    "text": "documents/fee-c03.txt"
+  },
+  {
+    "id": "fee-c04",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c04.pdf",
+    "text": "documents/fee-c04.txt"
+  },
+  {
+    "id": "fee-c05",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c05.pdf",
+    "text": "documents/fee-c05.txt"
+  },
+  {
+    "id": "fee-c06",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c06.pdf",
+    "text": "documents/fee-c06.txt"
+  },
+  {
+    "id": "fee-c07",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c07.pdf",
+    "text": "documents/fee-c07.txt"
+  },
+  {
+    "id": "fee-c08",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c08.pdf",
+    "text": "documents/fee-c08.txt"
+  },
+  {
+    "id": "fee-c09",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c09.pdf",
+    "text": "documents/fee-c09.txt"
+  },
+  {
+    "id": "fee-c10",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c10.pdf",
+    "text": "documents/fee-c10.txt"
+  },
+  {
+    "id": "fee-c11",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c11.pdf",
+    "text": "documents/fee-c11.txt"
+  },
+  {
+    "id": "fee-c12",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c12.pdf",
+    "text": "documents/fee-c12.txt"
+  },
+  {
+    "id": "fee-c13",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c13.pdf",
+    "text": "documents/fee-c13.txt"
+  },
+  {
+    "id": "fee-c14",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c14.pdf",
+    "text": "documents/fee-c14.txt"
+  },
+  {
+    "id": "fee-c15",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c15.pdf",
+    "text": "documents/fee-c15.txt"
+  },
+  {
+    "id": "fee-c16",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c16.pdf",
+    "text": "documents/fee-c16.txt"
+  },
+  {
+    "id": "fee-c17",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c17.pdf",
+    "text": "documents/fee-c17.txt"
+  },
+  {
+    "id": "fee-c18",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c18.pdf",
+    "text": "documents/fee-c18.txt"
+  },
+  {
+    "id": "fee-c19",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c19.pdf",
+    "text": "documents/fee-c19.txt"
+  },
+  {
+    "id": "fee-c20",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c20.pdf",
+    "text": "documents/fee-c20.txt"
+  },
+  {
+    "id": "fee-c21",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c21.pdf",
+    "text": "documents/fee-c21.txt"
+  },
+  {
+    "id": "fee-c22",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c22.pdf",
+    "text": "documents/fee-c22.txt"
+  },
+  {
+    "id": "fee-c23",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c23.pdf",
+    "text": "documents/fee-c23.txt"
+  },
+  {
+    "id": "fee-c24",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c24.pdf",
+    "text": "documents/fee-c24.txt"
+  },
+  {
+    "id": "fee-c25",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c25.pdf",
+    "text": "documents/fee-c25.txt"
+  },
+  {
+    "id": "fee-c26",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c26.pdf",
+    "text": "documents/fee-c26.txt"
+  },
+  {
+    "id": "fee-c27",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c27.pdf",
+    "text": "documents/fee-c27.txt"
+  },
+  {
+    "id": "fee-c28",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c28.pdf",
+    "text": "documents/fee-c28.txt"
+  },
+  {
+    "id": "fee-c29",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c29.pdf",
+    "text": "documents/fee-c29.txt"
+  },
+  {
+    "id": "fee-c30",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c30.pdf",
+    "text": "documents/fee-c30.txt"
+  },
+  {
+    "id": "fee-c31",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c31.pdf",
+    "text": "documents/fee-c31.txt"
+  },
+  {
+    "id": "fee-c32",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c32.pdf",
+    "text": "documents/fee-c32.txt"
+  },
+  {
+    "id": "fee-c33",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c33.pdf",
+    "text": "documents/fee-c33.txt"
+  },
+  {
+    "id": "fee-c34",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c34.pdf",
+    "text": "documents/fee-c34.txt"
+  },
+  {
+    "id": "fee-c35",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c35.pdf",
+    "text": "documents/fee-c35.txt"
+  },
+  {
+    "id": "fee-c36",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c36.pdf",
+    "text": "documents/fee-c36.txt"
+  },
+  {
+    "id": "fee-c37",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c37.pdf",
+    "text": "documents/fee-c37.txt"
+  },
+  {
+    "id": "fee-c38",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c38.pdf",
+    "text": "documents/fee-c38.txt"
+  },
+  {
+    "id": "fee-c39",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      250000,
+      450000
+    ],
+    "pdf": "documents/fee-c39.pdf",
+    "text": "documents/fee-c39.txt"
+  },
+  {
+    "id": "fee-c40",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-27",
+    "scanned": true,
+    "amountCents": [
+      32500,
+      500000
+    ],
+    "pdf": "documents/fee-c40.pdf",
+    "text": "documents/fee-c40.txt"
+  },
+  {
+    "id": "h05-01-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Daniel Okafor",
+    "date": "2026-05-02",
+    "scanned": true,
+    "amountCents": [
+      566032
+    ],
+    "pdf": "documents/h05-01-deposit.pdf",
+    "text": "documents/h05-01-deposit.txt"
+  },
+  {
+    "id": "h05-01-invoice",
+    "kind": "invoice",
+    "title": "Invoice H05-01-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-03",
+    "scanned": false,
+    "amountCents": [
+      42500,
+      42500
+    ],
+    "pdf": "documents/h05-01-invoice.pdf",
+    "text": "documents/h05-01-invoice.txt"
+  },
+  {
+    "id": "h05-01-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-04",
+    "scanned": false,
+    "amountCents": [
+      12785
+    ],
+    "pdf": "documents/h05-01-refund.pdf",
+    "text": "documents/h05-01-refund.txt"
+  },
+  {
+    "id": "h05-02-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Jamie Nguyen",
+    "date": "2026-05-05",
+    "scanned": false,
+    "amountCents": [
+      550596
+    ],
+    "pdf": "documents/h05-02-deposit.pdf",
+    "text": "documents/h05-02-deposit.txt"
+  },
+  {
+    "id": "h05-02-invoice",
+    "kind": "invoice",
+    "title": "Invoice H05-02-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-06",
+    "scanned": false,
+    "amountCents": [
+      35750,
+      32500
+    ],
+    "pdf": "documents/h05-02-invoice.pdf",
+    "text": "documents/h05-02-invoice.txt"
+  },
+  {
+    "id": "h05-02-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-05-07",
+    "scanned": true,
+    "amountCents": [
+      13102
+    ],
+    "pdf": "documents/h05-02-cost.pdf",
+    "text": "documents/h05-02-cost.txt"
+  },
+  {
+    "id": "h05-03-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Jordan Nguyen",
+    "date": "2026-05-08",
+    "scanned": true,
+    "amountCents": [
+      505924
+    ],
+    "pdf": "documents/h05-03-deposit.pdf",
+    "text": "documents/h05-03-deposit.txt"
+  },
+  {
+    "id": "h05-03-invoice",
+    "kind": "invoice",
+    "title": "Invoice H05-03-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-09",
+    "scanned": false,
+    "amountCents": [
+      42750,
+      42750
+    ],
+    "pdf": "documents/h05-03-invoice.pdf",
+    "text": "documents/h05-03-invoice.txt"
+  },
+  {
+    "id": "h05-03-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-05-10",
+    "scanned": true,
+    "amountCents": [
+      13419
+    ],
+    "pdf": "documents/h05-03-cost.pdf",
+    "text": "documents/h05-03-cost.txt"
+  },
+  {
+    "id": "h05-04-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Elena Park",
+    "date": "2026-05-11",
+    "scanned": false,
+    "amountCents": [
+      552768
+    ],
+    "pdf": "documents/h05-04-deposit.pdf",
+    "text": "documents/h05-04-deposit.txt"
+  },
+  {
+    "id": "h05-04-invoice",
+    "kind": "invoice",
+    "title": "Invoice H05-04-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-12",
+    "scanned": false,
+    "amountCents": [
+      42250,
+      32500
+    ],
+    "pdf": "documents/h05-04-invoice.pdf",
+    "text": "documents/h05-04-invoice.txt"
+  },
+  {
+    "id": "h05-04-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-13",
+    "scanned": false,
+    "amountCents": [
+      13736
+    ],
+    "pdf": "documents/h05-04-refund.pdf",
+    "text": "documents/h05-04-refund.txt"
+  },
+  {
+    "id": "h05-05-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Victor Chen",
+    "date": "2026-05-14",
+    "scanned": true,
+    "amountCents": [
+      567370
+    ],
+    "pdf": "documents/h05-05-deposit.pdf",
+    "text": "documents/h05-05-deposit.txt"
+  },
+  {
+    "id": "h05-05-invoice",
+    "kind": "invoice",
+    "title": "Invoice H05-05-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-15",
+    "scanned": false,
+    "amountCents": [
+      43000,
+      43000
+    ],
+    "pdf": "documents/h05-05-invoice.pdf",
+    "text": "documents/h05-05-invoice.txt"
+  },
+  {
+    "id": "h05-05-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-05-16",
+    "scanned": true,
+    "amountCents": [
+      14053
+    ],
+    "pdf": "documents/h05-05-cost.pdf",
+    "text": "documents/h05-05-cost.txt"
+  },
+  {
+    "id": "h05-06-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Nadia Flores",
+    "date": "2026-05-17",
+    "scanned": false,
+    "amountCents": [
+      515951
+    ],
+    "pdf": "documents/h05-06-deposit.pdf",
+    "text": "documents/h05-06-deposit.txt"
+  },
+  {
+    "id": "h05-06-invoice",
+    "kind": "invoice",
+    "title": "Invoice H05-06-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-18",
+    "scanned": false,
+    "amountCents": [
+      48750,
+      32500
+    ],
+    "pdf": "documents/h05-06-invoice.pdf",
+    "text": "documents/h05-06-invoice.txt"
+  },
+  {
+    "id": "h05-06-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-05-19",
+    "scanned": true,
+    "amountCents": [
+      14370
+    ],
+    "pdf": "documents/h05-06-cost.pdf",
+    "text": "documents/h05-06-cost.txt"
+  },
+  {
+    "id": "h05-07-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Omar Hassan",
+    "date": "2026-05-20",
+    "scanned": true,
+    "amountCents": [
+      584443
+    ],
+    "pdf": "documents/h05-07-deposit.pdf",
+    "text": "documents/h05-07-deposit.txt"
+  },
+  {
+    "id": "h05-07-invoice",
+    "kind": "invoice",
+    "title": "Invoice H05-07-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-21",
+    "scanned": false,
+    "amountCents": [
+      43250,
+      43250
+    ],
+    "pdf": "documents/h05-07-invoice.pdf",
+    "text": "documents/h05-07-invoice.txt"
+  },
+  {
+    "id": "h05-07-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-22",
+    "scanned": false,
+    "amountCents": [
+      14687
+    ],
+    "pdf": "documents/h05-07-refund.pdf",
+    "text": "documents/h05-07-refund.txt"
+  },
+  {
+    "id": "h05-08-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Lena Brooks",
+    "date": "2026-05-23",
+    "scanned": false,
+    "amountCents": [
+      534417
+    ],
+    "pdf": "documents/h05-08-deposit.pdf",
+    "text": "documents/h05-08-deposit.txt"
+  },
+  {
+    "id": "h05-08-invoice",
+    "kind": "invoice",
+    "title": "Invoice H05-08-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-24",
+    "scanned": false,
+    "amountCents": [
+      55250,
+      32500
+    ],
+    "pdf": "documents/h05-08-invoice.pdf",
+    "text": "documents/h05-08-invoice.txt"
+  },
+  {
+    "id": "h05-08-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-05-25",
+    "scanned": true,
+    "amountCents": [
+      15004
+    ],
+    "pdf": "documents/h05-08-cost.pdf",
+    "text": "documents/h05-08-cost.txt"
+  },
+  {
+    "id": "h06-01-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Isaac Patel",
+    "date": "2026-06-02",
+    "scanned": true,
+    "amountCents": [
+      514306
+    ],
+    "pdf": "documents/h06-01-deposit.pdf",
+    "text": "documents/h06-01-deposit.txt"
+  },
+  {
+    "id": "h06-01-invoice",
+    "kind": "invoice",
+    "title": "Invoice H06-01-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-03",
+    "scanned": false,
+    "amountCents": [
+      42500,
+      42500
+    ],
+    "pdf": "documents/h06-01-invoice.pdf",
+    "text": "documents/h06-01-invoice.txt"
+  },
+  {
+    "id": "h06-01-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-04",
+    "scanned": false,
+    "amountCents": [
+      12785
+    ],
+    "pdf": "documents/h06-01-refund.pdf",
+    "text": "documents/h06-01-refund.txt"
+  },
+  {
+    "id": "h06-02-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Sofia Rivera",
+    "date": "2026-06-05",
+    "scanned": false,
+    "amountCents": [
+      523408
+    ],
+    "pdf": "documents/h06-02-deposit.pdf",
+    "text": "documents/h06-02-deposit.txt"
+  },
+  {
+    "id": "h06-02-invoice",
+    "kind": "invoice",
+    "title": "Invoice H06-02-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-06",
+    "scanned": false,
+    "amountCents": [
+      35750,
+      32500
+    ],
+    "pdf": "documents/h06-02-invoice.pdf",
+    "text": "documents/h06-02-invoice.txt"
+  },
+  {
+    "id": "h06-02-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-06-07",
+    "scanned": true,
+    "amountCents": [
+      13102
+    ],
+    "pdf": "documents/h06-02-cost.pdf",
+    "text": "documents/h06-02-cost.txt"
+  },
+  {
+    "id": "h06-03-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Marcus Reed",
+    "date": "2026-06-08",
+    "scanned": true,
+    "amountCents": [
+      577425
+    ],
+    "pdf": "documents/h06-03-deposit.pdf",
+    "text": "documents/h06-03-deposit.txt"
+  },
+  {
+    "id": "h06-03-invoice",
+    "kind": "invoice",
+    "title": "Invoice H06-03-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-09",
+    "scanned": false,
+    "amountCents": [
+      42750,
+      42750
+    ],
+    "pdf": "documents/h06-03-invoice.pdf",
+    "text": "documents/h06-03-invoice.txt"
+  },
+  {
+    "id": "h06-03-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-06-10",
+    "scanned": true,
+    "amountCents": [
+      13419
+    ],
+    "pdf": "documents/h06-03-cost.pdf",
+    "text": "documents/h06-03-cost.txt"
+  },
+  {
+    "id": "h06-04-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Grace Kim",
+    "date": "2026-06-11",
+    "scanned": false,
+    "amountCents": [
+      564188
+    ],
+    "pdf": "documents/h06-04-deposit.pdf",
+    "text": "documents/h06-04-deposit.txt"
+  },
+  {
+    "id": "h06-04-invoice",
+    "kind": "invoice",
+    "title": "Invoice H06-04-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-12",
+    "scanned": false,
+    "amountCents": [
+      42250,
+      32500
+    ],
+    "pdf": "documents/h06-04-invoice.pdf",
+    "text": "documents/h06-04-invoice.txt"
+  },
+  {
+    "id": "h06-04-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-13",
+    "scanned": false,
+    "amountCents": [
+      13736
+    ],
+    "pdf": "documents/h06-04-refund.pdf",
+    "text": "documents/h06-04-refund.txt"
+  },
+  {
+    "id": "h06-05-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Rosa Alvarez",
+    "date": "2026-06-14",
+    "scanned": true,
+    "amountCents": [
+      581167
+    ],
+    "pdf": "documents/h06-05-deposit.pdf",
+    "text": "documents/h06-05-deposit.txt"
+  },
+  {
+    "id": "h06-05-invoice",
+    "kind": "invoice",
+    "title": "Invoice H06-05-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-15",
+    "scanned": false,
+    "amountCents": [
+      43000,
+      43000
+    ],
+    "pdf": "documents/h06-05-invoice.pdf",
+    "text": "documents/h06-05-invoice.txt"
+  },
+  {
+    "id": "h06-05-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-06-16",
+    "scanned": true,
+    "amountCents": [
+      14053
+    ],
+    "pdf": "documents/h06-05-cost.pdf",
+    "text": "documents/h06-05-cost.txt"
+  },
+  {
+    "id": "h06-06-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Ethan Walsh",
+    "date": "2026-06-17",
+    "scanned": false,
+    "amountCents": [
+      522751
+    ],
+    "pdf": "documents/h06-06-deposit.pdf",
+    "text": "documents/h06-06-deposit.txt"
+  },
+  {
+    "id": "h06-06-invoice",
+    "kind": "invoice",
+    "title": "Invoice H06-06-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-18",
+    "scanned": false,
+    "amountCents": [
+      48750,
+      32500
+    ],
+    "pdf": "documents/h06-06-invoice.pdf",
+    "text": "documents/h06-06-invoice.txt"
+  },
+  {
+    "id": "h06-06-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-06-19",
+    "scanned": true,
+    "amountCents": [
+      14370
+    ],
+    "pdf": "documents/h06-06-cost.pdf",
+    "text": "documents/h06-06-cost.txt"
+  },
+  {
+    "id": "h06-07-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Amira Saleh",
+    "date": "2026-06-20",
+    "scanned": true,
+    "amountCents": [
+      525584
+    ],
+    "pdf": "documents/h06-07-deposit.pdf",
+    "text": "documents/h06-07-deposit.txt"
+  },
+  {
+    "id": "h06-07-invoice",
+    "kind": "invoice",
+    "title": "Invoice H06-07-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-21",
+    "scanned": false,
+    "amountCents": [
+      43250,
+      43250
+    ],
+    "pdf": "documents/h06-07-invoice.pdf",
+    "text": "documents/h06-07-invoice.txt"
+  },
+  {
+    "id": "h06-07-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-22",
+    "scanned": false,
+    "amountCents": [
+      14687
+    ],
+    "pdf": "documents/h06-07-refund.pdf",
+    "text": "documents/h06-07-refund.txt"
+  },
+  {
+    "id": "h06-08-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Noah Bennett",
+    "date": "2026-06-23",
+    "scanned": false,
+    "amountCents": [
+      504607
+    ],
+    "pdf": "documents/h06-08-deposit.pdf",
+    "text": "documents/h06-08-deposit.txt"
+  },
+  {
+    "id": "h06-08-invoice",
+    "kind": "invoice",
+    "title": "Invoice H06-08-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-24",
+    "scanned": false,
+    "amountCents": [
+      55250,
+      32500
+    ],
+    "pdf": "documents/h06-08-invoice.pdf",
+    "text": "documents/h06-08-invoice.txt"
+  },
+  {
+    "id": "h06-08-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-06-25",
+    "scanned": true,
+    "amountCents": [
+      15004
+    ],
+    "pdf": "documents/h06-08-cost.pdf",
+    "text": "documents/h06-08-cost.txt"
+  },
+  {
+    "id": "h07-01-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Mei Lin",
+    "date": "2026-07-02",
+    "scanned": true,
+    "amountCents": [
+      558789
+    ],
+    "pdf": "documents/h07-01-deposit.pdf",
+    "text": "documents/h07-01-deposit.txt"
+  },
+  {
+    "id": "h07-01-invoice",
+    "kind": "invoice",
+    "title": "Invoice H07-01-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-03",
+    "scanned": false,
+    "amountCents": [
+      42500,
+      42500
+    ],
+    "pdf": "documents/h07-01-invoice.pdf",
+    "text": "documents/h07-01-invoice.txt"
+  },
+  {
+    "id": "h07-01-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-04",
+    "scanned": false,
+    "amountCents": [
+      12785
+    ],
+    "pdf": "documents/h07-01-refund.pdf",
+    "text": "documents/h07-01-refund.txt"
+  },
+  {
+    "id": "h07-02-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Carlos Vega",
+    "date": "2026-07-05",
+    "scanned": false,
+    "amountCents": [
+      512573
+    ],
+    "pdf": "documents/h07-02-deposit.pdf",
+    "text": "documents/h07-02-deposit.txt"
+  },
+  {
+    "id": "h07-02-invoice",
+    "kind": "invoice",
+    "title": "Invoice H07-02-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-06",
+    "scanned": false,
+    "amountCents": [
+      35750,
+      32500
+    ],
+    "pdf": "documents/h07-02-invoice.pdf",
+    "text": "documents/h07-02-invoice.txt"
+  },
+  {
+    "id": "h07-02-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-07-07",
+    "scanned": true,
+    "amountCents": [
+      13102
+    ],
+    "pdf": "documents/h07-02-cost.pdf",
+    "text": "documents/h07-02-cost.txt"
+  },
+  {
+    "id": "h07-03-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Fatima Yusuf",
+    "date": "2026-07-08",
+    "scanned": true,
+    "amountCents": [
+      565219
+    ],
+    "pdf": "documents/h07-03-deposit.pdf",
+    "text": "documents/h07-03-deposit.txt"
+  },
+  {
+    "id": "h07-03-invoice",
+    "kind": "invoice",
+    "title": "Invoice H07-03-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-09",
+    "scanned": false,
+    "amountCents": [
+      42750,
+      42750
+    ],
+    "pdf": "documents/h07-03-invoice.pdf",
+    "text": "documents/h07-03-invoice.txt"
+  },
+  {
+    "id": "h07-03-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-07-10",
+    "scanned": true,
+    "amountCents": [
+      13419
+    ],
+    "pdf": "documents/h07-03-cost.pdf",
+    "text": "documents/h07-03-cost.txt"
+  },
+  {
+    "id": "h07-04-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Peter Novak",
+    "date": "2026-07-11",
+    "scanned": false,
+    "amountCents": [
+      514001
+    ],
+    "pdf": "documents/h07-04-deposit.pdf",
+    "text": "documents/h07-04-deposit.txt"
+  },
+  {
+    "id": "h07-04-invoice",
+    "kind": "invoice",
+    "title": "Invoice H07-04-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-12",
+    "scanned": false,
+    "amountCents": [
+      42250,
+      32500
+    ],
+    "pdf": "documents/h07-04-invoice.pdf",
+    "text": "documents/h07-04-invoice.txt"
+  },
+  {
+    "id": "h07-04-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-13",
+    "scanned": false,
+    "amountCents": [
+      13736
+    ],
+    "pdf": "documents/h07-04-refund.pdf",
+    "text": "documents/h07-04-refund.txt"
+  },
+  {
+    "id": "h07-05-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Lucia Santos",
+    "date": "2026-07-14",
+    "scanned": true,
+    "amountCents": [
+      550293
+    ],
+    "pdf": "documents/h07-05-deposit.pdf",
+    "text": "documents/h07-05-deposit.txt"
+  },
+  {
+    "id": "h07-05-invoice",
+    "kind": "invoice",
+    "title": "Invoice H07-05-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-15",
+    "scanned": false,
+    "amountCents": [
+      43000,
+      43000
+    ],
+    "pdf": "documents/h07-05-invoice.pdf",
+    "text": "documents/h07-05-invoice.txt"
+  },
+  {
+    "id": "h07-05-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-07-16",
+    "scanned": true,
+    "amountCents": [
+      14053
+    ],
+    "pdf": "documents/h07-05-cost.pdf",
+    "text": "documents/h07-05-cost.txt"
+  },
+  {
+    "id": "h07-06-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Andre Lewis",
+    "date": "2026-07-17",
+    "scanned": false,
+    "amountCents": [
+      568309
+    ],
+    "pdf": "documents/h07-06-deposit.pdf",
+    "text": "documents/h07-06-deposit.txt"
+  },
+  {
+    "id": "h07-06-invoice",
+    "kind": "invoice",
+    "title": "Invoice H07-06-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-18",
+    "scanned": false,
+    "amountCents": [
+      48750,
+      32500
+    ],
+    "pdf": "documents/h07-06-invoice.pdf",
+    "text": "documents/h07-06-invoice.txt"
+  },
+  {
+    "id": "h07-06-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-07-19",
+    "scanned": true,
+    "amountCents": [
+      14370
+    ],
+    "pdf": "documents/h07-06-cost.pdf",
+    "text": "documents/h07-06-cost.txt"
+  },
+  {
+    "id": "h07-07-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Helen Wu",
+    "date": "2026-07-20",
+    "scanned": true,
+    "amountCents": [
+      521070
+    ],
+    "pdf": "documents/h07-07-deposit.pdf",
+    "text": "documents/h07-07-deposit.txt"
+  },
+  {
+    "id": "h07-07-invoice",
+    "kind": "invoice",
+    "title": "Invoice H07-07-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-21",
+    "scanned": false,
+    "amountCents": [
+      43250,
+      43250
+    ],
+    "pdf": "documents/h07-07-invoice.pdf",
+    "text": "documents/h07-07-invoice.txt"
+  },
+  {
+    "id": "h07-07-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-22",
+    "scanned": false,
+    "amountCents": [
+      14687
+    ],
+    "pdf": "documents/h07-07-refund.pdf",
+    "text": "documents/h07-07-refund.txt"
+  },
+  {
+    "id": "h07-08-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Mateo Cruz",
+    "date": "2026-07-23",
+    "scanned": false,
+    "amountCents": [
+      528481
+    ],
+    "pdf": "documents/h07-08-deposit.pdf",
+    "text": "documents/h07-08-deposit.txt"
+  },
+  {
+    "id": "h07-08-invoice",
+    "kind": "invoice",
+    "title": "Invoice H07-08-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-24",
+    "scanned": false,
+    "amountCents": [
+      55250,
+      32500
+    ],
+    "pdf": "documents/h07-08-invoice.pdf",
+    "text": "documents/h07-08-invoice.txt"
+  },
+  {
+    "id": "h07-08-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-07-25",
+    "scanned": true,
+    "amountCents": [
+      15004
+    ],
+    "pdf": "documents/h07-08-cost.pdf",
+    "text": "documents/h07-08-cost.txt"
+  },
+  {
+    "id": "h08-01-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Tessa Morgan",
+    "date": "2026-08-02",
+    "scanned": true,
+    "amountCents": [
+      525351
+    ],
+    "pdf": "documents/h08-01-deposit.pdf",
+    "text": "documents/h08-01-deposit.txt"
+  },
+  {
+    "id": "h08-01-invoice",
+    "kind": "invoice",
+    "title": "Invoice H08-01-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-03",
+    "scanned": false,
+    "amountCents": [
+      42500,
+      42500
+    ],
+    "pdf": "documents/h08-01-invoice.pdf",
+    "text": "documents/h08-01-invoice.txt"
+  },
+  {
+    "id": "h08-01-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-04",
+    "scanned": false,
+    "amountCents": [
+      12785
+    ],
+    "pdf": "documents/h08-01-refund.pdf",
+    "text": "documents/h08-01-refund.txt"
+  },
+  {
+    "id": "h08-02-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Jamal Price",
+    "date": "2026-08-05",
+    "scanned": false,
+    "amountCents": [
+      518665
+    ],
+    "pdf": "documents/h08-02-deposit.pdf",
+    "text": "documents/h08-02-deposit.txt"
+  },
+  {
+    "id": "h08-02-invoice",
+    "kind": "invoice",
+    "title": "Invoice H08-02-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-06",
+    "scanned": false,
+    "amountCents": [
+      35750,
+      32500
+    ],
+    "pdf": "documents/h08-02-invoice.pdf",
+    "text": "documents/h08-02-invoice.txt"
+  },
+  {
+    "id": "h08-02-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-08-07",
+    "scanned": true,
+    "amountCents": [
+      13102
+    ],
+    "pdf": "documents/h08-02-cost.pdf",
+    "text": "documents/h08-02-cost.txt"
+  },
+  {
+    "id": "h08-03-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Anita Shah",
+    "date": "2026-08-08",
+    "scanned": true,
+    "amountCents": [
+      505071
+    ],
+    "pdf": "documents/h08-03-deposit.pdf",
+    "text": "documents/h08-03-deposit.txt"
+  },
+  {
+    "id": "h08-03-invoice",
+    "kind": "invoice",
+    "title": "Invoice H08-03-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-09",
+    "scanned": false,
+    "amountCents": [
+      42750,
+      42750
+    ],
+    "pdf": "documents/h08-03-invoice.pdf",
+    "text": "documents/h08-03-invoice.txt"
+  },
+  {
+    "id": "h08-03-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-08-10",
+    "scanned": true,
+    "amountCents": [
+      13419
+    ],
+    "pdf": "documents/h08-03-cost.pdf",
+    "text": "documents/h08-03-cost.txt"
+  },
+  {
+    "id": "h08-04-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Felix Ortiz",
+    "date": "2026-08-11",
+    "scanned": false,
+    "amountCents": [
+      523847
+    ],
+    "pdf": "documents/h08-04-deposit.pdf",
+    "text": "documents/h08-04-deposit.txt"
+  },
+  {
+    "id": "h08-04-invoice",
+    "kind": "invoice",
+    "title": "Invoice H08-04-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-12",
+    "scanned": false,
+    "amountCents": [
+      42250,
+      32500
+    ],
+    "pdf": "documents/h08-04-invoice.pdf",
+    "text": "documents/h08-04-invoice.txt"
+  },
+  {
+    "id": "h08-04-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-13",
+    "scanned": false,
+    "amountCents": [
+      13736
+    ],
+    "pdf": "documents/h08-04-refund.pdf",
+    "text": "documents/h08-04-refund.txt"
+  },
+  {
+    "id": "h08-05-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Ruth Coleman",
+    "date": "2026-08-14",
+    "scanned": true,
+    "amountCents": [
+      529051
+    ],
+    "pdf": "documents/h08-05-deposit.pdf",
+    "text": "documents/h08-05-deposit.txt"
+  },
+  {
+    "id": "h08-05-invoice",
+    "kind": "invoice",
+    "title": "Invoice H08-05-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-15",
+    "scanned": false,
+    "amountCents": [
+      43000,
+      43000
+    ],
+    "pdf": "documents/h08-05-invoice.pdf",
+    "text": "documents/h08-05-invoice.txt"
+  },
+  {
+    "id": "h08-05-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-08-16",
+    "scanned": true,
+    "amountCents": [
+      14053
+    ],
+    "pdf": "documents/h08-05-cost.pdf",
+    "text": "documents/h08-05-cost.txt"
+  },
+  {
+    "id": "h08-06-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Leila Haddad",
+    "date": "2026-08-17",
+    "scanned": false,
+    "amountCents": [
+      533625
+    ],
+    "pdf": "documents/h08-06-deposit.pdf",
+    "text": "documents/h08-06-deposit.txt"
+  },
+  {
+    "id": "h08-06-invoice",
+    "kind": "invoice",
+    "title": "Invoice H08-06-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-18",
+    "scanned": false,
+    "amountCents": [
+      48750,
+      32500
+    ],
+    "pdf": "documents/h08-06-invoice.pdf",
+    "text": "documents/h08-06-invoice.txt"
+  },
+  {
+    "id": "h08-06-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-08-19",
+    "scanned": true,
+    "amountCents": [
+      14370
+    ],
+    "pdf": "documents/h08-06-cost.pdf",
+    "text": "documents/h08-06-cost.txt"
+  },
+  {
+    "id": "h08-07-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Simon Blake",
+    "date": "2026-08-20",
+    "scanned": true,
+    "amountCents": [
+      500222
+    ],
+    "pdf": "documents/h08-07-deposit.pdf",
+    "text": "documents/h08-07-deposit.txt"
+  },
+  {
+    "id": "h08-07-invoice",
+    "kind": "invoice",
+    "title": "Invoice H08-07-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-21",
+    "scanned": false,
+    "amountCents": [
+      43250,
+      43250
+    ],
+    "pdf": "documents/h08-07-invoice.pdf",
+    "text": "documents/h08-07-invoice.txt"
+  },
+  {
+    "id": "h08-07-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-22",
+    "scanned": false,
+    "amountCents": [
+      14687
+    ],
+    "pdf": "documents/h08-07-refund.pdf",
+    "text": "documents/h08-07-refund.txt"
+  },
+  {
+    "id": "h08-08-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Dina Farouk",
+    "date": "2026-08-23",
+    "scanned": false,
+    "amountCents": [
+      528223
+    ],
+    "pdf": "documents/h08-08-deposit.pdf",
+    "text": "documents/h08-08-deposit.txt"
+  },
+  {
+    "id": "h08-08-invoice",
+    "kind": "invoice",
+    "title": "Invoice H08-08-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-24",
+    "scanned": false,
+    "amountCents": [
+      55250,
+      32500
+    ],
+    "pdf": "documents/h08-08-invoice.pdf",
+    "text": "documents/h08-08-invoice.txt"
+  },
+  {
+    "id": "h08-08-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-08-25",
+    "scanned": true,
+    "amountCents": [
+      15004
+    ],
+    "pdf": "documents/h08-08-cost.pdf",
+    "text": "documents/h08-08-cost.txt"
+  },
+  {
+    "id": "h09-01-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Adrian Moss",
+    "date": "2026-09-02",
+    "scanned": true,
+    "amountCents": [
+      547243
+    ],
+    "pdf": "documents/h09-01-deposit.pdf",
+    "text": "documents/h09-01-deposit.txt"
+  },
+  {
+    "id": "h09-01-invoice",
+    "kind": "invoice",
+    "title": "Invoice H09-01-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-03",
+    "scanned": false,
+    "amountCents": [
+      42500,
+      42500
+    ],
+    "pdf": "documents/h09-01-invoice.pdf",
+    "text": "documents/h09-01-invoice.txt"
+  },
+  {
+    "id": "h09-01-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-04",
+    "scanned": false,
+    "amountCents": [
+      12785
+    ],
+    "pdf": "documents/h09-01-refund.pdf",
+    "text": "documents/h09-01-refund.txt"
+  },
+  {
+    "id": "h09-02-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Nina Petrov",
+    "date": "2026-09-05",
+    "scanned": false,
+    "amountCents": [
+      534038
+    ],
+    "pdf": "documents/h09-02-deposit.pdf",
+    "text": "documents/h09-02-deposit.txt"
+  },
+  {
+    "id": "h09-02-invoice",
+    "kind": "invoice",
+    "title": "Invoice H09-02-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-06",
+    "scanned": false,
+    "amountCents": [
+      35750,
+      32500
+    ],
+    "pdf": "documents/h09-02-invoice.pdf",
+    "text": "documents/h09-02-invoice.txt"
+  },
+  {
+    "id": "h09-02-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-09-07",
+    "scanned": true,
+    "amountCents": [
+      13102
+    ],
+    "pdf": "documents/h09-02-cost.pdf",
+    "text": "documents/h09-02-cost.txt"
+  },
+  {
+    "id": "h09-03-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Caleb Ross",
+    "date": "2026-09-08",
+    "scanned": true,
+    "amountCents": [
+      548243
+    ],
+    "pdf": "documents/h09-03-deposit.pdf",
+    "text": "documents/h09-03-deposit.txt"
+  },
+  {
+    "id": "h09-03-invoice",
+    "kind": "invoice",
+    "title": "Invoice H09-03-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-09",
+    "scanned": false,
+    "amountCents": [
+      42750,
+      42750
+    ],
+    "pdf": "documents/h09-03-invoice.pdf",
+    "text": "documents/h09-03-invoice.txt"
+  },
+  {
+    "id": "h09-03-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-09-10",
+    "scanned": true,
+    "amountCents": [
+      13419
+    ],
+    "pdf": "documents/h09-03-cost.pdf",
+    "text": "documents/h09-03-cost.txt"
+  },
+  {
+    "id": "h09-04-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Iris Tran",
+    "date": "2026-09-11",
+    "scanned": false,
+    "amountCents": [
+      572729
+    ],
+    "pdf": "documents/h09-04-deposit.pdf",
+    "text": "documents/h09-04-deposit.txt"
+  },
+  {
+    "id": "h09-04-invoice",
+    "kind": "invoice",
+    "title": "Invoice H09-04-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-12",
+    "scanned": false,
+    "amountCents": [
+      42250,
+      32500
+    ],
+    "pdf": "documents/h09-04-invoice.pdf",
+    "text": "documents/h09-04-invoice.txt"
+  },
+  {
+    "id": "h09-04-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-13",
+    "scanned": false,
+    "amountCents": [
+      13736
+    ],
+    "pdf": "documents/h09-04-refund.pdf",
+    "text": "documents/h09-04-refund.txt"
+  },
+  {
+    "id": "h09-05-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Daniel Okafor",
+    "date": "2026-09-14",
+    "scanned": true,
+    "amountCents": [
+      589908
+    ],
+    "pdf": "documents/h09-05-deposit.pdf",
+    "text": "documents/h09-05-deposit.txt"
+  },
+  {
+    "id": "h09-05-invoice",
+    "kind": "invoice",
+    "title": "Invoice H09-05-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-15",
+    "scanned": false,
+    "amountCents": [
+      43000,
+      43000
+    ],
+    "pdf": "documents/h09-05-invoice.pdf",
+    "text": "documents/h09-05-invoice.txt"
+  },
+  {
+    "id": "h09-05-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-09-16",
+    "scanned": true,
+    "amountCents": [
+      14053
+    ],
+    "pdf": "documents/h09-05-cost.pdf",
+    "text": "documents/h09-05-cost.txt"
+  },
+  {
+    "id": "h09-06-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Jamie Nguyen",
+    "date": "2026-09-17",
+    "scanned": false,
+    "amountCents": [
+      532063
+    ],
+    "pdf": "documents/h09-06-deposit.pdf",
+    "text": "documents/h09-06-deposit.txt"
+  },
+  {
+    "id": "h09-06-invoice",
+    "kind": "invoice",
+    "title": "Invoice H09-06-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-18",
+    "scanned": false,
+    "amountCents": [
+      48750,
+      32500
+    ],
+    "pdf": "documents/h09-06-invoice.pdf",
+    "text": "documents/h09-06-invoice.txt"
+  },
+  {
+    "id": "h09-06-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-09-19",
+    "scanned": true,
+    "amountCents": [
+      14370
+    ],
+    "pdf": "documents/h09-06-cost.pdf",
+    "text": "documents/h09-06-cost.txt"
+  },
+  {
+    "id": "h09-07-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Jordan Nguyen",
+    "date": "2026-09-20",
+    "scanned": true,
+    "amountCents": [
+      560958
+    ],
+    "pdf": "documents/h09-07-deposit.pdf",
+    "text": "documents/h09-07-deposit.txt"
+  },
+  {
+    "id": "h09-07-invoice",
+    "kind": "invoice",
+    "title": "Invoice H09-07-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-21",
+    "scanned": false,
+    "amountCents": [
+      43250,
+      43250
+    ],
+    "pdf": "documents/h09-07-invoice.pdf",
+    "text": "documents/h09-07-invoice.txt"
+  },
+  {
+    "id": "h09-07-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-22",
+    "scanned": false,
+    "amountCents": [
+      14687
+    ],
+    "pdf": "documents/h09-07-refund.pdf",
+    "text": "documents/h09-07-refund.txt"
+  },
+  {
+    "id": "h09-08-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Elena Park",
+    "date": "2026-09-23",
+    "scanned": false,
+    "amountCents": [
+      519339
+    ],
+    "pdf": "documents/h09-08-deposit.pdf",
+    "text": "documents/h09-08-deposit.txt"
+  },
+  {
+    "id": "h09-08-invoice",
+    "kind": "invoice",
+    "title": "Invoice H09-08-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-24",
+    "scanned": false,
+    "amountCents": [
+      55250,
+      32500
+    ],
+    "pdf": "documents/h09-08-invoice.pdf",
+    "text": "documents/h09-08-invoice.txt"
+  },
+  {
+    "id": "h09-08-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-09-25",
+    "scanned": true,
+    "amountCents": [
+      15004
+    ],
+    "pdf": "documents/h09-08-cost.pdf",
+    "text": "documents/h09-08-cost.txt"
+  },
+  {
+    "id": "h10-01-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Victor Chen",
+    "date": "2026-10-02",
+    "scanned": true,
+    "amountCents": [
+      518784
+    ],
+    "pdf": "documents/h10-01-deposit.pdf",
+    "text": "documents/h10-01-deposit.txt"
+  },
+  {
+    "id": "h10-01-invoice",
+    "kind": "invoice",
+    "title": "Invoice H10-01-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-03",
+    "scanned": false,
+    "amountCents": [
+      42500,
+      42500
+    ],
+    "pdf": "documents/h10-01-invoice.pdf",
+    "text": "documents/h10-01-invoice.txt"
+  },
+  {
+    "id": "h10-01-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-04",
+    "scanned": false,
+    "amountCents": [
+      12785
+    ],
+    "pdf": "documents/h10-01-refund.pdf",
+    "text": "documents/h10-01-refund.txt"
+  },
+  {
+    "id": "h10-02-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Nadia Flores",
+    "date": "2026-10-05",
+    "scanned": false,
+    "amountCents": [
+      556708
+    ],
+    "pdf": "documents/h10-02-deposit.pdf",
+    "text": "documents/h10-02-deposit.txt"
+  },
+  {
+    "id": "h10-02-invoice",
+    "kind": "invoice",
+    "title": "Invoice H10-02-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-06",
+    "scanned": false,
+    "amountCents": [
+      35750,
+      32500
+    ],
+    "pdf": "documents/h10-02-invoice.pdf",
+    "text": "documents/h10-02-invoice.txt"
+  },
+  {
+    "id": "h10-02-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-10-07",
+    "scanned": true,
+    "amountCents": [
+      13102
+    ],
+    "pdf": "documents/h10-02-cost.pdf",
+    "text": "documents/h10-02-cost.txt"
+  },
+  {
+    "id": "h10-03-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Omar Hassan",
+    "date": "2026-10-08",
+    "scanned": true,
+    "amountCents": [
+      526182
+    ],
+    "pdf": "documents/h10-03-deposit.pdf",
+    "text": "documents/h10-03-deposit.txt"
+  },
+  {
+    "id": "h10-03-invoice",
+    "kind": "invoice",
+    "title": "Invoice H10-03-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-09",
+    "scanned": false,
+    "amountCents": [
+      42750,
+      42750
+    ],
+    "pdf": "documents/h10-03-invoice.pdf",
+    "text": "documents/h10-03-invoice.txt"
+  },
+  {
+    "id": "h10-03-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-10-10",
+    "scanned": true,
+    "amountCents": [
+      13419
+    ],
+    "pdf": "documents/h10-03-cost.pdf",
+    "text": "documents/h10-03-cost.txt"
+  },
+  {
+    "id": "h10-04-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Lena Brooks",
+    "date": "2026-10-11",
+    "scanned": false,
+    "amountCents": [
+      547216
+    ],
+    "pdf": "documents/h10-04-deposit.pdf",
+    "text": "documents/h10-04-deposit.txt"
+  },
+  {
+    "id": "h10-04-invoice",
+    "kind": "invoice",
+    "title": "Invoice H10-04-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-12",
+    "scanned": false,
+    "amountCents": [
+      42250,
+      32500
+    ],
+    "pdf": "documents/h10-04-invoice.pdf",
+    "text": "documents/h10-04-invoice.txt"
+  },
+  {
+    "id": "h10-04-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-13",
+    "scanned": false,
+    "amountCents": [
+      13736
+    ],
+    "pdf": "documents/h10-04-refund.pdf",
+    "text": "documents/h10-04-refund.txt"
+  },
+  {
+    "id": "h10-05-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Isaac Patel",
+    "date": "2026-10-14",
+    "scanned": true,
+    "amountCents": [
+      508690
+    ],
+    "pdf": "documents/h10-05-deposit.pdf",
+    "text": "documents/h10-05-deposit.txt"
+  },
+  {
+    "id": "h10-05-invoice",
+    "kind": "invoice",
+    "title": "Invoice H10-05-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-15",
+    "scanned": false,
+    "amountCents": [
+      43000,
+      43000
+    ],
+    "pdf": "documents/h10-05-invoice.pdf",
+    "text": "documents/h10-05-invoice.txt"
+  },
+  {
+    "id": "h10-05-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-10-16",
+    "scanned": true,
+    "amountCents": [
+      14053
+    ],
+    "pdf": "documents/h10-05-cost.pdf",
+    "text": "documents/h10-05-cost.txt"
+  },
+  {
+    "id": "h10-06-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Sofia Rivera",
+    "date": "2026-10-17",
+    "scanned": false,
+    "amountCents": [
+      551492
+    ],
+    "pdf": "documents/h10-06-deposit.pdf",
+    "text": "documents/h10-06-deposit.txt"
+  },
+  {
+    "id": "h10-06-invoice",
+    "kind": "invoice",
+    "title": "Invoice H10-06-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-18",
+    "scanned": false,
+    "amountCents": [
+      48750,
+      32500
+    ],
+    "pdf": "documents/h10-06-invoice.pdf",
+    "text": "documents/h10-06-invoice.txt"
+  },
+  {
+    "id": "h10-06-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-10-19",
+    "scanned": true,
+    "amountCents": [
+      14370
+    ],
+    "pdf": "documents/h10-06-cost.pdf",
+    "text": "documents/h10-06-cost.txt"
+  },
+  {
+    "id": "h10-07-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Marcus Reed",
+    "date": "2026-10-20",
+    "scanned": true,
+    "amountCents": [
+      566814
+    ],
+    "pdf": "documents/h10-07-deposit.pdf",
+    "text": "documents/h10-07-deposit.txt"
+  },
+  {
+    "id": "h10-07-invoice",
+    "kind": "invoice",
+    "title": "Invoice H10-07-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-21",
+    "scanned": false,
+    "amountCents": [
+      43250,
+      43250
+    ],
+    "pdf": "documents/h10-07-invoice.pdf",
+    "text": "documents/h10-07-invoice.txt"
+  },
+  {
+    "id": "h10-07-refund",
+    "kind": "authorization",
+    "title": "Client Refund Authorization",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-22",
+    "scanned": false,
+    "amountCents": [
+      14687
+    ],
+    "pdf": "documents/h10-07-refund.pdf",
+    "text": "documents/h10-07-refund.txt"
+  },
+  {
+    "id": "h10-08-deposit",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Grace Kim",
+    "date": "2026-10-23",
+    "scanned": false,
+    "amountCents": [
+      580761
+    ],
+    "pdf": "documents/h10-08-deposit.pdf",
+    "text": "documents/h10-08-deposit.txt"
+  },
+  {
+    "id": "h10-08-invoice",
+    "kind": "invoice",
+    "title": "Invoice H10-08-INVOICE",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-24",
+    "scanned": false,
+    "amountCents": [
+      55250,
+      32500
+    ],
+    "pdf": "documents/h10-08-invoice.pdf",
+    "text": "documents/h10-08-invoice.txt"
+  },
+  {
+    "id": "h10-08-cost",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-10-25",
+    "scanned": true,
+    "amountCents": [
+      15004
+    ],
+    "pdf": "documents/h10-08-cost.pdf",
+    "text": "documents/h10-08-cost.txt"
+  },
+  {
+    "id": "cho-retainer",
+    "kind": "remittance",
+    "title": "Trust Deposit Advice",
+    "issuer": "Raymond Cho",
+    "date": "2026-05-05",
+    "scanned": true,
+    "amountCents": [
+      180000
+    ],
+    "pdf": "documents/cho-retainer.pdf",
+    "text": "documents/cho-retainer.txt"
+  },
+  {
+    "id": "cho-topup",
+    "kind": "remittance",
+    "title": "Trust Deposit Advice",
+    "issuer": "Raymond Cho",
+    "date": "2026-10-30",
+    "scanned": true,
+    "amountCents": [
+      520000
+    ],
+    "pdf": "documents/cho-topup.pdf",
+    "text": "documents/cho-topup.txt"
+  },
+  {
+    "id": "cho-expert-invoice",
+    "kind": "invoice",
+    "title": "Invoice CHO-EXPERT-INVOICE",
+    "issuer": "Marlowe Forensic Services",
+    "date": "2026-10-08",
+    "scanned": true,
+    "amountCents": [
+      600000,
+      75000
+    ],
+    "pdf": "documents/cho-expert-invoice.pdf",
+    "text": "documents/cho-expert-invoice.txt"
+  },
+  {
+    "id": "title-wire-1",
+    "kind": "bank_advice",
+    "title": "Wire Transfer Advice",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-07-07",
+    "scanned": false,
+    "amountCents": [
+      734125
+    ],
+    "pdf": "documents/title-wire-1.pdf",
+    "text": "documents/title-wire-1.txt"
+  },
+  {
+    "id": "title-wire-2",
+    "kind": "bank_advice",
+    "title": "Wire Transfer Advice",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-07-08",
+    "scanned": false,
+    "amountCents": [
+      734125
+    ],
+    "pdf": "documents/title-wire-2.pdf",
+    "text": "documents/title-wire-2.txt"
+  },
+  {
+    "id": "title-return",
+    "kind": "bank_advice",
+    "title": "Wire Transfer Advice",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-07-10",
+    "scanned": false,
+    "amountCents": [
+      734125
+    ],
+    "pdf": "documents/title-return.pdf",
+    "text": "documents/title-return.txt"
+  },
+  {
+    "id": "bank-service-fee",
+    "kind": "bank_letter",
+    "title": "Account Service Notice",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-08-18",
+    "scanned": false,
+    "amountCents": [
+      2500
+    ],
+    "pdf": "documents/bank-service-fee.pdf",
+    "text": "documents/bank-service-fee.txt"
+  },
+  {
+    "id": "firm-fee-replacement",
+    "kind": "bank_letter",
+    "title": "Account Service Notice",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-08-19",
+    "scanned": false,
+    "amountCents": [
+      2500
+    ],
+    "pdf": "documents/firm-fee-replacement.pdf",
+    "text": "documents/firm-fee-replacement.txt"
+  },
+  {
+    "id": "bayside-prior-letter",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-06-08",
+    "scanned": true,
+    "amountCents": [
+      320075
+    ],
+    "pdf": "documents/bayside-prior-letter.pdf",
+    "text": "documents/bayside-prior-letter.txt"
+  },
+  {
+    "id": "bayside-prior-confirmation",
+    "kind": "bank_advice",
+    "title": "Executed Wire Confirmation",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-06-12",
+    "scanned": false,
+    "amountCents": [
+      320075
+    ],
+    "pdf": "documents/bayside-prior-confirmation.pdf",
+    "text": "documents/bayside-prior-confirmation.txt"
+  },
+  {
+    "id": "park-funding",
+    "kind": "remittance",
+    "title": "Client Payment Advice",
+    "issuer": "Elena Park",
+    "date": "2026-06-11",
+    "scanned": true,
+    "amountCents": [
+      320075
+    ],
+    "pdf": "documents/park-funding.pdf",
+    "text": "documents/park-funding.txt"
+  },
+  {
+    "id": "brooks-settlement",
+    "kind": "settlement_advice",
+    "title": "Property Damage Settlement",
+    "issuer": "Tidemark Casualty Cooperative",
+    "date": "2026-09-15",
+    "scanned": false,
+    "amountCents": [
+      1867341
+    ],
+    "pdf": "documents/brooks-settlement.pdf",
+    "text": "documents/brooks-settlement.txt"
+  },
+  {
+    "id": "brooks-client-payment",
+    "kind": "settlement_advice",
+    "title": "Property Damage Settlement",
+    "issuer": "Tidemark Casualty Cooperative",
+    "date": "2026-09-17",
+    "scanned": false,
+    "amountCents": [
+      1867341
+    ],
+    "pdf": "documents/brooks-client-payment.pdf",
+    "text": "documents/brooks-client-payment.txt"
+  },
+  {
+    "id": "noise-1",
+    "kind": "remittance",
+    "title": "Payment Receipt",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-19",
+    "scanned": false,
+    "amountCents": [
+      87525
+    ],
+    "pdf": "documents/noise-1.pdf",
+    "text": "documents/noise-1.txt"
+  },
+  {
+    "id": "noise-2",
+    "kind": "remittance",
+    "title": "Payment Receipt",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-18",
+    "scanned": false,
+    "amountCents": [
+      92040
+    ],
+    "pdf": "documents/noise-2.pdf",
+    "text": "documents/noise-2.txt"
+  },
+  {
+    "id": "noise-3",
+    "kind": "remittance",
+    "title": "Payment Receipt",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-21",
+    "scanned": false,
+    "amountCents": [
+      125000
+    ],
+    "pdf": "documents/noise-3.pdf",
+    "text": "documents/noise-3.txt"
+  },
+  {
+    "id": "noise-4",
+    "kind": "remittance",
+    "title": "Payment Receipt",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-20",
+    "scanned": false,
+    "amountCents": [
+      87500
+    ],
+    "pdf": "documents/noise-4.pdf",
+    "text": "documents/noise-4.txt"
+  },
+  {
+    "id": "complaint-filed",
+    "kind": "court_filing",
+    "title": "Endorsed Complaint",
+    "issuer": "Fictional Superior Court - Civil Division",
+    "date": "2026-03-03",
+    "scanned": true,
+    "amountCents": [],
+    "pdf": "documents/complaint-filed.pdf",
+    "text": "documents/complaint-filed.txt"
+  },
+  {
+    "id": "allocation-global",
+    "kind": "allocation_agreement",
+    "title": "Joint Recovery Allocation Agreement",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-15",
+    "scanned": false,
+    "amountCents": [
+      12500000,
+      6250000,
+      3750000,
+      2500000,
+      450000,
+      225000,
+      135000,
+      90000
+    ],
+    "pdf": "documents/allocation-global.pdf",
+    "text": "documents/allocation-global.txt"
+  },
+  {
+    "id": "global-expert",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Marlowe Forensic Services",
+    "date": "2026-09-28",
+    "scanned": true,
+    "amountCents": [
+      300000,
+      75000
+    ],
+    "pdf": "documents/global-expert.pdf",
+    "text": "documents/global-expert.txt"
+  },
+  {
+    "id": "global-reporter",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-04-16",
+    "scanned": true,
+    "amountCents": [
+      105000
+    ],
+    "pdf": "documents/global-reporter.pdf",
+    "text": "documents/global-reporter.txt"
+  },
+  {
+    "id": "global-filing",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Fictional County Filing Desk",
+    "date": "2026-03-03",
+    "scanned": true,
+    "amountCents": [
+      45000
+    ],
+    "pdf": "documents/global-filing.pdf",
+    "text": "documents/global-filing.txt"
+  },
+  {
+    "id": "bayside-v1",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-10-14",
+    "scanned": true,
+    "amountCents": [
+      1200000
+    ],
+    "pdf": "documents/bayside-v1.pdf",
+    "text": "documents/bayside-v1.txt"
+  },
+  {
+    "id": "bayside-v2",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-10-21",
+    "scanned": true,
+    "amountCents": [
+      1450000
+    ],
+    "pdf": "documents/bayside-v2.pdf",
+    "text": "documents/bayside-v2.txt"
+  },
+  {
+    "id": "reyes-conditional",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Conditional Payment Recovery Desk (fictional)",
+    "date": "2026-10-14",
+    "scanned": true,
+    "amountCents": [
+      320000
+    ],
+    "pdf": "documents/reyes-conditional.pdf",
+    "text": "documents/reyes-conditional.txt"
+  },
+  {
+    "id": "settlement-v1",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 1",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-19",
+    "scanned": false,
+    "amountCents": [
+      12500000,
+      2062500,
+      225000,
+      1200000,
+      2762500,
+      1500000,
+      135000,
+      320000,
+      1795000,
+      625000,
+      90000,
+      1785000,
+      6250000,
+      3750000,
+      2500000
+    ],
+    "pdf": "documents/settlement-v1.pdf",
+    "text": "documents/settlement-v1.txt"
+  },
+  {
+    "id": "settlement-v2",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 2",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-22",
+    "scanned": false,
+    "amountCents": [
+      12500000,
+      2062500,
+      225000,
+      1450000,
+      2512500,
+      1500000,
+      135000,
+      320000,
+      1795000,
+      602500,
+      90000,
+      1807500,
+      6250000,
+      3750000,
+      2500000
+    ],
+    "pdf": "documents/settlement-v2.pdf",
+    "text": "documents/settlement-v2.txt"
+  },
+  {
+    "id": "global-check",
+    "kind": "check",
+    "title": "Settlement Draft",
+    "issuer": "Harborline Mutual Insurance",
+    "date": "2026-10-22",
+    "scanned": true,
+    "amountCents": [
+      12500000
+    ],
+    "pdf": "documents/global-check.pdf",
+    "text": "documents/global-check.txt",
+    "checkNumber": "902174"
+  },
+  {
+    "id": "supplemental-check",
+    "kind": "check",
+    "title": "Settlement Draft",
+    "issuer": "Harborline Mutual Insurance",
+    "date": "2026-11-06",
+    "scanned": true,
+    "amountCents": [
+      500000
+    ],
+    "pdf": "documents/supplemental-check.pdf",
+    "text": "documents/supplemental-check.txt",
+    "checkNumber": "902618"
+  },
+  {
+    "id": "policy-hl50877",
+    "kind": "policy",
+    "title": "Approved Supplemental Allocation",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-23",
+    "scanned": false,
+    "amountCents": [],
+    "pdf": "documents/policy-hl50877.pdf",
+    "text": "documents/policy-hl50877.txt"
+  },
+  {
+    "id": "bayside-bank-change",
+    "kind": "email",
+    "title": "Printed Email",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-22",
+    "scanned": false,
+    "amountCents": [
+      1450000
+    ],
+    "pdf": "documents/bayside-bank-change.pdf",
+    "text": "documents/bayside-bank-change.txt",
+    "eml": "documents/bayside-bank-change.eml"
+  },
+  {
+    "id": "recon-05",
+    "kind": "reconciliation",
+    "title": "Monthly Three-Way Reconciliation",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-06-01",
+    "scanned": false,
+    "amountCents": [
+      0,
+      4180370,
+      4180370,
+      0,
+      0
+    ],
+    "pdf": "documents/recon-05.pdf",
+    "text": "documents/recon-05.txt"
+  },
+  {
+    "id": "recon-06",
+    "kind": "reconciliation",
+    "title": "Monthly Three-Way Reconciliation",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-01",
+    "scanned": false,
+    "amountCents": [
+      4180370,
+      8121190,
+      8121190,
+      0,
+      0
+    ],
+    "pdf": "documents/recon-06.pdf",
+    "text": "documents/recon-06.txt"
+  },
+  {
+    "id": "recon-07",
+    "kind": "reconciliation",
+    "title": "Monthly Three-Way Reconciliation",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-01",
+    "scanned": false,
+    "amountCents": [
+      8121190,
+      12709394,
+      12709394,
+      0,
+      0
+    ],
+    "pdf": "documents/recon-07.pdf",
+    "text": "documents/recon-07.txt"
+  },
+  {
+    "id": "recon-08",
+    "kind": "reconciliation",
+    "title": "Monthly Three-Way Reconciliation",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-01",
+    "scanned": false,
+    "amountCents": [
+      12709394,
+      16408793,
+      16408793,
+      0,
+      0
+    ],
+    "pdf": "documents/recon-08.pdf",
+    "text": "documents/recon-08.txt"
+  },
+  {
+    "id": "recon-09",
+    "kind": "reconciliation",
+    "title": "Monthly Three-Way Reconciliation",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-10-01",
+    "scanned": false,
+    "amountCents": [
+      16408793,
+      20473658,
+      20473658,
+      0,
+      0
+    ],
+    "pdf": "documents/recon-09.pdf",
+    "text": "documents/recon-09.txt"
+  },
+  {
+    "id": "recon-10",
+    "kind": "reconciliation",
+    "title": "Monthly Three-Way Reconciliation",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-11-01",
+    "scanned": false,
+    "amountCents": [
+      20473658,
+      24373149,
+      24373149,
+      0,
+      0
+    ],
+    "pdf": "documents/recon-10.pdf",
+    "text": "documents/recon-10.txt"
+  }
+]

@@ -9,7 +9,9 @@
     "./finance": "./finance.ts",
     "./events": "./events.ts",
     "./snapshots": "./snapshots.ts",
-    "./investigation": "./investigation.ts"
+    "./investigation": "./investigation.ts",
+    "./money": "./money.ts",
+    "./orchestration": "./orchestration.ts"
   },
   "scripts": { "typecheck": "tsc --noEmit" },
   "devDependencies": { "typescript": "^5.0.0" }

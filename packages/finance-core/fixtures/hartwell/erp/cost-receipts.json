@@ -1,0 +1,345 @@
+[
+  {
+    "id": "h05-02-cost",
+    "documentId": "h05-02-cost",
+    "clientId": "c06",
+    "matterId": "m04",
+    "date": "2026-05-07",
+    "amountCents": 13102,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h05-03-cost",
+    "documentId": "h05-03-cost",
+    "clientId": "c07",
+    "matterId": "m05",
+    "date": "2026-05-10",
+    "amountCents": 13419,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h05-05-cost",
+    "documentId": "h05-05-cost",
+    "clientId": "c09",
+    "matterId": "m07",
+    "date": "2026-05-16",
+    "amountCents": 14053,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h05-06-cost",
+    "documentId": "h05-06-cost",
+    "clientId": "c10",
+    "matterId": "m08",
+    "date": "2026-05-19",
+    "amountCents": 14370,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h05-08-cost",
+    "documentId": "h05-08-cost",
+    "clientId": "c12",
+    "matterId": "m10",
+    "date": "2026-05-25",
+    "amountCents": 15004,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h06-02-cost",
+    "documentId": "h06-02-cost",
+    "clientId": "c14",
+    "matterId": "m12",
+    "date": "2026-06-07",
+    "amountCents": 13102,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h06-03-cost",
+    "documentId": "h06-03-cost",
+    "clientId": "c15",
+    "matterId": "m13",
+    "date": "2026-06-10",
+    "amountCents": 13419,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h06-05-cost",
+    "documentId": "h06-05-cost",
+    "clientId": "c17",
+    "matterId": "m15",
+    "date": "2026-06-16",
+    "amountCents": 14053,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h06-06-cost",
+    "documentId": "h06-06-cost",
+    "clientId": "c18",
+    "matterId": "m16",
+    "date": "2026-06-19",
+    "amountCents": 14370,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h06-08-cost",
+    "documentId": "h06-08-cost",
+    "clientId": "c20",
+    "matterId": "m18",
+    "date": "2026-06-25",
+    "amountCents": 15004,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h07-02-cost",
+    "documentId": "h07-02-cost",
+    "clientId": "c22",
+    "matterId": "m20",
+    "date": "2026-07-07",
+    "amountCents": 13102,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h07-03-cost",
+    "documentId": "h07-03-cost",
+    "clientId": "c23",
+    "matterId": "m21",
+    "date": "2026-07-10",
+    "amountCents": 13419,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h07-05-cost",
+    "documentId": "h07-05-cost",
+    "clientId": "c25",
+    "matterId": "m23",
+    "date": "2026-07-16",
+    "amountCents": 14053,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h07-06-cost",
+    "documentId": "h07-06-cost",
+    "clientId": "c26",
+    "matterId": "m24",
+    "date": "2026-07-19",
+    "amountCents": 14370,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h07-08-cost",
+    "documentId": "h07-08-cost",
+    "clientId": "c28",
+    "matterId": "m03",
+    "date": "2026-07-25",
+    "amountCents": 15004,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h08-02-cost",
+    "documentId": "h08-02-cost",
+    "clientId": "c30",
+    "matterId": "m05",
+    "date": "2026-08-07",
+    "amountCents": 13102,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h08-03-cost",
+    "documentId": "h08-03-cost",
+    "clientId": "c31",
+    "matterId": "m06",
+    "date": "2026-08-10",
+    "amountCents": 13419,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h08-05-cost",
+    "documentId": "h08-05-cost",
+    "clientId": "c33",
+    "matterId": "m08",
+    "date": "2026-08-16",
+    "amountCents": 14053,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h08-06-cost",
+    "documentId": "h08-06-cost",
+    "clientId": "c34",
+    "matterId": "m09",
+    "date": "2026-08-19",
+    "amountCents": 14370,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h08-08-cost",
+    "documentId": "h08-08-cost",
+    "clientId": "c36",
+    "matterId": "m11",
+    "date": "2026-08-25",
+    "amountCents": 15004,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h09-02-cost",
+    "documentId": "h09-02-cost",
+    "clientId": "c38",
+    "matterId": "m13",
+    "date": "2026-09-07",
+    "amountCents": 13102,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h09-03-cost",
+    "documentId": "h09-03-cost",
+    "clientId": "c39",
+    "matterId": "m14",
+    "date": "2026-09-10",
+    "amountCents": 13419,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h09-05-cost",
+    "documentId": "h09-05-cost",
+    "clientId": "c05",
+    "matterId": "m03",
+    "date": "2026-09-16",
+    "amountCents": 14053,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h09-06-cost",
+    "documentId": "h09-06-cost",
+    "clientId": "c06",
+    "matterId": "m04",
+    "date": "2026-09-19",
+    "amountCents": 14370,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h09-08-cost",
+    "documentId": "h09-08-cost",
+    "clientId": "c08",
+    "matterId": "m06",
+    "date": "2026-09-25",
+    "amountCents": 15004,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h10-02-cost",
+    "documentId": "h10-02-cost",
+    "clientId": "c10",
+    "matterId": "m08",
+    "date": "2026-10-07",
+    "amountCents": 13102,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h10-03-cost",
+    "documentId": "h10-03-cost",
+    "clientId": "c11",
+    "matterId": "m09",
+    "date": "2026-10-10",
+    "amountCents": 13419,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h10-05-cost",
+    "documentId": "h10-05-cost",
+    "clientId": "c13",
+    "matterId": "m11",
+    "date": "2026-10-16",
+    "amountCents": 14053,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h10-06-cost",
+    "documentId": "h10-06-cost",
+    "clientId": "c14",
+    "matterId": "m12",
+    "date": "2026-10-19",
+    "amountCents": 14370,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "h10-08-cost",
+    "documentId": "h10-08-cost",
+    "clientId": "c16",
+    "matterId": "m14",
+    "date": "2026-10-25",
+    "amountCents": 15004,
+    "description": "Certified transcript and delivery",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "global-expert",
+    "documentId": "global-expert",
+    "clientId": null,
+    "matterId": "m01",
+    "date": "2026-09-28",
+    "amountCents": 300000,
+    "description": "Collision reconstruction: 4 hours x $750.00",
+    "paidBy": "firm operating",
+    "allocationAgreementId": "allocation-global",
+    "shared": true,
+    "lines": [
+      {
+        "hours": 4,
+        "rateCents": 75000,
+        "amountCents": 300000
+      }
+    ]
+  },
+  {
+    "id": "global-reporter",
+    "documentId": "global-reporter",
+    "clientId": null,
+    "matterId": "m01",
+    "date": "2026-04-16",
+    "amountCents": 105000,
+    "description": "Deposition transcript and attendance",
+    "paidBy": "firm operating",
+    "allocationAgreementId": "allocation-global",
+    "shared": true
+  },
+  {
+    "id": "global-filing",
+    "documentId": "global-filing",
+    "clientId": null,
+    "matterId": "m01",
+    "date": "2026-03-03",
+    "amountCents": 45000,
+    "description": "Civil complaint filing fee",
+    "paidBy": "firm operating",
+    "allocationAgreementId": "allocation-global",
+    "shared": true
+  }
+]

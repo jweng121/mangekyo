@@ -1,2 +1,2 @@
 export { FinanceCaseView } from "./components/FinanceCaseView";
-export { FinanceInvestigationView } from "./components/FinanceInvestigationView";
+export { FinanceInvestigationView, subjectFromCase, type InvestigationSubject } from "./components/FinanceInvestigationView";

@@ -50,9 +50,12 @@ export interface FinanceTask extends SyntheticRecord {
   /** Investigation candidate only; does not establish ownership of the deposit. */
   candidateOwnerId: string;
   evidenceRefs: EvidenceReference[];
-  status: "awaiting_investigation" | "investigating" | "needs_information" | "review_required" | "investigation_completed" | "investigation_failed";
+  status: "awaiting_investigation" | "investigating" | "needs_information" | "review_required" | "investigation_completed" | "investigation_failed" | "checker_rejected";
   activeRunId?: string;
   createdAt: number;
+  /** Present on tasks created from the money source adapter. */
+  accountId?: string;
+  bankSourceId?: string;
 }
 
 export interface FinanceCaseBundle {
