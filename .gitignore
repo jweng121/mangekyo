@@ -4,3 +4,13 @@ dist/
 *.tsbuildinfo
 .env*
 !.env.example
+.mangekyo-data/
+**/.mangekyo-data/
+real-workspace.png
+
+# Local visual verification artifacts; demo PDFs are source fixtures.
+output/*
+!output/pdf/
+output/pdf/*
+!output/pdf/trust-bank-statement.pdf
+!output/pdf/trust-funding-instruction.pdf

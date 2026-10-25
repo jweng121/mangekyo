@@ -2,8 +2,14 @@
   "name": "mangekyo",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter @mangekyo/visual-audit-playground dev",
-    "build": "pnpm --filter @mangekyo/visual-audit-playground build",
-    "typecheck": "pnpm -r --if-present typecheck"
+    "dev": "pnpm --filter @mangekyo/visual-audit-dev dev",
+    "build": "pnpm --filter @mangekyo/visual-audit-dev build",
+    "typecheck": "pnpm -r --if-present typecheck && pnpm typecheck:convex",
+    "typecheck:convex": "pnpm --filter @mangekyo/visual-audit-dev exec tsc --noEmit -p ../../convex/tsconfig.json",
+    "smoke": "pnpm --filter @mangekyo/visual-audit-dev smoke",
+    "dev:playground": "pnpm --filter @mangekyo/visual-audit-playground dev"
+  },
+  "dependencies": {
+    "convex": "^1.48.0"
   }
 }
