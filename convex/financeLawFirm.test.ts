@@ -24,7 +24,7 @@ async function post(t: T, proposalId: string) {
 it.each([true, false])("runs all ten law-firm steps with Okafor posted and policy approved = %s", async (approved) => {
   const t = convexTest(schema, modules);
   await t.mutation(api.financeIntake.startFreshDemoRun, {});
-  expect((await view(t)).threeWay).toMatchObject({ status: "matched", bookCents: 60_770_000 });
+  expect((await view(t)).threeWay).toMatchObject({ status: "matched", bookCents: 3_287_270_000 });
   await next(t, 1);
   const original = (await runs(t, "harborline-delgado")).runs[0];
   expect(original.result?.proposedAllocations).toEqual([]);

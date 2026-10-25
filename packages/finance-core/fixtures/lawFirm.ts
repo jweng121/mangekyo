@@ -4,7 +4,7 @@ import { DEMO_ACCOUNT_ID, forDemoAccount, demoRunOf } from "./demoMoney";
 const AS_OF = Date.UTC(2026, 9, 1);
 const raw = (recordType: string, rawId: string): RawPointer => ({ system: "demo", recordType, rawId, datasetVersion: "law-firm-demo-v1" });
 const clients = [
-  ["westbrook", "Westbrook HOA", 21_000_000],
+  ["westbrook", "Westbrook HOA", 3_247_500_000],
   ["chen-park", "Chen & Park Holdings", 12_000_000],
   ["linh-nguyen", "Linh Nguyen", 350_000],
   ["james-nguyen", "James Nguyen", 420_000],
@@ -45,7 +45,7 @@ export function lawFirmBundle(accountId = DEMO_ACCOUNT_ID): NormalizedAccountBun
       document("cho-expert", "Expert witness invoice", "Raymond Hayes expert witness invoice", "Expert witness services for Raymond Hayes's contract case: $900,000.00."),
       document("westbrook-settlement", "Settlement letter", "Harborline settlement letter HL-50210", "Harborline Insurance settlement for Westbrook HOA, claim HL-50210: $18,000.00."),
     ],
-    statementBalances: [{ sourceId: "demo:bank-statement:law-firm", accountId: DEMO_ACCOUNT_ID, amountCents: 60_770_000, asOf: AS_OF, raw: raw("bank-statement", "opening") }],
+    statementBalances: [{ sourceId: "demo:bank-statement:law-firm", accountId: DEMO_ACCOUNT_ID, amountCents: 3_287_270_000, asOf: AS_OF, raw: raw("bank-statement", "opening") }],
     openingBalances: clients.map(([key, , amountCents]) => ({ sourceId: `demo:opening:${key}`, accountId: DEMO_ACCOUNT_ID, ownerId: `demo:owner:${key}`, amountCents, clearedCents: amountCents, asOf: AS_OF, bankSourceId: null, raw: raw("opening", key) })),
   }, accountId);
 }
