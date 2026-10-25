@@ -3,6 +3,7 @@ import { readTimestampStream, wordTimeline, type FishTimestampEvent, type WordTi
 
 /** Captions follow provider word timestamps on the audio clock, never estimated timers. */
 export class CloudTtsProvider implements TtsProvider {
+  constructor(readonly continuous = true) {}
   private paused = false;
   private audio?: HTMLAudioElement;
   private abort?: AbortController;

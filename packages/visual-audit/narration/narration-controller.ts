@@ -30,7 +30,42 @@ export class NarrationController {
       return;
     }
     this.status = "playing";
-    this.speakCurrent(++this.generation);
+    const generation = ++this.generation;
+    if (autoAdvance && this.provider.continuous && explanation.segments.slice(fromIndex).map(s=>s.text).join(" ").length <= 8000) this.speakContinuous(generation);
+    else this.speakCurrent(generation);
+  }
+
+  private speakContinuous(generation: number): void {
+    const explanation = this.explanation!;
+    const first = this.index;
+    let offset = 0;
+    const spans = explanation.segments.slice(first).map((segment, i) => {
+      const span = {segment, index:first+i, start:offset};
+      offset += segment.text.length + 1;
+      return span;
+    });
+    const text = spans.map(span=>span.segment.text).join(" ");
+    this.onSegment(spans[0].segment,first);
+    this.onUpdate({status:"playing",explanationId:explanation.id,segmentIndex:first,caption:"",spokenCharIndex:-1});
+    this.provider.speak(text, {
+      onStart:()=>{
+        if(generation!==this.generation)return;
+        this.onSegment(spans[0].segment,first);
+        this.onUpdate({status:this.status,explanationId:explanation.id,segmentIndex:first,caption:spans[0].segment.text,spokenCharIndex:-1});
+      },
+      onBoundary:charIndex=>{
+        if(generation!==this.generation||this.status!=="playing")return;
+        const span = [...spans].reverse().find(item=>charIndex>=item.start) ?? spans[0];
+        if(this.index!==span.index){this.index=span.index;this.onSegment(span.segment,span.index);}
+        this.onUpdate({status:"playing",explanationId:explanation.id,segmentIndex:this.index,caption:span.segment.text,spokenCharIndex:charIndex-span.start});
+      },
+      onEnd:()=>{
+        if(generation!==this.generation||this.status!=="playing")return;
+        if(this.awaitReply){this.status="awaiting_input";this.index=explanation.segments.length-1;this.onUpdate({status:this.status,explanationId:explanation.id,segmentIndex:this.index});}
+        else this.finish();
+      },
+      onError:error=>{if(generation===this.generation){this.status="error";this.onUpdate({status:"error",explanationId:explanation.id,segmentIndex:this.index,error});}},
+    });
   }
 
   private speakCurrent(generation: number): void {

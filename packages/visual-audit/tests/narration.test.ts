@@ -154,3 +154,26 @@ test("snapshot replies preserve requested order and reject invented evidence", (
   assert.throws(()=>parseChatSections('{"sections":[{"snapshotId":"other-tenant","text":"Wrong"}]}',fixture.snapshots));
   assert.throws(()=>parseChatSections('{"sections":[',fixture.snapshots));
 });
+
+test("continuous audio changes snapshots at word boundaries without another generation",()=>{
+  const spoken:string[]=[],visited:string[]=[],updates:PlaybackUpdate[]=[];
+  let callbacks:Parameters<TtsProvider["speak"]>[1];
+  const provider:TtsProvider={continuous:true,isAvailable:()=>true,speak:(text,next)=>{spoken.push(text);callbacks=next;},pause(){},resume(){},stop(){}};
+  const controller=new NarrationController(provider,u=>updates.push(u),s=>{if(s)visited.push(s.id);});
+  const explanation={id:"continuous",messageId:"message",segments:[
+    {id:"agreement",text:"Read the agreement.",evidenceRefs:[],highlightIds:[]},
+    {id:"statement",text:"Compare the statement.",evidenceRefs:[],highlightIds:[]},
+    {id:"check",text:"Payment is held.",evidenceRefs:[],highlightIds:[]},
+  ]};
+  controller.play(explanation,0,true,true);
+  expectSingleTrack();
+  callbacks!.onStart?.();callbacks!.onBoundary?.(5);
+  assert.equal(updates.at(-1)?.segmentIndex,0);
+  controller.pause();callbacks!.onBoundary?.(20);assert.equal(updates.at(-1)?.segmentIndex,0);
+  controller.resume();callbacks!.onBoundary?.(20);
+  assert.equal(visited.at(-1),"statement");assert.equal(updates.at(-1)?.spokenCharIndex,0);
+  callbacks!.onBoundary?.(43);assert.equal(visited.at(-1),"check");
+  callbacks!.onEnd();assert.equal(updates.at(-1)?.status,"awaiting_input");expectSingleTrack();
+  controller.stop();callbacks!.onBoundary?.(0);assert.equal(updates.at(-1)?.status,"idle");
+  function expectSingleTrack(){assert.deepEqual(spoken,["Read the agreement. Compare the statement. Payment is held."]);}
+});

@@ -1,4 +1,6 @@
 import "server-only";
+import {retryFetch} from "./retry-fetch";
+import {chatAnswerSchema} from "./chat-answer-schema";
 import { parseChatSections } from "./chat-sections";
 import type { InvestigationRecord, Snapshot, SnapshotChatSection } from "../../../packages/contracts";
 import { auditChatInstructions, chatEvidenceContext, chatEvidenceSnapshots } from "./chat-evidence-context";
@@ -65,11 +67,10 @@ class AnthropicAuditProvider implements AuditProvider {
     const content: ({ type: "text"; text: string } | { type: "image"; source: { type: "base64"; media_type: "image/png"; data: string } })[] = [];
     if (screenshotId) content.push({ type: "image", source: { type: "base64", media_type: "image/png", data: (await loadScreenshot(screenshotId)).toString("base64") } });
     content.push({ type: "text", text: chatEvidenceContext(question, selected, record) });
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await retryFetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "Content-Type": "application/json" },
-      body: JSON.stringify({ model, max_tokens: 2400, system: auditChatInstructions, messages: [{ role: "user", content }] }),
-      signal: AbortSignal.timeout(30000)
+      body: JSON.stringify({ model, max_tokens: 4000, output_config:{format:{type:"json_schema",schema:chatAnswerSchema}}, system: auditChatInstructions, messages: [{ role: "user", content }] }),
     });
     const body = await response.json() as { error?: { message?: string }; content?: { type: string; text?: string }[] };
     if (!response.ok) throw new Error(body.error?.message ?? `Claude audit request failed (${response.status})`);

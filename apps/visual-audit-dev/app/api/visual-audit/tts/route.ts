@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { assertLocalAccess } from "../../../../lib/local-access";
+import {retryFetch} from "../../../../lib/retry-fetch";
 
 export const runtime = "nodejs";
 export async function GET(request: NextRequest) {
@@ -13,14 +14,14 @@ export async function POST(request: NextRequest) {
     const provider = process.env.MANGEKYO_TTS_PROVIDER;
     if (provider !== "fish" && provider !== "elevenlabs") return NextResponse.json({ error: "Cloud TTS is not selected" }, { status: 400 });
     const { text, timestamps } = await request.json() as { text?: string; timestamps?: boolean };
-    if (!text?.trim() || text.length > 2000) return NextResponse.json({ error: "TTS segment must be 1 to 2000 characters" }, { status: 400 });
+    if (!text?.trim() || text.length > 8000) return NextResponse.json({ error: "TTS answer must be 1 to 8000 characters" }, { status: 400 });
     if (provider === "fish") {
       const key = process.env.FISH_API_KEY;
       if (!key) return NextResponse.json({ error: "Fish Audio TTS requires FISH_API_KEY" }, { status: 503 });
       const model = process.env.MANGEKYO_TTS_MODEL || "s2.1-pro-free";
       if (!["s2.1-pro-free", "s2.1-pro", "s2-pro", "s1", "drama-3"].includes(model)) return NextResponse.json({ error: `Unsupported Fish Audio model: ${model}` }, { status: 400 });
       const voice = process.env.MANGEKYO_TTS_VOICE;
-      const response = await fetch(timestamps ? "https://api.fish.audio/v1/tts/stream/with-timestamp" : "https://api.fish.audio/v1/tts", { method: "POST", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", model }, body: JSON.stringify({ text, format: "mp3", ...(voice ? { reference_id: voice } : {}) }), signal: AbortSignal.any([request.signal, AbortSignal.timeout(60000)]) });
+      const response = await retryFetch(timestamps ? "https://api.fish.audio/v1/tts/stream/with-timestamp" : "https://api.fish.audio/v1/tts", { method: "POST", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", model }, body: JSON.stringify({ text, format: "mp3", ...(voice ? { reference_id: voice } : {}) }), signal: request.signal },60000);
       if (!response.ok) return NextResponse.json({ error: `Fish Audio TTS failed (${response.status})` }, { status: 502 });
       return new NextResponse(response.body, { headers: { "Content-Type": timestamps ? "text/event-stream" : "audio/mpeg", "Cache-Control": "private, no-store" } });
     }

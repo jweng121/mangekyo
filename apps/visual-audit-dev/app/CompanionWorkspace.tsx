@@ -9,7 +9,7 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ArrowUp, ArrowUpRight, ArrowRight, Check, ChevronDown, ChevronRight, CircleAlert, FileText, GitBranch, Inbox, PanelLeftOpen, MessageSquare, Mic, PanelLeftClose, Search, Scan, Square, Maximize2, Minimize2, Plus, X, Columns2 } from "lucide-react";
 import { IconButton, ReviewMenu } from "./ReviewControls";
 import { annotationContext } from "./annotation-context";
-import { useMicrophoneMeter } from "./useMicrophoneMeter";
+import { useVoiceCapture } from "./useVoiceCapture";
 import { SnapshotChatReply } from "./SnapshotChatReply";
 import { WalkthroughIsland } from "./WalkthroughIsland";
 import { EvidenceCanvas } from "./EvidenceCanvas";
@@ -38,9 +38,6 @@ function tasksFrom(record: InvestigationRecord, includeAll = false): Task[] {
     return { id: root.id, title, taskId: root.taskId, runIds, agentId: root.agentId, status, reviewLabel, latestAt: latest.createdAt, searchable };
   }).sort((a, b) => b.latestAt.localeCompare(a.latestAt));
 }
-
-type SpeechResult = { results: ArrayLike<ArrayLike<{ transcript: string }>> };
-type SpeechRecognitionLike = { lang: string; interimResults: boolean; continuous: boolean; onstart: (() => void) | null; onend: (() => void) | null; onresult: ((event: SpeechResult) => void) | null; onerror: ((event: { error?: string }) => void) | null; onspeechstart: (() => void) | null; onspeechend: (() => void) | null; start(): void; stop(): void };
 
 export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?:string;initialRunId?:string} = {}) {
   const apiPath = (suffix = "") => platformRunId ? `/api/platform/review/${encodeURIComponent(platformRunId)}${suffix}` : `/api/visual-audit${suffix}`;
@@ -71,12 +68,13 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
   const [thinking, setThinking] = useState(false);
   const [replyError,setReplyError]=useState("");
   const [pendingQuestion, setPendingQuestion] = useState<string>();
-  const [listening, setListening] = useState(false);
-  const microphoneMeter = useMicrophoneMeter(listening);
+  const capture = useVoiceCapture(text => { setVoiceReply(text); setDraft(text); if (composeMode === "question") void ask(text); });
+  const {listening} = capture;
+  const microphoneMeter = capture;
   const [voiceReply, setVoiceReply] = useState("");
   const [answerNarration, setAnswerNarration] = useState<NarratedExplanation>();
   const voiceSession = useRef(0);
-  const [dictationError, setDictationError] = useState("");
+  const dictationError = capture.error;
   const [speechSupported, setSpeechSupported] = useState(false);
   const [voiceStatus, setVoiceStatus] = useState("idle");
   const [voiceAvailable, setVoiceAvailable] = useState(false);
@@ -98,10 +96,6 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
   const chatScroll = useRef<HTMLDivElement>(null);
   const annotationRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const narrator = useRef<NarrationController | null>(null);
-  const recognizer = useRef<SpeechRecognitionLike | null>(null);
-  const voiceTranscript = useRef("");
-  const voiceFinalizeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const voiceFinalizing = useRef(false);
   const snapshotsRef = useRef(record.snapshots); snapshotsRef.current = record.snapshots;
   const steeringStartedAt = useRef(0);
   const steeringStage = useRef<"none" | "submitted" | "running">("none");
@@ -138,7 +132,7 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
   const conversation = conversations.find(item => item.id === conversationId) ?? conversations[0];
   useEffect(() => { try { const saved = JSON.parse(localStorage.getItem("mangekyo-chat-sessions") ?? "[]"); if (Array.isArray(saved)) setChatSessions(saved.filter(item => typeof item.id === "string" && typeof item.caseId === "string" && typeof item.title === "string")); } catch {} setSessionsLoaded(true); }, []);
   useEffect(() => { if (sessionsLoaded) { try { localStorage.setItem("mangekyo-chat-sessions", JSON.stringify(chatSessions)); } catch {} } }, [chatSessions, sessionsLoaded]);
-  useEffect(() => { voiceSession.current++; setReplyError(""); setAnswerNarration(undefined); setConversationId("default"); setWalkthroughOpen(false); narrator.current?.stop(); stopDictation(); setVoiceReply(""); setDictationError(""); }, [task?.id]);
+  useEffect(() => { voiceSession.current++; setReplyError(""); setAnswerNarration(undefined); setConversationId("default"); setWalkthroughOpen(false); narrator.current?.stop(); stopDictation(); setVoiceReply(""); capture.clearError(); }, [task?.id]);
   const switchConversation = (id: string) => { voiceSession.current++; setReplyError(""); narrator.current?.stop(); stopDictation(); setWalkthroughOpen(false); setAnswerNarration(undefined); setConversationId(id); setDraft(""); setFlowMessages([]); setComposeMode("question"); };
   const newConversation = () => { if (!task) return; const id = crypto.randomUUID(); setChatSessions(current => [...current, { id, caseId: task.id, title: "New chat" }]); switchConversation(id); setInspectorTab("chat"); requestAnimationFrame(() => chatInput.current?.focus()); };
   const filteredTasks = tasks.filter(item => item.status === caseStatus && item.searchable.includes(query.toLowerCase()));
@@ -161,10 +155,9 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
     };
     narrator.current = new NarrationController(new BrowserTtsProvider(), update => { setVoiceError(update.error ?? ""); setVoiceStatus(update.status); if (update.caption !== undefined) setLiveCaption(update.caption); if (update.spokenCharIndex !== undefined) setSpokenCharIndex(update.spokenCharIndex); if (update.segmentIndex !== undefined) setSegmentIndex(update.segmentIndex); }, onSegment);
     setVoiceAvailable(new BrowserTtsProvider().isAvailable());
-    const speechWindow = window as typeof window & { SpeechRecognition?: new () => SpeechRecognitionLike; webkitSpeechRecognition?: new () => SpeechRecognitionLike };
-    setSpeechSupported(!!(speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition));
+    fetch("/api/visual-audit/transcribe").then(r=>r.json()).then(config=>setSpeechSupported(!!config.configured && typeof MediaRecorder !== "undefined" && !!navigator.mediaDevices?.getUserMedia)).catch(()=>setSpeechSupported(false));
     fetch("/api/visual-audit/tts").then(response => response.json()).then(config => {
-      if ((config.provider === "fish" || config.provider === "elevenlabs") && config.configured) { narrator.current?.stop(); narrator.current = new NarrationController(new CloudTtsProvider(), update => { setVoiceError(update.error ?? ""); setVoiceStatus(update.status); if (update.caption !== undefined) setLiveCaption(update.caption); if (update.spokenCharIndex !== undefined) setSpokenCharIndex(update.spokenCharIndex); if (update.segmentIndex !== undefined) setSegmentIndex(update.segmentIndex); }, onSegment); setVoiceAvailable(true); }
+      if ((config.provider === "fish" || config.provider === "elevenlabs") && config.configured) { narrator.current?.stop(); narrator.current = new NarrationController(new CloudTtsProvider(config.provider === "fish"), update => { setVoiceError(update.error ?? ""); setVoiceStatus(update.status); if (update.caption !== undefined) setLiveCaption(update.caption); if (update.spokenCharIndex !== undefined) setSpokenCharIndex(update.spokenCharIndex); if (update.segmentIndex !== undefined) setSegmentIndex(update.segmentIndex); }, onSegment); setVoiceAvailable(true); }
     }).catch(() => {});
     return () => { narrator.current?.stop(); stopDictation(); };
   }, []);
@@ -219,6 +212,7 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
     narrator.current?.pause();
     stopDictation();
     const prompt = question.trim(); if (!prompt || !selected || thinking) return;
+    capture.clearError();
     const chatTitle = conversation?.title === "New chat" ? prompt.slice(0, 60) : conversation?.title;
     if (conversation?.title === "New chat") setChatSessions(current => current.map(item => item.id === conversationId ? { ...item, title: chatTitle! } : item));
     const replySession = ++voiceSession.current;
@@ -238,57 +232,19 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
       }
     } catch (cause) { if(voiceSession.current===replySession){const message=(cause as Error).message;setError(message);setReplyError(message);setDraft(prompt);stopDictation();} } finally { setThinking(false); setPendingQuestion(undefined); }
   };
-  const stopDictation = () => {
-    clearTimeout(voiceFinalizeTimer.current); voiceFinalizeTimer.current = undefined; voiceFinalizing.current = false;
-    voiceTranscript.current = "";
-    const instance = recognizer.current;
-    recognizer.current = null;
-    if (instance) { instance.onresult = null; instance.onstart = null; instance.onend = null; instance.onerror = null; instance.onspeechstart = null; instance.onspeechend = null; instance.stop(); }
-    setListening(false);
-  };
-  const startDictation = () => {
-    if (recognizer.current) return;
-    const speechWindow = window as typeof window & { SpeechRecognition?: new () => SpeechRecognitionLike; webkitSpeechRecognition?: new () => SpeechRecognitionLike };
-    const Constructor = speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition;
-    if (!Constructor) { setDictationError("Voice input unavailable. Type in chat."); return; }
-    setDictationError(""); setVoiceReply(""); voiceTranscript.current = ""; setInspectorTab("chat");
-    const instance = new Constructor(); recognizer.current = instance; instance.lang = "en-US"; instance.interimResults = true; instance.continuous = true;
-    instance.onstart = () => { if (recognizer.current === instance) setListening(true); };
-    instance.onend = () => { if (recognizer.current === instance) { if (composeMode === "question" && voiceTranscript.current.trim()) sendVoiceReply(instance); else stopDictation(); } };
-    instance.onerror = event => { if (recognizer.current === instance) recognizer.current = null; setListening(false); setDictationError(event.error === "not-allowed" ? "Microphone blocked. Allow access or type in chat." : event.error === "no-speech" ? "No speech heard. Try again or type in chat." : "Voice input unavailable. Try again or type in chat."); };
-    instance.onresult = event => { if (recognizer.current !== instance) return; const text = Array.from(event.results).map(result => result[0]?.transcript ?? "").join(" ").trim(); if (text) { voiceTranscript.current = text; setVoiceReply(text); setDraft(text); } };
-    try { instance.start(); } catch { recognizer.current = null; setListening(false); setDictationError("Unable to start microphone. Try again."); }
-  };
-  const sendVoiceReply = (instance: SpeechRecognitionLike) => {
-    if (recognizer.current !== instance) return;
-    const text = voiceTranscript.current.trim();
-    stopDictation(); setVoiceReply("");
-    if (text) void ask(text);
-  };
-  useEffect(() => {
-    if (!listening || microphoneMeter.speaking || !voiceReply.trim() || thinking || composeMode !== "question") return;
-    const instance = recognizer.current;
-    if (!instance) return;
-    const silenceTimer = setTimeout(() => {
-      if (recognizer.current !== instance || voiceFinalizing.current) return;
-      voiceFinalizing.current = true;
-      // Stop recognition to flush its final transcript; onend normally sends it.
-      // Some browsers omit onend, so send the latest transcript after a short grace period.
-      voiceFinalizeTimer.current = setTimeout(() => sendVoiceReply(instance), 800);
-      instance.stop();
-    }, 1200);
-    return () => clearTimeout(silenceTimer);
-  }, [listening, microphoneMeter.speaking, voiceReply, thinking, composeMode]);
+  const stopDictation = () => capture.stop();
+  const startDictation = () => { setVoiceReply(""); setInspectorTab("chat"); void capture.start(); };
   const microphone = () => {
     narrator.current?.pause();
-    if (recognizer.current) stopDictation();
+    if (listening) capture.finish();
+    else if (capture.error) capture.retry();
     else startDictation();
   };
   // Enter listening once per conversational turn, not on every meter/render update.
   // Manually stopping the mic stays respected until the next turn.
   useEffect(() => {
-    if (walkthroughOpen && speechSupported && !thinking && !replyError && (voiceStatus === "paused" || voiceStatus === "awaiting_input")) startDictation();
-  }, [walkthroughOpen, voiceStatus, segmentIndex, speechSupported, thinking, replyError]);
+    if (walkthroughOpen && speechSupported && !thinking && !capture.transcribing && !capture.error && !replyError && (voiceStatus === "paused" || voiceStatus === "awaiting_input")) startDictation();
+  }, [walkthroughOpen, voiceStatus, segmentIndex, speechSupported, thinking, replyError, capture.transcribing, capture.error]);
   const post = async (body: object) => {
     setBusy(true); setError("");
     if ("action" in body && body.action === "steer") { setBranchId(undefined); steeringStartedAt.current = Date.now() - 1000; steeringStage.current = "none"; addFlow("I'm preparing a correction for the tasked agent based on this evidence."); }
@@ -354,7 +310,7 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
       })}{!filteredTasks.length && <p className="sidebar-empty">{query ? "No matching cases" : caseStatus === "resolved" ? "No resolved exceptions" : "No open exceptions"}</p>}</div>
     </aside>
     <main className="review-main">
-          <WalkthroughIsland replyError={replyError} onRetry={()=>void ask(draft)} title={answerNarration ? "Mangekyo" : undefined} thinking={thinking} autoSend={composeMode === "question"} listening={listening} speaking={microphoneMeter.speaking} levels={microphoneMeter.bars} reply={voiceReply} inputError={dictationError || microphoneMeter.error} speechSupported={speechSupported} onListen={microphone} error={voiceError} caption={liveCaption} spokenCharIndex={spokenCharIndex} open={walkthroughOpen} status={voiceStatus} available={voiceAvailable} explanation={answerNarration ?? narration} index={segmentIndex} snapshots={record.snapshots} annotationNumbers={annotationNumbers} onStart={() => { if (answerNarration) { voiceSession.current++; stopDictation(); setWalkthroughOpen(true); narrator.current?.play(answerNarration, 0, true, true); return; } if (narration) { voiceSession.current++; setAnswerNarration(undefined); stopDictation(); setWalkthroughOpen(true); setCompareOpen(false); narrator.current?.play(narration, 0, false); } }} onContinue={() => { stopDictation(); narrator.current?.continue(); }} onPause={() => narrator.current?.pause()} onResume={() => { stopDictation(); narrator.current?.resume(); }} onClose={() => { voiceSession.current++; stopDictation(); narrator.current?.stop(); setWalkthroughOpen(false); }} onSeek={index => { if (narration) narrator.current?.play(narration, index, false); }}/>
+          <WalkthroughIsland transcribing={capture.transcribing} replyError={replyError} onRetry={()=>void ask(draft)} title={answerNarration ? "Mangekyo" : undefined} thinking={thinking} autoSend={composeMode === "question"} listening={listening} speaking={microphoneMeter.speaking} levels={microphoneMeter.bars} reply={voiceReply} inputError={dictationError} speechSupported={speechSupported} onListen={microphone} error={voiceError} caption={liveCaption} spokenCharIndex={spokenCharIndex} open={walkthroughOpen} status={voiceStatus} available={voiceAvailable} explanation={answerNarration ?? narration} index={segmentIndex} snapshots={record.snapshots} annotationNumbers={annotationNumbers} onStart={() => { if (answerNarration) { voiceSession.current++; stopDictation(); setWalkthroughOpen(true); narrator.current?.play(answerNarration, 0, true, true); return; } if (narration) { voiceSession.current++; setAnswerNarration(undefined); stopDictation(); setWalkthroughOpen(true); setCompareOpen(false); narrator.current?.play(narration, 0, false); } }} onContinue={() => { stopDictation(); narrator.current?.continue(); }} onPause={() => narrator.current?.pause()} onResume={() => { stopDictation(); narrator.current?.resume(); }} onClose={() => { voiceSession.current++; stopDictation(); narrator.current?.stop(); setWalkthroughOpen(false); }} onSeek={index => { if (narration) narrator.current?.play(narration, index, false); }}/>
       <header className="case-header">
         <div className="case-heading"><div className="case-breadcrumb">{sidebarOpen ? <IconButton label="Hide case list" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={17}/></IconButton> : <button className="sidebar-reopen" aria-label="Show case list" aria-expanded={false} onClick={() => setSidebarOpen(true)}><PanelLeftOpen size={17}/><span>Show cases</span></button>}<a href="/escalations">Escalations</a><ChevronRight size={13}/><span>{task?.taskId.match(/\d+$/)?.[0] ? `#${task.taskId.match(/\d+$/)?.[0]}` : "Review"}</span></div><h1>{task ? task.title : "Escalations"}</h1></div>
         {task && <div className="case-header-actions"><span className={`case-status ${task.status==="resolved"?"completed":""}`}>{platformRunId ? <>{record.platformReview?.status === "resolved" ? "Completed" : record.platformReview?.status === "ready_for_approval" ? "Ready for approval" : record.platformReview?.status === "running" ? "Agent running" : "Needs escalation"}</> : runReviewStatus(record,originalRun?.id??"") === "Completed" ? <><Check size={12}/>Completed</> : <><i/>{runReviewStatus(record,originalRun?.id??"")}</>}</span>{platformRunId && <a className="review-primary" href={`/desk?tab=reviews&accountId=${encodeURIComponent(record.platformReview?.accountId ?? "")}`}>Review on overview</a>}{canResolve && <button className="review-primary" onClick={resolveCase} disabled={busy}><Check size={15}/> Approve correction</button>}<ReviewMenu items={[
