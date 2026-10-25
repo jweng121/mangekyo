@@ -12,6 +12,7 @@ export interface ObservationField {
 
 /** Immutable tool result used by the shared read/write evidence renderer. */
 export interface RecordEvidence {
+  currency?: string;
   system: string;
   resource: string;
   operation: "read" | "insert" | "update" | "delete";
@@ -74,7 +75,7 @@ export interface Snapshot {
   toolResponse?: string;
   recordedJustification?: string;
   screenshotDimensions?: { width: number; height: number };
-  sourceDocument?: { url: string; filename: string; mimeType: "application/pdf"; sha256: string; pageNumber: number; pageCount: number; extraction: "pdf-text" };
+  sourceDocument?: { url: string; filename: string; mimeType: "application/pdf"; sha256: string; pageNumber: number; pageCount: number; extraction: "pdf-text" | "provided-transcript" };
 }
 
 export * from "./finance-snapshots";

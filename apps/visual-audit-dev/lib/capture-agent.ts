@@ -41,7 +41,7 @@ export async function captureStructuredCheckpoint(input: {
   run: InvestigationRun; sequence: number; actionType: AgentEvent["actionType"];
   title: string; summary: string; documentId: string; documentVersion: string;
   observation: Omit<StructuredObservation, "kind">; toolCall: string; toolResponse: string;
-  recordedJustification?: string;
+  recordedJustification?: string; auditStatus?:Snapshot["auditStatus"]; executionStatus?:Snapshot["executionStatus"];
 }): Promise<Snapshot> {
   if (input.sequence < 1 || !Number.isInteger(input.sequence)) throw new Error("Invalid checkpoint sequence");
   if (!input.documentId || !input.documentVersion) throw new Error("Document identity and version are required");
@@ -50,10 +50,10 @@ export async function captureStructuredCheckpoint(input: {
   const id = `${run.id}-snapshot-${sequence}`;
   const eventId = `${run.id}-event-${sequence}`;
   const evidence = input.observation.fields.map(field => ({ id: `${id}-${field.id}`, label: field.label, source: input.documentId, field: field.id, value: field.value }));
-  const event: AgentEvent = { id: eventId, schemaVersion: 1, runId: run.id, taskId: run.taskId, sequence, timestamp, agentId: run.agentId, agentRole: run.agentId, actionType: input.actionType, title: input.title, summary: input.summary, parentEventIds: sequence > 1 ? [`${run.id}-event-${sequence - 1}`] : [], branchId: run.branchId, snapshotId: id, status: "completed", toolCall: input.toolCall, toolResponse: input.toolResponse };
-  const snapshot: Snapshot = { id, schemaVersion: 1, eventId, runId: run.id, taskId: run.taskId, parentSnapshotId: sequence > 1 ? `${run.id}-snapshot-${sequence - 1}` : undefined, agentId: run.agentId, agentRole: run.agentId, timestamp, sequence, actionType: input.actionType, title: input.title, summary: input.summary, documentId: input.documentId, documentVersion: input.documentVersion, observation: { ...input.observation, kind: "api" }, source: input.documentId, readTargets: input.actionType === "READ" ? input.observation.fields.map(field => field.label) : [], writeTargets: input.actionType === "WRITE_CONFIRMED" ? input.observation.fields.map(field => field.label) : [], evidence, instructionVersion: "execution-adapter", policyVersion: "execution-adapter", executionStatus: "completed", auditStatus: "unreviewed", toolCall: input.toolCall, toolResponse: input.toolResponse, recordedJustification: input.recordedJustification };
+  const event: AgentEvent = { id: eventId, schemaVersion: 1, runId: run.id, taskId: run.taskId, sequence, timestamp, agentId: run.agentId, agentRole: run.agentId, actionType: input.actionType, title: input.title, summary: input.summary, parentEventIds: sequence > 1 ? [`${run.id}-event-${sequence - 1}`] : [], branchId: run.branchId, snapshotId: id, status: input.executionStatus ?? "completed", toolCall: input.toolCall, toolResponse: input.toolResponse };
+  const snapshot: Snapshot = { id, schemaVersion: 1, eventId, runId: run.id, taskId: run.taskId, parentSnapshotId: sequence > 1 ? `${run.id}-snapshot-${sequence - 1}` : undefined, agentId: run.agentId, agentRole: run.agentId, timestamp, sequence, actionType: input.actionType, title: input.title, summary: input.summary, documentId: input.documentId, documentVersion: input.documentVersion, observation: { ...input.observation, fields: input.observation.fields.map((field,index)=>({...field,sourceRef:evidence[index].id})), kind: "api" }, source: input.documentId, readTargets: input.actionType === "READ" ? input.observation.fields.map(field => field.label) : [], writeTargets: input.actionType === "WRITE_CONFIRMED" ? input.observation.fields.map(field => field.label) : [], evidence, instructionVersion: "execution-adapter", policyVersion: "execution-adapter", executionStatus: input.executionStatus ?? "completed", auditStatus: input.auditStatus ?? "unreviewed", toolCall: input.toolCall, toolResponse: input.toolResponse, recordedJustification: input.recordedJustification };
   const primaryField = input.observation.fields[0];
-  if (primaryField) snapshot.annotations = [{ id: `${id}:${primaryField.id}`, snapshotId: id, evidenceRef: evidence[0].id, label: primaryField.label, fieldPath: `observation.fields.${primaryField.id}`, textQuote: primaryField.value }];
+  if (primaryField) snapshot.annotations = [{ id: `${id}:${primaryField.id}`, snapshotId: id, evidenceRef: evidence[0].id, label: primaryField.label, fieldPath: `observation.fields.${primaryField.id}` }];
   await appendCheckpoint(event, snapshot);
   return snapshot;
 }

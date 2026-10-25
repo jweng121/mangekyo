@@ -1,5 +1,6 @@
+import {atomicRename} from "./atomic-rename";
 import "server-only";
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { tmpdir } from "node:os";
 import type { AgentEvent, AuditFinding, Escalation, InvestigationChatMessage, InvestigationRecord, InvestigationReport, InvestigationRun, MemoryEntry, Snapshot, SteeringRequest } from "../../../packages/contracts";
@@ -35,7 +36,7 @@ async function change(update: (record: InvestigationRecord) => void): Promise<vo
     update(record);
     const temporary = `${file}.${crypto.randomUUID()}.tmp`;
     await writeFile(temporary, JSON.stringify(record, null, 2));
-    await rename(temporary, file);
+    await atomicRename(temporary, file);
   });
   writeQueue = next.catch(() => {});
   await next;

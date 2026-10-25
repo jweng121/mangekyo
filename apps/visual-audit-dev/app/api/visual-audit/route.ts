@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { InvestigationReport, SteeringRequest } from "../../../../../packages/contracts";
+import { correctSettlement } from "../../../lib/erp-demo";
 import { runBrowserAgent } from "../../../lib/capture-agent";
 import { auditCapturedRun } from "../../../lib/audit-run";
 import { assertLocalAccess } from "../../../lib/local-access";
@@ -42,6 +43,7 @@ export async function POST(request: NextRequest) {
       if (instruction.length < 12 || instruction.length > 2000) return NextResponse.json({ error: "Correction must be 12 to 2000 characters" }, { status: 400 });
       const steering: SteeringRequest = { id: crypto.randomUUID(), schemaVersion: 1, parentRunId: parent.id, checkpointSnapshotId: source.id, instruction, evidenceIds: source.evidence.map(item => item.id), actorId: "local-demo-reviewer", createdAt: new Date().toISOString(), scope: body.scope === "checkpoint" ? "checkpoint" : "dependent_work", status: "submitted" };
       await addSteering(steering);
+      if(parent.taskId.startsWith("hartwell-"))return NextResponse.json(await correctSettlement(parent,steering));
       const corrected = await runBrowserAgent(request.nextUrl.origin, steering);
       await auditCapturedRun(corrected);
       const updated = await readInvestigation();

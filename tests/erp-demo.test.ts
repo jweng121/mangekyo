@@ -1,0 +1,9 @@
+﻿import {describe,it,expect} from "vitest";
+import {readFileSync} from "node:fs";
+import {checkSettlement,ownerBalances,type BankRow} from "../apps/visual-audit-dev/lib/erp-demo-model";
+const fixture=(name:string)=>JSON.parse(readFileSync(`packages/finance-core/fixtures/hartwell/erp/${name}.json`,"utf8"));
+describe("Hartwell live demo source invariants",()=>{
+ it("imports the existing deposit exactly once and reconciles owner liabilities",()=>{const all:BankRow[]=fixture("bank-transactions");const index=all.findIndex(r=>r.id==="harborline-deposit");const before=all.slice(0,index),after=all.slice(0,index+1);const total=(rows:BankRow[])=>rows.reduce((n,r)=>n+r.amountCents,0);expect(total(after)-total(before)).toBe(12500000);expect(total(after)).toBe(after.at(-1)!.balanceCents);expect(Object.values(ownerBalances(after)).reduce((n,x)=>n+x,0)).toBe(total(after));});
+ it("finds the fee error from ERP agreement and statement records, not the answer key",()=>{const allocation=fixture("allocation-agreements")[0].allocations.find((a:any)=>a.clientId==="c03");const agreement=fixture("fee-agreements").find((a:any)=>a.clientId==="c03");const statement=fixture("settlement-statements").find((a:any)=>a.id==="settlement-v1");const fee=statement.lines.find((a:any)=>a.clientId==="c03"&&a.kind==="attorney_fee").amountCents;expect(checkSettlement(allocation,agreement,fee)).toEqual({feeCents:602500,clientCents:1807500,excessCents:22500});expect(checkSettlement(allocation,agreement,602500).excessCents).toBe(0);});
+ it("refuses an unsigned agreement or a changed fee basis",()=>{expect(()=>checkSettlement({amountCents:2500000,costCents:90000},{basis:"gross",signed:true,rateBasisPoints:2500},625000)).toThrow();expect(()=>checkSettlement({amountCents:2500000,costCents:90000},{basis:"net_after_costs",signed:false,rateBasisPoints:2500},625000)).toThrow();});
+});

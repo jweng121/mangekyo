@@ -1,4 +1,5 @@
 import { PlatformShell } from "../../finance-dev/app/components/PlatformShell";
+import { DemoShortcuts } from "./DemoShortcuts";
 import { ChatDock } from "./ChatDock";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -23,7 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <PlatformShell>{children}<ChatDock/></PlatformShell>
+        <PlatformShell>{children}<ChatDock/><DemoShortcuts/></PlatformShell>
       </body>
     </html>
   );

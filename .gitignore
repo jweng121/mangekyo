@@ -40,3 +40,5 @@ output/pdf/*
 [Cc][Ll][Aa][Uu][Dd][Ee].[Mm][Dd]
 
 .next-preview/
+
+/apps/visual-audit-dev/output/

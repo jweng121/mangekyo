@@ -16,7 +16,7 @@ def pdf_read(request):
   if len(document.pages)>100: raise ValueError("PDF exceeds the 100-page local limit")
   page=document.pages[number-1]
   text=page.extract_text() or ""
-  if not text.strip(): raise ValueError("This PDF has no extractable text. Scanned PDFs require OCR, which is not enabled.")
+  if not text.strip() and not request.get("renderOnly"): raise ValueError("This PDF has no extractable text. Scanned PDFs require OCR, which is not enabled.")
   matches=page.search(request.get("pattern",""),regex=True,case=True,main_group=request.get("group",0)) if request.get("pattern") else []
   region=None;value=None
   if len(matches)==1:
@@ -59,9 +59,23 @@ CREATE TABLE IF NOT EXISTS allocation_drafts (id TEXT PRIMARY KEY, bankLine TEXT
   return {"draft":draft,"writeConfirmed":True,"record":{"system":"Harbor Trust / SQLite demo","resource":"allocation_drafts","operation":action,"status":"succeeded","filters":{"id":draft_id},"columns":[{"key":"client","label":"Client"},{"key":"legalEntity","label":"Legal entity"},{"key":"liabilityAccount","label":"Trust account"},{"key":"amount","label":"Amount (CAD)","align":"right"},{"key":"status","label":"Status"}],"rows":[draft],"rowCount":1,"truncated":False,"executedAt":stamp,"changes":changes,"transactionId":draft_id,"postingEffect":"Draft saved. Trust ledger not posted."}}
  finally: db.close()
 
+def settlement(request):
+ path=Path(request["databasePath"]);path.parent.mkdir(parents=True,exist_ok=True)
+ db=sqlite3.connect(path,timeout=15);db.row_factory=sqlite3.Row
+ try:
+  db.execute("CREATE TABLE IF NOT EXISTS settlement_drafts (id TEXT PRIMARY KEY, client TEXT, feeCents INTEGER, clientCents INTEGER, status TEXT, ledgerPosted INTEGER, createdAt TEXT)")
+  if request["action"]=="settlement_workspace":return {"drafts":[dict(r) for r in db.execute("SELECT * FROM settlement_drafts ORDER BY createdAt DESC")]}
+  row=request["row"];stamp=datetime.now(timezone.utc).isoformat()
+  if row["status"]!="held" or row["ledgerPosted"] or min(row["feeCents"],row["clientCents"])<0:raise ValueError("Only nonnegative held drafts are supported")
+  if row.get("supersedes"):db.execute("UPDATE settlement_drafts SET status = 'superseded' WHERE id = ? AND status = 'held'",(row["supersedes"],))
+  db.execute("INSERT OR IGNORE INTO settlement_drafts VALUES (?,?,?,?,?,0,?)",(row["id"],row["client"],row["feeCents"],row["clientCents"],"held",stamp));db.commit()
+  saved=dict(db.execute("SELECT * FROM settlement_drafts WHERE id=?",(row["id"],)).fetchone())
+  return {"record":{"system":"Hartwell demo / SQLite","currency":"USD","resource":"settlement_drafts","operation":"insert","status":"succeeded","filters":{"id":row["id"]},"columns":[{"key":"client","label":"Client"},{"key":"feeCents","label":"Fee (USD)"},{"key":"clientCents","label":"Client proceeds (USD)"},{"key":"status","label":"Status"}],"rows":[saved],"rowCount":1,"truncated":False,"executedAt":stamp,"transactionId":row["id"],"postingEffect":"Held draft saved. No ledger posting or payment."}}
+ finally:db.close()
+
 try:
  request=json.loads(sys.stdin.buffer.read())
- result=pdf_read(request) if request["action"]=="pdf" else ledger(request)
+ result=pdf_read(request) if request["action"]=="pdf" else settlement(request) if request["action"].startswith("settlement_") else ledger(request)
  print(json.dumps(result,ensure_ascii=True))
 except Exception as error:
  print(json.dumps({"error":str(error)}));sys.exit(1)

@@ -1,3 +1,4 @@
+import type {DemoState} from "./erp-demo-model";
 import type { InvestigationRecord } from "../../../packages/contracts";
 
 // The four rows and balances in the current Harbor Trust bank statement fixture.
@@ -10,11 +11,11 @@ export const bankStatement = {
     { id: "1043", date: "2026-10-23", reference: "X-310 / Cedar deposit", amount: 3250, balance: 141350, code: "X-310" },
   ],
 };
-export type WorkspaceClient = {id:string;name:string;legal:string;code:string;trust:string;invoice:string;amount:string;account:string};
+export type WorkspaceClient = {id:string;name:string;legal:string;code:string;trust:string;invoice:string;amount:string;account:string;balance?:number};
 export type AllocationDraft = {id:string;bankLine:string;client:string;legalEntity:string;liabilityAccount:string;invoice:string;amount:string;currency:string;status:string;ledgerPosted:number;createdAt:string};
 export type AgentDefinition = {id:string;name:string;instructions:string;createdAt:string;status:"draft"};
 export type OrchestratorMessage = {id:string;role:"user"|"assistant";text:string;createdAt:string};
-export type WorkspaceData = {bank:typeof bankStatement;clients:WorkspaceClient[];drafts:AllocationDraft[];record:InvestigationRecord;agents:AgentDefinition[];messages:OrchestratorMessage[]};
+export type WorkspaceData = {bank:typeof bankStatement;clients:WorkspaceClient[];drafts:AllocationDraft[];record:InvestigationRecord;agents:AgentDefinition[];messages:OrchestratorMessage[];simulation?:DemoState;documents?:{id:string;name:string;date:string;kind:string;href:string}[];invoices?:any[]};
 export function escalationCases(record:InvestigationRecord) {
   return record.runs.filter(run=>!run.parentRunId && record.escalations.some(e=>e.runId===run.id)).map(run=>{
     const family=new Set([run.id]);
@@ -28,7 +29,7 @@ export function escalationCases(record:InvestigationRecord) {
     return {run,latest,completed,open:!completed,
     outcome:record.snapshots.filter(s=>s.runId===latest.id).sort((a,b)=>a.sequence-b.sequence).at(-1)?.summary,
     agent:run.agentId.replaceAll(/[-_]/g," ").replace(/^./,letter=>letter.toUpperCase()),
-    workflow:run.taskId==="bank-line-1042"?"Deposit ownership":run.agentId==="trust-records-agent"?"Client record validation":run.taskId.replaceAll(/[-_]/g," ").replace(/^./,letter=>letter.toUpperCase()),
+    workflow:run.taskId.startsWith("hartwell-")?"Settlement distribution":run.taskId==="bank-line-1042"?"Deposit ownership":run.agentId==="trust-records-agent"?"Client record validation":run.taskId.replaceAll(/[-_]/g," ").replace(/^./,letter=>letter.toUpperCase()),
     finding:record.findings.find(f=>f.runId===run.id),
     snapshots:record.snapshots.filter(s=>s.runId===run.id).length,
   };});

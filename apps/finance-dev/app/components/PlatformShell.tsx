@@ -24,7 +24,7 @@ export function PlatformShell({ children }: { children: ReactNode }) {
     <aside className="platform-nav" aria-label="Main navigation">
       <Link className="platform-brand" href="/desk"><img src="/mangekyo-logo.png" width={40} height={40} alt=""/><strong>Mangekyo</strong></Link>
       <div className="workspace-nav-row">
-      <div className="workspace-label"><span className="workspace-initial">H</span><span>Harbor Trust<small>ERP workspace</small></span></div>
+      <div className="workspace-label"><span className="workspace-initial">H</span><span>Hartwell & Moreno<small>ERP workspace</small></span></div>
       <button className="nav-collapse" aria-label={collapsed ? "Expand navigation" : "Collapse navigation"} onClick={()=>setCollapsed(!collapsed)}>{collapsed ? <PanelLeftOpen size={17}/> : <PanelLeftClose size={17}/>}</button>
       </div>
       <nav>{links.map(({href,label,icon:Icon,active})=><Link key={href} href={href} title={label} aria-label={label} className={active ? "active" : ""} aria-current={active ? "page" : undefined}><Icon size={18}/><span>{label}</span></Link>)}<button className="platform-chat-button" aria-label="Chat" title="Chat" onClick={()=>openWorkspaceChat()}><MessageSquare size={18}/><span>Chat</span></button></nav>
