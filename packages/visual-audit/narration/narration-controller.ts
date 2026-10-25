@@ -45,7 +45,6 @@ export class NarrationController {
       return span;
     });
     const text = spans.map(span=>span.segment.text).join(" ");
-    this.onSegment(spans[0].segment,first);
     this.onUpdate({status:"playing",explanationId:explanation.id,segmentIndex:first,caption:"",spokenCharIndex:-1});
     this.provider.speak(text, {
       onStart:()=>{
@@ -73,12 +72,11 @@ export class NarrationController {
     if (!explanation || generation !== this.generation) return;
     const segment = explanation.segments[this.index];
     if (!segment) { this.finish(); return; }
-    this.onSegment(segment, this.index);
     this.onUpdate({ status: "playing", explanationId: explanation.id, segmentIndex: this.index, caption: "", spokenCharIndex: -1 });
     this.provider.speak(segment.text, {
       onStart: () => {
         if (generation !== this.generation) return;
-        // Replay the focus animation when buffered audio actually starts.
+        // Navigate only once the prepared audio actually starts playing.
         this.onSegment(segment, this.index);
         this.onUpdate({ status: this.status, explanationId: explanation.id, segmentIndex: this.index, caption: segment.text, spokenCharIndex: -1 });
       },

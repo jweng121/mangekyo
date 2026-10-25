@@ -38,7 +38,7 @@ test("highlights reject unrecorded field paths and invented image coordinates", 
 });
 
 test("narration synchronizes segments and supports pause, resume, stop, and replay", () => {
-  const callbacks: { onEnd: () => void; onError: (error: string) => void }[] = [];
+  const callbacks: Parameters<TtsProvider["speak"]>[1][] = [];
   const spoken: string[] = [];
   const states: PlaybackUpdate[] = [];
   const visited: string[] = [];
@@ -54,15 +54,20 @@ test("narration synchronizes segments and supports pause, resume, stop, and repl
   const controller = new NarrationController(provider, update => states.push(update), (segment?: NarrationSegment) => { if (segment) visited.push(segment.snapshotId ?? ""); });
   const explanation = buildIssueExplanation("message-1", finding, fixture.snapshots);
   controller.play(explanation);
+  assert.equal(visited.length, 0, "keep the current snapshot while audio prepares");
+  callbacks[0].onStart?.();
   assert.equal(visited[0], "snapshot-original-maker");
   controller.pause(); assert(paused);
   controller.resume(); assert(!paused);
   callbacks[0].onEnd();
+  assert.equal(visited.length, 1, "next segment also waits for audio");
+  callbacks[1].onStart?.();
   assert.equal(visited[1], "snapshot-original-bank");
   controller.stop();
   callbacks[1].onEnd();
   assert.equal(visited.length, 2, "stale callback must not advance after stop");
   controller.replay();
+  callbacks[2].onStart?.();
   assert.equal(visited[2], "snapshot-original-maker");
   assert(spoken.length === 3 && stopped >= 2);
   assert(states.some(state => state.status === "paused"));
@@ -111,10 +116,12 @@ test("conversational narration waits for the operator before advancing", () => {
   const provider: TtsProvider = { isAvailable: () => true, speak: (_text, next) => { callbacks = next; }, pause() {}, resume() {}, stop() {} };
   const controller = new NarrationController(provider, update => updates.push(update), segment => { if (segment) visited.push(segment.id); });
   controller.play(buildIssueExplanation("dialogue-test", finding, fixture.snapshots), 0, false);
+  callbacks!.onStart?.();
   callbacks!.onEnd();
   assert.equal(updates.at(-1)?.status, "awaiting_input");
   assert.equal(visited.length, 1);
   controller.continue();
+  callbacks!.onStart?.();
   assert.equal(visited.length, 2);
   controller.stop();
   controller.continue();
@@ -167,6 +174,7 @@ test("continuous audio changes snapshots at word boundaries without another gene
   ]};
   controller.play(explanation,0,true,true);
   expectSingleTrack();
+  assert.deepEqual(visited,[],"continuous track must be ready before navigation");
   callbacks!.onStart?.();callbacks!.onBoundary?.(5);
   assert.equal(updates.at(-1)?.segmentIndex,0);
   controller.pause();callbacks!.onBoundary?.(20);assert.equal(updates.at(-1)?.segmentIndex,0);
