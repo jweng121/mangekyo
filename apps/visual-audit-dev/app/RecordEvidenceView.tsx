@@ -1,0 +1,19 @@
+"use client";
+import type { Snapshot } from "../../../packages/contracts";
+
+export function RecordEvidenceView({ snapshot, onEvidence, focused }: { snapshot: Snapshot; onEvidence: (id: string) => void; focused?: string }) {
+  const record = snapshot.observation.record;
+  if (!record) return <div className="evidence-structured"><header><h3>{snapshot.title}</h3></header><table className="record-fields"><tbody>{snapshot.observation.fields.map(field => <tr key={field.id}><th>{field.label}</th><td>{field.value}</td></tr>)}</tbody></table>{snapshot.observation.changes?.length ? <section className="record-changes"><h4>Changes</h4>{snapshot.observation.changes.map(change => <div key={change.field}><span>{change.field}</span><del>{change.before}</del><strong>{change.after}</strong></div>)}</section> : null}{snapshot.observation.output && <dl className="record-outcome">{Object.entries(snapshot.observation.output).map(([key,value]) => <div key={key}><dt>{key.replace(/([A-Z])/g, " $1")}</dt><dd>{value}</dd></div>)}</dl>}</div>;
+  const annotation = snapshot.annotations?.[0];
+  const operation = { read: "Read", insert: "Insert", update: "Update", delete: "Delete" }[record.operation];
+  return <div className="evidence-structured record-view">
+    <header><div><span className="record-operation">{operation} <span aria-hidden="true"> / </span> {record.status}</span><h3>{({ trust_clients: "Trust clients", allocation_drafts: "Allocation drafts" } as Record<string, string>)[record.resource] ?? record.resource.replaceAll("_", " ")}</h3></div><time dateTime={record.executedAt}>{new Date(record.executedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</time></header>
+    <p className="record-source">{record.system}</p>
+    <dl className="record-filters">{Object.entries(record.filters).map(([key, value]) => <div key={key}><dt>{key}</dt><dd>{value}</dd></div>)}</dl>
+    <div className="record-table-scroll"><table className="record-fields"><thead><tr>{record.columns.map(column => <th key={column.key} style={{ textAlign: column.align }}>{column.label}</th>)}</tr></thead><tbody>{record.rows.map((row, i) => <tr key={i} className={annotation?.id === focused ? "record-focused" : ""} onClick={() => annotation && onEvidence(annotation.evidenceRef)} tabIndex={annotation ? 0 : undefined} onKeyDown={event => { if (annotation && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); onEvidence(annotation.evidenceRef); } }} aria-label={annotation ? `View annotation: ${annotation.label}` : undefined}>{record.columns.map(column => <td key={column.key} style={{ textAlign: column.align }}>{row[column.key] === null ? "Null" : column.align === "right" && row[column.key] !== "" && Number.isFinite(Number(row[column.key])) ? Number(row[column.key]).toLocaleString("en-CA", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : String(row[column.key] ?? "")}</td>)}</tr>)}</tbody></table></div>
+    {!record.rows.length && <p className="record-empty">No matching records</p>}
+    {record.changes?.length ? <section className="record-diff"><h4>Saved changes</h4><table className="record-fields"><thead><tr><th>Field</th><th>Before</th><th>After</th></tr></thead><tbody>{record.changes.map(change => <tr key={change.field}><th>{({ client: "Client", legalEntity: "Legal entity", liabilityAccount: "Trust account", invoice: "Funding reference" } as Record<string, string>)[change.field] ?? change.field}</th><td className="record-before">{change.before}</td><td className="record-after">{change.after}</td></tr>)}</tbody></table></section> : null}
+    <footer><span>{record.rowCount} {record.rowCount === 1 ? "record" : "records"}{record.truncated ? " / partial result" : ""}</span>{record.postingEffect && <span>{record.postingEffect}</span>}</footer>
+    <details className="record-raw"><summary>JSON view</summary><pre>{JSON.stringify(record.rows, null, 2)}</pre></details>
+  </div>;
+}

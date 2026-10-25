@@ -1,9 +1,11 @@
-export type * from "./finance";
 export type * from "./events";
 export type * from "./snapshots";
-export * from "./investigation";
-// EvidenceReference is intentionally not re-exported: the finance shape owns that name here.
-export type {
-  ActionType, ExecutionStatus, AuditStatus, AgentEvent, ObservationField, StructuredObservation,
-  EvidenceAnnotation, Snapshot, AuditFinding, Escalation, SteeringRequest, CorrectionRequest,
-} from "./agent";
+export type * from "./audit";
+export type * from "./corrections";
+export type * from "./memory";
+export type * from "./agents";
+export type * from "./narration";
+export type * from "./investigation";
+
+export * from "./finance-investigation";
+export type { SyntheticRecord, FinanceCase, FinanceOwner, FinanceTransaction, FinanceDocument, FinanceTask, FinanceCaseBundle, EvidenceReference as FinanceEvidenceReference } from "./finance";

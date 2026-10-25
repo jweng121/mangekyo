@@ -1,0 +1,5 @@
+import type { ExecutionBranch, SteeringRequest } from "@mangekyo/contracts";
+
+export function BranchComparison({ branch, steering }: { branch: ExecutionBranch; steering: SteeringRequest }) {
+  return <div className="comparison"><div className="comparison-head"><div><div className="eyebrow">BRANCH COMPARISON</div><h3>One checkpoint. Two outcomes.</h3></div><span className="mock-label">SIMULATED</span></div><div className="comparison-grid"><div><small>ORIGINAL · {branch.parentRunId}</small><strong>Client A</strong><p>Proposal followed invoice name. Payment reference remained unresolved.</p><span className="status-pill flagged">Flagged</span></div><div><small>CORRECTED · {branch.runId}</small><strong>Client B</strong><p>Maker rechecked B-204 and agreed with the independent checker.</p><span className="status-pill clear">Proposal only</span></div></div><p className="comparison-foot">Steering {steering.id} by {steering.actorId} · Forked from {branch.forkSnapshotId}. No transaction was executed or replayed.</p></div>;
+}

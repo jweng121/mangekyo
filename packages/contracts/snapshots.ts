@@ -1,54 +1,80 @@
-import type { EvidenceReference, FinanceTask, SyntheticRecord } from "./finance";
+import type { ActionType, AuditStatus, EvidenceReference, ExecutionStatus } from "./events";
+import type { EvidenceAnnotation } from "./narration";
 
-/** Structured state at a persisted event, with no generated reasoning or screenshot. */
-export interface InitialFinanceSnapshot extends SyntheticRecord {
-  snapshotId: string;
-  eventId: string;
-  taskId: string;
-  runId: string;
-  sequence: number;
-  timestamp: number;
-  taskState: FinanceTask;
-  inputs: {
-    transactionId: string;
-    candidateOwnerId: string;
-    evidenceRefs: EvidenceReference[];
-  };
-  output: {
-    allocationStatus: "unallocated";
-    allocatedAmountCents: 0;
-    approved: false;
-    investigationStatus: "not_started";
-  };
+export interface ObservationField {
+  id: string;
+  label: string;
+  value: string;
+  sourceRef?: string;
+  emphasis?: "read" | "modified" | "conflict" | "memory";
+  bounds?: { x: number; y: number; width: number; height: number };
 }
 
-export interface InvestigationSnapshot extends SyntheticRecord {
-  snapshotId: string;
-  eventId: string;
-  taskId: string;
-  runId: string;
-  sequence: number;
-  timestamp: number;
-  taskState: FinanceTask;
-  inputs: {
-    transactionId: string;
-    candidateOwnerId: string;
-    evidenceRefs: EvidenceReference[];
-    contextRunId: string;
-    instructionVersion: string;
-  };
-  output: {
-    allocationStatus: "unallocated";
-    allocatedAmountCents: 0;
-    approved: false;
-    investigationStatus: import("./investigation").InvestigationStatus;
-    providerMode: import("./investigation").FinanceAgentMode;
-    simulated: boolean;
-    result: import("./investigation").FinanceAgentOutput | null;
-    deterministicChecks: import("./investigation").DeterministicChecks | null;
-    error: import("./investigation").InvestigationError | null;
-    reportSource?: import("./investigation").FinanceReportSource;
-  };
+/** Immutable tool result used by the shared read/write evidence renderer. */
+export interface RecordEvidence {
+  system: string;
+  resource: string;
+  operation: "read" | "insert" | "update" | "delete";
+  status: "succeeded" | "failed" | "proposed";
+  filters: Record<string, string>;
+  columns: { key: string; label: string; align?: "left" | "right" }[];
+  rows: Record<string, string | number | boolean | null>[];
+  rowCount: number;
+  truncated: boolean;
+  executedAt: string;
+  changes?: { field: string; before: string; after: string }[];
+  transactionId?: string;
+  postingEffect?: string;
 }
 
-export type FinanceSnapshot = InitialFinanceSnapshot | InvestigationSnapshot;
+export interface StructuredObservation {
+  kind: "api" | "document" | "browser" | "synthetic";
+  label: string;
+  fields: ObservationField[];
+  input?: Record<string, string>;
+  output?: Record<string, string>;
+  changes?: { field: string; before: string; after: string }[];
+  toolInteractions?: { tool: string; request: string; response: string }[];
+  documentText?: string;
+  record?: RecordEvidence;
+}
+
+export interface Snapshot {
+  id: string;
+  schemaVersion: 1;
+  eventId: string;
+  runId: string;
+  taskId: string;
+  parentSnapshotId?: string;
+  documentId?: string;
+  documentVersion?: string;
+  viewport?: { width: number; height: number; page?: number };
+  targetRegion?: { x: number; y: number; width: number; height: number };
+  agentId: string;
+  agentRole: string;
+  timestamp: string;
+  sequence: number;
+  actionType: ActionType;
+  title: string;
+  summary: string;
+  screenshot?: { url: string; provenance: "actual" | "simulated"; alt: string; capturedAt?: string; artifactId?: string };
+  observation: StructuredObservation;
+  source: string;
+  readTargets: string[];
+  writeTargets: string[];
+  evidence: EvidenceReference[];
+  annotations?: EvidenceAnnotation[];
+  instructionVersion: string;
+  policyVersion: string;
+  executionStatus: ExecutionStatus;
+  auditStatus: AuditStatus;
+  memoryRefs?: string[];
+  browserUrl?: string;
+  toolCall?: string;
+  toolResponse?: string;
+  recordedJustification?: string;
+  screenshotDimensions?: { width: number; height: number };
+  sourceDocument?: { url: string; filename: string; mimeType: "application/pdf"; sha256: string; pageNumber: number; pageCount: number; extraction: "pdf-text" };
+}
+
+export * from "./finance-snapshots";

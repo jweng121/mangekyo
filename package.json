@@ -2,10 +2,12 @@
   "name": "mangekyo",
   "private": true,
   "packageManager": "pnpm@10.20.0",
-  "engines": { "node": ">=22.12.0" },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
-    "dev": "pnpm --filter @mangekyo/visual-audit-playground dev",
-    "build": "pnpm --filter @mangekyo/visual-audit-playground build",
+    "dev": "pnpm --filter @mangekyo/visual-audit-dev dev",
+    "build": "pnpm --filter @mangekyo/visual-audit-dev build",
     "typecheck": "tsc --noEmit -p convex/tsconfig.json && tsc --noEmit -p tsconfig.tests.json && pnpm -r --if-present typecheck",
     "dev:finance": "pnpm --filter @mangekyo/finance-dev dev",
     "build:finance": "pnpm --filter @mangekyo/finance-dev build",
@@ -16,7 +18,10 @@
     "dev:monitored-agent": "tsx scripts/monitored-agent/runner.ts",
     "demo:reset": "tsx apps/demo-erp/data/reset.ts",
     "demo:seed": "tsx apps/demo-erp/data/reset.ts",
-    "demo:test": "vitest run && playwright test"
+    "demo:test": "vitest run && playwright test",
+    "typecheck:convex": "pnpm --filter @mangekyo/visual-audit-dev exec tsc --noEmit -p ../../convex/tsconfig.json",
+    "smoke": "pnpm --filter @mangekyo/visual-audit-dev smoke",
+    "dev:playground": "pnpm --filter @mangekyo/visual-audit-playground dev"
   },
   "dependencies": {
     "@mangekyo/contracts": "workspace:*",

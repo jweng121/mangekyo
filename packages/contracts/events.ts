@@ -1,53 +1,35 @@
-import type { EvidenceReference, SyntheticRecord } from "./finance";
+export type ActionType = "READ" | "PROPOSE" | "DECISION" | "WRITE_ATTEMPT" | "WRITE_CONFIRMED" | "HANDOFF" | "AUDIT" | "ESCALATE" | "STEER" | "MEMORY_WRITE";
+export type ExecutionStatus = "running" | "completed" | "blocked" | "simulated";
+export type AuditStatus = "unreviewed" | "clear" | "flagged" | "needs_review";
 
-/** Persisted append-only facts; sequence orders events within a task. Timestamps are Unix ms. */
-export interface TaskCreatedEvent extends SyntheticRecord {
-  eventId: string;
-  taskId: string;
-  runId: string;
-  sequence: number;
-  type: "finance.task.created";
-  timestamp: number;
-  actor: { type: "system"; component: "finance-dev.synthetic-seed" };
-  evidenceRefs: EvidenceReference[];
-  payload: {
-    transactionId: string;
-    candidateOwnerId: string;
-    amountCents: number;
-    currency: "USD";
-    allocationStatus: "unallocated";
-  };
+export interface EvidenceReference {
+  id: string;
+  label: string;
+  source: string;
+  field?: string;
+  value?: string;
+  href?: string;
 }
 
-export type InvestigationEventType = "finance.investigation.started" | "finance.evidence.retrieved" |
-  "finance.checks.completed" | "finance.provider.started" | "finance.provider.result_received" |
-  "finance.validation.failed" | "finance.investigation.failed" | "finance.question.raised" |
-  "finance.clarification.saved" | "finance.investigation.resumed" | "finance.investigation.completed";
-
-export interface InvestigationEvent extends SyntheticRecord {
-  eventId: string;
-  taskId: string;
+export interface AgentEvent {
+  id: string;
+  schemaVersion: 1;
   runId: string;
+  taskId: string;
   sequence: number;
-  type: InvestigationEventType;
-  timestamp: number;
-  actor: { type: "system"; component: "finance-investigation" } |
-    { type: "human"; component: "finance-dev"; identity: string; authenticated: boolean };
-  evidenceRefs: EvidenceReference[];
-  payload: {
-    mode: import("./investigation").FinanceAgentMode;
-    simulated: boolean;
-    message: string;
-    instructionVersion: string;
-    policyVersions: string[];
-    contextRunId?: string;
-    parentRunId?: string;
-    externalRunId?: string;
-    reportSource?: import("./investigation").FinanceReportSource;
-    questionId?: string;
-    clarificationId?: string;
-    errorCode?: string;
-  };
+  timestamp: string;
+  agentId: string;
+  agentRole: string;
+  actionType: ActionType;
+  title: string;
+  summary: string;
+  parentEventIds: string[];
+  branchId: string;
+  snapshotId: string;
+  status: ExecutionStatus;
+  toolCall?: string;
+  toolResponse?: string;
+  browserUrl?: string;
 }
 
-export type FinanceEvent = TaskCreatedEvent | InvestigationEvent;
+export * from "./finance-events";
