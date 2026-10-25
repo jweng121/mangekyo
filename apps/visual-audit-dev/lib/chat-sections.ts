@@ -3,7 +3,12 @@ import type { Snapshot, SnapshotChatSection } from "../../../packages/contracts"
 // Navigation is only allowed to evidence supplied to this answer.
 export function parseChatSections(raw: string, snapshots: Snapshot[]) {
   let value: unknown;
-  try { value = JSON.parse(raw.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "")); }
+  // Some responses wrap otherwise valid JSON in a textual respond invocation.
+  // Unwrap only this complete envelope; never execute it or salvage partial JSON.
+  let json = raw.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
+  const envelope = json.match(/^<invoke\s+name=["']respond["']\s*>\s*([\s\S]*?)\s*<\/invoke>$/);
+  if (envelope) json = envelope[1];
+  try { value = JSON.parse(json); }
   catch { throw new Error("The assistant returned an incomplete answer. Please try again."); }
   const entries = (value as { sections?: unknown[] } | null)?.sections;
   if (!Array.isArray(entries) || !entries.length) throw new Error("The assistant returned no answer sections.");
