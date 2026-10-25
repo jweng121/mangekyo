@@ -17,7 +17,7 @@ export const lawFirmSteps = [
   "Daniel Okafor sends $2,500.00 toward his retainer",
   "J NGUYEN sends $1,200.00 with the memo case fees",
   "Two Bayview Title wires quote the same escrow instruction",
-  "Riley requests $6,000.00 for Raymond Cho's expert witness",
+  "Riley requests $900,000.00 for Raymond Hayes's expert witness",
   "The agent proposes an insurance claim-number policy",
   "Harborline sends $18,000.00 for Westbrook HOA",
   "A paralegal moves $3,000.00 of Chen & Park fees to the firm with no invoice",

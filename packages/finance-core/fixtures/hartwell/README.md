@@ -54,8 +54,8 @@ Two Estuary Title wires have the same reference; both actually arrived and
 one was returned. A $3,750.00 bank charge hits the firm's charge-clearing ledger
 and is replaced from operating the next day; no client is charged.
 
-**A: matched month-end, negative client during the month.** Cho starts with
-$270,000.00. Riley pays a $900,000.00 expert invoice October 9. Cho is at -$630,000.00 through
+**A: matched month-end, negative client during the month.** Hayes starts with
+$270,000.00. Riley pays a $900,000.00 expert invoice October 9. Hayes is at -$630,000.00 through
 October 29, then pays $780,000.00 October 30, ending at $150,000.00. Every bank transaction
 has a balanced journal, so all six month ends still reconcile. The Trust
 Compliance Auditor must inspect daily client balances. The separate temporary
@@ -180,7 +180,7 @@ The fake agency wording is deliberately distinct from an actual agency notice.
 
 `verify.py` independently reads the exported JSON, CSV, PDF and text files.
 It recomputes bank running balances and journal debit/credit totals, reconciles
-all client subsidiary ledgers each month, reconstructs Cho's daily balance,
+all client subsidiary ledgers each month, reconstructs Hayes's daily balance,
 checks all answer-key arithmetic, signed/unsigned versions, policy allocation,
 email headers and account mismatch, invoice line extensions, evidence links,
 PDF rendering, PDF/text amounts, and artifact hashes. `--check-determinism`

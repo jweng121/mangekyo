@@ -14,7 +14,7 @@ const LAW = "law-firm-demo-v1";
 const raw = (recordType: string, rawId: string, datasetVersion = LAW): RawPointer => ({ system: "demo", recordType, rawId, datasetVersion });
 
 export const UNCLEARED_PAYOUT_PURPOSE = "Scorecard: Delgado client share before the check clears";
-export const OVERDRAW_PURPOSE = "Scorecard: Raymond Cho expert witness, more than he has";
+export const OVERDRAW_PURPOSE = "Scorecard: Raymond Hayes expert witness, more than he has";
 
 export type PlantKey = "wrong-client" | "duplicate" | "uncleared-payout" | "overdraw" | "unsupported-claim" | "bounced-check";
 export interface Plant {
@@ -42,7 +42,7 @@ export const PLANTS: Plant[] = [
     rightAnswer: "Blocked by L2: the funds haven't cleared.",
     subject: { kind: "payment", purpose: UNCLEARED_PAYOUT_PURPOSE, rule: "L2" } },
   { key: "overdraw", label: "Overdraw", catcher: "lock",
-    mistake: "Riley asks to pay $6,000.00 for Raymond Cho, who has $1,800.00.",
+    mistake: "Riley asks to pay $900,000.00 for Raymond Hayes, who has $270,000.00.",
     rightAnswer: "Blocked by L1: the pool has the cash, but it belongs to other clients.",
     subject: { kind: "payment", purpose: OVERDRAW_PURPOSE, rule: "L1" } },
   { key: "unsupported-claim", label: "Unsupported claim", catcher: "checker",

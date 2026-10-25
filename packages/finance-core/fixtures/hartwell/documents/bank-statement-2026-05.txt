@@ -24,7 +24,7 @@
 
     05-04      ACH REFUND DANIEL OKAFOR                                                $19,177.50                              $766,120.50
 
-    05-05      ACH CR RAYMOND CHO                                                                        $270,000.00         $1,036,120.50
+    05-05      ACH CR RAYMOND HAYES                                                                      $270,000.00         $1,036,120.50
 
     05-05      ACH FROM JAMIE NGUYEN                                                                     $825,894.00         $1,862,014.50
 

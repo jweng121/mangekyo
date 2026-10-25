@@ -225,8 +225,8 @@ describe("Trust Compliance Auditor", () => {
     expect(report.status).toBe("clean");
     expect(report.reviewed.owners).toBe(7);
     const unsigned = await t.query(api.financeAudit.monthlyReconciliationReport, { accountId, month: "2026-10" });
-    expect(unsigned).toMatchObject({ signedOff: null, bookCents: 33_950_000, threeWay: { status: "matched" } });
-    expect(unsigned.bank.adjustedCents).toBe(33_950_000);
+    expect(unsigned).toMatchObject({ signedOff: null, bookCents: 60_770_000, threeWay: { status: "matched" } });
+    expect(unsigned.bank.adjustedCents).toBe(60_770_000);
     await expect(t.mutation(api.financeAudit.signOffMonthlyReconciliation, { accountId, month: "2026-10", dev: riley })).rejects.toThrow("approver");
     await expect(t.mutation(api.financeAudit.signOffMonthlyReconciliation, { accountId, month: "2026-11", dev: sam })).rejects.toThrow("only after it ends");
     const signed = await t.mutation(api.financeAudit.signOffMonthlyReconciliation, { accountId, month: "2026-10", note: "Reviewed against the bank statement.", dev: sam });
