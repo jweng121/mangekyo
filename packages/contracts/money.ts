@@ -213,8 +213,12 @@ export interface ThreeWayCheckResult {
   currency: string;
   cutoff: number;
   status: "matched" | "mismatched" | "insufficient_data";
-  /** adjustedCents = statement + post-cutover feed + reconciling items + outstanding items (optional on legacy snapshots). */
-  bank: { statementCents: number | null; postAnchorCents: number; reconcilingCents: number; outstandingCents?: number; adjustedCents: number | null; clearedCents: number | null; pendingCents: number };
+  /**
+   * adjustedCents = statement + post-cutover feed + reconciling items + outstanding items (optional on legacy snapshots).
+   * adjustedClearedCents = adjustedCents − pending deposits − deposits in transit: the pool figure lock cards show. Outstanding
+   * payments are already out of it; clearedCents adds them back (the bank's own cleared view).
+   */
+  bank: { statementCents: number | null; postAnchorCents: number; reconcilingCents: number; outstandingCents?: number; adjustedCents: number | null; clearedCents: number | null; adjustedClearedCents?: number | null; pendingCents: number };
   bookCents: number;
   ownersTotalCents: number;
   unallocatedCents: number;
@@ -290,9 +294,17 @@ export interface MoneyProposal {
   cancellationReason?: string;
   blockedReasons?: LockFailure[];
   postedEntryIds?: string[];
+  /** Blocked payment: a person saw it and closed the card. The proposal stays blocked in the history. */
+  acknowledged?: { by: string; at: number; note: string | null };
   createdAt: number;
   updatedAt: number;
 }
+
+/** Why a blocked payment no longer needs a person: a later request for the same line passed the lock, or a person acknowledged it. */
+export interface BlockedSuperseded { reason: "later_request" | "acknowledged"; proposalId: string | null; by: string; at: number }
+
+/** A proposal as the overview returns it. `superseded` is derived on read and never stored. */
+export type MoneyProposalView = MoneyProposal & { superseded?: BlockedSuperseded };
 
 export type LockCode =
   | "OWNER_INSUFFICIENT_FUNDS" | "FUNDS_NOT_CLEARED" | "MISSING_EVIDENCE" | "SELF_APPROVAL"

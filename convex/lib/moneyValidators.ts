@@ -49,7 +49,7 @@ export const ownerBalance = v.object({
 export const causeCode = v.union(...(["BANK_TXN_WITHOUT_LEDGER_ENTRY", "LEDGER_ENTRY_WITHOUT_BANK_TXN", "AMOUNT_MISMATCH", "DUPLICATE_POSTING", "UNCLEARED_DEPOSIT_ALLOCATED", "UNKNOWN_OWNER_ENTRY", "CURRENCY_MISMATCH", "RECONCILING_ITEM_WITHOUT_DETAIL", "NO_OPENING_BALANCE", "OUTSTANDING_ITEM_AGED", "COMMINGLING"] as const).map(code => v.literal(code)));
 export const threeWay = v.object({
   accountId: v.string(), currency: v.string(), cutoff: v.number(), status: v.union(v.literal("matched"), v.literal("mismatched"), v.literal("insufficient_data")),
-  bank: v.object({ statementCents: v.union(v.number(), v.null()), postAnchorCents: v.number(), reconcilingCents: v.number(), outstandingCents: v.optional(v.number()), adjustedCents: v.union(v.number(), v.null()), clearedCents: v.union(v.number(), v.null()), pendingCents: v.number() }),
+  bank: v.object({ statementCents: v.union(v.number(), v.null()), postAnchorCents: v.number(), reconcilingCents: v.number(), outstandingCents: v.optional(v.number()), adjustedCents: v.union(v.number(), v.null()), clearedCents: v.union(v.number(), v.null()), adjustedClearedCents: v.optional(v.union(v.number(), v.null())), pendingCents: v.number() }),
   bookCents: v.number(), ownersTotalCents: v.number(), unallocatedCents: v.number(),
   differences: v.object({ bankMinusBook: v.union(v.number(), v.null()), bookMinusOwners: v.number() }),
   causes: v.array(v.object({ code: causeCode, severity: v.union(v.literal("mismatch"), v.literal("warning")), message: v.string(), amountCents: v.union(v.number(), v.null()), sourceIds: v.array(v.string()), ownerIds: v.array(v.string()), unattributed: v.boolean() })),
@@ -76,8 +76,11 @@ export const proposal = v.object({
   ownerId: v.optional(v.string()), amountCents: v.number(), purpose: v.string(), fundingSourceId: v.optional(v.string()),
   payoutKind: v.optional(payoutKind), matterId: v.optional(v.string()), settlementSourceId: v.optional(v.string()), payeeOwnerId: v.optional(v.string()),
   approvedBy: v.optional(v.string()), approvalId: v.optional(v.string()), rejectionReason: v.optional(v.string()), hold: v.optional(proposalHold), cancellationReason: v.optional(v.string()), blockedReasons: v.optional(v.array(lockFailure)),
-  postedEntryIds: v.optional(v.array(v.string())), createdAt: v.number(), updatedAt: v.number(),
+  postedEntryIds: v.optional(v.array(v.string())), acknowledged: v.optional(v.object({ by: v.string(), at: v.number(), note: v.union(v.string(), v.null()) })), createdAt: v.number(), updatedAt: v.number(),
 });
+export const blockedSuperseded = v.object({ reason: v.union(v.literal("later_request"), v.literal("acknowledged")), proposalId: v.union(v.string(), v.null()), by: v.string(), at: v.number() });
+/** The overview's proposal: `superseded` is derived on read, never stored. */
+export const proposalView = proposal.extend({ superseded: v.optional(blockedSuperseded) });
 export const transition = v.object({
   transitionId: v.string(), proposalId: v.string(), accountId: v.string(), from: v.union(proposalStatus, v.null()), to: proposalStatus,
   actor: v.string(), reason: v.union(v.string(), v.null()), lock: v.union(lockResult, v.null()), at: v.number(),

@@ -178,6 +178,27 @@ export const cancelHeld = mutation({
   },
 });
 
+/** "Acknowledge": a person closes a blocked payment card. The proposal stays blocked in the history; nothing moves. Either role may do it. */
+export const acknowledgeBlocked = mutation({
+  args: { proposalId: v.string(), note: v.optional(v.string()), dev: money.devIdentity }, returns: money.proposal,
+  handler: async (ctx, args) => {
+    const actor = await resolveActor(ctx, args.dev);
+    const note = args.note?.trim() || null;
+    if (note && note.length > 4000) throw new ConvexError("A note can be at most 4000 characters.");
+    const proposal = await getProposal(ctx, args.proposalId);
+    if (proposal.kind !== "payment" || proposal.status !== "blocked") throw new ConvexError(`${args.proposalId} is not a blocked payment.`);
+    if (proposal.acknowledged) return proposal;
+    const row = await ctx.db.query("financeProposals").withIndex("by_proposalId", (q) => q.eq("proposalId", proposal.proposalId)).unique();
+    if (!row) throw new Error(`Unknown proposal ${proposal.proposalId}`);
+    const acknowledged = { by: actor.identity, at: Date.now(), note };
+    await ctx.db.patch("financeProposals", row._id, { acknowledged, updatedAt: acknowledged.at });
+    const next = { ...proposal, acknowledged, updatedAt: acknowledged.at };
+    await appendMoneyEvent(ctx, { accountId: proposal.accountId, type: "finance.money.blocked_acknowledged", actor, operationId: proposal.proposalId, stage: "acknowledged", proposal: next, sourceIds: proposal.evidenceSourceIds,
+      message: `${actor.identity} acknowledged blocked payment ${proposal.proposalId}${note ? `: ${note}` : "."} It stays blocked in the history; no money moved.` });
+    return next;
+  },
+});
+
 /** "Continue": a person resumes the held approve or post step; every rule runs again, including L4. */
 export const continueHeld = mutation({
   args: { proposalId: v.string(), dev: money.devIdentity }, returns: outcome,

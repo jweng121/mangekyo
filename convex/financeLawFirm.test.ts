@@ -58,6 +58,9 @@ it.each([true, false])("runs all ten law-firm steps with Okafor posted and polic
   const detail = (await t.query(api.financeTrust.getDisbursement, { runId: second.runId }))!;
   expect(detail.state).toBe("ready_for_approval");
   expect(detail.lines.map(l => [l.line.kind, l.status, l.lock?.allowed])).toEqual([["attorney_fee", "pending_approval", true], ["costs", "pending_approval", true], ["client_share", "pending_approval", true]]);
+  // The step-2 lines leave "Needs a person": each is superseded by the same line of the second run, and stays blocked in the history.
+  const byId = new Map((await view(t)).proposals.map(p => [p.proposalId, p]));
+  expect(firstDisbursement.proposalIds.map(id => [byId.get(id)?.status, byId.get(id)?.superseded])).toEqual(second.proposalIds.map(id => ["blocked", { reason: "later_request", proposalId: id, by: `agent:disbursement:${second.runId}`, at: expect.any(Number) }]));
   // Every line's claim was verified against the signed statement (and the fee agreement for the fee line).
   expect(second.claimCheck?.claims.every(c => c.verdict === "supported")).toBe(true);
   expect(second.claimCheck?.claims.find(c => c.findingId === "payout:line-1")?.sourceRefs).toEqual(["demo:document:delgado-settlement-statement:v1", "demo:document:delgado-fee-agreement:v1"]);
@@ -102,6 +105,18 @@ it.each([true, false])("runs all ten law-firm steps with Okafor posted and polic
   await next(t, 7);
   const cho = (await view(t)).proposals.find(p => p.ownerId === "demo:owner:raymond-cho")!;
   expect(cho.status).toBe("blocked"); expect(cho.blockedReasons?.map(f => f.rule)).toContain("L1");
+  // Nothing later replaces Cho's request, so it needs a person until someone acknowledges it. Acknowledging moves no money.
+  expect(cho.superseded).toBeUndefined();
+  await expect(t.mutation(api.financeProposals.acknowledgeBlocked, { proposalId: second.proposalIds[0], dev: sam })).rejects.toThrow("is not a blocked payment");
+  const beforeAck = await view(t);
+  const acknowledged = await t.mutation(api.financeProposals.acknowledgeBlocked, { proposalId: cho.proposalId, note: " Told the client. ", dev: sam });
+  expect(acknowledged).toMatchObject({ status: "blocked", acknowledged: { by: "dev-unverified:sam", note: "Told the client." } });
+  expect((await t.mutation(api.financeProposals.acknowledgeBlocked, { proposalId: cho.proposalId, dev: riley })).acknowledged?.by).toBe("dev-unverified:sam");
+  const choAfter = (await view(t)).proposals.find(p => p.proposalId === cho.proposalId)!;
+  expect(choAfter).toMatchObject({ status: "blocked", superseded: { reason: "acknowledged", proposalId: null, by: "dev-unverified:sam" } });
+  expect((await view(t)).balances).toEqual(beforeAck.balances);
+  const acks = (await t.query(api.financeDesk.getActivity, { accountId, paginationOpts: { numItems: 200, cursor: null } })).page.filter(e => e.type === "finance.money.blocked_acknowledged");
+  expect(acks).toHaveLength(1);
   await next(t, 8);
   const desk = await t.query(api.financeDesk.getDeskData, { accountId });
   const insurance = desk.policies.find(p => p.statement === "Insurance checks that quote a claim number go to the client on that claim.")!;

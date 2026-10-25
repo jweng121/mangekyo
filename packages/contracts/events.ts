@@ -59,7 +59,7 @@ export type FinanceEvent = TaskCreatedEvent | InvestigationEvent;
 export type MoneyEventType = "finance.money.import_completed" | "finance.money.lock_checked" |
   "finance.money.proposal_transitioned" | "finance.money.ledger_posted" | "finance.money.bank_item_recorded" |
   "finance.money.auto_investigation" | "finance.money.hold_updated" |
-  "finance.money.policy_approved" | "finance.money.feed_step" |
+  "finance.money.policy_approved" | "finance.money.feed_step" | "finance.money.blocked_acknowledged" |
   /** A step snapshot captured for a run on the account stream (disbursement, reconciler, audit); sourceIds carry the snapshotId. */
   "finance.money.snapshot_captured" | "finance.money.audit_completed";
 

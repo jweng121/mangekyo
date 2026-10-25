@@ -135,7 +135,7 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
 
       <h3>Three numbers</h3>
       <div className={`three-numbers ${tw.status}`} role={tw.status === "matched" ? "status" : "alert"}>
-        <div><span>Bank</span><strong>{money(tw.bank.adjustedCents)}</strong><small>statement {money(tw.bank.statementCents)} {tw.bank.postAnchorCents !== 0 && `+ feed ${money(tw.bank.postAnchorCents)}`} {tw.bank.reconcilingCents !== 0 && `+ reconciling ${money(tw.bank.reconcilingCents)}`} {(tw.bank.outstandingCents ?? 0) !== 0 && `+ outstanding ${money(tw.bank.outstandingCents ?? 0)}`} · cleared {money(tw.bank.clearedCents)} · pending {money(tw.bank.pendingCents)}</small></div>
+        <div><span>Bank</span><strong>{money(tw.bank.adjustedCents)}</strong><small>statement {money(tw.bank.statementCents)} {tw.bank.postAnchorCents !== 0 && `+ feed ${money(tw.bank.postAnchorCents)}`} {tw.bank.reconcilingCents !== 0 && `+ reconciling ${money(tw.bank.reconcilingCents)}`} {(tw.bank.outstandingCents ?? 0) !== 0 && `+ outstanding ${money(tw.bank.outstandingCents ?? 0)}`} · adjusted cleared {money(tw.bank.adjustedClearedCents ?? null)} · pending {money(tw.bank.pendingCents)}</small></div>
         <div><span>Books</span><strong>{money(tw.bookCents)}</strong><small>sum of ledger entries</small></div>
         <div><span>Owners total</span><strong>{money(tw.ownersTotalCents)}</strong><small>includes unallocated {money(tw.unallocatedCents)}</small></div>
         <p className="verdict">{tw.status === "matched" ? "Matched" : tw.status === "mismatched" ? `Mismatched · bank − books ${money(tw.differences.bankMinusBook)} · books − owners ${money(tw.differences.bookMinusOwners)}` : "Insufficient data"}</p>
@@ -190,6 +190,7 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
           {p.rejectionReason && <p>Rejected: {p.rejectionReason}</p>}
           {p.cancellationReason && <p>Cancelled while on hold: {p.cancellationReason}</p>}
           {p.blockedReasons && <ul>{p.blockedReasons.map((f, i) => <li key={i}><code>{f.rule} {f.code}</code> {f.message}</li>)}</ul>}
+          {p.superseded && <p>{p.superseded.reason === "acknowledged" ? <>Acknowledged by <code>{p.superseded.by}</code>; no longer needs a person.</> : <>Superseded by <code>{p.superseded.proposalId}</code>, a later request for the same line that passed the lock.</>}</p>}
           {p.status === "pending_approval" && <div className="row">
             <button disabled={busy || role !== "approver"} onClick={() => run(async () => show(await approve({ proposalId: p.proposalId, dev })))}>Approve</button>
             <input aria-label={`Rejection reason for ${p.proposalId}`} placeholder="Reason for rejection (required)" value={reasons[p.proposalId] ?? ""} onChange={e => setReasons({ ...reasons, [p.proposalId]: e.target.value })} disabled={role !== "approver"} />
@@ -217,7 +218,7 @@ export function MoneyPanel({ connected }: { connected: boolean }) {
         {role !== "requester" && <p className="hint">Switch to the requester role to request a payment.</p>}
       </form>
       {lastLock && overview.proposals.find(p => p.proposalId === lastLock.proposalId)?.kind === "payment" && <><h4>Lock result for {lastLock.proposalId}</h4><LockView lock={lastLock.lock} />
-        {lastLock.lock.facts.ownerAvailableCents !== undefined && <p>Pooled account cleared cash {money(lastLock.lock.facts.poolClearedCents as number | null)} · owner available {money(lastLock.lock.facts.ownerAvailableCents as number | null)} · requested {money(lastLock.lock.facts.requestedCents as number | null)}</p>}</>}
+        {lastLock.lock.facts.ownerAvailableCents !== undefined && <p>Pooled account, adjusted cleared {money((lastLock.lock.facts.poolAdjustedClearedCents ?? lastLock.lock.facts.poolClearedCents) as number | null)} · owner available {money(lastLock.lock.facts.ownerAvailableCents as number | null)} · requested {money(lastLock.lock.facts.requestedCents as number | null)}</p>}</>}
 
       <h3>Posted ledger entries</h3>
       <p>Append-only. Showing the latest {overview.entries.length}.</p>

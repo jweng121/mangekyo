@@ -183,6 +183,7 @@ export function threeWayCheck(state: AccountLedgerState, cutoff: number, options
   const pendingCents = sum(feed.filter(row => row.clearing === "pending").map(signed));
   const outstandingCents = sum(outstanding.map(row => row.amountCents));
   const adjustedCents = statement ? sum([statement.amountCents, postAnchorCents, reconcilingCents, outstandingCents]) : null;
+  const inTransitCents = sum(outstanding.filter(row => row.kind === "deposit_in_transit").map(row => row.amountCents));
   if (!statement) causes.push({ code: "NO_OPENING_BALANCE", severity: "mismatch", message: "No bank statement balance at or before the cutoff; the bank figure cannot be computed.", amountCents: null, sourceIds: [], ownerIds: [], unattributed: true });
 
   const bankMinusBook = adjustedCents === null ? null : adjustedCents - bookCents;
@@ -194,7 +195,8 @@ export function threeWayCheck(state: AccountLedgerState, cutoff: number, options
   const status = !statement ? "insufficient_data" : bankMinusBook === 0 && bookMinusOwners === 0 && !causes.some(row => row.severity === "mismatch") ? "matched" : "mismatched";
   return {
     accountId: account.accountId, currency: account.currency, cutoff, status,
-    bank: { statementCents: statement?.amountCents ?? null, postAnchorCents, reconcilingCents, outstandingCents, adjustedCents, clearedCents: adjustedCents === null ? null : adjustedCents - pendingCents - outstandingCents, pendingCents },
+    bank: { statementCents: statement?.amountCents ?? null, postAnchorCents, reconcilingCents, outstandingCents, adjustedCents, clearedCents: adjustedCents === null ? null : adjustedCents - pendingCents - outstandingCents,
+      adjustedClearedCents: adjustedCents === null ? null : adjustedCents - pendingCents - inTransitCents, pendingCents },
     bookCents, ownersTotalCents, unallocatedCents, differences: { bankMinusBook, bookMinusOwners }, causes, outstanding, outstandingMaxDays: maxDays,
   };
 }

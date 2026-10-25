@@ -51,6 +51,9 @@ describe("three-way check causes", () => {
     expect(posted.bank.outstandingCents).toBe(-100_000);
     expect(posted.bank.adjustedCents).toBe(before.bank.adjustedCents! - 100_000);
     expect(posted.bank.clearedCents).toBe(before.bank.clearedCents);
+    // The pool figure lock cards show: the outstanding payment is already out of it.
+    expect(before.bank.adjustedClearedCents).toBe(before.bank.clearedCents);
+    expect(posted.bank.adjustedClearedCents).toBe(before.bank.clearedCents! - 100_000);
     expect(affectedOwners(posted)).toEqual(new Set());
     state.bankTransactions.push(demoSettlement("pay-1", 100_000, NOW - 5, "demo:owner-record:yankee"));
     const settled = threeWayCheck(state, NOW);
@@ -76,6 +79,9 @@ describe("three-way check causes", () => {
     const state = demoState();
     state.entries.push(entry({ entryId: "dit", amountCents: 40_000, kind: "deposit_received", bankReference: "DEMO-LOCKBOX-1", effectiveAt: NOW }));
     expect(threeWayCheck(state, NOW).outstanding).toEqual([expect.objectContaining({ kind: "deposit_in_transit", amountCents: 40_000 })]);
+    // Not cleared money: the deposit in transit counts in the adjusted balance but not in the pool figure.
+    const { bank } = threeWayCheck(state, NOW);
+    expect(bank.adjustedClearedCents).toBe(bank.adjustedCents! - bank.pendingCents - 40_000);
     expect(threeWayCheck(state, NOW).status).toBe("matched");
     expect(threeWayCheck(state, NOW + 6 * 24 * 60 * 60 * 1000).causes.map(c => c.code)).toContain("OUTSTANDING_ITEM_AGED");
   });

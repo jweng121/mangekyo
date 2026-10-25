@@ -1,7 +1,8 @@
 import { ConvexError, v } from "convex/values";
-import type { NormalizedAccountBundle, NormalizedBankTransaction } from "@mangekyo/contracts";
+import type { MoneyProposalView, NormalizedAccountBundle, NormalizedBankTransaction } from "@mangekyo/contracts";
 import { candidateOwnerSourceIds, depositCaseId, formatCents, normalizeErpState, type ErpState } from "@mangekyo/finance-core/intake";
 import { activeAllocations, importLedgerEntries, ownerBalances } from "@mangekyo/finance-core/ledger";
+import { supersededBlocked } from "@mangekyo/finance-core/gateway";
 import { DEMO_ACCOUNT_ID, demoMoneyBundle, demoRunOf, demoSettlement, demoUnrecordedOutflow } from "@mangekyo/finance-core/fixtures/demo-money";
 // Read-only use of the teammate's deterministic generator; his runtime state file is never touched.
 import { createSeed } from "../apps/demo-erp/data/seed";
@@ -422,7 +423,7 @@ export const getAccountOverview = query({
     outstandingMaxDays: v.number(), reconcilingItems: v.array(money.reconcilingItem),
     account: money.storedAccount, threeWay: money.threeWay, balances: v.array(money.ownerBalance), deposits: v.array(depositRow),
     owners: v.array(money.owner), documents: v.array(v.object({ sourceId: v.string(), title: v.string(), documentType: v.string(), excerpt: v.string() })),
-    obligations: v.array(money.obligation), entries: v.array(money.ledgerEntry), proposals: v.array(money.proposal),
+    obligations: v.array(money.obligation), entries: v.array(money.ledgerEntry), proposals: v.array(money.proposalView),
   }),
   handler: async (ctx, { accountId, cutoff, now }) => {
     const loaded = await loadAccount(ctx, accountId);
@@ -436,13 +437,14 @@ export const getAccountOverview = query({
       return { transaction, status, taskId: tasks.find(t => t.bankSourceId === transaction.sourceId)?.taskId ?? null, allocatedTo };
     });
     const { _id, _creationTime, ...account } = loaded.account;
+    const superseded = supersededBlocked(loaded.proposals);
     return {
       outstandingMaxDays: outstandingMaxDays(), reconcilingItems: loaded.state.reconcilingItems,
       account, threeWay: checkAccount(loaded.state, at, now ?? latestActivity(loaded)), balances: ownerBalances(loaded.state, at), deposits,
       owners: loaded.state.owners, documents: loaded.documents.map(d => ({ sourceId: d.sourceId, title: d.title, documentType: d.documentType, excerpt: d.excerpt })),
       obligations: loaded.obligations,
       entries: [...loaded.state.entries].sort((a, b) => b.effectiveAt - a.effectiveAt || b.entryId.localeCompare(a.entryId)).slice(0, 200),
-      proposals: [...loaded.proposals].sort((a, b) => b.createdAt - a.createdAt).slice(0, 100),
+      proposals: [...loaded.proposals].sort((a, b) => b.createdAt - a.createdAt).slice(0, 100).map((p): MoneyProposalView => superseded.has(p.proposalId) ? { ...p, superseded: superseded.get(p.proposalId)! } : p),
     };
   },
 });

@@ -31,7 +31,7 @@ function Bars({ pool, available, requested, ownerName }: { pool: number | null; 
   const row = (label: string, value: number, color: string, valueColor?: string) => <div>
     <div className="bar-l"><span>{label}</span><span className="n" style={{ color: valueColor }}>{money(value)}</span></div>
     <div className="track"><div className="fill" style={{ width: pct(value), background: color }} /></div></div>;
-  return <div className="bars">{row("Pooled account, cleared", pool ?? 0, "var(--ok)")}{row(`${ownerName}, available`, available, "var(--ink)")}{row("Requested", requested, "var(--bad)", "var(--bad)")}</div>;
+  return <div className="bars">{row("Pooled account, adjusted cleared", pool ?? 0, "var(--ok)")}{row(`${ownerName}, available`, available, "var(--ink)")}{row("Requested", requested, "var(--bad)", "var(--bad)")}</div>;
 }
 
 function Card({ tone, tag, tagTone, title, children }: { tone?: "bad" | "wait"; tag: string; tagTone: string; title: ReactNode; children: ReactNode }) {
@@ -66,7 +66,7 @@ export default function Desk() {
     settle: useMutation(api.financeIntake.simulateSettlement), record: useMutation(api.financeIntake.recordBankItem), approve: useMutation(api.financeProposals.approveProposal),
     post: useMutation(api.financeProposals.postProposal), reject: useMutation(api.financeProposals.rejectProposal), propose: useMutation(api.financeProposals.proposeAllocation),
     recheck: useMutation(api.financeProposals.recheckHeld), wait: useMutation(api.financeProposals.keepWaiting), cancel: useMutation(api.financeProposals.cancelHeld),
-    resume: useMutation(api.financeProposals.continueHeld), answer: useMutation(api.financeInvestigations.answerQuestion),
+    resume: useMutation(api.financeProposals.continueHeld), answer: useMutation(api.financeInvestigations.answerQuestion), acknowledge: useMutation(api.financeProposals.acknowledgeBlocked),
     feed: useMutation(api.financeIntake.feedNext), policy: useMutation(api.financeProposals.approvePolicy), allProven: useMutation(api.financeProposals.approveAllProven),
     approveFix: useMutation(api.financeReconciliation.approveCorrection), rejectFix: useMutation(api.financeReconciliation.rejectCorrection),
     planted: useMutation(api.financeScorecard.runPlanted), batch: useMutation(api.financeScorecard.runBatch), start: useMutation(api.financeInvestigations.startInvestigation),
@@ -237,14 +237,20 @@ export default function Desk() {
     </Card> });
   }
 
-  for (const p of proposals.filter(p => p.kind === "payment" && p.status === "blocked").slice(0, 3)) {
+  // One pool figure on every lock card: the adjusted cleared balance (pending deposits and deposits in transit out; outstanding payments already out).
+  const pool = tw ? tw.bank.adjustedClearedCents ?? null : null;
+  // Superseded (a later request for the same line passed, or a person acknowledged it) leaves the queue; the history keeps it.
+  for (const p of proposals.filter(p => p.kind === "payment" && p.status === "blocked" && !p.superseded).slice(0, 3)) {
     const l1 = p.blockedReasons?.some(f => f.rule === "L1");
     const l2 = p.blockedReasons?.some(f => f.rule === "L2");
     const funding = overview?.deposits.find(d => d.transaction.sourceId === p.fundingSourceId)?.transaction;
     queue.push({ key: p.proposalId, node: <Card tone="bad" tag={`Blocked by the lock · ${p.blockedReasons?.map(f => `rule ${f.rule}`).join(", ")}`} tagTone="t-bad" title={`${money(p.amountCents)} for ${names.owner(p.ownerId)} can't go out`}>
-      {l1 && <Bars pool={tw?.bank.clearedCents ?? null} available={available(p.ownerId)} requested={p.amountCents} ownerName={names.owner(p.ownerId)} />}
-      <p>Requested by {personName(p.requestedBy)}. {l2 && funding ? `At request time, the ${money(funding.amountCents)} ${funding.counterparty.replace(" Insurance", "")} check hadn't cleared yet.` : l1 ? `The account holds ${money(tw?.bank.adjustedCents)}, but ${names.owner(p.ownerId)} has ${money(available(p.ownerId))}. Paying this would use other clients' money.` : `Stopped because ${reasonWords(p.blockedReasons?.map(f => f.code) ?? [])}.`} This request stays blocked in the history.</p>
-      {l2 && funding?.clearing === "cleared" && <button className="btn alt sm" disabled={busy || acting !== "riley"} onClick={() => setPayOpen({ ownerId: p.ownerId, amount: (p.amountCents / 100).toFixed(2), purpose: "Delgado client share after clearing", fundingSourceId: p.fundingSourceId })}>Make a new request as riley</button>}
+      {l1 && <Bars pool={pool} available={available(p.ownerId)} requested={p.amountCents} ownerName={names.owner(p.ownerId)} />}
+      <p>Requested by {personName(p.requestedBy)}. {l2 && funding ? `At request time, the ${money(funding.amountCents)} ${funding.counterparty.replace(" Insurance", "")} check hadn't cleared yet.` : l1 ? `The account holds ${money(pool)} cleared, but ${names.owner(p.ownerId)} has ${money(available(p.ownerId))}. Paying this would use other clients' money.` : `Stopped because ${reasonWords(p.blockedReasons?.map(f => f.code) ?? [])}.`} This request stays blocked in the history.</p>
+      <div className="acts">
+        {l2 && funding?.clearing === "cleared" && <button className="btn alt sm" disabled={busy || acting !== "riley"} onClick={() => setPayOpen({ ownerId: p.ownerId, amount: (p.amountCents / 100).toFixed(2), purpose: "Delgado client share after clearing", fundingSourceId: p.fundingSourceId })}>Make a new request as riley</button>}
+        <button className="btn alt sm" disabled={busy} onClick={() => act(() => m.acknowledge({ proposalId: p.proposalId, dev }), "Acknowledged. It stays blocked in the history.")}>Acknowledge</button>
+      </div>
     </Card> });
   }
 
@@ -269,7 +275,6 @@ export default function Desk() {
   });
   const feed: Activity[] = activity.results.map(e => describeEvent(e, names));
   const cause = tw ? causeLine(tw, names.owner) : null;
-  const pool = tw?.bank.clearedCents ?? null;
 
   return <MotionRoot className="">
     <header className="bar"><div className="wrap bar-in">
@@ -347,7 +352,7 @@ export default function Desk() {
         </div>
 
         <section aria-label="Owners" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <div className="colhead"><h2 style={{ fontSize: 18, margin: 0 }}>Owners</h2><span style={{ fontSize: 13, color: "var(--muted)" }}>Pooled account cleared cash: <b className="n"><Money cents={pool} /></b></span></div>
+          <div className="colhead"><h2 style={{ fontSize: 18, margin: 0 }}>Owners</h2><span style={{ fontSize: 13, color: "var(--muted)" }}>Pooled account, adjusted cleared: <b className="n"><Money cents={pool} /></b></span></div>
           <div className="tbl"><table>
             <thead><tr><th>Owner</th><th className="r">Posted</th><th className="r">Not cleared</th><th className="r">Available</th><th>Status</th></tr></thead>
             <tbody>{balances.map(b => { const s = ownerStatus(b, tw); return <tr key={b.ownerId ?? "unallocated"}>
@@ -397,7 +402,7 @@ function PaymentDialog({ accountId, acting, initial, overview, onClose }: { acco
       const avail = overview.balances.find(b => b.ownerId === ownerId)?.availableCents ?? 0;
       setResult(r.proposal.status === "blocked" ? <div className="card bad" style={{ padding: 14 }}>
         <span className="tag t-bad">Blocked by the lock · {r.lock?.failures.map(f => `rule ${f.rule}`).join(", ")}</span>
-        {l1 && <Bars pool={overview.threeWay.bank.clearedCents} available={avail} requested={cents} ownerName={ownerName} />}
+        {l1 && <Bars pool={overview.threeWay.bank.adjustedClearedCents ?? null} available={avail} requested={cents} ownerName={ownerName} />}
         <p>{l1 ? `To send this, ${ownerName} needs ${money(cents - Math.max(0, avail))} more in cleared funds. The pool's cash belongs to other owners.` : `Stopped because ${reasonWords(r.lock?.failures.map(f => f.code) ?? [])}.`}</p></div>
         : <p style={{ margin: 0, color: "var(--ok)" }}>Allowed. Sent to a second person for approval.</p>);
     } catch (err) { setResult(<p style={{ color: "var(--bad)", margin: 0 }}>{errorText(err)}</p>); }

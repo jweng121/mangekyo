@@ -1,5 +1,5 @@
 import type {
-  AllocationShare, LedgerEntry, LockFailure, LockResult, MoneyProposal, NormalizedDocument, NormalizedObligation, PayoutKind, ProposalStatus, ThreeWayCheckResult,
+  AllocationShare, BlockedSuperseded, LedgerEntry, LockFailure, LockResult, MoneyProposal, NormalizedDocument, NormalizedObligation, PayoutKind, ProposalStatus, ThreeWayCheckResult,
 } from "@mangekyo/contracts";
 import { formatCents, isPositiveCents } from "../intake/cents";
 import { activeAllocations, affectedOwners, firmOwnerIds, openDisputedCents, ownerBalances, type AccountLedgerState } from "../ledger";
@@ -29,6 +29,28 @@ export function classifyFailures(failures: LockFailure[]): "pass" | "refused" | 
   if (failures.length === 0) return "pass";
   if (failures.some(f => f.rule === "L4" || f.rule === "L7")) return "refused";
   return failures.every(f => TEMPORARY.has(f.rule)) ? "temporary" : "permanent";
+}
+
+/**
+ * Blocked payments that no longer need a person, keyed by proposalId. A blocked payment is superseded when a later request
+ * for the same line passed the lock at request (same owner, payee and amount; the same settlement statement and payout kind
+ * when the blocked one names them), or when a person acknowledged it. It stays blocked in the history either way.
+ */
+export function supersededBlocked(proposals: MoneyProposal[]): Map<string, BlockedSuperseded> {
+  const out = new Map<string, BlockedSuperseded>();
+  const payee = (p: MoneyProposal) => p.payeeOwnerId ?? p.ownerId;
+  const sameLine = (blocked: MoneyProposal, later: MoneyProposal) => later.ownerId === blocked.ownerId && payee(later) === payee(blocked) && later.amountCents === blocked.amountCents
+    && (!blocked.settlementSourceId || later.settlementSourceId === blocked.settlementSourceId)
+    && (!blocked.payoutKind || !later.payoutKind || later.payoutKind === blocked.payoutKind);
+  const after = (a: MoneyProposal, b: MoneyProposal) => a.createdAt > b.createdAt || (a.createdAt === b.createdAt && a.proposalId > b.proposalId);
+  const passed = proposals.filter(p => p.kind === "payment" && p.status !== "blocked" && p.status !== "proposed")
+    .sort((a, b) => a.createdAt - b.createdAt || a.proposalId.localeCompare(b.proposalId));
+  for (const blocked of proposals.filter(p => p.kind === "payment" && p.status === "blocked")) {
+    if (blocked.acknowledged) { out.set(blocked.proposalId, { reason: "acknowledged", proposalId: null, by: blocked.acknowledged.by, at: blocked.acknowledged.at }); continue; }
+    const later = passed.find(p => after(p, blocked) && sameLine(blocked, p));
+    if (later) out.set(blocked.proposalId, { reason: "later_request", proposalId: later.proposalId, by: later.requestedBy, at: later.createdAt });
+  }
+  return out;
 }
 
 /** Plain-English hold reason for the "Needs a person" list. */
@@ -227,14 +249,15 @@ export function evaluatePayment(ctx: GatewayContext, request: PaymentRequest, ar
 
   const balance = ownerBalances(state, ctx.cutoff, request.proposalId).find(row => row.ownerId === request.ownerId);
   const facts: LockResult["facts"] = {
-    requestedCents: request.amountCents, poolBankCents: threeWay.bank.adjustedCents, poolClearedCents: threeWay.bank.clearedCents,
+    requestedCents: request.amountCents, poolBankCents: threeWay.bank.adjustedCents, poolClearedCents: threeWay.bank.clearedCents, poolAdjustedClearedCents: threeWay.bank.adjustedClearedCents ?? null,
     poolBookCents: threeWay.bookCents, ownerPostedCents: balance?.postedCents ?? null, ownerClearedCents: balance?.clearedCents ?? null,
     ownerHoldsCents: balance?.holdsCents ?? null, ownerAvailableCents: balance?.availableCents ?? null, threeWayStatus: threeWay.status,
   };
   evaluated.push("L2", "L1");
   if (balance && isPositiveCents(request.amountCents)) {
     const funding = request.fundingSourceId ? state.bankTransactions.find(row => row.sourceId === request.fundingSourceId) : undefined;
-    const pool = threeWay.bank.clearedCents === null ? "unknown" : formatCents(threeWay.bank.clearedCents, state.account.currency);
+    const poolCents = threeWay.bank.adjustedClearedCents ?? null;
+    const pool = poolCents === null ? "unknown" : formatCents(poolCents, state.account.currency);
     const money = (cents: number) => formatCents(cents, state.account.currency);
     if (request.fundingSourceId && (!funding || funding.clearing !== "cleared" || funding.bookedAt > ctx.cutoff)) {
       failures.push({ rule: "L2", code: "FUNDS_NOT_CLEARED", message: `Funding deposit ${request.fundingSourceId} has not cleared; its money cannot be spent yet.`, sourceIds: [request.fundingSourceId] });
