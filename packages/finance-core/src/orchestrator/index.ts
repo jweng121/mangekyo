@@ -6,7 +6,7 @@ import { FinanceProviderError } from "../agent/types";
  */
 export const ORCHESTRATOR_STATES = ["received", "investigating", "validating", "checking", "needs_person", "ready_for_approval", "rejected", "waiting_to_clear", "failed"] as const;
 export type OrchestratorState = (typeof ORCHESTRATOR_STATES)[number];
-export type OrchestratorKind = "deposit" | "reconciliation";
+export type OrchestratorKind = "deposit" | "reconciliation" | "disbursement" | "audit";
 
 /** A run is in flight; a second start returns it instead of starting another. */
 export const ACTIVE_STATES: ReadonlySet<OrchestratorState> = new Set(["investigating", "validating", "checking"]);
@@ -47,7 +47,7 @@ export type EventKind = "transition" | "retry" | "budget_check";
 export type Trigger =
   | "deposit_received" | "auto_start" | "person_started" | "person_answered" | "person_corrected" | "deposit_cleared"
   | "mismatch_found" | "budget_refused" | "provider_result" | "provider_error" | "timeout" | "validated" | "validation_failed"
-  | "checker_result" | "checker_failed";
+  | "checker_result" | "checker_failed" | "person_approved_correction" | "person_rejected_correction" | "audit_requested" | "allocation_posted";
 export interface OrchestratorActor { type: "system" | "agent" | "code" | "person"; identity: string }
 export interface OrchestratorReason { code: string; message: string }
 

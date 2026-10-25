@@ -6,14 +6,14 @@ import { extractCreaoReport } from "../agent/creaoResult";
 
 /** Agent 2. Runs after an investigation output passes validation and before anything reaches a person. */
 
-/** "off" only appears on runs saved before CHECKER_MODE existed; new runs are checked by mock or creao. */
-export type CheckerAgentMode = "off" | "mock" | "creao";
+/** "off" only appears on runs saved before CHECKER_MODE existed; new runs are checked by mock, creao or external. */
+export type CheckerAgentMode = "off" | "mock" | "creao" | "external";
 
 export interface AgentVerdict { findingId: string; verdict: ClaimVerdict; reason: string; sourceSays?: string | null }
 
 /** Same shape as the investigator's provider: mock now, a separate CREAO agent later. */
 export interface ClaimCheckerAgent {
-  mode: "mock" | "creao";
+  mode: "mock" | "creao" | "external";
   check(input: FinanceAgentInput, output: FinanceAgentOutput, code: ClaimCheck[]): Promise<AgentVerdict[]>;
 }
 
@@ -140,7 +140,7 @@ export interface CheckerVerdict { findingId: string; verdict: ClaimVerdict; sour
 export interface CheckerOutput { schemaVersion: typeof CHECKER_OUTPUT_VERSION; verdicts: CheckerVerdict[] }
 
 export interface ClaimCheckerProvider {
-  mode: "mock" | "creao";
+  mode: "mock" | "creao" | "external";
   start(input: CheckerInput): Promise<ProviderExecution>;
   poll(externalRunId: string): Promise<ProviderExecution>;
 }
@@ -195,7 +195,7 @@ export function validateCheckerOutput(value: unknown, input: CheckerInput): Chec
 }
 
 /** The final, stored result: code verdicts plus validated agent verdicts. */
-export function finalizeClaimCheck(code: ClaimCheck[], output: CheckerOutput, mode: "mock" | "creao", now: number): ClaimCheckResult {
+export function finalizeClaimCheck(code: ClaimCheck[], output: CheckerOutput, mode: "mock" | "creao" | "external", now: number): ClaimCheckResult {
   return claimCheckResult(combineVerdicts(code, output.verdicts.map(v => ({ findingId: v.findingId, verdict: v.verdict, reason: v.reason, sourceSays: v.sourceSays }))), mode, now);
 }
 
@@ -240,11 +240,11 @@ export class CreaoClaimCheckerProvider implements ClaimCheckerProvider {
   }
 }
 
-/** CHECKER_MODE: mock (default) or creao. Anything else is a configuration error; there is no silent fallback. */
-export function parseCheckerMode(raw: string | undefined): "mock" | "creao" | null {
+/** EVIDENCE_CHECKER_MODE / CHECKER_MODE: mock (default), creao or external. Anything else is a configuration error; there is no silent fallback. */
+export function parseCheckerMode(raw: string | undefined): "mock" | "creao" | "external" | null {
   const value = raw?.trim().toLowerCase() ?? "";
   if (value === "") return "mock";
-  return value === "mock" || value === "creao" ? value : null;
+  return value === "mock" || value === "creao" || value === "external" ? value : null;
 }
 
 export function createClaimCheckerProvider(config: { mode: "mock" | "creao"; appId?: string; apiKey?: string; timeoutMs?: number }, fetchImpl?: typeof fetch): ClaimCheckerProvider {

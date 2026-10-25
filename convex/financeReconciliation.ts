@@ -1,6 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import { FinanceProviderError } from "@mangekyo/finance-core/agent";
-import { buildReconciliationInput, causeKey, checkReconciliationFindings, correctionEntries, evaluateCorrection, mockReconciliationProvider, reconcilableCauses, ReconciliationValidationError, validateReconciliationOutput, type CorrectingEntry, type ReconciliationInput } from "@mangekyo/finance-core/reconciliation";
+import { createAgentProvider } from "@mangekyo/finance-core/agents";
+import { buildReconciliationInput, causeKey, checkReconciliationFindings, correctionEntries, evaluateCorrection, mockReconciliationProvider, RECON_REPORT_FIELDS, reconcilableCauses, ReconciliationValidationError, validateReconciliationOutput, type CorrectingEntry, type ReconciliationInput } from "@mangekyo/finance-core/reconciliation";
 import { callWithRetry, MAX_AUTOMATIC_RETRIES, parseProviderTimeoutMs, retryWriteConflicts } from "@mangekyo/finance-core/orchestrator";
 import { formatCents } from "@mangekyo/finance-core/intake";
 import { internal } from "./_generated/api";
@@ -11,7 +12,8 @@ import { appendMoneyEvent, checkAccount, compact, knownSourceIds, loadAccount, r
 import * as money from "./lib/moneyValidators";
 import * as orch from "./lib/orchestratorValidators";
 import { recordOnly } from "./lib/investigationRecords";
-import { CODE_ACTOR, ensureOrchestration, findOrchestration, step, SYSTEM_ACTOR } from "./lib/orchestrator";
+import { captureStep, configFor, provenanceFor } from "./lib/agents";
+import { checkBudget, CODE_ACTOR, ensureOrchestration, findOrchestration, step, SYSTEM_ACTOR } from "./lib/orchestrator";
 import { investigationError } from "./lib/validators";
 
 /**
@@ -20,7 +22,8 @@ import { investigationError } from "./lib/validators";
  */
 
 const RUN_TIMEOUT_MS = 10 * 60 * 1000;
-const AGENT = { type: "agent" as const, identity: "agent:reconciler:mock" };
+const AGENT = { type: "agent" as const, identity: "agent:reconciler" };
+const agentActor = (mode: string) => ({ type: "agent" as const, identity: `${AGENT.identity}:${mode}` });
 const reconTaskId = (accountId: string, key: string) => `recon:${accountId}:${key}`;
 
 async function findRun(ctx: MutationCtx, runId: string) {
@@ -41,11 +44,17 @@ function lockFor(ctx: MutationCtx, loaded: LoadedAccount, known: Set<string>, en
   return evaluateCorrection({ state: loaded.state, known, entry, causeKey: key, now: Date.now(), recheck: state => checkAccount(state, Date.now()), ...extra });
 }
 
-/** Scheduled after anything that can change the books. Starts one mismatch investigation per new code-found cause. Mock only for now. */
+/**
+ * Scheduled after anything that can change the books. Starts one Three-Way Reconciler run per new code-found cause.
+ * Automatic only while the intake agent is mock (a paid intake mode means a person starts everything); the reconciler's own mode
+ * may be mock, creao or external, and a paid mode is budget-checked and recorded as a real run.
+ */
 export const autoStart = internalMutation({
   args: { accountId: v.string() }, returns: v.null(),
   handler: async (ctx, { accountId }) => {
     if (providerMode() !== "mock") return null;
+    const config = configFor("reconciler");
+    if (!config.mode || !config.configured) return null;
     const loaded = await loadAccount(ctx, accountId);
     const threeWay = checkAccount(loaded.state, Date.now());
     if (threeWay.status !== "mismatched") return null;
@@ -56,11 +65,16 @@ export const autoStart = internalMutation({
       let orchestration = await ensureOrchestration(ctx, { kind: "reconciliation", taskId, accountId, subjectSourceId: cause.sourceIds[0] ?? null, trigger: "mismatch_found", actor: CODE_ACTOR,
         reason: { code: cause.code, message: `Three-way check failed: ${cause.message}` } });
       const runId = `${taskId}:run:1`;
-      const input = buildReconciliationInput({ runId, state: loaded.state, threeWay, cause, documents: loaded.documents });
       const now = Date.now();
-      await ctx.db.insert("financeReconciliationRuns", { runId, orchestrationId: orchestration.orchestrationId, accountId, causeKey: key, attempt: 1, mode: "mock", status: "investigating", input, output: null, findingChecks: [], dryRun: null, error: null, externalRunId: null, retries: 0, createdAt: now, updatedAt: now });
-      orchestration = await step(ctx, orchestration, { kind: "budget_check", to: "received", trigger: "mismatch_found", actor: CODE_ACTOR, reason: { code: "BUDGET_NOT_APPLICABLE", message: "The mismatch agent is mock-only for now; mock runs don't count against the real-run budget." } });
-      await step(ctx, orchestration, { to: "investigating", trigger: "mismatch_found", actor: SYSTEM_ACTOR, runId, activeRunId: runId, reason: { code: "MISMATCH_INVESTIGATION", message: `Mismatch agent started on ${cause.code} with the code-found cause and the ${input.records.bankTransactions.length + input.records.ledgerEntries.length} record(s) it involves.` } });
+      const budget = await checkBudget(ctx, taskId, config.realRuns, now);
+      orchestration = await step(ctx, orchestration, { kind: "budget_check", to: "received", trigger: "mismatch_found", actor: CODE_ACTOR, reason: { code: budget.code, message: budget.message }, budget });
+      if (!budget.allowed) { await step(ctx, orchestration, { to: "needs_person", trigger: "budget_refused", actor: CODE_ACTOR, reason: { code: budget.code, message: budget.message }, budget }); continue; }
+      const input = buildReconciliationInput({ runId, state: loaded.state, threeWay, cause, documents: loaded.documents });
+      const provenance = provenanceFor("reconciler");
+      await ctx.db.insert("financeReconciliationRuns", { runId, orchestrationId: orchestration.orchestrationId, accountId, causeKey: key, attempt: 1, mode: config.mode, model: provenance.model, status: "investigating", input, output: null, findingChecks: [], dryRun: null, error: null, externalRunId: null, retries: 0, createdAt: now, updatedAt: now });
+      if (config.realRuns) await ctx.db.insert("financeRealRuns", { runId, taskId, accountId, provider: "reconciler", day: new Date(now).toISOString().slice(0, 10), at: now });
+      await step(ctx, orchestration, { to: "investigating", trigger: "mismatch_found", actor: SYSTEM_ACTOR, runId, activeRunId: runId, reason: { code: "MISMATCH_INVESTIGATION", message: `Three-Way Reconciler (${config.mode}, ${provenance.model}) started on ${cause.code} with the code-found cause and the ${input.records.bankTransactions.length + input.records.ledgerEntries.length} record(s) it involves.` } });
+      await captureStep(ctx, { runId, taskId, accountId, agent: "reconciler", kind: "input_frozen", actor: CODE_ACTOR, provenance, startedAt: now, input, message: `Exactly what the Three-Way Reconciler is given for ${cause.code}.` });
       await ctx.scheduler.runAfter(0, internal.financeReconciliation.execute, { runId });
     }
     return null;
@@ -87,7 +101,7 @@ export const recordRetry = internalMutation({
   },
 });
 
-/** Mock reconciler behind the provider interface, with the same timeout and single retry as the investigator. */
+/** The reconciler in its configured mode behind the provider interface, with the same timeout and single retry as the intake agent. */
 export const execute = internalAction({
   args: { runId: v.string() }, returns: v.null(),
   handler: async (ctx, { runId }): Promise<null> => {
@@ -95,9 +109,16 @@ export const execute = internalAction({
     if (!run || run.status !== "investigating") return null;
     const timeoutMs = parseProviderTimeoutMs(env.PROVIDER_TIMEOUT_MS);
     try {
-      const execution = await callWithRetry(() => mockReconciliationProvider.start(run.input as ReconciliationInput), { timeoutMs, phase: "start", paid: false,
+      const config = configFor("reconciler");
+      const provider = createAgentProvider<ReconciliationInput>(config, mockReconciliationProvider, RECON_REPORT_FIELDS, { timeoutMs });
+      let execution = await callWithRetry(() => provider.start(run.input as ReconciliationInput), { timeoutMs, phase: "start", paid: config.realRuns === 1,
         onRetry: async error => await retryWriteConflicts(() => ctx.runMutation(internal.financeReconciliation.recordRetry, { runId, error: { code: error.code, message: error.message, retryable: error.retryable } })) });
-      if (execution.status !== "completed") throw new FinanceProviderError("provider_failed", "The reconciler did not complete.");
+      while (execution.status === "pending") {
+        if (Date.now() >= run.createdAt + RUN_TIMEOUT_MS) throw new FinanceProviderError("provider_timeout", "The reconciler did not finish before the run deadline.");
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        execution = await provider.poll(execution.externalRunId);
+      }
+      if (execution.status !== "completed") throw new FinanceProviderError(execution.error.code, execution.error.message);
       await retryWriteConflicts(() => ctx.runMutation(internal.financeReconciliation.recordResult, { runId, externalRunId: execution.externalRunId, outputJson: JSON.stringify(execution.output) }));
     } catch (error) {
       const failure = error instanceof FinanceProviderError ? { code: error.code, message: error.message, retryable: error.retryable } : { code: "provider_failure", message: "The reconciler failed unexpectedly.", retryable: false };
@@ -128,8 +149,9 @@ export const recordResult = internalMutation({
     if (Date.now() >= run.createdAt + RUN_TIMEOUT_MS) { await fail(ctx, run, { code: "timeout", message: "The mismatch investigation timed out.", retryable: false }, "timeout"); return null; }
     const orchestrationTask = run.orchestrationId.replace(/:orchestrator$/, "");
     let orchestration = (await findOrchestration(ctx, orchestrationTask))!;
+    const answeredAt = run.updatedAt;
     await ctx.db.patch("financeReconciliationRuns", run._id, { status: "validating", externalRunId: args.externalRunId, updatedAt: Date.now() });
-    orchestration = await step(ctx, orchestration, { to: "validating", trigger: "provider_result", actor: AGENT, runId: run.runId, reason: { code: "ANSWER_RECEIVED", message: "The mismatch agent answered; validating it." } });
+    orchestration = await step(ctx, orchestration, { to: "validating", trigger: "provider_result", actor: agentActor(run.mode), runId: run.runId, reason: { code: "ANSWER_RECEIVED", message: "The Three-Way Reconciler answered; validating it." } });
     const input = run.input as ReconciliationInput;
     let output;
     try {
@@ -142,6 +164,8 @@ export const recordResult = internalMutation({
     }
     await ctx.db.patch("financeReconciliationRuns", run._id, { status: "checking", output, updatedAt: Date.now() });
     orchestration = await step(ctx, orchestration, { to: "checking", trigger: "validated", actor: CODE_ACTOR, runId: run.runId, reason: { code: "VALIDATED", message: "Valid answer. Code checks its claims and dry-runs the correcting entry." } });
+    const provenance = { ...provenanceFor("reconciler"), mode: run.mode, model: run.model ?? run.mode };
+    await captureStep(ctx, { runId: run.runId, taskId: orchestrationTask, accountId: run.accountId, agent: "reconciler", kind: "output_validated", actor: agentActor(run.mode), provenance, startedAt: answeredAt, input, output, message: `${output.outcome}: ${output.explanation.slice(0, 200)}` });
     const findingChecks = checkReconciliationFindings(output, input);
     const loaded = await loadAccount(ctx, run.accountId);
     const known = await knownSourceIds(ctx, loaded);
@@ -149,6 +173,7 @@ export const recordResult = internalMutation({
     const dryRun = output.proposedEntry ? lockFor(ctx, loaded, known, output.proposedEntry, run.causeKey, { status: "proposed", requestedBy: AGENT.identity }) : null;
     const unsupported = findingChecks.find(f => !f.supported);
     const now = Date.now();
+    await captureStep(ctx, { runId: run.runId, taskId: orchestrationTask, accountId: run.accountId, agent: "evidence_checker", kind: "claims_checked", actor: CODE_ACTOR, provenance: provenanceFor("evidence_checker"), startedAt: now, input: output.findings, output: findingChecks, lockResults: null, message: `Code checked ${findingChecks.length} finding(s)${dryRun ? `; correction lock dry run ${dryRun.allowed ? "passed" : "failed"}` : ""}.` });
     if (unsupported || (dryRun && !dryRun.allowed)) {
       await ctx.db.patch("financeReconciliationRuns", run._id, { status: "rejected", findingChecks, dryRun, updatedAt: now });
       const why = unsupported ? `A claim's cited records don't contain: ${unsupported.missing.join(", ")}.` : `The correcting entry fails the lock: ${dryRun!.failures.map(f => `${f.rule} ${f.message}`).join(" ")}`;

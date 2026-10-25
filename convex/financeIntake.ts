@@ -10,7 +10,7 @@ import { internalMutation, mutation, query, type MutationCtx } from "./_generate
 import { autoInvestigationSetting, providerMode } from "./financeInvestigations";
 import { demoFeedStep, feedBundle, FEED_LENGTH, FEED_PAYMENT_PURPOSE } from "@mangekyo/finance-core/fixtures/demo-feed";
 import { lawFirmBundle } from "@mangekyo/finance-core/fixtures/law-firm";
-import { lawFirmFeedBundle, lawFirmSteps, lawId, LAW_FIRM_FEED_LENGTH } from "@mangekyo/finance-core/fixtures/law-firm-feed";
+import { lawFirmFeedBundle, lawFirmSteps, lawId, LAW_FIRM_FEED_LENGTH, PARALEGAL, PARALEGAL_FEE_PURPOSE } from "@mangekyo/finance-core/fixtures/law-firm-feed";
 import { demoAccountId } from "@mangekyo/finance-core/fixtures/demo-money";
 import { nextProposalId, submitProposal } from "./lib/money";
 import * as money from "./lib/moneyValidators";
@@ -271,15 +271,23 @@ async function advanceLawFirmFeed(ctx: MutationCtx, loaded: LoadedAccount) {
   if (step > total) return { step: total, total, label: null, done: true };
   const id = (suffix: string) => lawId(accountId, suffix);
   if ([1, 4, 5, 6, 9].includes(step)) await importBundle(ctx, lawFirmFeedBundle(step, accountId, Date.now()), "demo");
-  if (step === 2 || step === 7) {
+  // Step 2: the Disbursement agent prepares Delgado's three payout lines from the signed settlement statement before the check clears;
+  // the lock blocks each line (L2: the funds haven't cleared). After clearing and allocation it runs again on its own.
+  if (step === 2) await ctx.runMutation(internal.financeTrust.autoStartDisbursement, { accountId, bankSourceId: id("bank:txn:harborline-delgado"), trigger: "person_started" });
+  if (step === 7) {
     const now = Date.now();
     await submitProposal(ctx, { proposalId: await nextProposalId(ctx, accountId, "payment"), accountId, kind: "payment", status: "proposed", currency: "USD",
-      requestedBy: "dev-unverified:riley", origin: { type: "person" },
-      ownerId: id(`owner:${step === 2 ? "maria-delgado" : "raymond-cho"}`), amountCents: step === 2 ? 5_600_000 : 600_000,
-      purpose: step === 2 ? "Delgado client share before check clearance" : "Raymond Cho expert witness",
-      evidenceSourceIds: [id(`document:${step === 2 ? "delgado-settlement" : "cho-expert"}:v1`)],
-      ...(step === 2 ? { fundingSourceId: id("bank:txn:harborline-delgado") } : {}), createdAt: now, updatedAt: now },
+      requestedBy: "dev-unverified:riley", origin: { type: "person" }, ownerId: id("owner:raymond-cho"), amountCents: 600_000, purpose: "Raymond Cho expert witness",
+      evidenceSourceIds: [id("document:cho-expert:v1")], createdAt: now, updatedAt: now },
       { identity: "dev-unverified:riley", authenticated: false, role: "requester" });
+  }
+  // Step 10: a paralegal moves $3,000.00 of Chen & Park fees to the firm with no approved invoice and no settlement statement: blocked by L9.
+  if (step === 10) {
+    const now = Date.now();
+    await submitProposal(ctx, { proposalId: await nextProposalId(ctx, accountId, "payment"), accountId, kind: "payment", status: "proposed", currency: "USD",
+      requestedBy: PARALEGAL, origin: { type: "person" }, ownerId: id("owner:chen-park"), payeeOwnerId: id("owner:firm"), payoutKind: "attorney_fee", amountCents: 300_000, purpose: PARALEGAL_FEE_PURPOSE,
+      evidenceSourceIds: [id("owner-record:chen-park")], createdAt: now, updatedAt: now },
+      { identity: PARALEGAL, authenticated: false, role: "requester" });
   }
   if (step === 3) await ctx.runMutation(api.financeIntake.simulateDepositCleared, { bankSourceId: id("bank:txn:harborline-delgado") });
   if (step === 8) {

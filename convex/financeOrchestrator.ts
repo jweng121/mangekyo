@@ -2,22 +2,27 @@ import { v } from "convex/values";
 import { ORCHESTRATOR_STATES, parseMockFault, parseProviderTimeoutMs, utcDay } from "@mangekyo/finance-core/orchestrator";
 import { env, query } from "./_generated/server";
 import { checkerConfiguration, providerMode } from "./financeInvestigations";
+import { agentConfigurations } from "./lib/agents";
 import { recordOnly } from "./lib/investigationRecords";
 import { budgetLimits } from "./lib/orchestrator";
 import * as orch from "./lib/orchestratorValidators";
 
-const modeConfig = v.object({ mode: v.union(v.literal("mock"), v.literal("creao"), v.null()), configured: v.boolean(), message: v.string() });
+const modeOrNull = v.union(orch.agentMode, v.null());
+const modeConfig = v.object({ mode: modeOrNull, configured: v.boolean(), message: v.string() });
+const agentConfigView = v.object({ agent: orch.agentName, label: v.string(), aliases: v.array(v.string()), plannedModel: v.string(), mode: modeOrNull, model: v.string(), configured: v.boolean(), message: v.string(), realRuns: v.number(), instructionVersion: v.string() });
 
 /** Everything that decides how runs behave, minus secrets. `now` lets the query count today's real runs without reading the clock. */
 export const getConfiguration = query({
   args: { now: v.number() },
-  returns: v.object({ investigator: v.union(v.literal("mock"), v.literal("creao"), v.null()), checker: modeConfig, timeoutMs: v.number(), mockFault: v.union(v.string(), v.null()),
-    budget: v.object({ perDay: v.number(), perDeposit: v.number(), usedToday: v.number(), day: v.string() }) }),
+  returns: v.object({ investigator: modeOrNull, checker: modeConfig, timeoutMs: v.number(), mockFault: v.union(v.string(), v.null()),
+    budget: v.object({ perDay: v.number(), perDeposit: v.number(), usedToday: v.number(), day: v.string() }),
+    /** The five trust agents: mode, model (never a key) and whether each is configured. */
+    agents: v.array(agentConfigView) }),
   handler: async (ctx, { now }) => {
     const day = utcDay(now);
     const usedToday = (await ctx.db.query("financeRealRuns").withIndex("by_day", q => q.eq("day", day)).take(1000)).length;
     return { investigator: providerMode(), checker: checkerConfiguration(), timeoutMs: parseProviderTimeoutMs(env.PROVIDER_TIMEOUT_MS),
-      mockFault: providerMode() === "mock" ? parseMockFault(env.MOCK_PROVIDER_FAULT) : null, budget: { ...budgetLimits(), usedToday, day } };
+      mockFault: providerMode() === "mock" ? parseMockFault(env.MOCK_PROVIDER_FAULT) : null, budget: { ...budgetLimits(), usedToday, day }, agents: agentConfigurations() };
   },
 });
 

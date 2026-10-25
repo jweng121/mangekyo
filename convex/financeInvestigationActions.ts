@@ -1,11 +1,13 @@
 import type { InvestigationError } from "@mangekyo/contracts";
-import { createFinanceAgentProvider, FinanceProviderError, type ProviderExecution } from "@mangekyo/finance-core/agent";
-import { createClaimCheckerProvider, type CheckerInput } from "@mangekyo/finance-core/checker";
+import { FinanceProviderError, INVESTIGATION_REPORT_FIELDS, mockFinanceAgentProvider, type FinanceAgentProvider, type ProviderExecution } from "@mangekyo/finance-core/agent";
+import { createAgentProvider } from "@mangekyo/finance-core/agents";
+import { mockClaimCheckerProvider, type CheckerInput, type ClaimCheckerProvider } from "@mangekyo/finance-core/checker";
 import { callWithRetry, isRetryable, parseMockFault, parseProviderTimeoutMs, retryWriteConflicts, withMockFault, withTimeout, WRITE_CONFLICT } from "@mangekyo/finance-core/orchestrator";
 import type { FunctionArgs, FunctionReference, FunctionReturnType } from "convex/server";
 import { internal } from "./_generated/api";
 import { env, internalAction, type ActionCtx } from "./_generated/server";
 import { v } from "convex/values";
+import { configFor } from "./lib/agents";
 
 function safeError(error: unknown): InvestigationError {
   if (error instanceof FinanceProviderError) return { code: error.code, message: error.message, retryable: error.retryable };
@@ -20,6 +22,14 @@ const mutate = <M extends FunctionReference<"mutation", "internal">>(ctx: Action
 const timeoutMs = () => parseProviderTimeoutMs(env.PROVIDER_TIMEOUT_MS);
 const retry = (ctx: ActionCtx, runId: string, provider: "investigator" | "checker") =>
   async (error: FinanceProviderError) => await mutate(ctx, internal.financeInvestigations.recordRetry, { runId, provider, error: safeError(error) });
+
+/** Trust Intake in its configured mode (mock, its CREAO app, or an external model), behind the one provider interface. */
+function intakeProvider(mode: string, appId: string | undefined): FinanceAgentProvider {
+  const config = configFor("intake");
+  if (config.mode !== mode) throw new FinanceProviderError("configuration_error", `This run was started in ${mode} mode but INTAKE_MODE is now ${config.mode ?? "invalid"}; it needs a person.`);
+  const base = createAgentProvider(appId ? { ...config, appId } : config, mockFinanceAgentProvider, INVESTIGATION_REPORT_FIELDS, { timeoutMs: timeoutMs() });
+  return { mode: config.mode, start: input => base.start(input), poll: id => base.poll(id) };
+}
 
 async function saveExecution(ctx: ActionCtx, runId: string, execution: ProviderExecution): Promise<void> {
   if (execution.status === "pending") {
@@ -43,9 +53,9 @@ export const execute = internalAction({
     if (!run) return null;
     try {
       if (!run.providerInput) throw new Error("Missing immutable provider context");
-      const base = createFinanceAgentProvider({ mode: run.mode, appId: run.providerAppId ?? env.CREAO_APP_ID, apiKey: env.CREAO_API_KEY, timeoutMs: timeoutMs() });
-      const provider = withMockFault(base, run.mode === "mock" ? parseMockFault(env.MOCK_PROVIDER_FAULT) : null);
-      const execution = await callWithRetry(() => provider.start(run.providerInput!), { timeoutMs: timeoutMs(), phase: "start", paid: run.mode === "creao", onRetry: retry(ctx, runId, "investigator") });
+      const base = intakeProvider(run.mode, run.providerAppId);
+      const provider = withMockFault(base as never, run.mode === "mock" ? parseMockFault(env.MOCK_PROVIDER_FAULT) : null) as unknown as FinanceAgentProvider;
+      const execution = await callWithRetry(() => provider.start(run.providerInput!), { timeoutMs: timeoutMs(), phase: "start", paid: run.mode !== "mock", onRetry: retry(ctx, runId, "investigator") });
       await saveExecution(ctx, runId, execution);
     } catch (error) {
       await mutate(ctx, internal.financeInvestigations.recordFailure, { runId, error: safeError(error) });
@@ -65,8 +75,8 @@ export const poll = internalAction({
       return null;
     }
     try {
-      const provider = createFinanceAgentProvider({ mode: run.mode, appId: run.providerAppId ?? env.CREAO_APP_ID, apiKey: env.CREAO_API_KEY, timeoutMs: timeoutMs() });
-      await saveExecution(ctx, runId, await withTimeout(() => provider.poll(run.externalRunId!), timeoutMs(), "poll", run.mode === "creao"));
+      const provider = intakeProvider(run.mode, run.providerAppId);
+      await saveExecution(ctx, runId, await withTimeout(() => provider.poll(run.externalRunId!), timeoutMs(), "poll", run.mode !== "mock"));
     } catch (error) {
       const failure = safeError(error);
       if (isRetryable(failure) && await mutate(ctx, internal.financeInvestigations.recordRetry, { runId, provider: "investigator", error: failure })) {
@@ -85,7 +95,14 @@ async function saveCheck(ctx: ActionCtx, runId: string, execution: ProviderExecu
   else await mutate(ctx, internal.financeInvestigations.recordCheckFailure, { runId, error: execution.error });
 }
 
-/** CHECKER_MODE=creao only: starts the checker agent for a validated run. Never called for mock, which runs inside recordResult. */
+/** The Evidence Checker in a paid mode (its CREAO app or an external model). Never called for mock, which runs inside recordResult. */
+function checkerProvider(appId: string | null): ClaimCheckerProvider {
+  const config = configFor("evidence_checker");
+  if (config.mode === "mock" || config.mode === null) throw new FinanceProviderError("configuration_error", "The Evidence Checker's mode changed while this run was waiting; it needs a person.");
+  const base = createAgentProvider<CheckerInput>(appId ? { ...config, appId } : config, mockClaimCheckerProvider, ["schemaVersion", "verdicts"], { timeoutMs: timeoutMs() });
+  return { mode: config.mode, start: input => base.start(input), poll: id => base.poll(id) };
+}
+
 async function startChecker(ctx: ActionCtx, runId: string): Promise<void> {
   const job = await ctx.runQuery(internal.financeInvestigations.getCheckerJob, { runId });
   if (!job) return;
@@ -93,7 +110,7 @@ async function startChecker(ctx: ActionCtx, runId: string): Promise<void> {
   try {
     // No claims means nothing for a paid checker run to judge.
     if (job.claims === 0) { await mutate(ctx, internal.financeInvestigations.recordCheck, { runId, outputJson: JSON.stringify({ schemaVersion: "finance-claim-check-output/v1", verdicts: [] }) }); return; }
-    const provider = createClaimCheckerProvider({ mode: "creao", appId: job.appId ?? env.CREAO_CHECKER_APP_ID, apiKey: env.CREAO_CHECKER_API_KEY ?? env.CREAO_API_KEY, timeoutMs: timeoutMs() });
+    const provider = checkerProvider(job.appId);
     await saveCheck(ctx, runId, await callWithRetry(() => provider.start(input), { timeoutMs: timeoutMs(), phase: "check", paid: true, onRetry: retry(ctx, runId, "checker") }));
   } catch (error) {
     await mutate(ctx, internal.financeInvestigations.recordCheckFailure, { runId, error: safeError(error) });
@@ -107,7 +124,7 @@ export const pollChecker = internalAction({
     if (!job?.externalRunId) return null;
     if (Date.now() >= job.deadline) { await mutate(ctx, internal.financeInvestigations.expireRun, { runId }); return null; }
     try {
-      const provider = createClaimCheckerProvider({ mode: "creao", appId: job.appId ?? env.CREAO_CHECKER_APP_ID, apiKey: env.CREAO_CHECKER_API_KEY ?? env.CREAO_API_KEY, timeoutMs: timeoutMs() });
+      const provider = checkerProvider(job.appId);
       await saveCheck(ctx, runId, await withTimeout(() => provider.poll(job.externalRunId!), timeoutMs(), "poll", true));
     } catch (error) {
       const failure = safeError(error);

@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 import { convexTest } from "convex-test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { api } from "./_generated/api";
+import { api, internal } from "./_generated/api";
 import schema from "./schema";
 
 const modules = import.meta.glob(["./**/*.{ts,js}", "!./**/*.test.ts"]);
@@ -91,11 +91,26 @@ describe("mismatch agent", () => {
     expect(recon.map(r => r.subjectSourceId).sort()).toEqual([RETURNED, "demo:bank:txn:E-001"].sort());
   });
 
-  it("does nothing in CREAO mode: the mismatch agent is mock-only for now", async () => {
+  it("does not start on its own while the intake agent is in a paid mode", async () => {
     const t = convexTest(schema, modules);
     await bounced(t);
     vi.stubEnv("FINANCE_AGENT_MODE", "creao");
     await t.mutation(api.financeIntake.simulateUnrecordedOutflow, { accountId }); await drain(t);
     expect((await t.query(api.financeOrchestrator.getPipeline, { accountId })).rows.filter(r => r.kind === "reconciliation")).toHaveLength(1);
+  });
+
+  it("asks one short question instead of recording an outflow the records don't explain", async () => {
+    const t = convexTest(schema, modules);
+    await bounced(t);
+    // An outflow the bank attributes to Okafor, with no return marker and no document: the reconciler must not guess.
+    const outflow = "demo:bank:txn:okafor-mystery";
+    await t.run(async ctx => { await ctx.db.insert("financeBankTransactions", { sourceId: outflow, accountId, subAccount: "IOLTA", direction: "outflow", amountCents: 250_000, currency: "USD", bookedAt: Date.now(), clearing: "cleared", reference: "DEBIT 4471", counterparty: "BANK", ownerHintSourceId: "demo:owner-record:daniel-okafor", documentSourceIds: [], duplicateOfSourceId: null, raw: { system: "demo", recordType: "bank-transaction", rawId: "okafor-mystery", datasetVersion: "law-firm-demo-v1" } }); });
+    await t.mutation(internal.financeReconciliation.autoStart, { accountId }); await drain(t);
+    const run = await t.run(async ctx => (await ctx.db.query("financeReconciliationRuns").collect()).find(r => r.causeKey.endsWith(outflow)));
+    expect(run?.status).toBe("needs_person");
+    expect(run?.output).toMatchObject({ outcome: "needs_information", proposedEntry: null });
+    expect(run?.output?.questions).toHaveLength(1);
+    expect(run?.output?.questions[0].question).toBe("The bank is $2,500.00 short. Did Daniel Okafor's check bounce, or is this a bank fee?");
+    expect((await t.query(api.financeReconciliation.listCorrections, { accountId })).filter(c => c.causeKey.endsWith(outflow))).toEqual([]);
   });
 });

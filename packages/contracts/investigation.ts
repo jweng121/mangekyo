@@ -4,7 +4,7 @@ import type { NormalizedBankTransaction, NormalizedObligation, OwnerBalance, Thr
 export const FINANCE_INPUT_VERSION = "finance-investigation-input/v1" as const;
 export const FINANCE_OUTPUT_VERSION = "finance-investigation-output/v1" as const;
 export const FINANCE_INSTRUCTION_VERSION = "finance-investigator/v1" as const;
-export type FinanceAgentMode = "mock" | "creao";
+export type FinanceAgentMode = "mock" | "creao" | "external";
 export interface FinanceReportSource {
   field: "result.text" | "result.chatText";
   format: "json" | "json_suffix";
@@ -77,7 +77,7 @@ export interface ClaimCheck {
 }
 export interface ClaimCheckResult {
   schemaVersion: "finance-claim-check/v1";
-  agentMode: "off" | "mock" | "creao";
+  agentMode: "off" | "mock" | "creao" | "external";
   status: "passed" | "rejected";
   claims: ClaimCheck[];
   checkedAt: number;
@@ -107,6 +107,8 @@ export interface HumanClarification {
   timestamp: number;
   respondent: { identity: string; authenticated: boolean };
   evidenceRefs: EvidenceReference[];
+  /** Memory: the account the answer belongs to, so later runs on other deposits of the account see it. Absent on older rows. */
+  accountId?: string;
 }
 export interface FinancialCheck {
   status: "passed" | "failed" | "insufficient_data" | "not_applicable";
@@ -187,6 +189,9 @@ export interface FinanceInvestigationRun {
   /** Agent 2: the claim checker's verdict on every finding, stored with the run. */
   claimCheck?: ClaimCheckResult;
   error: InvestigationError | null;
+  /** Which agent, mode and model produced this run (and checked it). Absent on runs saved before the five agents existed. */
+  provenance?: { agent: string; mode: FinanceAgentMode; model: string; instructionVersion: string };
+  checkerProvenance?: { agent: string; mode: FinanceAgentMode; model: string; instructionVersion: string };
 }
 export interface FinanceInvestigationQuestion {
   caseId: string;

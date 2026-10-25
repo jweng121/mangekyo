@@ -11,4 +11,5 @@ export { FinanceProviderError } from "./types";
 export type { FinanceAgentProvider, ProviderExecution } from "./types";
 export { validateFinanceAgentOutput, FinanceOutputValidationError } from "./validation";
 export { CreaoAppClient } from "./creaoClient";
-export { extractCreaoReport } from "./creaoResult";
+export { extractCreaoReport, INVESTIGATION_REPORT_FIELDS } from "./creaoResult";
+export { mockFinanceAgentProvider, mockInvestigation } from "./mock";

@@ -45,7 +45,7 @@ export const getDeskData = query({
     counts: v.object({ autoStarted: v.number(), blocked: v.number(), posted: v.number() }),
     approvedPolicies: v.array(v.object({ policyId: v.string(), statement: v.string(), sourceId: v.string(), approvedBy: v.union(v.string(), v.null()), approvedAt: v.number() })),
     checkerStopped: v.array(v.object({ runId: v.string(), taskId: v.string(), bankSourceId: v.union(v.string(), v.null()), attempt: v.number(), claim: v.string(), reason: v.string(), sourceSays: v.union(v.string(), v.null()) })),
-    feed: v.object({ mode: v.union(v.literal("mock"), v.literal("creao"), v.null()), stepsDone: v.number(), total: v.number() }),
+    feed: v.object({ mode: v.union(v.literal("mock"), v.literal("creao"), v.literal("external"), v.null()), stepsDone: v.number(), total: v.number() }),
   }),
   handler: async (ctx, { accountId }) => {
     const tasks = await ctx.db.query("financeTasks").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(100);

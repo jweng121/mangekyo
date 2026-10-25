@@ -34,7 +34,7 @@ describe("one orchestrator per deposit", () => {
     expect(asked.events.find(e => e.to === "investigating")?.actor).toEqual({ type: "system", identity: "system:orchestrator" });
     expect(asked.events.find(e => e.to === "validating")?.actor.type).toBe("agent");
     expect(asked.events.find(e => e.to === "checking")?.actor).toEqual({ type: "code", identity: "code:finance-core" });
-    expect(asked.events.find(e => e.to === "needs_person")?.actor.identity).toBe("agent:claim-checker:mock");
+    expect(asked.events.find(e => e.to === "needs_person")?.actor.identity).toBe("agent:evidence-checker:mock");
     const budget = asked.events.find(e => e.kind === "budget_check")!;
     expect(budget.budget).toMatchObject({ allowed: true, code: "BUDGET_NOT_APPLICABLE", needed: 0 });
 
@@ -128,7 +128,7 @@ describe("one orchestrator per deposit", () => {
   it("refuses an invalid CHECKER_MODE before starting anything", async () => {
     vi.stubEnv("CHECKER_MODE", "off");
     const { t, taskId } = await synthetic();
-    await expect(t.mutation(api.financeInvestigations.startInvestigation, { taskId, scope: scope() })).rejects.toThrow("CHECKER_MODE must be mock or creao");
+    await expect(t.mutation(api.financeInvestigations.startInvestigation, { taskId, scope: scope() })).rejects.toThrow("EVIDENCE_CHECKER_MODE (or CHECKER_MODE) must be mock, creao or external");
     expect(await t.query(api.financeOrchestrator.getTimeline, { taskId })).toBeNull();
   });
 });
@@ -201,7 +201,7 @@ describe("Agent 2 on CREAO (CHECKER_MODE=creao, fake HTTP; the investigator stay
     const run = (await t.query(api.financeInvestigations.getTaskInvestigation, { taskId })).runs[0];
     expect(run).toMatchObject({ status: "needs_information", claimCheck: { agentMode: "creao", status: "passed" } });
     expect((await t.query(api.financeOrchestrator.getTimeline, { taskId }))!.orchestration.state).toBe("needs_person");
-    expect(await t.run(async ctx => (await ctx.db.query("financeRealRuns").collect()).map(r => r.provider))).toEqual(["checker"]);
+    expect(await t.run(async ctx => (await ctx.db.query("financeRealRuns").collect()).map(r => r.provider))).toEqual(["evidence_checker"]);
     await t.finishAllScheduledFunctions(vi.runAllTimers);
     expect(fetchSpy).toHaveBeenCalledTimes(2);
   });

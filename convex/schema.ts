@@ -16,7 +16,9 @@ export default defineSchema({
   financeInvestigationQuestions: defineTable(fields.question)
     .index("by_questionId", ["questionId"]).index("by_taskId", ["taskId"]),
   financeClarifications: defineTable(fields.clarification)
-    .index("by_taskId_and_timestamp", ["taskId", "timestamp"]),
+    .index("by_taskId_and_timestamp", ["taskId", "timestamp"])
+    // Memory: every person's answer on the account is visible to the next run on any of its deposits.
+    .index("by_accountId_and_timestamp", ["accountId", "timestamp"]),
   financeApprovedPolicies: defineTable(fields.policy)
     .index("by_accountId_and_currency_and_approvedAt", ["accountId", "currency", "approvedAt"]),
   financeAccounts: defineTable(money.storedAccount).index("by_accountId", ["accountId"]),
@@ -39,4 +41,17 @@ export default defineSchema({
   financeCorrections: defineTable(orchestrator.correction).index("by_correctionId", ["correctionId"]).index("by_accountId", ["accountId"]),
   financePolicyBacktests: defineTable(orchestrator.policyBacktest).index("by_accountId", ["accountId"]),
   financeScorecards: defineTable(orchestrator.scorecard).index("by_accountId", ["accountId"]),
+  // Trust rules and the five agents. Every table below is append-only or changes status fields only; money moves only through the ledger.
+  financeDisputes: defineTable(money.dispute).index("by_disputeId", ["disputeId"]).index("by_accountId", ["accountId"]),
+  // One immutable snapshot per step of every agent run (visual audit). Never patched.
+  financeStepSnapshots: defineTable(orchestrator.stepSnapshot).index("by_snapshotId", ["snapshotId"]).index("by_runId_and_stepIndex", ["runId", "stepIndex"]),
+  // A person's correction of a run: creates a new linked attempt; the corrected run never changes.
+  financeRunCorrections: defineTable(orchestrator.runCorrection).index("by_correctionId", ["correctionId"]).index("by_runId", ["runId"]).index("by_taskId", ["taskId"]).index("by_newRunId", ["newRunId"]),
+  financeEvalCases: defineTable(orchestrator.evalCase).index("by_evalCaseId", ["evalCaseId"]).index("by_agent_and_instructionVersion", ["agent", "instructionVersion"]),
+  financeEvalRuns: defineTable(orchestrator.evalRun).index("by_evalRunId", ["evalRunId"]).index("by_agent", ["agent"]),
+  financeDisbursementRuns: defineTable(orchestrator.disbursementRun).index("by_runId", ["runId"]).index("by_taskId_and_attempt", ["taskId", "attempt"]).index("by_accountId", ["accountId"]),
+  financeAuditRuns: defineTable(orchestrator.auditRun).index("by_runId", ["runId"]).index("by_accountId", ["accountId"]),
+  financeAuditReports: defineTable(orchestrator.auditReport).index("by_reportId", ["reportId"]).index("by_accountId", ["accountId"]),
+  // A signed monthly reconciliation is the report exactly as the person saw it; one row per sign-off, never edited.
+  financeMonthlyReconciliations: defineTable(orchestrator.monthlyReport).index("by_accountId_and_month", ["accountId", "month"]),
 });

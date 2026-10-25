@@ -36,7 +36,7 @@ describe("scorecard (mock mode)", () => {
     expect(await t.query(api.financeScorecard.getScorecard, { accountId: "demo:account:pool-001" })).toBeNull();
   });
 
-  it("runs a batch of synthetic deposits and reports time, % handled without a person and % flagged", async () => {
+  it("runs a batch of synthetic deposits and reports time, % handled without a person and % flagged", { timeout: 60_000 }, async () => {
     const t = convexTest(schema, modules);
     const { accountId, count } = await t.mutation(api.financeScorecard.runBatch, { count: 40 });
     // A bulk import starts its investigations 400 ms apart.

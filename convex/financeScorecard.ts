@@ -139,6 +139,6 @@ export const getScorecard = query({
 
 /** Scorecards across accounts, newest first, for the desk's "Measure" menu. */
 export const listScorecards = query({
-  args: {}, returns: v.array(v.object({ scorecardId: v.string(), accountId: v.string(), kind: v.union(v.literal("planted"), v.literal("batch")), count: v.number(), startedAt: v.number() })),
+  args: {}, returns: v.array(v.object({ scorecardId: v.string(), accountId: v.string(), kind: v.union(v.literal("planted"), v.literal("batch"), v.literal("audit_drill")), count: v.number(), startedAt: v.number() })),
   handler: async (ctx) => (await ctx.db.query("financeScorecards").order("desc").take(20)).map(recordOnly),
 });

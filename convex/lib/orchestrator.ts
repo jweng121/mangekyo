@@ -57,7 +57,7 @@ export async function step(ctx: MutationCtx, orchestration: Orchestration, args:
 }
 
 /** Creates the orchestration in `received`, with its first event and snapshot. Idempotent per task. */
-export async function ensureOrchestration(ctx: MutationCtx, args: { kind: OrchestratorKind; taskId: string; accountId: string | null; subjectSourceId: string | null; trigger: Trigger; actor: OrchestratorActor; reason: OrchestratorReason }): Promise<Orchestration> {
+export async function ensureOrchestration(ctx: MutationCtx, args: { kind: OrchestratorKind; taskId: string; accountId: string | null; subjectSourceId: string | null; trigger: Trigger | string; actor: OrchestratorActor; reason: OrchestratorReason }): Promise<Orchestration> {
   const existing = await findOrchestration(ctx, args.taskId);
   if (existing) return existing;
   const now = Date.now();

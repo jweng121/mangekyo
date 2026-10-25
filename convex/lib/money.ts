@@ -1,6 +1,7 @@
 import type { FinanceRecordSet, InvestigationScope, LedgerEntry, LockResult, MoneyEvent, MoneyProposal, MoneySnapshot, ProposalHold, ProposalStatus, ThreeWayCheckResult } from "@mangekyo/contracts";
 import { ConvexError } from "convex/values";
 import { buildPostingEntries, canTransition, classifyFailures, evaluateAllocation, evaluatePayment, holdReason, type GatewayContext } from "@mangekyo/finance-core/gateway";
+import { matterForDeposit } from "@mangekyo/finance-core/disbursement";
 import { buildDepositRecordSet, depositCaseId } from "@mangekyo/finance-core/intake";
 import { DEFAULT_OUTSTANDING_MAX_DAYS, threeWayCheck, type AccountLedgerState } from "@mangekyo/finance-core/ledger";
 import type { Doc } from "../_generated/dataModel";
@@ -56,7 +57,7 @@ export interface LoadedAccount {
 export async function loadAccount(ctx: QueryCtx | MutationCtx, accountId: string): Promise<LoadedAccount> {
   const account = await requireAccount(ctx, accountId);
   const take = MAX_ROWS + 1;
-  const [bank, owners, obligations, documents, statements, reconciling, proposals, entries] = await Promise.all([
+  const [bank, owners, obligations, documents, statements, reconciling, proposals, entries, disputes] = await Promise.all([
     bounded(ctx.db.query("financeBankTransactions").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(take), "bank transactions"),
     bounded(ctx.db.query("financeAccountOwners").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(take), "owners"),
     bounded(ctx.db.query("financeObligations").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(take), "obligations"),
@@ -65,6 +66,7 @@ export async function loadAccount(ctx: QueryCtx | MutationCtx, accountId: string
     bounded(ctx.db.query("financeReconcilingItems").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(take), "reconciling items"),
     bounded(ctx.db.query("financeProposals").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(take), "proposals"),
     bounded(ctx.db.query("financeLedgerEntries").withIndex("by_accountId_and_effectiveAt", (q) => q.eq("accountId", accountId)).take(take), "ledger entries"),
+    bounded(ctx.db.query("financeDisputes").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(take), "disputes"),
   ]);
   const proposalList = proposals.map(recordOnly) as MoneyProposal[];
   const { system, datasetVersion, importedAt, issues, ...moneyAccount } = recordOnly(account);
@@ -76,6 +78,7 @@ export async function loadAccount(ctx: QueryCtx | MutationCtx, accountId: string
       entries: entries.map(recordOnly) as LedgerEntry[],
       holds: proposalList.filter(p => p.kind === "payment" && (p.status === "pending_approval" || p.status === "approved" || p.status === "on_hold") && p.ownerId)
         .map(p => ({ proposalId: p.proposalId, ownerId: p.ownerId!, amountCents: p.amountCents })),
+      disputes: disputes.map(recordOnly),
     },
     documents: documents.map(recordOnly), obligations: obligations.map(recordOnly), proposals: proposalList, statements: statements.map(recordOnly),
   };
@@ -136,13 +139,15 @@ export async function appendMoneyEvent(ctx: MutationCtx, args: {
 }
 
 export async function gatewayContext(ctx: MutationCtx, loaded: LoadedAccount, cutoff: number): Promise<GatewayContext> {
-  return { state: loaded.state, threeWay: checkAccount(loaded.state, cutoff), knownSourceIds: await knownSourceIds(ctx, loaded), proposals: loaded.proposals, cutoff };
+  // Trust rules read the account's documents (signed statements, fee agreements) and obligations (approved invoices).
+  return { state: loaded.state, threeWay: checkAccount(loaded.state, cutoff), knownSourceIds: await knownSourceIds(ctx, loaded), proposals: loaded.proposals, cutoff, documents: loaded.documents, obligations: loaded.obligations };
 }
 
 export function evaluate(gateway: GatewayContext, proposal: MoneyProposal, stage: LockResult["stage"], actor: string, to: ProposalStatus): LockResult {
   const args = { stage, actor, transition: { from: proposal.status, to } };
   return proposal.kind === "payment"
-    ? evaluatePayment(gateway, { proposalId: proposal.proposalId, ownerId: proposal.ownerId ?? "", amountCents: proposal.amountCents, currency: proposal.currency, evidenceSourceIds: proposal.evidenceSourceIds, fundingSourceId: proposal.fundingSourceId, requestedBy: proposal.requestedBy }, args)
+    ? evaluatePayment(gateway, { proposalId: proposal.proposalId, ownerId: proposal.ownerId ?? "", amountCents: proposal.amountCents, currency: proposal.currency, evidenceSourceIds: proposal.evidenceSourceIds, fundingSourceId: proposal.fundingSourceId, requestedBy: proposal.requestedBy,
+        payoutKind: proposal.payoutKind, matterId: proposal.matterId, settlementSourceId: proposal.settlementSourceId, payeeOwnerId: proposal.payeeOwnerId }, args)
     : evaluateAllocation(gateway, { proposalId: proposal.proposalId, bankSourceId: proposal.bankSourceId ?? "", shares: proposal.shares ?? [], currency: proposal.currency, evidenceSourceIds: proposal.evidenceSourceIds, requestedBy: proposal.requestedBy }, args);
 }
 
@@ -234,6 +239,11 @@ export async function gatedStep(ctx: MutationCtx, proposal: MoneyProposal, stage
   await appendMoneyEvent(ctx, { accountId: proposal.accountId, type: "finance.money.ledger_posted", actor, operationId: proposal.proposalId, message: `Posted ${entries.length} ledger entr${entries.length === 1 ? "y" : "ies"}; three-way check is ${after.status}.`, proposal, lock, threeWay: after, entryIds, stage: "post" });
   const posted = await transition(ctx, proposal, "posted", actor, null, lock, after, { postedEntryIds: entryIds });
   await recheckHeldProposals(ctx, proposal.accountId);
+  // A posted allocation of a settlement deposit with a signed settlement statement hands the matter to the Disbursement agent (mock mode only, idempotent).
+  if (proposal.kind === "allocation" && proposal.bankSourceId) {
+    const deposit = loaded.state.bankTransactions.find(t => t.sourceId === proposal.bankSourceId);
+    if (deposit && matterForDeposit(deposit, loaded.documents)) await ctx.scheduler.runAfter(0, internal.financeTrust.autoStartDisbursement, { accountId: proposal.accountId, bankSourceId: proposal.bankSourceId });
+  }
   return { proposal: posted, lock, entryIds };
 }
 

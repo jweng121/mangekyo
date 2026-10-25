@@ -141,8 +141,9 @@ describe("auto-investigation of newly recorded deposits", () => {
     expect(await t.query(api.financeInvestigations.getAutoInvestigationSetting, {})).toMatchObject({ enabled: true });
   });
 
-  it("respects AUTO_INVESTIGATE=false, an invalid value, and an unset provider mode", async () => {
-    for (const [mode, setting, code] of [["mock", "false", "AUTO_DISABLED_SETTING"], ["mock", "yes", "AUTO_SETTING_INVALID"], [undefined, undefined, "MODE_NOT_CONFIGURED"]] as const) {
+  it("respects AUTO_INVESTIGATE=false, an invalid value, and an invalid provider mode", async () => {
+    // An unset mode now means mock (each agent defaults to mock); an invalid value still refuses to start anything.
+    for (const [mode, setting, code] of [["mock", "false", "AUTO_DISABLED_SETTING"], ["mock", "yes", "AUTO_SETTING_INVALID"], ["bogus", undefined, "MODE_NOT_CONFIGURED"]] as const) {
       vi.unstubAllEnvs();
       if (mode) vi.stubEnv("FINANCE_AGENT_MODE", mode);
       if (setting) vi.stubEnv("AUTO_INVESTIGATE", setting);
