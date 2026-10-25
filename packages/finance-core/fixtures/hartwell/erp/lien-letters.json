@@ -8,7 +8,25 @@
     "version": 1,
     "validThrough": "2026-06-30",
     "patientAccount": "BG-61104",
-    "payeeId": "bayside"
+    "payeeId": "bayside",
+    "charges": [
+      {
+        "serviceDate": "2026-02-18",
+        "description": "Clinical evaluation and diagnostic imaging",
+        "billedCents": 317045,
+        "adjustmentCents": 125000,
+        "payoffCents": 192045
+      },
+      {
+        "serviceDate": "2026-03-10",
+        "description": "Outpatient treatment and follow-up care",
+        "billedCents": 203030,
+        "adjustmentCents": 75000,
+        "payoffCents": 128030
+      }
+    ],
+    "totalBilledCents": 520075,
+    "totalAdjustmentCents": 200000
   },
   {
     "id": "bayside-v1",
@@ -19,7 +37,25 @@
     "version": 1,
     "validThrough": "2026-10-20",
     "patientAccount": "BG-50877-D",
-    "payeeId": "bayside"
+    "payeeId": "bayside",
+    "charges": [
+      {
+        "serviceDate": "2026-02-18",
+        "description": "Clinical evaluation and diagnostic imaging",
+        "billedCents": 845000,
+        "adjustmentCents": 125000,
+        "payoffCents": 720000
+      },
+      {
+        "serviceDate": "2026-03-10",
+        "description": "Outpatient treatment and follow-up care",
+        "billedCents": 555000,
+        "adjustmentCents": 75000,
+        "payoffCents": 480000
+      }
+    ],
+    "totalBilledCents": 1400000,
+    "totalAdjustmentCents": 200000
   },
   {
     "id": "bayside-v2",
@@ -30,7 +66,32 @@
     "version": 2,
     "validThrough": "2026-11-15",
     "patientAccount": "BG-50877-D",
-    "payeeId": "bayside"
+    "payeeId": "bayside",
+    "charges": [
+      {
+        "serviceDate": "2026-02-18",
+        "description": "Clinical evaluation and diagnostic imaging",
+        "billedCents": 845000,
+        "adjustmentCents": 125000,
+        "payoffCents": 720000
+      },
+      {
+        "serviceDate": "2026-03-10",
+        "description": "Outpatient treatment and follow-up care",
+        "billedCents": 555000,
+        "adjustmentCents": 75000,
+        "payoffCents": 480000
+      },
+      {
+        "serviceDate": "2026-04-02",
+        "description": "Supplemental therapy charge; posted 10/21/2026",
+        "billedCents": 300000,
+        "adjustmentCents": 50000,
+        "payoffCents": 250000
+      }
+    ],
+    "totalBilledCents": 1700000,
+    "totalAdjustmentCents": 250000
   },
   {
     "id": "reyes-conditional",
@@ -41,6 +102,24 @@
     "version": 1,
     "validThrough": "2026-11-15",
     "patientAccount": "MC-260318",
-    "payeeId": "medicare"
+    "payeeId": "medicare",
+    "charges": [
+      {
+        "serviceDate": "2026-02-18",
+        "description": "Clinical evaluation and diagnostic imaging",
+        "billedCents": 317000,
+        "adjustmentCents": 125000,
+        "payoffCents": 192000
+      },
+      {
+        "serviceDate": "2026-03-10",
+        "description": "Outpatient treatment and follow-up care",
+        "billedCents": 203000,
+        "adjustmentCents": 75000,
+        "payoffCents": 128000
+      }
+    ],
+    "totalBilledCents": 520000,
+    "totalAdjustmentCents": 200000
   }
 ]

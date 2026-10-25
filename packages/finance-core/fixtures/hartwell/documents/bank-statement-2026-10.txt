@@ -1,0 +1,97 @@
+ BAY COMMERCE BANK
+                                                                        BUSINESS BANKING / TRUST SERVICES
+
+1128 Bracken Plaza, Oakland, CA 94612 | Telephone: (510) 555-0120
+
+ Client Trust Account Statement
+  Date: 2026-10-31 | Reference: BANK-STATEMENT-2026-10
+
+ Hartwell & Moreno LLP | IOLTA ****4417
+
+ Statement period: 2026-10-01 through 2026-10-31
+
+   Opening balance                Deposits / credits                Withdrawals / debits              Closing balance
+
+   $204,736.58                    $49,641.47                     $10,646.56                     $243,731.49
+
+
+    Posting        Description / check reference                                                  Debit                 Credit              Balance
+    date
+
+    10-02       ZELLE FROM VICTOR CHEN                                                                         $5,187.84          $209,924.42
+
+    10-03      ACH TO HARTWELL OPER 2290                                                 $425.00                              $209,499.42
+
+    10-04      ACH REFUND VICTOR CHEN                                                    $127.85                              $209,371.57
+
+    10-05      ACH FROM NADIA FLORES                                                                          $5,567.08          $214,938.65
+
+    10-06      ACH TO HARTWELL OPER 2290                                                 $357.50                              $214,581.15
+
+    10-07      ACH COST REIMB OPER 2290                                                   $131.02                              $214,450.13
+
+    10-08       WIRE FROM OMAR HASSAN                                                                        $5,261.82          $219,711.95
+
+    10-09      CHECK 7074 MARLOWE FORENSIC / 7074                                        $6,000.00                              $213,711.95
+
+    10-09      ACH TO HARTWELL OPER 2290                                                 $427.50                              $213,284.45
+
+    10-10      ACH COST REIMB OPER 2290                                                   $134.19                              $213,150.26
+
+    10-11      CHECK FROM LENA BROOKS / 6143                                                                 $5,472.16          $218,622.42
+
+    10-12      ACH TO HARTWELL OPER 2290                                                 $422.50                              $218,199.92
+
+    10-13      ACH REFUND LENA BROOKS                                                   $137.36                              $218,062.56
+
+    10-14       ZELLE FROM ISAAC PATEL                                                                         $5,086.90          $223,149.46
+
+    10-15      ACH TO HARTWELL OPER 2290                                                 $430.00                              $222,719.46
+
+    10-16      ACH COST REIMB OPER 2290                                                   $140.53                              $222,578.93
+
+    10-17      ACH FROM SOFIA RIVERA                                                                          $5,514.92          $228,093.85
+
+    10-18      ACH TO HARTWELL OPER 2290                                                 $487.50                              $227,606.35
+
+    10-19      ACH COST REIMB OPER 2290                                                   $143.70                              $227,462.65
+
+    10-20       WIRE FROM MARCUS REED                                                                        $5,668.14          $233,130.79
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                     bank-statement-2026-10 | Paqe 1
+ BAY COMMERCE BANK
+                                                                        BUSINESS BANKING / TRUST SERVICES
+
+1128 Bracken Plaza, Oakland, CA 94612 | Telephone: (510) 555-0120
+
+
+
+    Posting        Description / check reference                                                  Debit                 Credit              Balance
+    date
+
+    10-20      ACH CR D OKAFOR PART PMT                                                                     $875.00          $234,005.79
+
+    10-21      ACH TO HARTWELL OPER 2290                                                 $432.50                              $233,573.29
+
+    10-22      ACH REFUND MARCUS REED                                                   $146.87                              $233,426.42
+
+    10-23      CHECK FROM GRACE KIM / 6147                                                                    $5,807.61          $239,234.03
+
+    10-24      ACH TO HARTWELL OPER 2290                                                 $552.50                              $238,681.53
+
+    10-25      ACH COST REIMB OPER 2290                                                   $150.04                              $238,531.49
+
+    10-30      ACH CR RAYMOND CHO                                                                            $5,200.00          $243,731.49
+
+ Please compare this statement with your account records. This statement reports posted bank activity; it does not certify individual client ledger
+  balances. Questions: (510) 555-0120.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                     bank-statement-2026-10 | Paqe 2

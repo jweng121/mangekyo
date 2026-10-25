@@ -1,13 +1,19 @@
-Dina Farouk
-583 Willow Anchorage | Oakland, CA 94612
-Teleph0ne: (510) 555-0131
-Client Payment Advice
-2026-08-23
-To: Hartwell & Moreno LLP
-Client reference: c36
-Amount: $5,282.23
-Method: CHECK
-Memo: retianer
-Please credit my trust ledger. This is an advance toward fees and costs.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+ Dina Farouk
+  583 Willow Anchorage | Oakland, CA 94612 | Telephone: (510) 555-0131
+
+
+  Client Payment Advice
+   Date: 2026-08-23 | Reference: H08-08-DEPOSIT
+
+  To: Hartwell & Moreno LLP
+   Client reference: c36
+  Amount: $5,282.23
+  Method: CHECK
+  Memo: retianer
+  Please credit my trust ledger. This is an advance toward fees and costs.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                 h08-08-deposit | Paqe 1

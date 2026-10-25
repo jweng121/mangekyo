@@ -1,12 +1,18 @@
-Fictional County Filing Desk
-583 Willow Anchorage | Oakland, CA 94612
-Teleph0ne: (510) 555-0131
-Receipt / Paid Invoice
-2026-03-03
-File: m01
-Civil complaint filing fee
-Amount received: $450.00
-Paid by Hartwell & Moreno LLP, operating account ending 2290.
-Retain this receipt with your case records.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+ Fictional County Filing Desk
+  583 Willow Anchorage | Oakland, CA 94612 | Telephone: (510) 555-0131
+
+
+  Receipt / Paid Invoice
+   Date: 2026-03-03 | Reference: GLOBAL-FILING
+
+   File: m01
+   Civil complaint filing fee
+  Amount received: $450.00
+  Paid by Hartwell & Moreno LLP, operating account ending 2290.
+  Retain this receipt with your case records.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                                           global-filing | Paqe 1

@@ -1,13 +1,19 @@
-Caleb Ross
-583 Willow Anchorage | Oakland, CA 94612
-Teleph0ne: (510) 555-0131
-Client Payment Advice
-2026-09-08
-To: Hartwell & Moreno LLP
-Client reference: c39
-Amount: $5,482.43
-Method: WIRE
-Memo: for file
-Please credit my trust ledger. This is an advance toward fees and costs.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+ Caleb Ross
+  583 Willow Anchorage | Oakland, CA 94612 | Telephone: (510) 555-0131
+
+
+  Client Payment Advice
+   Date: 2026-09-08 | Reference: H09-03-DEPOSIT
+
+  To: Hartwell & Moreno LLP
+   Client reference: c39
+  Amount: $5,482.43
+  Method: WIRE
+  Memo: for file
+  Please credit my trust ledger. This is an advance toward fees and costs.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                 h09-03-deposit | Paqe 1

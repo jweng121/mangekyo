@@ -1,13 +1,19 @@
-Noah Bennett
-583 Willow Anchorage | Oakland, CA 94612
-Teleph0ne: (510) 555-0131
-Client Payment Advice
-2026-06-23
-To: Hartwell & Moreno LLP
-Client reference: c20
-Amount: $5,046.07
-Method: CHECK
-Memo: retianer
-Please credit my trust ledger. This is an advance toward fees and costs.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+ Noah Bennett
+  583 Willow Anchorage | Oakland, CA 94612 | Telephone: (510) 555-0131
+
+
+  Client Payment Advice
+   Date: 2026-06-23 | Reference: H06-08-DEPOSIT
+
+  To: Hartwell & Moreno LLP
+   Client reference: c20
+  Amount: $5,046.07
+  Method: CHECK
+  Memo: retianer
+  Please credit my trust ledger. This is an advance toward fees and costs.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                 h06-08-deposit | Paqe 1

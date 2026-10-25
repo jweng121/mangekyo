@@ -1,14 +1,21 @@
-Bay Commerce Bank
-1128 Bracken Plaza | Oakland, CA 94612
-Teleph0ne: (510) 555-0131
-Executed Wire Confirmation
-2026-06-12
-Beneficiary: Bayside Medical Group
-Bank: Cedar Inlet Bank
-Account: 0000831264
-Routing: 000000000
-Client: Elena Park / Account BG-61104
-Wire amount: $3,200.75
-Status: settled; beneficiary acknowledged receipt.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+ BAY COMMERCE BANK
+                                                                        BUSINESS BANKING / TRUST SERVICES
+
+1128 Bracken Plaza, Oakland, CA 94612 | Telephone: (510) 555-0120
+
+ Executed Wire Confirmation
+  Date: 2026-06-12 | Reference: BAYSIDE-PRIOR-CONFIRMATION
+
+ Beneficiary: Bayside Medical Group
+ Bank: Cedar Inlet Bank
+ Account: ****1264
+ Routing: withheld
+ Client: Elena Park / Account BG-61104
+ Wire amount: $3,200.75
+ Status: settled; beneficiary acknowledged receipt.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                             bayside-prior-confirmation | Paqe 1

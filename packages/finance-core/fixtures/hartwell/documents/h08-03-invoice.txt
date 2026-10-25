@@ -1,14 +1,27 @@
-Hartwell & Moreno LLP
-1846 Alder Quay, Suite 400 | Oakland, CA 94612
-Teleph0ne: (510) 555-0147
-Invoice H08-03-INVOICE
-2026-08-09
-Bill to: Anita Shah
-Matter: m06
-Completed milestone: review and written advice
-1 x $427.50     $427.50
-Total due: $427.50
-Approved for trust payment: /s/ Sam Whitfield
-Please include the invoice number with your remittance.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+              Hartwell & Moreno LLP
+                                     ATTORNEYS AT LAW
+                            1846 Alder Quay, Suite 400 | Oakland, CA 94612 | Telephone: (510) 555-0147
+
+
+   Invoice H08-03-INVOICE
+      Date: 2026-08-09 | Reference: H08-03-INVOICE
+
+       Bill to: Anita Shah | Matter m06
+    Professional services and authorized charges
+
+       Service date       Description                                    Hours / units    Rate            Amount
+
+       2026-08-08       Completed milestone: review and written advice               1          $427.50          $427.50
+
+    Total due: $427.50
+
+     Approved for trust payment: /s/ Sam Whitfield | 2026-08-09
+
+     Please include the invoice number with your remittance. Payments from trust require the ordinary balance and
+      authorization checks. Retain this invoice with the matter expense records.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                   h08-03-invoice | Paqe 1
