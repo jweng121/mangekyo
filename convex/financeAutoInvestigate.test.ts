@@ -23,6 +23,46 @@ describe("auto-investigation of newly recorded deposits", () => {
   beforeEach(() => { vi.useFakeTimers(); vi.setSystemTime(Date.UTC(2026, 9, 24, 12)); });
   afterEach(() => { vi.useRealTimers(); vi.unstubAllEnvs(); vi.restoreAllMocks(); });
 
+  it("reviews pending evidence without proposing, keeps L2 request blocking, and proposes only in a new cleared attempt", async () => {
+    vi.stubEnv("FINANCE_AGENT_MODE", "mock");
+    vi.stubEnv("AUTO_INVESTIGATE", "false");
+    const t = convexTest(schema, modules);
+    await t.mutation(api.financeIntake.loadDemoFixture, {});
+    const bankSourceId = "demo:bank:txn:A-001";
+    await t.run(async ctx => {
+      const row = (await ctx.db.query("financeBankTransactions").withIndex("by_sourceId", q => q.eq("sourceId", bankSourceId)).unique())!;
+      await ctx.db.patch(row._id, { clearing: "pending" });
+    });
+    vi.stubEnv("AUTO_INVESTIGATE", "true");
+    await t.mutation(internal.financeIntake.autoInvestigateDeposit, { accountId: DEMO, bankSourceId });
+    await drain(t);
+    const [original] = await runsFor(t, DEMO, bankSourceId);
+    expect(original.status).toBe("completed");
+    expect(original.result?.summary).toContain("Waiting for the check to clear");
+    expect(original.result?.proposedAllocations).toEqual([]);
+    expect(original.providerInput?.records.transactions).toEqual([]);
+    const payment = await t.mutation(api.financeProposals.requestPayment, {
+      accountId: DEMO, ownerId: "demo:owner:alpha", amountCents: 100, purpose: "pending check test",
+      fundingSourceId: bankSourceId, evidenceSourceIds: ["demo:document:agreement-alpha:v1"], dev: { role: "requester", name: "riley" },
+    });
+    expect(payment.proposal.status).toBe("blocked");
+    expect(payment.lock?.failures.some(f => f.rule === "L2")).toBe(true);
+    await t.mutation(api.financeIntake.simulateDepositCleared, { bankSourceId });
+    await drain(t);
+    const runs = await runsFor(t, DEMO, bankSourceId);
+    expect(runs).toHaveLength(2);
+    expect(runs.find(r => r.runId === original.runId)).toEqual(original);
+    const next = runs.find(r => r.runId !== original.runId)!;
+    expect(next.parentRunId).toBe(original.runId);
+    expect(next.status).toBe("review_required");
+    expect(next.result?.proposedAllocations).toHaveLength(1);
+    await t.mutation(internal.financeIntake.autoInvestigateDeposit, { accountId: DEMO, bankSourceId });
+    expect(await runsFor(t, DEMO, bankSourceId)).toHaveLength(2);
+    const view = await t.query(api.financeIntake.getAccountOverview, { accountId: DEMO });
+    expect(view.proposals.find(p => p.proposalId === payment.proposal.proposalId)?.status).toBe("blocked");
+    expect(view.entries.some(e => e.kind === "allocation")).toBe(false);
+  });
+
   it("mock mode, default setting: each new cleared deposit gets exactly one investigation, and proposals wait for approval", async () => {
     vi.stubEnv("FINANCE_AGENT_MODE", "mock");
     const t = convexTest(schema, modules);
@@ -101,8 +141,9 @@ describe("auto-investigation of newly recorded deposits", () => {
     expect(await t.query(api.financeInvestigations.getAutoInvestigationSetting, {})).toMatchObject({ enabled: true });
   });
 
-  it("respects AUTO_INVESTIGATE=false, an invalid value, and an unset provider mode", async () => {
-    for (const [mode, setting, code] of [["mock", "false", "AUTO_DISABLED_SETTING"], ["mock", "yes", "AUTO_SETTING_INVALID"], [undefined, undefined, "MODE_NOT_CONFIGURED"]] as const) {
+  it("respects AUTO_INVESTIGATE=false, an invalid value, and an invalid provider mode", async () => {
+    // An unset mode now means mock (each agent defaults to mock); an invalid value still refuses to start anything.
+    for (const [mode, setting, code] of [["mock", "false", "AUTO_DISABLED_SETTING"], ["mock", "yes", "AUTO_SETTING_INVALID"], ["bogus", undefined, "MODE_NOT_CONFIGURED"]] as const) {
       vi.unstubAllEnvs();
       if (mode) vi.stubEnv("FINANCE_AGENT_MODE", mode);
       if (setting) vi.stubEnv("AUTO_INVESTIGATE", setting);

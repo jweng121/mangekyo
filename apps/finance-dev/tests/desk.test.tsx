@@ -10,6 +10,7 @@ import { causeLine, describeEvent, money, ownerStatus, personName, progressText,
 const results: Record<string, unknown> = {};
 vi.mock("convex/react", () => ({
   useQuery: (ref: Parameters<typeof getFunctionName>[0], args: unknown) => args === "skip" ? undefined : results[getFunctionName(ref)],
+  usePaginatedQuery: (ref: Parameters<typeof getFunctionName>[0]) => ({ results: (results[getFunctionName(ref)] as { page: unknown[] } | undefined)?.page ?? [], status: "Exhausted", loadMore: () => undefined }),
   useMutation: () => async () => { throw new Error("not used in render test"); },
 }));
 vi.mock("next/navigation", () => ({ useParams: () => ({ runId: encodeURIComponent(String(results.runId)) }), useRouter: () => ({ push: () => undefined }) }));
@@ -55,6 +56,7 @@ describe("desk render with real backend query results", () => {
     const overview = await t.query(api.financeIntake.getAccountOverview, { accountId: DEMO });
     const desk = await t.query(api.financeDesk.getDeskData, { accountId: DEMO });
     Object.assign(results, {
+      "financeDesk:getActivity": await t.query(api.financeDesk.getActivity, { accountId: DEMO, paginationOpts: { numItems: 50, cursor: null } }),
       "financeIntake:listAccounts": await t.query(api.financeIntake.listAccounts, {}), "financeIntake:getAccountOverview": overview,
       "financeDesk:getDeskData": desk, "financeInvestigations:getProviderConfiguration": await t.query(api.financeInvestigations.getProviderConfiguration, {}),
     });
@@ -70,9 +72,26 @@ describe("desk render with real backend query results", () => {
     const { default: Desk } = await import("../app/desk/page");
     const html = decode(renderToString(<Desk />));
     for (const text of ["Doesn't reconcile: $2,000.00 gap", "Bank, adjusted", "Every owner, added up", "Found by code:", "Needs a person", "On hold · needs a person",
-      "Approve entry", "AI proposal · needs sign-off", "The agent stopped to ask", "Blocked by the lock · rule L1", "Pooled account, cleared", "AI · proposed policy",
+      "Approve entry", "AI proposal · needs sign-off", "The agent stopped to ask", "Blocked by the lock · rule L1", "Pooled account, adjusted cleared", "AI · proposed policy",
       "started automatically", "posted after sign-off", "Acting as (dev only)", "Break it…", "New payment", "Not yet assigned"]) expect(html).toContain(text);
     expect(html).not.toMatch(/Processing/);
+    // One pool figure on the lock card: the bar and the sentence both show the adjusted cleared balance (the pending $2,500.00 deposit is out of it).
+    const { bank } = overview.threeWay;
+    const pool = money(bank.adjustedClearedCents ?? null);
+    expect(bank.adjustedClearedCents).toBe(bank.adjustedCents! - 250_000);
+    const plain = html.replace(/<[^>]+>/g, "");
+    expect(plain).toContain(`Pooled account, adjusted cleared${pool}`);
+    expect(plain).toContain(`The account holds ${pool} cleared, but`);
+    expect(plain).not.toContain(`The account holds ${money(bank.adjustedCents)}`);
+
+    // Acknowledged, the blocked card leaves "Needs a person"; the activity history still shows it.
+    const blocked = overview.proposals.find(p => p.ownerId === "demo:owner:xavier" && p.status === "blocked")!;
+    await t.mutation(api.financeProposals.acknowledgeBlocked, { proposalId: blocked.proposalId, dev: approver });
+    results["financeIntake:getAccountOverview"] = await t.query(api.financeIntake.getAccountOverview, { accountId: DEMO });
+    results["financeDesk:getActivity"] = await t.query(api.financeDesk.getActivity, { accountId: DEMO, paginationOpts: { numItems: 50, cursor: null } });
+    const after = decode(renderToString(<Desk />));
+    expect(after).not.toContain("Blocked by the lock · rule L1");
+    expect(after).toContain("Acknowledged the blocked");
   });
 
   it("renders the run inspector and what the agent saw from a frozen input", async () => {
@@ -102,6 +121,7 @@ describe("desk render with real backend query results", () => {
       "financeIntake:listAccounts": await t.query(api.financeIntake.listAccounts, {}), "financeIntake:getAccountOverview": await t.query(api.financeIntake.getAccountOverview, { accountId: DEMO }),
       "financeDesk:getDeskData": await t.query(api.financeDesk.getDeskData, { accountId: DEMO }), "financeInvestigations:getProviderConfiguration": await t.query(api.financeInvestigations.getProviderConfiguration, {}),
       runId: rerun.runId, "financeDesk:getRunView": await t.query(api.financeDesk.getRunView, { runId: rerun.runId }),
+      "financeDesk:getActivity": await t.query(api.financeDesk.getActivity, { accountId: DEMO, paginationOpts: { numItems: 50, cursor: null } }),
     });
     const { default: Desk } = await import("../app/desk/page");
     const html = decode(renderToString(<Desk />));

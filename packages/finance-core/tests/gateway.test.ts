@@ -1,9 +1,9 @@
-import type { ProposalStatus } from "@mangekyo/contracts";
+import type { MoneyProposal, ProposalStatus } from "@mangekyo/contracts";
 import { describe, expect, it } from "vitest";
-import { buildPostingEntries, canTransition, checkEvidence, classifyFailures, holdReason, checkSelfApproval, checkState, evaluateAllocation, evaluatePayment, TRANSITIONS, type GatewayContext } from "../src/gateway";
+import { buildPostingEntries, canTransition, checkEvidence, classifyFailures, holdReason, checkSelfApproval, checkState, evaluateAllocation, evaluatePayment, supersededBlocked, TRANSITIONS, type GatewayContext } from "../src/gateway";
 import { threeWayCheck, type AccountLedgerState } from "../src/ledger";
 import { demoIds, demoUnrecordedOutflow } from "../fixtures/demoMoney";
-import { demoState, NOW } from "./money";
+import { demoState, entry, NOW } from "./money";
 
 function context(state: AccountLedgerState = demoState(), proposals: GatewayContext["proposals"] = []): GatewayContext {
   const known = new Set([...state.bankTransactions.map(t => t.sourceId), ...state.owners.map(o => o.sourceId), "demo:document:instruction-x-001:v1", "demo:document:instruction-d-001:v1", "demo:document:instruction-y-001:v1", "demo:document:remit-a-001:v1"]);
@@ -22,7 +22,17 @@ describe("L1 owner funds — the pool's cash is not the owner's cash", () => {
     expect(result.failures).toEqual([expect.objectContaining({ rule: "L1", code: "OWNER_INSUFFICIENT_FUNDS", sourceIds: ["demo:owner-record:xavier"] })]);
     expect(result.failures[0].message).toContain("$120.00 available");
     expect(result.failures[0].message).toContain("$268,100.00 cleared");
-    expect(result.facts).toMatchObject({ requestedCents: 500_000, ownerAvailableCents: 12_000, poolClearedCents: 26_810_000 });
+    expect(result.facts).toMatchObject({ requestedCents: 500_000, ownerAvailableCents: 12_000, poolClearedCents: 26_810_000, poolAdjustedClearedCents: 26_810_000 });
+  });
+
+  it("names the adjusted cleared pool, with outstanding payments already out, the same figure the cards show", () => {
+    const state = demoState();
+    state.entries.push(entry({ entryId: "pay-0:entry:1", ownerId: demoIds.yankee, amountCents: -100_000, kind: "disbursement", bankReference: "PAY:pay-0" }));
+    const ctx = context(state);
+    const result = evaluatePayment(ctx, payment(demoIds.xavier, 500_000, { evidenceSourceIds: ["demo:document:instruction-x-001:v1"] }), request);
+    expect(ctx.threeWay.bank.adjustedClearedCents).toBe(26_710_000);
+    expect(result.facts).toMatchObject({ poolClearedCents: 26_810_000, poolAdjustedClearedCents: 26_710_000 });
+    expect(result.failures[0].message).toContain("$267,100.00 cleared");
   });
 
   it("allows a payment within the owner's available balance and counts other holds", () => {
@@ -66,7 +76,7 @@ describe("L4 self-approval", () => {
     expect(checkSelfApproval("dev:requester:riley", "dev:approver:sam", "p")).toBeNull();
     const result = evaluatePayment(context(), payment(demoIds.yankee, 100), { stage: "approve", actor: "dev:requester:riley", transition: { from: "pending_approval", to: "approved" } });
     expect(codes(result)).toEqual(["SELF_APPROVAL"]);
-    expect(result.evaluated).toEqual(["L7", "L4", "L6", "L3", "L2", "L1", "L5"]);
+    expect(result.evaluated).toEqual(["L7", "L4", "L6", "L3", "L2", "L1", "L5", "L8", "L9", "L10", "L11"]);
   });
 });
 
@@ -188,5 +198,35 @@ describe("hold classification", () => {
     const red = context(state);
     const l5 = evaluatePayment(red, payment(demoIds.yankee, 100), request).failures;
     expect(holdReason(l5, state, red.threeWay)).toBe("On hold: the bank and the books don't agree yet (Bank outflow $2,000.00 (DEMO-WIRE-Y-9001) has no ledger entry).");
+  });
+});
+
+describe("superseded blocked payments", () => {
+  const pay = (proposalId: string, status: ProposalStatus, createdAt: number, extra: Partial<MoneyProposal> = {}): MoneyProposal => ({
+    proposalId, accountId: "a", kind: "payment", status, currency: "USD", requestedBy: "dev-unverified:riley", origin: { type: "person" }, evidenceSourceIds: [],
+    ownerId: "o:delgado", amountCents: 5_600_000, purpose: "client share", createdAt, updatedAt: createdAt, ...extra,
+  });
+
+  it("is superseded by a later request for the same line that passed the lock", () => {
+    const blocked = pay("p1", "blocked", 1, { payoutKind: "client_share", settlementSourceId: "s1" });
+    const later = pay("p2", "pending_approval", 2, { payoutKind: "client_share", settlementSourceId: "s1", requestedBy: "agent:disbursement:r2" });
+    expect(supersededBlocked([blocked, later]).get("p1")).toEqual({ reason: "later_request", proposalId: "p2", by: "agent:disbursement:r2", at: 2 });
+    // A person's request without a settlement line is covered by the agent's later line for the same owner, payee and amount.
+    expect(supersededBlocked([pay("p0", "blocked", 1), later]).get("p0")?.proposalId).toBe("p2");
+  });
+
+  it("is not superseded by an earlier, blocked or different request", () => {
+    const blocked = pay("p2", "blocked", 2, { payoutKind: "client_share", settlementSourceId: "s1" });
+    expect(supersededBlocked([blocked, pay("p1", "posted", 1, { payoutKind: "client_share", settlementSourceId: "s1" })]).size).toBe(0);
+    expect(supersededBlocked([blocked, pay("p3", "blocked", 3, { payoutKind: "client_share", settlementSourceId: "s1" })]).has("p2")).toBe(false);
+    expect(supersededBlocked([blocked, pay("p3", "posted", 3, { payoutKind: "client_share", settlementSourceId: "s1", amountCents: 1 })]).size).toBe(0);
+    expect(supersededBlocked([blocked, pay("p3", "posted", 3, { payoutKind: "attorney_fee", settlementSourceId: "s1" })]).size).toBe(0);
+    expect(supersededBlocked([blocked, pay("p3", "posted", 3, { payoutKind: "client_share", settlementSourceId: "s2" })]).size).toBe(0);
+    expect(supersededBlocked([blocked, pay("p3", "posted", 3, { payoutKind: "client_share", settlementSourceId: "s1", payeeOwnerId: "o:firm" })]).size).toBe(0);
+  });
+
+  it("is superseded once a person acknowledges it", () => {
+    const blocked = pay("p1", "blocked", 1, { acknowledged: { by: "dev-unverified:sam", at: 5, note: null } });
+    expect(supersededBlocked([blocked]).get("p1")).toEqual({ reason: "acknowledged", proposalId: null, by: "dev-unverified:sam", at: 5 });
   });
 });

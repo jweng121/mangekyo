@@ -7,6 +7,7 @@ import { useMutation, useQuery } from "convex/react";
 import { ConvexError } from "convex/values";
 import { api } from "../../../../../convex/_generated/api";
 import { MotionRoot } from "../../components/MotionRoot";
+import { OrchestratorTimeline } from "../../components/OrchestratorTimeline";
 import { money, personName } from "../../lib/desk";
 import "../../mk.css";
 
@@ -66,6 +67,7 @@ export default function RunInspector() {
   const runId = decodeURIComponent(String(useParams<{ runId: string }>().runId));
   const view = useQuery(api.financeDesk.getRunView, { runId });
   const config = useQuery(api.financeInvestigations.getProviderConfiguration);
+  const timeline = useQuery(api.financeOrchestrator.getTimeline, view ? { taskId: view.run.taskId } : "skip");
   if (view === undefined) return <MotionRoot className=""><p className="wrap empty" style={{ marginTop: 24 }}>Loading the run…</p></MotionRoot>;
   if (view === null) return <MotionRoot className=""><p className="wrap empty" style={{ marginTop: 24 }}>No run with this ID. <Link href="/desk">Back to the desk</Link></p></MotionRoot>;
   const { run, runs, steps } = view;
@@ -99,7 +101,9 @@ export default function RunInspector() {
         </Link>)}</div>
       </section>
       <div className="cols">
-        <section className="card" style={{ flex: "999 1 520px", minWidth: 0, padding: "6px 20px 10px" }} aria-label="Steps">
+        <div style={{ flex: "999 1 520px", minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+        {timeline && <OrchestratorTimeline state={timeline.orchestration.state} events={timeline.events} retries={timeline.orchestration.retries} highlightRunId={runId} />}
+        <section className="card" style={{ minWidth: 0, padding: "6px 20px 10px" }} aria-label="Steps">
           <h2 style={{ fontSize: 18, margin: "14px 0 2px" }}>What happened in run {run.attempt}</h2>
           <p style={{ margin: "0 0 4px", fontSize: 13, color: "var(--muted)" }}>Each step is a frozen snapshot, saved with its event.</p>
           {steps.map((s, i) => {
@@ -114,7 +118,10 @@ export default function RunInspector() {
               </div></div>;
           })}
         </section>
+        </div>
         <aside style={{ flex: "1 1 400px", minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+          {run.status === "failed" && <section className="card bad" aria-label="Failed, needs a person"><span className="tag t-bad">Failed, needs a person</span>
+            <p>{run.error?.message ?? "This attempt failed."} Nothing was sent for approval and no money moved. {/validation|checker/.test(run.error?.code ?? "") ? "Validation and checker failures are never retried automatically." : "Provider or network trouble gets one automatic retry; the orchestrator below shows whether it was used."}</p></section>}
           {run.status === "checker_rejected" && latest?.runId === runId && <FixIt runId={runId} creao={config?.mode === "creao"} />}
           <section className="card" aria-label="Claim by claim"><h2 style={{ fontSize: 18, margin: 0 }}>Claim by claim</h2>
             {policies.map(p => <span key={p.sourceId} className="tag t-ok">Used policy {p.policyId}{p.approvedBy ? `, approved by ${personName(p.approvedBy)}` : ""}</span>)}
@@ -130,7 +137,7 @@ export default function RunInspector() {
                   {c.sourceRefs.map(ref => <span key={ref} className="ids">Cites {ref}{sources.has(ref) ? ` · ${sources.get(ref)}` : ""}</span>)}
                 </div></div>;
             })}
-            <p className="meta">{run.claimCheck ? `Checked by code${run.claimCheck.agentMode !== "off" ? ` and the ${run.claimCheck.agentMode} checker agent` : ""} at ${new Date(run.claimCheck.checkedAt).toLocaleString("en-US")}. Any unsupported claim stops the run before a person sees a proposal.` : "This run finished before the claim checker existed, so its claims weren't checked."}</p>
+            <p className="meta">{run.claimCheck ? `Checked by code${run.claimCheck.agentMode !== "off" ? ` and the ${run.claimCheck.agentMode === "creao" ? "CREAO" : "mock"} checker agent (CHECKER_MODE=${run.claimCheck.agentMode})` : ""} at ${new Date(run.claimCheck.checkedAt).toLocaleString("en-US")}. Any unsupported claim stops the run before a person sees a proposal.` : "This run finished before the claim checker existed, so its claims weren't checked."}</p>
           </section>
           {run.result && <section className="card" aria-label="Outcome"><h2 style={{ fontSize: 18, margin: 0 }}>Outcome</h2>
             <p>{run.status === "checker_rejected" ? "Stopped by the claim checker. The proposal below never reached a person and no money moved." : run.result.proposedAllocations.length ? `Proposed ${run.result.proposedAllocations.length} allocation(s); none is approved until a person signs off.` : run.result.questions.length ? `Asked ${run.result.questions.length} question(s) instead of guessing (steps above). No money moved.` : "Findings only. No money moved."}</p>

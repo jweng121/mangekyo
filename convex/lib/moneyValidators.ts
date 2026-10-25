@@ -14,15 +14,23 @@ export const bankTransaction = v.object({
   reference: v.string(), counterparty: v.string(), ownerHintSourceId: v.union(v.string(), v.null()), documentSourceIds: v.array(v.string()),
   duplicateOfSourceId: v.union(v.string(), v.null()), raw: rawPointer,
 });
-export const owner = v.object({ sourceId: v.string(), ownerId: v.string(), accountId: v.string(), subAccount: v.string(), name: v.string(), raw: rawPointer });
+export const ownerKind = v.union(v.literal("client"), v.literal("firm"));
+export const owner = v.object({ sourceId: v.string(), ownerId: v.string(), accountId: v.string(), subAccount: v.string(), name: v.string(), ownerKind: v.optional(ownerKind), raw: rawPointer });
 export const obligation = v.object({
   sourceId: v.string(), accountId: v.string(), kind: v.union(v.literal("invoice"), v.literal("agreement"), v.literal("expected_payment")),
   ownerSourceId: v.union(v.string(), v.null()), amountCents: v.union(v.number(), v.null()), currency: v.union(v.string(), v.null()),
-  reference: v.string(), status: v.string(), excerpt: v.string(), raw: rawPointer,
+  reference: v.string(), status: v.string(), excerpt: v.string(), matterId: v.optional(v.string()), raw: rawPointer,
 });
+export const payoutKind = v.union(v.literal("client_share"), v.literal("attorney_fee"), v.literal("costs"), v.literal("lien"), v.literal("refund"), v.literal("other"));
+export const settlementLine = v.object({ kind: payoutKind, label: v.string(), amountCents: v.number(), payeeOwnerSourceId: v.union(v.string(), v.null()) });
 export const sourceDocument = v.object({
   sourceId: v.string(), accountId: v.string(), documentType: v.string(), title: v.string(), version: v.string(), text: v.string(), excerpt: v.string(),
-  namedOwnerSourceIds: v.array(v.string()), raw: rawPointer,
+  namedOwnerSourceIds: v.array(v.string()), signed: v.optional(v.boolean()), matterId: v.optional(v.string()), lines: v.optional(v.array(settlementLine)), feeBasisPoints: v.optional(v.number()), raw: rawPointer,
+});
+/** A disputed amount on a client's balance, recorded and resolved only by people (trust rule L10). */
+export const dispute = v.object({
+  disputeId: v.string(), accountId: v.string(), ownerId: v.string(), amountCents: v.number(), reason: v.string(), status: v.union(v.literal("open"), v.literal("resolved")),
+  recordedBy: v.string(), recordedAt: v.number(), resolvedBy: v.optional(v.string()), resolvedAt: v.optional(v.number()), resolution: v.optional(v.string()), sourceIds: v.array(v.string()),
 });
 export const statementBalance = v.object({ sourceId: v.string(), accountId: v.string(), amountCents: v.number(), asOf: v.number(), raw: rawPointer });
 export const reconcilingItem = v.object({ sourceId: v.string(), accountId: v.string(), appliesTo: v.literal("bank"), amountCents: v.number(), description: v.string(), detailed: v.boolean(), raw: rawPointer });
@@ -38,10 +46,10 @@ export const ledgerEntry = v.object({
 export const ownerBalance = v.object({
   ownerId: v.union(v.string(), v.null()), name: v.string(), postedCents: v.number(), clearedCents: v.number(), unclearedCents: v.number(), holdsCents: v.number(), availableCents: v.number(),
 });
-export const causeCode = v.union(...(["BANK_TXN_WITHOUT_LEDGER_ENTRY", "LEDGER_ENTRY_WITHOUT_BANK_TXN", "AMOUNT_MISMATCH", "DUPLICATE_POSTING", "UNCLEARED_DEPOSIT_ALLOCATED", "UNKNOWN_OWNER_ENTRY", "CURRENCY_MISMATCH", "RECONCILING_ITEM_WITHOUT_DETAIL", "NO_OPENING_BALANCE", "OUTSTANDING_ITEM_AGED"] as const).map(code => v.literal(code)));
+export const causeCode = v.union(...(["BANK_TXN_WITHOUT_LEDGER_ENTRY", "LEDGER_ENTRY_WITHOUT_BANK_TXN", "AMOUNT_MISMATCH", "DUPLICATE_POSTING", "UNCLEARED_DEPOSIT_ALLOCATED", "UNKNOWN_OWNER_ENTRY", "CURRENCY_MISMATCH", "RECONCILING_ITEM_WITHOUT_DETAIL", "NO_OPENING_BALANCE", "OUTSTANDING_ITEM_AGED", "COMMINGLING"] as const).map(code => v.literal(code)));
 export const threeWay = v.object({
   accountId: v.string(), currency: v.string(), cutoff: v.number(), status: v.union(v.literal("matched"), v.literal("mismatched"), v.literal("insufficient_data")),
-  bank: v.object({ statementCents: v.union(v.number(), v.null()), postAnchorCents: v.number(), reconcilingCents: v.number(), outstandingCents: v.optional(v.number()), adjustedCents: v.union(v.number(), v.null()), clearedCents: v.union(v.number(), v.null()), pendingCents: v.number() }),
+  bank: v.object({ statementCents: v.union(v.number(), v.null()), postAnchorCents: v.number(), reconcilingCents: v.number(), outstandingCents: v.optional(v.number()), adjustedCents: v.union(v.number(), v.null()), clearedCents: v.union(v.number(), v.null()), adjustedClearedCents: v.optional(v.union(v.number(), v.null())), pendingCents: v.number() }),
   bookCents: v.number(), ownersTotalCents: v.number(), unallocatedCents: v.number(),
   differences: v.object({ bankMinusBook: v.union(v.number(), v.null()), bookMinusOwners: v.number() }),
   causes: v.array(v.object({ code: causeCode, severity: v.union(v.literal("mismatch"), v.literal("warning")), message: v.string(), amountCents: v.union(v.number(), v.null()), sourceIds: v.array(v.string()), ownerIds: v.array(v.string()), unattributed: v.boolean() })),
@@ -49,9 +57,9 @@ export const threeWay = v.object({
   outstandingMaxDays: v.optional(v.number()),
 });
 
-export const lockRule = v.union(...(["L1", "L2", "L3", "L4", "L5", "L6", "L7"] as const).map(rule => v.literal(rule)));
+export const lockRule = v.union(...(["L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "L10", "L11"] as const).map(rule => v.literal(rule)));
 export const lockFailure = v.object({
-  rule: lockRule, code: v.union(...(["OWNER_INSUFFICIENT_FUNDS", "FUNDS_NOT_CLEARED", "MISSING_EVIDENCE", "SELF_APPROVAL", "RECONCILIATION_MISMATCH", "AMOUNT_INTEGRITY", "STATE"] as const).map(code => v.literal(code))),
+  rule: lockRule, code: v.union(...(["OWNER_INSUFFICIENT_FUNDS", "FUNDS_NOT_CLEARED", "MISSING_EVIDENCE", "SELF_APPROVAL", "RECONCILIATION_MISMATCH", "AMOUNT_INTEGRITY", "STATE", "COMMINGLING", "FEE_NOT_EARNED", "DISPUTED_FUNDS", "SETTLEMENT_MISMATCH"] as const).map(code => v.literal(code))),
   message: v.string(), sourceIds: v.array(v.string()),
 });
 export const lockResult = v.object({
@@ -66,9 +74,13 @@ export const proposal = v.object({
   origin: v.union(v.object({ type: v.literal("agent"), taskId: v.string(), runId: v.string(), agentProposalIds: v.array(v.string()) }), v.object({ type: v.literal("person") })),
   evidenceSourceIds: v.array(v.string()), bankSourceId: v.optional(v.string()), shares: v.optional(v.array(v.object({ ownerId: v.string(), amountCents: v.number() }))),
   ownerId: v.optional(v.string()), amountCents: v.number(), purpose: v.string(), fundingSourceId: v.optional(v.string()),
+  payoutKind: v.optional(payoutKind), matterId: v.optional(v.string()), settlementSourceId: v.optional(v.string()), payeeOwnerId: v.optional(v.string()),
   approvedBy: v.optional(v.string()), approvalId: v.optional(v.string()), rejectionReason: v.optional(v.string()), hold: v.optional(proposalHold), cancellationReason: v.optional(v.string()), blockedReasons: v.optional(v.array(lockFailure)),
-  postedEntryIds: v.optional(v.array(v.string())), createdAt: v.number(), updatedAt: v.number(),
+  postedEntryIds: v.optional(v.array(v.string())), acknowledged: v.optional(v.object({ by: v.string(), at: v.number(), note: v.union(v.string(), v.null()) })), createdAt: v.number(), updatedAt: v.number(),
 });
+export const blockedSuperseded = v.object({ reason: v.union(v.literal("later_request"), v.literal("acknowledged")), proposalId: v.union(v.string(), v.null()), by: v.string(), at: v.number() });
+/** The overview's proposal: `superseded` is derived on read, never stored. */
+export const proposalView = proposal.extend({ superseded: v.optional(blockedSuperseded) });
 export const transition = v.object({
   transitionId: v.string(), proposalId: v.string(), accountId: v.string(), from: v.union(proposalStatus, v.null()), to: proposalStatus,
   actor: v.string(), reason: v.union(v.string(), v.null()), lock: v.union(lockResult, v.null()), at: v.number(),

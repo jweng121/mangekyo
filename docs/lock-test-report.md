@@ -1,5 +1,9 @@
 # Lock rules — UI click-through test
 
+Latest continuation: [law-firm demo verification](lawfirm-progress.md) records
+the completed mock walkthrough, refund and bounced-check checks, and current
+validation results. Historical lock checks below are retained unchanged.
+
 - **Date**: 2026-10-24
 - **Setup**: the real finance-dev UI at http://localhost:3001 (already running), against the dev deployment `laudable-sturgeon-5` (provider mode `creao`) with `dev:backend` running.
 - **Driver**: Playwright Chromium, headless. The script cannot click any button whose text mentions an investigation, and it aborts if an investigation mutation is ever sent. No investigation was started.

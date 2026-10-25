@@ -1,18 +1,27 @@
 import { v } from "convex/values";
+import { paginationOptsValidator, paginationResultValidator } from "convex/server";
 import type { AnyFinanceEvent, FinanceInvestigationRun } from "@mangekyo/contracts";
 import { query } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
 import * as validators from "./lib/validators";
-import { recordOnly } from "./lib/investigationRecords";
+import { publicRun, recordOnly } from "./lib/investigationRecords";
+import { loadAccount } from "./lib/money";
+import * as orchestrator from "./lib/orchestratorValidators";
+import { backtestPolicy } from "@mangekyo/finance-core/policy";
 import { providerMode } from "./financeInvestigations";
 import { FEED_LENGTH } from "@mangekyo/finance-core/fixtures/demo-feed";
+import { LAW_FIRM_FEED_LENGTH } from "@mangekyo/finance-core/fixtures/law-firm-feed";
 
 /** Read-only views for the operator desk. No writes; the desk acts through the existing mutations. */
+export const getActivity = query({
+  args: { accountId: v.string(), paginationOpts: paginationOptsValidator },
+  returns: paginationResultValidator(validators.event),
+  handler: async (ctx, args) => {
+    const result = await ctx.db.query("financeEvents").withIndex("by_caseId_and_timestamp", q => q.eq("caseId", `intake:${args.accountId}`)).order("desc").paginate(args.paginationOpts);
+    return { ...result, page: result.page.map(recordOnly) };
+  },
+});
 
-function publicRun(row: Doc<"financeInvestigationRuns">): FinanceInvestigationRun {
-  const { executionClaimed, pollCount, deadline, ...run } = recordOnly(row);
-  return run as FinanceInvestigationRun;
-}
 
 const runSummary = v.object({
   runId: v.string(), taskId: v.string(), attempt: v.number(), parentRunId: v.union(v.string(), v.null()), status: validators.investigationStatus,
@@ -31,12 +40,12 @@ export const getDeskData = query({
   returns: v.object({
     tasks: v.array(v.object({ taskId: v.string(), bankSourceId: v.union(v.string(), v.null()), status: v.string(), latestRun: v.union(runSummary, v.null()) })),
     questions: v.array(v.object({ questionId: v.string(), runId: v.string(), taskId: v.string(), bankSourceId: v.union(v.string(), v.null()), question: v.string(), sourceRefs: v.array(v.string()) })),
-    policies: v.array(v.object({ policyId: v.string(), runId: v.string(), statement: v.string(), sourceRefs: v.array(v.string()) })),
+    policies: v.array(v.object({ policyId: v.string(), runId: v.string(), statement: v.string(), sourceRefs: v.array(v.string()), backtest: v.union(orchestrator.backtest, v.null()) })),
     activity: v.array(validators.event),
     counts: v.object({ autoStarted: v.number(), blocked: v.number(), posted: v.number() }),
     approvedPolicies: v.array(v.object({ policyId: v.string(), statement: v.string(), sourceId: v.string(), approvedBy: v.union(v.string(), v.null()), approvedAt: v.number() })),
     checkerStopped: v.array(v.object({ runId: v.string(), taskId: v.string(), bankSourceId: v.union(v.string(), v.null()), attempt: v.number(), claim: v.string(), reason: v.string(), sourceSays: v.union(v.string(), v.null()) })),
-    feed: v.object({ mode: v.union(v.literal("mock"), v.literal("creao"), v.null()), stepsDone: v.number(), total: v.number() }),
+    feed: v.object({ mode: v.union(v.literal("mock"), v.literal("creao"), v.literal("external"), v.null()), stepsDone: v.number(), total: v.number() }),
   }),
   handler: async (ctx, { accountId }) => {
     const tasks = await ctx.db.query("financeTasks").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).take(100);
@@ -66,13 +75,16 @@ export const getDeskData = query({
     const account = await ctx.db.query("financeAccounts").withIndex("by_accountId", (q) => q.eq("accountId", accountId)).unique();
     const approved = account ? await ctx.db.query("financeApprovedPolicies").withIndex("by_accountId_and_currency_and_approvedAt", (q) => q.eq("accountId", accountId).eq("currency", account.currency)).take(100) : [];
     const approvedStatements = new Set(approved.map(p => p.statement));
+    // Learning you can trust: every proposed rule is replayed over past decided deposits before anyone can approve it.
+    const loaded = account ? await loadAccount(ctx, accountId) : null;
+    const backtest = (statement: string) => loaded ? backtestPolicy(statement, loaded.state, { documents: loaded.documents, obligations: loaded.obligations }) : null;
     const feedSteps = money.filter(e => e.type === "finance.money.feed_step").length;
     return {
       tasks: taskRows, questions, activity, checkerStopped,
       // One card per distinct statement; several runs often propose the same policy.
-      policies: policies.filter((p, i) => !approvedStatements.has(p.statement.replace(/^For human review: /, "")) && policies.findIndex(q => q.statement === p.statement) === i),
+      policies: policies.filter((p, i) => !approvedStatements.has(p.statement.replace(/^For human review: /, "")) && policies.findIndex(q => q.statement === p.statement) === i).map(p => ({ ...p, backtest: backtest(p.statement) })),
       approvedPolicies: approved.map(p => ({ policyId: p.policyId, statement: p.statement, sourceId: p.sourceId, approvedBy: p.approvedBy ?? null, approvedAt: p.approvedAt })),
-      feed: { mode: providerMode(), stepsDone: feedSteps, total: FEED_LENGTH },
+      feed: { mode: providerMode(), stepsDone: feedSteps, total: account?.datasetVersion === "law-firm-demo-v1" ? LAW_FIRM_FEED_LENGTH : FEED_LENGTH },
       counts: { autoStarted, blocked: proposals.filter(p => p.status === "blocked").length, posted: proposals.filter(p => p.status === "posted").length },
     };
   },

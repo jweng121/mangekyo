@@ -153,7 +153,9 @@ describe("finance investigation workflow", () => {
     expect(JSON.stringify(run.error)).not.toContain("nonexistent-source");
     const failedSnapshot = (await t.query(api.finance.listTaskSnapshots, { taskId })).at(-1)!;
     expect(failedSnapshot.output).toMatchObject({ error: run.error });
-    expect((await t.query(api.finance.listTaskEvents, { taskId })).at(-1)?.type).toBe("finance.validation.failed");
+    // The failure is followed only by its step snapshot for the visual audit.
+    const types = (await t.query(api.finance.listTaskEvents, { taskId })).map(e => e.type);
+    expect(types.slice(-2)).toEqual(["finance.validation.failed", "finance.snapshot.captured"]);
     await t.finishAllScheduledFunctions(vi.runAllTimers);
   });
 
@@ -219,7 +221,7 @@ describe("finance investigation workflow", () => {
     await t.action(internal.financeInvestigationActions.poll, { runId: deliberate.runId });
     const [next] = (await t.query(api.financeInvestigations.getTaskInvestigation, { taskId })).runs;
     expect(next).toMatchObject({ parentRunId: started.runId, status: "failed", externalRunId: "second-external-run", error: { code: "validation_failed" } });
-    expect((await t.query(api.finance.listTaskEvents, { taskId })).at(-1)?.type).toBe("finance.validation.failed");
+    expect((await t.query(api.finance.listTaskEvents, { taskId })).filter(e => e.type !== "finance.snapshot.captured").at(-1)?.type).toBe("finance.validation.failed");
     await t.finishAllScheduledFunctions(vi.runAllTimers);
     expect(fetchSpy).toHaveBeenCalledTimes(3);
   });

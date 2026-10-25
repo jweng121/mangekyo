@@ -38,7 +38,7 @@ describe("Agent 2: the claim checker", () => {
     const t = await setup();
     const a = (await runs(t, "demo:bank:txn:A-001")).runs[0];
     expect(a.status).toBe("review_required");
-    expect(a.claimCheck).toMatchObject({ status: "passed", agentMode: "off", claims: [expect.objectContaining({ verdict: "supported", checkedBy: "code" })] });
+    expect(a.claimCheck).toMatchObject({ status: "passed", agentMode: "mock", claims: [expect.objectContaining({ verdict: "supported", checkedBy: "code" })] });
     const events = await t.query(api.finance.listTaskEvents, { taskId: taskOf("demo:bank:txn:A-001") });
     expect(events.map(e => e.type)).toContain("finance.checker.completed");
     const snapshots = await t.query(api.finance.listTaskSnapshots, { taskId: taskOf("demo:bank:txn:A-001") });
@@ -64,8 +64,7 @@ describe("Agent 2: the claim checker", () => {
     expect(events.filter(e => e.runId === rejectedRunId).map(e => e.type)).toEqual(expect.arrayContaining(["finance.checker.rejected"]));
   });
 
-  it("the agent part (mock) is off by default and only judges what code can't", async () => {
-    vi.stubEnv("CHECKER_AGENT_MODE", "mock");
+  it("the agent part is mock by default (CHECKER_MODE unset) and only judges what code can't", async () => {
     const t = await setup();
     const b = (await runs(t, "demo:bank:txn:B-001")).runs[0];
     expect(b.claimCheck?.agentMode).toBe("mock");
@@ -150,7 +149,7 @@ describe("live feed, policies and approve-all", () => {
     const desk = await t.query(api.financeDesk.getDeskData, { accountId: DEMO });
     const candidate = desk.policies.find(p => p.policyId === "invoice-exact-match")!;
     await expect(t.mutation(api.financeProposals.approvePolicy, { runId: candidate.runId, candidatePolicyId: candidate.policyId, dev: requester })).rejects.toThrow("approver");
-    expect(await t.mutation(api.financeProposals.approvePolicy, { runId: candidate.runId, candidatePolicyId: candidate.policyId, dev: approver })).toEqual({ policyId: "P-1" });
+    expect(await t.mutation(api.financeProposals.approvePolicy, { runId: candidate.runId, candidatePolicyId: candidate.policyId, dev: approver })).toMatchObject({ policyId: "P-1", backtest: { testable: true, disagree: 0 } });
     await expect(t.mutation(api.financeProposals.approvePolicy, { runId: candidate.runId, candidatePolicyId: candidate.policyId, dev: approver })).rejects.toThrow("already approved");
     const after = await t.query(api.financeDesk.getDeskData, { accountId: DEMO });
     expect(after.approvedPolicies).toEqual([expect.objectContaining({ policyId: "P-1", approvedBy: "dev-unverified:sam" })]);

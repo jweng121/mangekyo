@@ -44,7 +44,7 @@ function proposalLabel(p: MoneyProposal | undefined, names: Names): string {
 
 /** Replaces internal record IDs in backend messages with names people use. */
 export function scrubIds(text: string, names: Names): string {
-  return text.replace(/(?:demo|erp|bank|intake)(?::[\w@-]+)+(?:\.\w+)?/g, id => {
+  return text.replace(/\b(?:demo|erp|bank|intake)(?::[\w@-]+)+(?:\.\w+)?/g, id => {
     if (/(^|:)owner:/.test(id)) return names.owner(id);
     if (/bank:txn:/.test(id)) { const d = names.deposit(id); return d === "a deposit" ? "the bank item" : d; }
     return "a record";
@@ -90,6 +90,7 @@ function describeRaw(e: AnyFinanceEvent, names: Names): Activity {
       case "finance.money.bank_item_recorded": return { ...base, ...(actor ?? { who: "Bank feed", tone: "code" as Tone }), text: m.payload.message.replace(/demo:[^ ]*:?bank:txn:/g, "").replace(/\(simulated\)/, "· simulated") };
       case "finance.money.policy_approved": return { ...base, ...(actor ?? { who: "System", tone: "system" as Tone }), text: m.payload.message.replace(/ The next matching investigation will use it\.$/, ""), sub: "The next matching investigation uses it." };
       case "finance.money.feed_step": return { ...base, who: "Live feed", tone: "system", text: m.payload.message, sub: "Scripted DEMO activity · mock mode" };
+      case "finance.money.blocked_acknowledged": return { ...base, ...(actor ?? { who: "System", tone: "system" as Tone }), text: `Acknowledged the blocked ${label}`, sub: "It stays blocked in the history · no money moved" };
       case "finance.money.hold_updated": return { ...base, ...(actor ?? { who: "System", tone: "system" as Tone }), text: `Hold on the ${label}: ${m.payload.message.split(": ").slice(1).join(": ") || m.payload.message}` };
     }
   }

@@ -4,8 +4,10 @@ import { checkSelfApproval, checkState } from "@mangekyo/finance-core/gateway";
 import { buildReversalEntries } from "@mangekyo/finance-core/ledger";
 import { mutation, query } from "./_generated/server";
 import * as money from "./lib/moneyValidators";
+import * as orchestrator from "./lib/orchestratorValidators";
+import { backtestPolicy } from "@mangekyo/finance-core/policy";
 import { appendMoneyEvent, checkAccount, compact, evaluate, gatedStep, gatewayContext, getProposal, loadAccount, nextProposalId, recheckHeldProposals, recheckHold, requireAccount, resolveActor, submitProposal, transition, updateHold } from "./lib/money";
-import { recordOnly } from "./lib/investigationRecords";
+import { publicRun, recordOnly } from "./lib/investigationRecords";
 import { appendBoundary } from "./financeInvestigations";
 
 const outcome = v.object({ proposal: money.proposal, lock: v.union(money.lockResult, v.null()), alreadyDone: v.boolean() });
@@ -102,8 +104,7 @@ export const rejectProposal = mutation({
           question: `A reviewer rejected proposed allocation ${proposal.proposalId} (${proposal.shares?.map(s => `${s.amountCents} cents to ${s.ownerId}`).join(", ")}). Why, and what should be investigated instead?`,
           answer: reason, caseId: run.caseId, taskId: run.taskId, runId: run.runId, timestamp: Date.now(), respondent, evidenceRefs: [],
         });
-        const { executionClaimed, pollCount, deadline, _id, _creationTime, ...publicRun } = run;
-        await appendBoundary(ctx, publicRun, "finance.clarification.saved", "Reviewer rejection saved as task clarification for the next investigation attempt; no allocation was posted.", { clarificationId }, { type: "human", component: "finance-dev", ...respondent });
+        await appendBoundary(ctx, publicRun(run), "finance.clarification.saved", "Reviewer rejection saved as task clarification for the next investigation attempt; no allocation was posted.", { clarificationId }, { type: "human", component: "finance-dev", ...respondent });
       }
     }
     return { proposal: rejected, lock: null, alreadyDone: false };
@@ -177,6 +178,27 @@ export const cancelHeld = mutation({
   },
 });
 
+/** "Acknowledge": a person closes a blocked payment card. The proposal stays blocked in the history; nothing moves. Either role may do it. */
+export const acknowledgeBlocked = mutation({
+  args: { proposalId: v.string(), note: v.optional(v.string()), dev: money.devIdentity }, returns: money.proposal,
+  handler: async (ctx, args) => {
+    const actor = await resolveActor(ctx, args.dev);
+    const note = args.note?.trim() || null;
+    if (note && note.length > 4000) throw new ConvexError("A note can be at most 4000 characters.");
+    const proposal = await getProposal(ctx, args.proposalId);
+    if (proposal.kind !== "payment" || proposal.status !== "blocked") throw new ConvexError(`${args.proposalId} is not a blocked payment.`);
+    if (proposal.acknowledged) return proposal;
+    const row = await ctx.db.query("financeProposals").withIndex("by_proposalId", (q) => q.eq("proposalId", proposal.proposalId)).unique();
+    if (!row) throw new Error(`Unknown proposal ${proposal.proposalId}`);
+    const acknowledged = { by: actor.identity, at: Date.now(), note };
+    await ctx.db.patch("financeProposals", row._id, { acknowledged, updatedAt: acknowledged.at });
+    const next = { ...proposal, acknowledged, updatedAt: acknowledged.at };
+    await appendMoneyEvent(ctx, { accountId: proposal.accountId, type: "finance.money.blocked_acknowledged", actor, operationId: proposal.proposalId, stage: "acknowledged", proposal: next, sourceIds: proposal.evidenceSourceIds,
+      message: `${actor.identity} acknowledged blocked payment ${proposal.proposalId}${note ? `: ${note}` : "."} It stays blocked in the history; no money moved.` });
+    return next;
+  },
+});
+
 /** "Continue": a person resumes the held approve or post step; every rule runs again, including L4. */
 export const continueHeld = mutation({
   args: { proposalId: v.string(), dev: money.devIdentity }, returns: outcome,
@@ -189,9 +211,13 @@ export const continueHeld = mutation({
   },
 });
 
-/** Approve a policy the investigator proposed. Approver only; recorded with who; append-only. Used by the next investigation. */
+/**
+ * Approve a policy the investigator proposed. Approver only; recorded with who; append-only. Used by the next investigation.
+ * It is backtested first against every past deposit a person decided; any disagreement (or a rule code can't replay)
+ * needs a written reason, which is saved with the backtest.
+ */
 export const approvePolicy = mutation({
-  args: { runId: v.string(), candidatePolicyId: v.string(), dev: money.devIdentity }, returns: v.object({ policyId: v.string() }),
+  args: { runId: v.string(), candidatePolicyId: v.string(), reason: v.optional(v.string()), dev: money.devIdentity }, returns: v.object({ policyId: v.string(), backtest: orchestrator.backtest }),
   handler: async (ctx, args) => {
     const actor = await resolveActor(ctx, args.dev);
     if (actor.role !== "approver") throw new ConvexError("Switch to the approver role to approve a policy.");
@@ -205,11 +231,18 @@ export const approvePolicy = mutation({
     const statement = candidate.statement.replace(/^For human review: /, "");
     const existing = await ctx.db.query("financeApprovedPolicies").withIndex("by_accountId_and_currency_and_approvedAt", (q) => q.eq("accountId", task.accountId!).eq("currency", account.currency)).take(500);
     if (existing.some(p => p.statement === statement)) throw new ConvexError("This policy is already approved for the account.");
+    const loaded = await loadAccount(ctx, task.accountId);
+    const backtest = backtestPolicy(statement, loaded.state, { documents: loaded.documents, obligations: loaded.obligations });
+    const reason = args.reason?.trim() ?? "";
+    if (reason.length > 4000) throw new ConvexError("The reason can be at most 4000 characters.");
+    if (backtest.reasonRequired && !reason) throw new ConvexError(`${backtest.summary} Write the reason it should be approved anyway.`);
     const policyId = `P-${existing.length + 1}`;
     const now = Date.now();
     await ctx.db.insert("financeApprovedPolicies", { policyId, version: "v1", statement, status: "approved", accountId: task.accountId, currency: account.currency, approvedAt: now, sourceId: `policy:${task.accountId}:${policyId}@v1`, approvedBy: actor.identity, fromRunId: run.runId });
-    await appendMoneyEvent(ctx, { accountId: task.accountId, type: "finance.money.policy_approved", actor, operationId: `policy:${policyId}`, stage: "policy", message: `Approved policy ${policyId}: "${statement}" The next matching investigation will use it.`, sourceIds: [run.runId] });
-    return { policyId };
+    await ctx.db.insert("financePolicyBacktests", { ...backtest, backtestId: `policy:${task.accountId}:${policyId}:backtest`, accountId: task.accountId, policyId, runId: run.runId, reason: reason || null, approvedBy: actor.identity, at: now });
+    await appendMoneyEvent(ctx, { accountId: task.accountId, type: "finance.money.policy_approved", actor, operationId: `policy:${policyId}`, stage: "policy",
+      message: `Approved policy ${policyId}: "${statement}" Backtest: ${backtest.summary}${reason ? ` Reason given: ${reason}` : ""} The next matching investigation will use it.`, sourceIds: [run.runId, ...backtest.cases.map(c => c.bankSourceId)] });
+    return { policyId, backtest };
   },
 });
 

@@ -1,7 +1,8 @@
 import { ConvexError, v } from "convex/values";
-import type { NormalizedAccountBundle, NormalizedBankTransaction } from "@mangekyo/contracts";
+import type { MoneyProposalView, NormalizedAccountBundle, NormalizedBankTransaction } from "@mangekyo/contracts";
 import { candidateOwnerSourceIds, depositCaseId, formatCents, normalizeErpState, type ErpState } from "@mangekyo/finance-core/intake";
 import { activeAllocations, importLedgerEntries, ownerBalances } from "@mangekyo/finance-core/ledger";
+import { supersededBlocked } from "@mangekyo/finance-core/gateway";
 import { DEMO_ACCOUNT_ID, demoMoneyBundle, demoRunOf, demoSettlement, demoUnrecordedOutflow } from "@mangekyo/finance-core/fixtures/demo-money";
 // Read-only use of the teammate's deterministic generator; his runtime state file is never touched.
 import { createSeed } from "../apps/demo-erp/data/seed";
@@ -9,6 +10,9 @@ import { api, internal } from "./_generated/api";
 import { internalMutation, mutation, query, type MutationCtx } from "./_generated/server";
 import { autoInvestigationSetting, providerMode } from "./financeInvestigations";
 import { demoFeedStep, feedBundle, FEED_LENGTH, FEED_PAYMENT_PURPOSE } from "@mangekyo/finance-core/fixtures/demo-feed";
+import { lawFirmBundle } from "@mangekyo/finance-core/fixtures/law-firm";
+import { lawFirmFeedBundle, lawFirmSteps, lawId, LAW_FIRM_FEED_LENGTH, PARALEGAL, PARALEGAL_FEE_PURPOSE } from "@mangekyo/finance-core/fixtures/law-firm-feed";
+import { demoAccountId } from "@mangekyo/finance-core/fixtures/demo-money";
 import { nextProposalId, submitProposal } from "./lib/money";
 import * as money from "./lib/moneyValidators";
 import * as validators from "./lib/validators";
@@ -34,7 +38,7 @@ async function upsert(ctx: MutationCtx, table: SourceTable, row: { sourceId: str
 
 const importResult = v.object({ accountId: v.string(), inserted: v.number(), updated: v.number(), unchanged: v.number(), entriesInserted: v.number(), issues: v.array(money.issue) });
 
-async function importBundle(ctx: MutationCtx, bundle: NormalizedAccountBundle, system: "erp" | "demo") {
+export async function importBundle(ctx: MutationCtx, bundle: NormalizedAccountBundle, system: "erp" | "demo") {
   const now = Date.now();
   const accountId = bundle.account.accountId;
   const counts = { inserted: 0, updated: 0, unchanged: 0 };
@@ -69,7 +73,11 @@ async function importBundle(ctx: MutationCtx, bundle: NormalizedAccountBundle, s
   await appendMoneyEvent(ctx, { accountId, type: "finance.money.import_completed", actor: SYSTEM, operationId: `import:${accountId}:${now}`, stage: "import",
     message: `${system} import: ${counts.inserted} inserted, ${counts.updated} updated, ${counts.unchanged} unchanged source records; ${entriesInserted} new ledger entries; ${issues.length} issue(s).`,
     threeWay: checkAccount(loaded.state, now), sourceIds: issues.map(row => row.rawId) });
-  for (const bankSourceId of newlyEligible) await scheduleAutoInvestigation(ctx, loaded, bankSourceId);
+  // A bulk import (more than 10 new deposits, e.g. the 200-deposit batch) starts its investigations a little apart: every settle reads the
+  // whole account for the lock, so hundreds settling at once mostly conflict with each other.
+  let order = 0;
+  const stagger = newlyEligible.size > 10 ? AUTO_STAGGER_MS : 0;
+  for (const bankSourceId of newlyEligible) await scheduleAutoInvestigation(ctx, loaded, bankSourceId, stagger * order++);
   await recheckHeldProposals(ctx, accountId);
   return { accountId, ...counts, entriesInserted, issues };
 }
@@ -84,13 +92,19 @@ export const loadDemoFixture = mutation({
   handler: async (ctx) => await importBundle(ctx, demoMoneyBundle(), "demo"),
 });
 
+/** The next DEMO pool number. Earlier accounts and their history are never reused or touched. */
+export async function nextDemoRun(ctx: MutationCtx): Promise<number> {
+  const accounts = await ctx.db.query("financeAccounts").take(500);
+  const runs = accounts.map(a => demoRunOf(a.accountId)).filter((run): run is number => run !== null);
+  return runs.length ? Math.max(...runs) + 1 : 1;
+}
+
 /** A new DEMO account (next pool number) with the fixture loaded clean. Earlier accounts and their history are untouched. */
 export const startFreshDemoRun = mutation({
-  args: {}, returns: importResult,
-  handler: async (ctx) => {
-    const accounts = await ctx.db.query("financeAccounts").take(500);
-    const runs = accounts.map(a => demoRunOf(a.accountId)).filter((run): run is number => run !== null);
-    return await importBundle(ctx, demoMoneyBundle(runs.length ? Math.max(...runs) + 1 : 1), "demo");
+  args: { fixture: v.optional(v.literal("legacy")) }, returns: importResult,
+  handler: async (ctx, args) => {
+    const run = await nextDemoRun(ctx);
+    return await importBundle(ctx, args.fixture === "legacy" ? demoMoneyBundle(run) : lawFirmBundle(demoAccountId(run)), "demo");
   },
 });
 
@@ -105,6 +119,66 @@ async function insertDemoBankItem(ctx: MutationCtx, txn: NormalizedBankTransacti
 }
 
 const simulated = v.object({ sourceId: v.string(), created: v.boolean() });
+
+/** Mock bank return: the bank moved first. Books wait for a different person to record the return. */
+export const simulateClientBounce = mutation({
+  args: { accountId: v.string(), dev: money.devIdentity }, returns: simulated,
+  handler: async (ctx, { accountId, dev }) => {
+    const loaded = await loadAccount(ctx, accountId);
+    if (providerMode() !== "mock" || loaded.account.datasetVersion !== "law-firm-demo-v1") throw new ConvexError("Client returns are simulated only in the mock law-firm demo.");
+    const actor = await resolveActor(ctx, dev);
+    if (actor.role !== "requester") throw new ConvexError("Switch to riley, requester, to simulate the return; sam can then approve the return entry.");
+    const candidates = ["okafor-retainer", "nguyen-zelle"].map(key => loaded.state.bankTransactions.find(t => t.sourceId === lawId(accountId, `bank:txn:${key}`)));
+    const original = candidates.find(t => t && activeAllocations(loaded.state.entries, t.sourceId).length > 0);
+    if (!original) throw new ConvexError("First approve and post the Okafor or James Nguyen allocation.");
+    const allocations = activeAllocations(loaded.state.entries, original.sourceId);
+    if (allocations.length !== 1 || allocations[0].amountCents !== original.amountCents) throw new ConvexError("This demo return requires one complete owner allocation.");
+    const owner = loaded.state.owners.find(o => o.ownerId === allocations[0].ownerId)!;
+    const sourceId = `${original.sourceId}:returned`;
+    const existing = await ctx.db.query("financeBankTransactions").withIndex("by_sourceId", q => q.eq("sourceId", sourceId)).unique();
+    if (existing) return { sourceId, created: false };
+    await ctx.db.insert("financeBankTransactions", { ...original, sourceId, direction: "outflow", clearing: "cleared", bookedAt: Date.now(), reference: `RETURN ${original.reference}`, ownerHintSourceId: owner.sourceId, duplicateOfSourceId: null, raw: { ...original.raw, recordType: "client-check-return", rawId: sourceId } });
+    const after = await loadAccount(ctx, accountId);
+    await appendMoneyEvent(ctx, { accountId, type: "finance.money.bank_item_recorded", actor, operationId: sourceId, stage: "bank_return",
+      message: `Simulated bank return: ${formatCents(original.amountCents)} from ${original.counterparty} for ${owner.name}. A different person must approve the return entry.`, sourceIds: [sourceId, original.sourceId], threeWay: checkAccount(after.state, Date.now()) });
+    await recheckHeldProposals(ctx, accountId);
+    return { sourceId, created: true };
+  },
+});
+
+/** A person's duplicate decision creates a refund-payable allocation through the ordinary gates. */
+export const confirmDuplicate = mutation({
+  args: { accountId: v.string(), bankSourceId: v.string(), dev: money.devIdentity }, returns: v.object({ proposalId: v.string() }),
+  handler: async (ctx, args) => {
+    const loaded = await loadAccount(ctx, args.accountId);
+    if (providerMode() !== "mock" || loaded.account.datasetVersion !== "law-firm-demo-v1") throw new ConvexError("Duplicate decisions here are mock law-firm demo only.");
+    const actor = await resolveActor(ctx, args.dev);
+    const deposit = loaded.state.bankTransactions.find(t => t.sourceId === args.bankSourceId);
+    if (!deposit?.duplicateOfSourceId || deposit.sourceId !== lawId(args.accountId, "bank:txn:bayview-second")) throw new ConvexError("Choose the second Bayview wire flagged as a possible duplicate.");
+    const previous = loaded.proposals.find(p => p.bankSourceId === deposit.sourceId);
+    if (previous) return { proposalId: previous.proposalId };
+    const ownerId = lawId(args.accountId, "owner:bayview-refund");
+    const sourceId = lawId(args.accountId, "document:bayview-duplicate-decision:v1");
+    const text = `${actor.identity} confirmed the second $40,000.00 Bayview Title wire with reference ESC-2291 is a duplicate and must be returned to Bayview Title (refund payable).`;
+    await ctx.db.insert("financeAccountOwners", { ownerId, sourceId: lawId(args.accountId, "owner-record:bayview-refund"), accountId: args.accountId, subAccount: "IOLTA", name: "Bayview Title (refund payable)", raw: { ...deposit.raw, recordType: "refund-payee", rawId: ownerId } });
+    await ctx.db.insert("financeSourceDocuments", { sourceId, accountId: args.accountId, title: "Human duplicate and refund decision", documentType: "Human instruction", text, excerpt: text, version: "v1", namedOwnerSourceIds: [lawId(args.accountId, "owner-record:bayview-refund")], raw: { ...deposit.raw, recordType: "human-instruction", rawId: sourceId } });
+    const taskId = depositTaskId(args.accountId, deposit.sourceId);
+    const questions = await ctx.db.query("financeInvestigationQuestions").withIndex("by_taskId", q => q.eq("taskId", taskId)).take(100);
+    for (const question of questions.filter(q => q.status === "open" && q.key === "duplicate-or-installment")) {
+      const clarificationId = `${question.questionId}:clarification`;
+      await ctx.db.insert("financeClarifications", { clarificationId, sourceId: `clarification:${clarificationId}`, questionId: question.questionId, question: question.question,
+        answer: text, caseId: question.caseId, taskId, runId: question.runId, timestamp: Date.now(), respondent: { identity: actor.identity, authenticated: actor.authenticated }, evidenceRefs: [] });
+      await ctx.db.patch(question._id, { status: "answered", clarificationId });
+    }
+    const now = Date.now();
+    const proposalId = await nextProposalId(ctx, args.accountId, "allocation");
+    await submitProposal(ctx, { proposalId, accountId: args.accountId, kind: "allocation", status: "proposed", currency: deposit.currency, requestedBy: actor.identity,
+      origin: { type: "person" }, bankSourceId: deposit.sourceId, shares: [{ ownerId, amountCents: deposit.amountCents }], amountCents: deposit.amountCents,
+      purpose: "Bayview duplicate refund payable", evidenceSourceIds: [deposit.sourceId, deposit.duplicateOfSourceId, sourceId], createdAt: now, updatedAt: now }, actor);
+    await appendMoneyEvent(ctx, { accountId: args.accountId, type: "finance.money.bank_item_recorded", actor, operationId: proposalId, stage: "duplicate_decision", message: text, sourceIds: [sourceId, deposit.sourceId, deposit.duplicateOfSourceId] });
+    return { proposalId };
+  },
+});
 
 /** DEV ONLY, DEMO account only: a bank-feed outflow nobody recorded (scenario E). */
 export const simulateUnrecordedOutflow = mutation({
@@ -130,15 +204,14 @@ export const simulateSettlement = mutation({
   },
 });
 
-function depositTaskId(accountId: string, bankSourceId: string) {
+export function depositTaskId(accountId: string, bankSourceId: string) {
   return `${depositCaseId(accountId)}:deposit:${bankSourceId}`;
 }
 
-/** Why a deposit cannot be investigated, or null when it is a cleared, recorded, unallocated deposit. */
+/** Investigation moves no money. Pending deposits remain bank evidence, not allocatable transactions. */
 function ineligibility(loaded: LoadedAccount, bankSourceId: string): { code: string; message: string } | null {
   const deposit = loaded.state.bankTransactions.find(t => t.sourceId === bankSourceId);
   if (!deposit || deposit.direction !== "inflow") return { code: "NOT_A_DEPOSIT", message: "Only bank deposits can be investigated." };
-  if (deposit.clearing !== "cleared") return { code: "AWAITING_CLEARANCE", message: "This deposit has not cleared; investigation input v1 only carries cleared deposits." };
   if (!loaded.state.entries.some(e => e.kind === "deposit_received" && e.fundsSourceId === bankSourceId)) return { code: "NOT_RECORDED", message: "This deposit is not recorded in the ledger (it predates the cutover and is reflected in opening balances)." };
   if (activeAllocations(loaded.state.entries, bankSourceId).length > 0) return { code: "ALREADY_ALLOCATED", message: "This deposit is already allocated." };
   return null;
@@ -171,6 +244,7 @@ export const feedNext = mutation({
     if (providerMode() !== "mock") throw new ConvexError("The live feed runs only in mock mode. In CREAO mode every investigation costs money, so it never starts here.");
     await requireAccount(ctx, accountId);
     const loaded = await loadAccount(ctx, accountId);
+    if (loaded.account.datasetVersion === "law-firm-demo-v1") return await advanceLawFirmFeed(ctx, loaded);
     for (let index = 0; index < FEED_LENGTH; index++) {
       const step = demoFeedStep(index, accountId, Date.now());
       if (!step) break;
@@ -190,6 +264,44 @@ export const feedNext = mutation({
   },
 });
 
+async function advanceLawFirmFeed(ctx: MutationCtx, loaded: LoadedAccount) {
+  const accountId = loaded.account.accountId;
+  const events = await ctx.db.query("financeEvents").withIndex("by_taskId_and_sequence", q => q.eq("taskId", `money:${accountId}`)).take(2000);
+  const step = events.filter(e => e.type === "finance.money.feed_step").length + 1;
+  const total = LAW_FIRM_FEED_LENGTH;
+  if (step > total) return { step: total, total, label: null, done: true };
+  const id = (suffix: string) => lawId(accountId, suffix);
+  if ([1, 4, 5, 6, 9].includes(step)) await importBundle(ctx, lawFirmFeedBundle(step, accountId, Date.now()), "demo");
+  // Step 2: the Disbursement agent prepares Delgado's three payout lines from the signed settlement statement before the check clears;
+  // the lock blocks each line (L2: the funds haven't cleared). After clearing and allocation it runs again on its own.
+  if (step === 2) await ctx.runMutation(internal.financeTrust.autoStartDisbursement, { accountId, bankSourceId: id("bank:txn:harborline-delgado"), trigger: "person_started" });
+  if (step === 7) {
+    const now = Date.now();
+    await submitProposal(ctx, { proposalId: await nextProposalId(ctx, accountId, "payment"), accountId, kind: "payment", status: "proposed", currency: "USD",
+      requestedBy: "dev-unverified:riley", origin: { type: "person" }, ownerId: id("owner:raymond-cho"), amountCents: 600_000, purpose: "Raymond Cho expert witness",
+      evidenceSourceIds: [id("document:cho-expert:v1")], createdAt: now, updatedAt: now },
+      { identity: "dev-unverified:riley", authenticated: false, role: "requester" });
+  }
+  // Step 10: a paralegal moves $3,000.00 of Chen & Park fees to the firm with no approved invoice and no settlement statement: blocked by L9.
+  if (step === 10) {
+    const now = Date.now();
+    await submitProposal(ctx, { proposalId: await nextProposalId(ctx, accountId, "payment"), accountId, kind: "payment", status: "proposed", currency: "USD",
+      requestedBy: PARALEGAL, origin: { type: "person" }, ownerId: id("owner:chen-park"), payeeOwnerId: id("owner:firm"), payoutKind: "attorney_fee", amountCents: 300_000, purpose: PARALEGAL_FEE_PURPOSE,
+      evidenceSourceIds: [id("owner-record:chen-park")], createdAt: now, updatedAt: now },
+      { identity: PARALEGAL, authenticated: false, role: "requester" });
+  }
+  if (step === 3) await ctx.runMutation(api.financeIntake.simulateDepositCleared, { bankSourceId: id("bank:txn:harborline-delgado") });
+  if (step === 8) {
+    const bankSourceId = id("bank:txn:harborline-delgado");
+    if (!activeAllocations(loaded.state.entries, bankSourceId).length) throw new ConvexError("Approve and post Maria Delgado's allocation before proposing the policy.");
+    const taskId = depositTaskId(accountId, bankSourceId);
+    await ctx.runMutation(internal.financeInvestigations.autoStartInvestigation, { taskId, scope: { kind: "deposit_investigation", accountId, currency: "USD", from: null }, trigger: "auto_start" });
+  }
+  const label = lawFirmSteps[step - 1];
+  await appendMoneyEvent(ctx, { accountId, type: "finance.money.feed_step", actor: SYSTEM, operationId: `feed:${accountId}:${step}`, stage: "feed", message: `Live feed step ${step} of ${total}: ${label}.` });
+  return { step, total, label, done: step === total };
+}
+
 /** DEV ONLY, DEMO accounts only: the bank feed reports a pending demo deposit as cleared. */
 export const simulateDepositCleared = mutation({
   args: { bankSourceId: v.string() }, returns: v.object({ sourceId: v.string(), changed: v.boolean() }),
@@ -201,6 +313,7 @@ export const simulateDepositCleared = mutation({
     const loaded = await loadAccount(ctx, row.accountId);
     await appendMoneyEvent(ctx, { accountId: row.accountId, type: "finance.money.bank_item_recorded", actor: SYSTEM, operationId: bankSourceId, stage: "bank_feed", message: `DEMO bank feed: ${bankSourceId} cleared (simulated).`, threeWay: checkAccount(loaded.state, Date.now()), sourceIds: [bankSourceId] });
     await recheckHeldProposals(ctx, row.accountId);
+    await scheduleAutoInvestigation(ctx, loaded, bankSourceId);
     return { sourceId: bankSourceId, changed: true };
   },
 });
@@ -215,6 +328,11 @@ export const recordBankItem = mutation({
     const loaded = await loadAccount(ctx, args.accountId);
     const txn = loaded.state.bankTransactions.find(t => t.sourceId === args.bankSourceId);
     if (!txn) throw new ConvexError("Unknown bank transaction for this account.");
+    if (txn.raw.recordType === "client-check-return") {
+      const events = await ctx.db.query("financeEvents").withIndex("by_taskId_and_sequence", q => q.eq("taskId", `money:${args.accountId}`)).take(2000);
+      const decision = events.find(e => e.type === "finance.money.bank_item_recorded" && e.runId === txn.sourceId);
+      if (!decision || decision.actor.type !== "human" || decision.actor.identity === actor.identity) throw new ConvexError("L4: a different person must approve the bank return entry.");
+    }
     const linked = loaded.state.entries.some(e => e.sourceRefs.includes(txn.sourceId) || e.fundsSourceId === txn.sourceId || (!!e.bankReference && e.bankReference === txn.reference));
     if (linked) throw new ConvexError("This bank item is already recorded in the ledger.");
     const ownerId = args.ownerId ?? loaded.state.owners.find(o => o.sourceId === txn.ownerHintSourceId)?.ownerId;
@@ -246,13 +364,15 @@ async function autoEvent(ctx: MutationCtx, accountId: string, bankSourceId: stri
 }
 
 /** Import-time decision: schedule when the setting allows it, otherwise record the skip and its reason now. */
-async function scheduleAutoInvestigation(ctx: MutationCtx, loaded: LoadedAccount, bankSourceId: string) {
+const AUTO_STAGGER_MS = 400;
+
+async function scheduleAutoInvestigation(ctx: MutationCtx, loaded: LoadedAccount, bankSourceId: string, delayMs = 0) {
   const accountId = loaded.state.account.accountId;
   const setting = autoInvestigationSetting();
   if (!setting.enabled) return await autoEvent(ctx, accountId, bankSourceId, false, setting.code, setting.message);
   const blocked = ineligibility(loaded, bankSourceId);
   if (blocked) return await autoEvent(ctx, accountId, bankSourceId, false, blocked.code, blocked.message);
-  await ctx.scheduler.runAfter(0, internal.financeIntake.autoInvestigateDeposit, { accountId, bankSourceId });
+  await ctx.scheduler.runAfter(delayMs, internal.financeIntake.autoInvestigateDeposit, { accountId, bankSourceId });
 }
 
 /** One investigation per deposit: rechecks the setting and eligibility, and never starts a second run for a task. */
@@ -263,15 +383,21 @@ export const autoInvestigateDeposit = internalMutation({
     if (!setting.enabled) { await autoEvent(ctx, accountId, bankSourceId, false, setting.code, setting.message); return null; }
     const loaded = await loadAccount(ctx, accountId);
     const existing = await ctx.db.query("financeTasks").withIndex("by_taskId", (q) => q.eq("taskId", depositTaskId(accountId, bankSourceId))).unique();
-    const prior = existing && await ctx.db.query("financeInvestigationRuns").withIndex("by_taskId_and_attempt", (q) => q.eq("taskId", existing.taskId)).first();
-    if (prior) { await autoEvent(ctx, accountId, bankSourceId, false, "ALREADY_INVESTIGATED", `Task already has investigation ${prior.runId}; no second run.`); return null; }
+    const prior = existing && await ctx.db.query("financeInvestigationRuns").withIndex("by_taskId_and_attempt", (q) => q.eq("taskId", existing.taskId)).order("desc").first();
+    // Only the simulated clearance workflow gets a new automatic attempt. Never retry a paid run.
+    const clearedAfterReview = providerMode() === "mock" && prior?.mode === "mock" && prior.status === "completed"
+      && prior.result?.outcome === "findings" && prior.providerInput?.records.transactions.length === 0
+      && prior.providerInput.records.bankTransactions?.some(t => t.sourceId === bankSourceId && t.clearing === "pending")
+      && loaded.state.bankTransactions.some(t => t.sourceId === bankSourceId && t.clearing === "cleared");
+    if (prior && !clearedAfterReview) { await autoEvent(ctx, accountId, bankSourceId, false, "ALREADY_INVESTIGATED", `Task already has investigation ${prior.runId}; no second run.`); return null; }
     const blocked = ineligibility(loaded, bankSourceId);
     if (blocked) { await autoEvent(ctx, accountId, bankSourceId, false, blocked.code, blocked.message); return null; }
     const { taskId } = await ensureTaskRow(ctx, loaded, bankSourceId);
     try {
       // Nested mutation: a failed start rolls back on its own while the skip is still recorded here.
-      const started = await ctx.runMutation(api.financeInvestigations.startInvestigation, { taskId, scope: { kind: "deposit_investigation", accountId, currency: loaded.state.account.currency, from: null } });
-      await autoEvent(ctx, accountId, bankSourceId, started.created, started.created ? "AUTO_STARTED" : "ALREADY_INVESTIGATED", started.created ? "Proposals from this run still need a person to approve." : "An investigation is already active.", started.runId);
+      const started = await ctx.runMutation(internal.financeInvestigations.autoStartInvestigation, { taskId, scope: { kind: "deposit_investigation", accountId, currency: loaded.state.account.currency, from: null }, trigger: clearedAfterReview ? "deposit_cleared" : "auto_start" });
+      if (started.refused) await autoEvent(ctx, accountId, bankSourceId, false, started.refused.code, started.refused.message);
+      else await autoEvent(ctx, accountId, bankSourceId, started.created, started.created ? "AUTO_STARTED" : "ALREADY_INVESTIGATED", started.created ? "Proposals from this run still need a person to approve." : "An investigation is already active.", started.runId);
     } catch (error) {
       await autoEvent(ctx, accountId, bankSourceId, false, "START_FAILED", error instanceof ConvexError && typeof error.data === "string" ? error.data : "The investigation could not be started.");
     }
@@ -286,7 +412,7 @@ const depositRow = v.object({
 
 export const listAccounts = query({
   args: {}, returns: v.array(money.storedAccount),
-  handler: async (ctx) => (await ctx.db.query("financeAccounts").take(20)).map(recordOnly),
+  handler: async (ctx) => (await ctx.db.query("financeAccounts").order("desc").take(500)).map(recordOnly),
 });
 
 /** Everything the money panel shows for one account. Omit cutoff for the latest recorded state. */
@@ -297,7 +423,7 @@ export const getAccountOverview = query({
     outstandingMaxDays: v.number(), reconcilingItems: v.array(money.reconcilingItem),
     account: money.storedAccount, threeWay: money.threeWay, balances: v.array(money.ownerBalance), deposits: v.array(depositRow),
     owners: v.array(money.owner), documents: v.array(v.object({ sourceId: v.string(), title: v.string(), documentType: v.string(), excerpt: v.string() })),
-    obligations: v.array(money.obligation), entries: v.array(money.ledgerEntry), proposals: v.array(money.proposal),
+    obligations: v.array(money.obligation), entries: v.array(money.ledgerEntry), proposals: v.array(money.proposalView),
   }),
   handler: async (ctx, { accountId, cutoff, now }) => {
     const loaded = await loadAccount(ctx, accountId);
@@ -311,13 +437,14 @@ export const getAccountOverview = query({
       return { transaction, status, taskId: tasks.find(t => t.bankSourceId === transaction.sourceId)?.taskId ?? null, allocatedTo };
     });
     const { _id, _creationTime, ...account } = loaded.account;
+    const superseded = supersededBlocked(loaded.proposals);
     return {
       outstandingMaxDays: outstandingMaxDays(), reconcilingItems: loaded.state.reconcilingItems,
       account, threeWay: checkAccount(loaded.state, at, now ?? latestActivity(loaded)), balances: ownerBalances(loaded.state, at), deposits,
       owners: loaded.state.owners, documents: loaded.documents.map(d => ({ sourceId: d.sourceId, title: d.title, documentType: d.documentType, excerpt: d.excerpt })),
       obligations: loaded.obligations,
       entries: [...loaded.state.entries].sort((a, b) => b.effectiveAt - a.effectiveAt || b.entryId.localeCompare(a.entryId)).slice(0, 200),
-      proposals: [...loaded.proposals].sort((a, b) => b.createdAt - a.createdAt).slice(0, 100),
+      proposals: [...loaded.proposals].sort((a, b) => b.createdAt - a.createdAt).slice(0, 100).map((p): MoneyProposalView => superseded.has(p.proposalId) ? { ...p, superseded: superseded.get(p.proposalId)! } : p),
     };
   },
 });

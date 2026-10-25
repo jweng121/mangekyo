@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 import Link from "next/link";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation, useQuery, usePaginatedQuery } from "convex/react";
 import { ConvexError } from "convex/values";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -13,9 +13,11 @@ import { MotionRoot, prefersReducedMotion } from "../components/MotionRoot";
 import { Money } from "../components/Money";
 import AnimatedList from "../components/reactbits/AnimatedList";
 import { causeLine, describeEvent, money, ownerStatus, personName, progressText, reasonWords, usedPolicy, type Activity, type Names } from "../lib/desk";
+import { STATE } from "../lib/orchestrator";
 import "../mk.css";
 
 type Acting = "sam" | "riley";
+type PaymentDraft = { ownerId?: string; amount?: string; purpose?: string; fundingSourceId?: string };
 const devFor = (acting: Acting) => acting === "sam" ? { role: "approver" as const, name: "sam" } : { role: "requester" as const, name: "riley" };
 const isDemo = (id: string) => /^demo:account:pool-\d+$/.test(id);
 const errorText = (e: unknown) => e instanceof ConvexError && typeof e.data === "string" ? e.data : e instanceof Error ? e.message.replace(/^[\s\S]*Uncaught (ConvexError|Error): /, "").split("\n")[0] : "Request failed.";
@@ -29,7 +31,7 @@ function Bars({ pool, available, requested, ownerName }: { pool: number | null; 
   const row = (label: string, value: number, color: string, valueColor?: string) => <div>
     <div className="bar-l"><span>{label}</span><span className="n" style={{ color: valueColor }}>{money(value)}</span></div>
     <div className="track"><div className="fill" style={{ width: pct(value), background: color }} /></div></div>;
-  return <div className="bars">{row("Pooled account, cleared", pool ?? 0, "var(--ok)")}{row(`${ownerName}, available`, available, "var(--ink)")}{row("Requested", requested, "var(--bad)", "var(--bad)")}</div>;
+  return <div className="bars">{row("Pooled account, adjusted cleared", pool ?? 0, "var(--ok)")}{row(`${ownerName}, available`, available, "var(--ink)")}{row("Requested", requested, "var(--bad)", "var(--bad)")}</div>;
 }
 
 function Card({ tone, tag, tagTone, title, children }: { tone?: "bad" | "wait"; tag: string; tagTone: string; title: ReactNode; children: ReactNode }) {
@@ -45,21 +47,29 @@ export default function Desk() {
   useEffect(() => { const t = setInterval(() => setMinute(Math.floor(Date.now() / 60_000) * 60_000), 60_000); return () => clearInterval(t); }, []);
   const overview = useQuery(api.financeIntake.getAccountOverview, accountId ? { accountId, now: minute + 59_999 } : "skip");
   const desk = useQuery(api.financeDesk.getDeskData, accountId ? { accountId } : "skip");
+  const activity = usePaginatedQuery(api.financeDesk.getActivity, accountId ? { accountId } : "skip", { initialNumItems: 50 });
   const config = useQuery(api.financeInvestigations.getProviderConfiguration);
+  const orchestrator = useQuery(api.financeOrchestrator.getConfiguration, { now: minute });
+  const pipeline = useQuery(api.financeOrchestrator.getPipeline, accountId ? { accountId } : "skip");
+  const corrections = useQuery(api.financeReconciliation.listCorrections, accountId ? { accountId } : "skip");
+  const scorecard = useQuery(api.financeScorecard.getScorecard, accountId ? { accountId } : "skip");
   const [acting, setActing] = useState<Acting>("sam");
   const dev = devFor(acting);
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [inputs, setInputs] = useState<Record<string, string>>({});
-  const [payOpen, setPayOpen] = useState<{ ownerId?: string; amount?: string } | null>(null);
+  const [payOpen, setPayOpen] = useState<PaymentDraft | null>(null);
 
   const m = {
+    bounce: useMutation(api.financeIntake.simulateClientBounce), duplicate: useMutation(api.financeIntake.confirmDuplicate),
     fresh: useMutation(api.financeIntake.startFreshDemoRun), outflow: useMutation(api.financeIntake.simulateUnrecordedOutflow), cleared: useMutation(api.financeIntake.simulateDepositCleared),
     settle: useMutation(api.financeIntake.simulateSettlement), record: useMutation(api.financeIntake.recordBankItem), approve: useMutation(api.financeProposals.approveProposal),
     post: useMutation(api.financeProposals.postProposal), reject: useMutation(api.financeProposals.rejectProposal), propose: useMutation(api.financeProposals.proposeAllocation),
     recheck: useMutation(api.financeProposals.recheckHeld), wait: useMutation(api.financeProposals.keepWaiting), cancel: useMutation(api.financeProposals.cancelHeld),
-    resume: useMutation(api.financeProposals.continueHeld), answer: useMutation(api.financeInvestigations.answerQuestion),
+    resume: useMutation(api.financeProposals.continueHeld), answer: useMutation(api.financeInvestigations.answerQuestion), acknowledge: useMutation(api.financeProposals.acknowledgeBlocked),
     feed: useMutation(api.financeIntake.feedNext), policy: useMutation(api.financeProposals.approvePolicy), allProven: useMutation(api.financeProposals.approveAllProven),
+    approveFix: useMutation(api.financeReconciliation.approveCorrection), rejectFix: useMutation(api.financeReconciliation.rejectCorrection),
+    planted: useMutation(api.financeScorecard.runPlanted), batch: useMutation(api.financeScorecard.runBatch), start: useMutation(api.financeInvestigations.startInvestigation),
   };
   // Live feed: play/pause steps through the scripted DEMO sequence, one import every few seconds. Mock mode only.
   const [playing, setPlaying] = useState(false);
@@ -67,8 +77,10 @@ export default function Desk() {
     if (!playing || !accountId) return;
     let stop = false;
     const tick = async () => {
+      setBusy(true);
       try { const r = await m.feed({ accountId }); if (r.done) { setPlaying(false); setToast("Live feed finished. Break it, or request a payment, to keep going."); return; } }
       catch (e) { setPlaying(false); setToast(errorText(e)); return; }
+      finally { setBusy(false); }
       if (!stop) timer = setTimeout(tick, 4500);
     };
     let timer = setTimeout(tick, 300);
@@ -114,6 +126,12 @@ export default function Desk() {
   const runFor = (bankSourceId?: string) => desk?.tasks.find(t => t.bankSourceId === bankSourceId)?.latestRun ?? null;
   const reasonBox = (key: string, placeholder: string) => <input aria-label={placeholder} placeholder={placeholder} value={inputs[key] ?? ""} onChange={e => setInputs({ ...inputs, [key]: e.target.value })} />;
 
+  for (const d of overview?.deposits.filter(d => d.status === "awaiting_clearance") ?? []) queue.push({ key: `waiting:${d.transaction.sourceId}`, node:
+    <Card tone="wait" tag="Bank clearance pending" tagTone="t-wait" title="Waiting for the check to clear">
+      <p>{names.deposit(d.transaction.sourceId)}. The agent can review the evidence now, but cannot propose an allocation until the check clears.</p>
+      {runFor(d.transaction.sourceId) && <Link className="btn alt sm" href={`/runs/${encodeURIComponent(runFor(d.transaction.sourceId)!.runId)}`}>Open run</Link>}
+    </Card> });
+
   for (const p of proposals.filter(p => p.status === "on_hold")) queue.push({ key: p.proposalId, node:
     <Card tone="wait" tag={p.hold?.ready ? "Ready to continue · a person decides" : "On hold · needs a person"} tagTone={p.hold?.ready ? "t-ok" : "t-wait"} title={p.kind === "payment" ? `${money(p.amountCents)} for ${names.owner(p.ownerId)}` : `${money(p.amountCents)} → ${p.shares?.map(s => names.owner(s.ownerId)).join(", ")}`}>
       <p>{p.hold?.message}</p>
@@ -134,7 +152,19 @@ export default function Desk() {
       <div className="acts"><Link className="btn sm" href={`/runs/${encodeURIComponent(s.runId)}`}>Open run and fix</Link></div>
     </Card> });
 
-  for (const c of tw?.causes.filter(c => c.code === "BANK_TXN_WITHOUT_LEDGER_ENTRY") ?? []) {
+  const fixes = (corrections ?? []).filter(c => c.status === "proposed" && c.stillMismatched);
+  for (const c of fixes) queue.push({ key: c.correctionId, node:
+    <Card tone="bad" tag="Mismatch agent · proposes a fix" tagTone="t-ai" title={`${c.entry.kind === "record_bank_item" ? "Record" : "Reverse"} ${money(Math.abs(c.entry.amountCents))} ${c.entry.ownerId ? `against ${names.owner(c.entry.ownerId)}` : "as unallocated"}`}>
+      <p>{c.explanation}</p>
+      <span className="meta">Found by code, explained by the agent (mock) · every claim checked · the dry run clears the mismatch · approving re-runs the lock with who is acting</span>
+      <div className="acts">
+        <button className="btn sm" disabled={busy} onClick={() => act(async () => { const r = await m.approveFix({ correctionId: c.correctionId, dev }); setToast(r.allowed ? "Entry approved and posted. Bank, books and owners re-checked." : `Refused by the lock: ${r.failures.map(f => f.message).join(" ")}`); })}>Approve entry</button>
+        <Link className="btn alt sm" href={`/reconciliation/${encodeURIComponent(c.runId)}`}>Open run</Link>
+      </div>
+      <div className="acts">{reasonBox(`fix:${c.correctionId}`, "Reason to reject (required)")}<button className="btn alt sm" disabled={busy || !(inputs[`fix:${c.correctionId}`] ?? "").trim()} onClick={() => act(() => m.rejectFix({ correctionId: c.correctionId, reason: inputs[`fix:${c.correctionId}`] ?? "", dev }), "Rejected. The reason is saved with the run.")}>Reject</button></div>
+    </Card> });
+
+  for (const c of tw?.causes.filter(c => c.code === "BANK_TXN_WITHOUT_LEDGER_ENTRY" && !fixes.some(f => f.entry.bankSourceId === c.sourceIds[0])) ?? []) {
     const txn = overview?.deposits.find(d => d.transaction.sourceId === c.sourceIds[0])?.transaction;
     queue.push({ key: `fix:${c.sourceIds[0]}`, node: <Card tone="bad" tag="Code · fixes the gap" tagTone="t-code" title={`Record the ${money(Math.abs(c.amountCents ?? 0))} bank item against ${c.ownerIds.map(names.owner).join(", ") || "an owner"}`}>
       <p>The bank shows money moving with no ledger entry{txn ? ` (${txn.counterparty})` : ""}. Recording it brings the books back in line. It is a correction, not a payment.</p>
@@ -172,11 +202,23 @@ export default function Desk() {
       {p.status === "pending_approval" && <div className="acts">{reasonBox(`reject:${p.proposalId}`, "Reason to reject (required)")}<button className="btn alt sm" disabled={busy || !(inputs[`reject:${p.proposalId}`] ?? "").trim()} onClick={() => act(() => m.reject({ proposalId: p.proposalId, reason: inputs[`reject:${p.proposalId}`] ?? "", dev }), "Rejected with your reason.")}>Reject</button></div>}
     </Card> });
 
+  for (const o of pipeline?.rows.filter(o => o.kind === "deposit" && (o.state === "failed" || (o.state === "needs_person" && !!o.reason?.code.startsWith("BUDGET_")))) ?? []) {
+    const budget = o.state === "needs_person";
+    queue.push({ key: o.orchestrationId, node: <Card tone="bad" tag={budget ? "Real-run budget · refused" : "Failed, needs a person"} tagTone="t-bad" title={budget ? `Not started for ${names.deposit(o.subjectSourceId ?? "")}` : `The run for ${names.deposit(o.subjectSourceId ?? "")} stopped`}>
+      <p>{o.reason?.message.replace(/^Failed, needs a person: /, "")} Nothing was sent for approval and no money moved.</p>
+      <div className="acts">
+        {overview && <button className="btn alt sm" disabled={busy} onClick={() => act(async () => { const r = await m.start({ taskId: o.taskId, scope: { kind: "deposit_investigation", accountId: accountId!, currency: overview.account.currency, from: null } }); setToast(r.refused ? r.refused.message : "Started again."); })}>Try again{config?.mode === "creao" ? " (starts a CREAO run)" : ""}</button>}
+        {o.lastRunId && <Link className="btn alt sm" href={`/runs/${encodeURIComponent(o.lastRunId)}`}>Open run</Link>}
+      </div>
+    </Card> });
+  }
+
   for (const q of desk?.questions ?? []) queue.push({ key: q.questionId, node:
     <Card tag="The agent stopped to ask" tagTone="t-wait" title={q.question}>
       <p>It asked instead of guessing. Your answer is saved as a clarification and the next attempt sees it; it is not a financial approval.</p>
       <label className="field">Your answer{reasonBox(`answer:${q.questionId}`, "Type the answer")}</label>
       <div className="acts">
+        {overview?.account.datasetVersion === "law-firm-demo-v1" && q.questionId.endsWith(":question:duplicate-or-installment") && <button className="btn sm" disabled={busy || acting !== "riley"} onClick={() => act(() => m.duplicate({ accountId: accountId!, bankSourceId: q.bankSourceId!, dev }), "Duplicate decision saved. Approve its refund-payable allocation as sam before requesting the refund.")}>Mark duplicate for refund as riley</button>}
         <button className="btn sm" disabled={busy || !(inputs[`answer:${q.questionId}`] ?? "").trim()} onClick={() => act(() => m.answer({ runId: q.runId, questionId: q.questionId, answer: inputs[`answer:${q.questionId}`] ?? "" }), "Saved. The agent reruns with your answer.")}>Save answer and resume{config?.mode === "creao" ? " (starts a CREAO run)" : ""}</button>
         <Link className="btn alt sm" href={`/runs/${encodeURIComponent(q.runId)}`}>Open run</Link>
       </div>
@@ -195,49 +237,80 @@ export default function Desk() {
     </Card> });
   }
 
-  for (const p of proposals.filter(p => p.kind === "payment" && p.status === "blocked").slice(0, 3)) {
+  // One pool figure on every lock card: the adjusted cleared balance (pending deposits and deposits in transit out; outstanding payments already out).
+  const pool = tw ? tw.bank.adjustedClearedCents ?? null : null;
+  // Superseded (a later request for the same line passed, or a person acknowledged it) leaves the queue; the history keeps it.
+  for (const p of proposals.filter(p => p.kind === "payment" && p.status === "blocked" && !p.superseded).slice(0, 3)) {
     const l1 = p.blockedReasons?.some(f => f.rule === "L1");
+    const l2 = p.blockedReasons?.some(f => f.rule === "L2");
+    const funding = overview?.deposits.find(d => d.transaction.sourceId === p.fundingSourceId)?.transaction;
     queue.push({ key: p.proposalId, node: <Card tone="bad" tag={`Blocked by the lock · ${p.blockedReasons?.map(f => `rule ${f.rule}`).join(", ")}`} tagTone="t-bad" title={`${money(p.amountCents)} for ${names.owner(p.ownerId)} can't go out`}>
-      {l1 && <Bars pool={tw?.bank.clearedCents ?? null} available={available(p.ownerId)} requested={p.amountCents} ownerName={names.owner(p.ownerId)} />}
-      <p>Requested by {personName(p.requestedBy)}. {l1 ? "The pool has the cash, but it belongs to other owners." : `Stopped because ${reasonWords(p.blockedReasons?.map(f => f.code) ?? [])}.`} Nobody can override this; it stays on record.</p>
+      {l1 && <Bars pool={pool} available={available(p.ownerId)} requested={p.amountCents} ownerName={names.owner(p.ownerId)} />}
+      <p>Requested by {personName(p.requestedBy)}. {l2 && funding ? `At request time, the ${money(funding.amountCents)} ${funding.counterparty.replace(" Insurance", "")} check hadn't cleared yet.` : l1 ? `The account holds ${money(pool)} cleared, but ${names.owner(p.ownerId)} has ${money(available(p.ownerId))}. Paying this would use other clients' money.` : `Stopped because ${reasonWords(p.blockedReasons?.map(f => f.code) ?? [])}.`} This request stays blocked in the history.</p>
+      <div className="acts">
+        {l2 && funding?.clearing === "cleared" && <button className="btn alt sm" disabled={busy || acting !== "riley"} onClick={() => setPayOpen({ ownerId: p.ownerId, amount: (p.amountCents / 100).toFixed(2), purpose: "Delgado client share after clearing", fundingSourceId: p.fundingSourceId })}>Make a new request as riley</button>}
+        <button className="btn alt sm" disabled={busy} onClick={() => act(() => m.acknowledge({ proposalId: p.proposalId, dev }), "Acknowledged. It stays blocked in the history.")}>Acknowledge</button>
+      </div>
     </Card> });
   }
+
+  const refundOwner = owners.find(o => o.name === "Bayview Title (refund payable)");
+  if (refundOwner && available(refundOwner.ownerId) > 0) queue.push({ key: "bayview-refund", node:
+    <Card tag="Confirmed duplicate" tagTone="t-wait" title="Return Bayview's duplicate wire">
+      <p>The duplicate is assigned to Bayview as a refund payable. Riley requests the refund; sam approves and posts it through every payment lock.</p>
+      <button className="btn sm" disabled={busy || acting !== "riley"} onClick={() => setPayOpen({ ownerId: refundOwner.ownerId, amount: "40000.00", purpose: "Refund confirmed duplicate to Bayview Title" })}>Request refund as riley</button>
+    </Card> });
 
   for (const pol of desk?.policies ?? []) queue.push({ key: `${pol.runId}:${pol.policyId}`, node:
     <Card tag="AI · proposed policy" tagTone="t-ai" title={`“${pol.statement.replace(/^For human review: /, "")}”`}>
       <p>Based on a deposit the investigator matched. Once approved, the next matching investigation uses it and says so; it never approves money by itself.</p>
-      <div className="acts"><button className="btn sm" disabled={busy} onClick={() => act(async () => { const r = await m.policy({ runId: pol.runId, candidatePolicyId: pol.policyId, dev }); setToast(`Policy ${r.policyId} saved. The agent uses it on the next matching deposit.`); })}>Approve policy</button><Link className="btn alt sm" href={`/runs/${encodeURIComponent(pol.runId)}`}>Open run</Link></div>
+      {pol.backtest && <div className="quote"><span className={`tag ${pol.backtest.reasonRequired ? "t-wait" : "t-ok"}`}>Backtest</span> {pol.backtest.summary}{pol.backtest.cases.filter(c => !c.agrees).map(c => <span key={c.bankSourceId} style={{ display: "block", fontSize: 13 }}>Disagrees on {c.label}: the rule says {names.owner(c.predictedOwnerId)}, a person decided {c.decidedOwnerIds.map(names.owner).join(", ")}.</span>)}</div>}
+      {pol.backtest?.reasonRequired && <label className="field">{pol.backtest.testable ? "It disagrees with a past decision. Why approve it anyway? (required)" : "Code can't replay this rule. Why approve it? (required)"}{reasonBox(`policy:${pol.runId}:${pol.policyId}`, "Written reason")}</label>}
+      <div className="acts"><button className="btn sm" disabled={busy || (!!pol.backtest?.reasonRequired && !(inputs[`policy:${pol.runId}:${pol.policyId}`] ?? "").trim())} onClick={() => act(async () => { const r = await m.policy({ runId: pol.runId, candidatePolicyId: pol.policyId, reason: inputs[`policy:${pol.runId}:${pol.policyId}`], dev }); setToast(`Policy ${r.policyId} saved. The agent uses it on the next matching deposit.`); })}>Approve policy</button><Link className="btn alt sm" href={`/runs/${encodeURIComponent(pol.runId)}`}>Open run</Link></div>
     </Card> });
 
   const working = (desk?.tasks ?? []).flatMap(t => {
     const text = t.latestRun ? progressText(t.latestRun.status, names.deposit(t.bankSourceId ?? ""), null) : null;
-    return text ? [text] : [];
+    return text ? [{ key: t.taskId, text }] : [];
   });
-  const feed: Activity[] = (desk?.activity ?? []).map(e => describeEvent(e, names));
+  const feed: Activity[] = activity.results.map(e => describeEvent(e, names));
   const cause = tw ? causeLine(tw, names.owner) : null;
-  const pool = tw?.bank.clearedCents ?? null;
 
   return <MotionRoot className="">
     <header className="bar"><div className="wrap bar-in">
       <Link className="brand" href="/" aria-label="Mangekyo home"><img src="/mangekyo-logo.png" alt="" width={34} height={34} />Mangekyo</Link>
       <div className="ctl">
-        <label>Acting as (dev only)<select value={acting} onChange={e => setActing(e.target.value as Acting)}><option value="sam">sam, approver</option><option value="riley">riley, requester</option></select></label>
-        <label>Account<select value={accountId ?? ""} onChange={e => setChosen(e.target.value)}>{accounts?.map(a => <option key={a.accountId} value={a.accountId}>{a.name.replace("Sandbox ERP pooled trust accounts (TRUST-01 + TRUST-02)", "Sandbox ERP (seed 42)")}</option>)}</select></label>
-        {accountId && isDemo(accountId) && <button className="btn alt" disabled={desk?.feed.mode !== "mock" || (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7)} title={desk?.feed.mode !== "mock" ? "Mock mode only: in CREAO mode investigations cost money" : undefined} onClick={() => setPlaying(!playing)}>
+        <label>Acting as (dev only)<select aria-label="Acting as (dev only)" value={acting} onChange={e => setActing(e.target.value as Acting)}><option value="sam">sam, approver</option><option value="riley">riley, requester</option></select></label>
+        <label>Account<select aria-label="Account" value={accountId ?? ""} onChange={e => setChosen(e.target.value)}>{accounts?.map(a => <option key={a.accountId} value={a.accountId}>{a.name.replace("Sandbox ERP pooled trust accounts (TRUST-01 + TRUST-02)", "Sandbox ERP (seed 42)")}</option>)}</select></label>
+        {accountId && isDemo(accountId) && <button className="btn alt" disabled={busy || desk?.feed.mode !== "mock" || (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7)} title={desk?.feed.mode !== "mock" ? "Mock mode only: in CREAO mode investigations cost money" : undefined} onClick={() => setPlaying(!playing)}>
           {desk?.feed.mode !== "mock" ? "Live feed (mock only)" : (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7) ? "Feed finished" : playing ? "Pause live feed" : desk?.feed.stepsDone ? `Resume live feed (${desk.feed.stepsDone}/${desk.feed.total})` : "Start live feed"}</button>}
+        {accountId && isDemo(accountId) && <button className="btn alt" disabled={busy || playing || desk?.feed.mode !== "mock" || (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7)} onClick={() => act(async () => { const result = await m.feed({ accountId }); setToast(result.done ? "Live feed finished." : "One scripted step saved."); })}>Next step</button>}
         {accountId && isDemo(accountId) && <select aria-label="Break it" value="" disabled={busy} onChange={e => {
           const v = e.target.value;
           if (v === "outflow") void act(() => m.outflow({ accountId }), "A wire left the bank with no ledger entry.");
+          if (v === "bounce") void act(() => m.bounce({ accountId, dev }), "The bank returned the deposit. Sam must approve the return entry.");
           if (v === "overpay") { setActing("riley"); setPayOpen({ ownerId: owners.find(o => o.name.includes("Owner X"))?.ownerId, amount: "5000.00" }); }
           if (v === "clear") { const d = overview?.deposits.find(x => x.transaction.clearing === "pending"); if (d) void act(() => m.cleared({ bankSourceId: d.transaction.sourceId }), "The pending deposit cleared."); }
-        }}><option value="">Break it…</option><option value="outflow">Wire leaves with no ledger entry</option><option value="overpay">Request more than an owner has</option><option value="clear">A pending deposit clears</option></select>}
+        }}><option value="">Break it…</option>{overview?.account.datasetVersion === "law-firm-demo-v1" ? <option value="bounce">Client check bounces</option> : <option value="outflow">Wire leaves with no ledger entry</option>}<option value="overpay">Request more than an owner has</option><option value="clear">A pending deposit clears</option></select>}
+        <select aria-label="Measure" value="" disabled={busy || config?.mode !== "mock"} title={config?.mode !== "mock" ? "Mock mode only" : undefined} onChange={e => {
+          const v = e.target.value;
+          if (v === "planted") void act(async () => { const r = await m.planted({}); setChosen(r.accountId); }, "Scorecard run started: six planted mistakes in a fresh law-firm account.");
+          if (v === "batch") void act(async () => { const r = await m.batch({ count: 200 }); setChosen(r.accountId); }, "Batch started: 200 synthetic deposits on a fresh DEMO account.");
+        }}><option value="">Measure…</option><option value="planted">Planted-mistake scorecard</option><option value="batch">Batch: 200 deposits</option></select>
         <button className="btn alt" disabled={busy} onClick={() => act(async () => { const r = await m.fresh({}); setChosen(r.accountId); }, "Fresh DEMO run loaded. Earlier runs are unchanged.")}>Fresh DEMO run</button>
         <button className="btn" onClick={() => setPayOpen({})}>New payment</button>
       </div>
     </div></header>
-    <div className="wrap proto">{config?.mode === "creao" ? "CREAO mode · investigations cost money and never start automatically here" : config?.mode === "mock" ? "Mock mode · agent answers are simulated and deterministic" : "Provider mode not configured"} · {overview?.account.synthetic ? "synthetic data" : ""} · dev-only identities</div>
+    <div className="wrap proto">{config?.mode === "creao" ? "CREAO mode · investigations cost money" : config?.mode === "mock" && overview?.account.datasetVersion === "law-firm-demo-v1" ? "Sample data · fictional law firm · agents simulated" : config?.mode === "mock" ? "Sample data · agents simulated" : "Provider mode not configured"}</div>
 
     <main className="wrap desk">
+      {scorecard && <section className="card" aria-label="Scorecard" style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }}>
+          <span className="eyebrow">{scorecard.kind === "planted" ? "Scorecard · planted mistakes · mock" : "Scorecard · batch · mock"}</span>
+          <b style={{ fontSize: 20, color: scorecard.kind === "planted" && scorecard.summary.wrong ? "var(--bad)" : "var(--ink)" }}>{scorecard.summary.line}</b>
+        </div>
+        <Link className="btn alt sm" href={`/scorecard/${encodeURIComponent(accountId!)}`}>Open scorecard</Link>
+      </section>}
       {!overview || !tw ? <p className="empty">{accounts?.length === 0 ? "No accounts yet. Use Fresh DEMO run to load one." : "Loading the account…"}</p> : <>
         <section className="eq" aria-label="Reconciliation" ref={eqBox}>
           <div className="eq-status" role="status">{matched ? OK : BAD}<span style={{ color: matched ? "var(--ok)" : "var(--bad)" }}>{matched ? "Matched · every dollar has an owner" : tw.status === "insufficient_data" ? "Can't reconcile yet: no bank statement" : `Doesn't reconcile: ${money(Math.abs(tw.differences.bankMinusBook ?? tw.differences.bookMinusOwners))} gap`}</span></div>
@@ -255,6 +328,8 @@ export default function Desk() {
               {overview.reconcilingItems.map(r => <li key={r.sourceId}><span>{r.detailed ? "Timing adjustment" : "Timing adjustment, reported without line items · flagged, not hidden"}</span><span className="n">{money(r.amountCents)}</span></li>)}
               {tw.outstanding?.map(o => <li key={o.entryId}><span>{o.kind === "outstanding_payment" ? "Outstanding payment" : "Deposit in transit"} · {names.owner(o.ownerId)} · {o.ageDays === 0 ? "today" : `${o.ageDays} day${o.ageDays === 1 ? "" : "s"} old`} · not yet at the bank (limit {overview.outstandingMaxDays} days)</span><span className="n">{money(o.amountCents)}</span></li>)}
             </ul></div>}
+          {pipeline && pipeline.rows.length > 0 && <div className="counts" aria-label="Pipeline">{(["ready_for_approval", "needs_person", "rejected", "waiting_to_clear", "failed", "investigating", "validating", "checking"] as const).filter(state => pipeline.counts[state]).map(state => <span key={state}><b className="n">{pipeline.counts[state]}</b> {STATE[state].label.toLowerCase()}</span>)}</div>}
+          {orchestrator && <p className="meta" style={{ margin: 0 }}>Investigator {orchestrator.investigator ?? "not set"} · checker {orchestrator.checker.mode ?? "misconfigured"} · timeout {(orchestrator.timeoutMs / 1000).toFixed(0)} s · real runs today {orchestrator.budget.usedToday} of {orchestrator.budget.perDay} (max {orchestrator.budget.perDeposit} per deposit; mock runs don&apos;t count){orchestrator.mockFault ? ` · MOCK_PROVIDER_FAULT=${orchestrator.mockFault}` : ""}</p>}
           <div className="counts"><span><b className="n">{desk?.counts.autoStarted ?? 0}</b> started automatically</span><span><b className="n">{queue.length}</b> waiting on a person</span><span><b className="n">{desk?.counts.blocked ?? 0}</b> blocked by the lock</span><span><b className="n">{desk?.counts.posted ?? 0}</b> posted after sign-off</span></div>
         </section>
 
@@ -267,16 +342,17 @@ export default function Desk() {
           <section className="col-main" aria-label="Activity">
             <div className="colhead"><h2>Activity</h2><span className="m" style={{ fontSize: 12, color: "var(--muted)" }}>Newest first · from saved events</span></div>
             <div className="feed" aria-live="polite">
-              {working.map(text => <div key={text} className="working">{text}</div>)}
+              {working.map(w => <div key={w.key} className="working">{w.text}</div>)}
               {feed.length === 0 ? <p className="empty" style={{ margin: "12px 0" }}>No activity yet.</p> :
-                <AnimatedList items={feed.map(a => ({ id: a.id, title: a.text }))} animation="slide" frame={false} theme="light" showGradients={false} selectOnHover={false} enableArrowNavigation={false} maxHeight={560} gap={0} width="100%"
+                <AnimatedList items={feed.map(a => ({ id: a.id, title: a.text }))} animation="none" frame={false} theme="light" showGradients={false} selectOnHover={false} enableArrowNavigation={false} maxHeight={560} gap={0} width="100%"
                   renderItem={(_, index) => { const a = feed[index]; return <div className="ev"><span className="tm">{new Date(a.at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</span><div className="tx"><b>{a.text}</b>{a.sub && <span className="sub">{a.sub}</span>}<span className={`who ${a.tone}`}>{a.who}</span></div></div>; }} />}
             </div>
+            {activity.status !== "Exhausted" && <button className="btn alt sm" disabled={activity.status !== "CanLoadMore"} onClick={() => activity.loadMore(50)}>{activity.status === "LoadingMore" ? "Loading activity" : "Load older activity"}</button>}
           </section>
         </div>
 
         <section aria-label="Owners" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <div className="colhead"><h2 style={{ fontSize: 18, margin: 0 }}>Owners</h2><span style={{ fontSize: 13, color: "var(--muted)" }}>Pooled account cleared cash: <b className="n"><Money cents={pool} /></b></span></div>
+          <div className="colhead"><h2 style={{ fontSize: 18, margin: 0 }}>Owners</h2><span style={{ fontSize: 13, color: "var(--muted)" }}>Pooled account, adjusted cleared: <b className="n"><Money cents={pool} /></b></span></div>
           <div className="tbl"><table>
             <thead><tr><th>Owner</th><th className="r">Posted</th><th className="r">Not cleared</th><th className="r">Available</th><th>Status</th></tr></thead>
             <tbody>{balances.map(b => { const s = ownerStatus(b, tw); return <tr key={b.ownerId ?? "unallocated"}>
@@ -294,14 +370,14 @@ export default function Desk() {
 
 type Overview = NonNullable<ReturnType<typeof useQuery<typeof api.financeIntake.getAccountOverview>>>;
 
-function PaymentDialog({ accountId, acting, initial, overview, onClose }: { accountId: string; acting: Acting; initial: { ownerId?: string; amount?: string }; overview: Overview; onClose(): void }) {
+function PaymentDialog({ accountId, acting, initial, overview, onClose }: { accountId: string; acting: Acting; initial: PaymentDraft; overview: Overview; onClose(): void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const request = useMutation(api.financeProposals.requestPayment);
   const [ownerId, setOwnerId] = useState(initial.ownerId ?? overview.owners[0]?.ownerId ?? "");
   const ownerName = overview.owners.find(o => o.ownerId === ownerId)?.name ?? "";
   const docsFor = (name: string) => overview.documents.filter(d => d.title.includes(name) || d.excerpt.includes(name));
   const [amount, setAmount] = useState(initial.amount ?? "1000.00");
-  const [purpose, setPurpose] = useState("Settlement distribution");
+  const [purpose, setPurpose] = useState(initial.purpose ?? "Settlement distribution");
   const [doc, setDoc] = useState("");
   const [result, setResult] = useState<ReactNode>(null);
   const [busy, setBusy] = useState(false);
@@ -321,12 +397,12 @@ function PaymentDialog({ accountId, acting, initial, overview, onClose }: { acco
     try { cents = dollarsToCents(amount, "form"); } catch { setResult(<p style={{ color: "var(--bad)", margin: 0 }}>Enter an amount like 1250.00 (at most two decimals).</p>); return; }
     setBusy(true);
     try {
-      const r = await request({ accountId, ownerId, amountCents: cents, purpose, evidenceSourceIds: doc ? [doc] : [], dev: devFor(acting) });
+      const r = await request({ accountId, ownerId, amountCents: cents, purpose, evidenceSourceIds: doc ? [doc] : [], ...(initial.fundingSourceId ? { fundingSourceId: initial.fundingSourceId } : {}), dev: devFor(acting) });
       const l1 = r.lock?.failures.some(f => f.rule === "L1");
       const avail = overview.balances.find(b => b.ownerId === ownerId)?.availableCents ?? 0;
       setResult(r.proposal.status === "blocked" ? <div className="card bad" style={{ padding: 14 }}>
         <span className="tag t-bad">Blocked by the lock · {r.lock?.failures.map(f => `rule ${f.rule}`).join(", ")}</span>
-        {l1 && <Bars pool={overview.threeWay.bank.clearedCents} available={avail} requested={cents} ownerName={ownerName} />}
+        {l1 && <Bars pool={overview.threeWay.bank.adjustedClearedCents ?? null} available={avail} requested={cents} ownerName={ownerName} />}
         <p>{l1 ? `To send this, ${ownerName} needs ${money(cents - Math.max(0, avail))} more in cleared funds. The pool's cash belongs to other owners.` : `Stopped because ${reasonWords(r.lock?.failures.map(f => f.code) ?? [])}.`}</p></div>
         : <p style={{ margin: 0, color: "var(--ok)" }}>Allowed. Sent to a second person for approval.</p>);
     } catch (err) { setResult(<p style={{ color: "var(--bad)", margin: 0 }}>{errorText(err)}</p>); }
