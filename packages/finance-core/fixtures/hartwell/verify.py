@@ -120,7 +120,7 @@ def main():
     check(msg['requestedBank']['account']==c['requestedAccount']!=c['onFileAccount']==onfile['bank']['account']==bytx['bayside-prior-paid']['bankAccount'],'bank mismatch')
     check((date.fromisoformat(msg['scheduledPaymentDate'])-date.fromisoformat(msg['receivedAt'][:10])).days==1,'day before payout')
     check(onfile['phone']==c['phone'] and msg['requestedAmountCents']==1450000,'verification contact and amount')
-    check('0000975521' in email.get_body().get_content() and '$14,500.00' in email.get_body().get_content(),'email body')
+    check('****5521' in email.get_body().get_content() and '$14,500.00' in email.get_body().get_content(),'email body')
     incoming=data['incoming-items'];policy_=data['policies'][0];d=cases['D']
     check(policy_['status']=='approved' and policy_['approvedBy']=='sam' and policy_['approvedDate']<incoming[1]['receivedDate'],'approved memory')
     check(incoming[1]['amountCents']==d['amountCents']==500000 and incoming[1]['receivedDate'].startswith('2026-11'),'November supplemental')
@@ -143,21 +143,48 @@ def main():
             clientname=next(c['name'] for c in data['clients'] if c['id']==cid)
             block=text.split(clientname+' | Allocation ')[1].split('Total distributions:')[0].split(' | Allocation ')[0]
             check(all(l['amountCents'] in amounts(block) for l in s['lines'] if l['clientId']==cid),'statement per-client amounts')
+    for r in data['lien-letters']:
+        check(sum(c['payoffCents'] for c in r['charges'])==r['amountCents'],'lien itemized payoff')
+        check(sum(c['billedCents'] for c in r['charges'])==r['totalBilledCents'],'lien billed total')
+        check(sum(c['adjustmentCents'] for c in r['charges'])==r['totalAdjustmentCents'],'lien adjustments total')
+        check(all(c['billedCents']-c['adjustmentCents']==c['payoffCents'] for c in r['charges']),'lien row arithmetic')
+        check(r['totalBilledCents']-r['totalAdjustmentCents']==r['amountCents'],'lien net arithmetic')
+    for r in data['bank-statements']:
+        ts=[t for t in txs if t['postedDate'].startswith(r['month'])]
+        check(r['transactionIds']==[t['id'] for t in ts],'statement transaction coverage')
+        check(r['creditsCents']==sum(max(t['amountCents'],0) for t in ts),'statement credits')
+        check(r['debitsCents']==sum(max(-t['amountCents'],0) for t in ts),'statement debits')
+        check(r['openingBalanceCents']+r['creditsCents']-r['debitsCents']==r['closingBalanceCents']==ts[-1]['balanceCents'],'statement closing balance')
+        text=(ROOT/docs[r['documentId']]['text']).read_text(encoding='utf-8')
+        for t in ts:check(abs(t['amountCents']) in amounts(text) and t['balanceCents'] in amounts(text),'statement transaction printed')
+    for inv in invoices.values():
+        text=(ROOT/docs[inv['documentId']]['text']).read_text(encoding='utf-8')
+        check(all(l['serviceDate'] in text and l['amountCents'] in amounts(text) for l in inv['lines']),'dated invoice lines printed')
+        check(all(l['serviceDate']<=inv['date'] for l in inv['lines']),'invoice dated services')
+    for payee in payees.values():
+        check(re.fullmatch(r'\*{4}\d{4}',payee['bank']['account']) is not None and payee['bank']['routing']=='withheld','masked payee details')
+    expected_facts='355f01ff0f35f29522431f67b815d478176485a00dac0f41d490ad3c53b79e80'
+    check(hashlib.sha256(json.dumps(load('answer-key.json'),sort_keys=True,separators=(',',':')).encode()).hexdigest()==expected_facts,'original answer-key facts preserved except masking')
     rendered=0
     for id,d in docs.items():
         text=(ROOT/d['text']).read_text(encoding='utf-8')
         check(set(amounts(text))==set(d['amountCents']),'document amount inventory '+id)
-        check('Teleph0ne' in text and 'Encl0sure' in text,'two harmless OCR slips '+id)
+        check(text.count('Paqe ')==d['pageCount'] and 'Enclosure: file copy' not in text,'harmless OCR page marker '+id)
+        check(not re.search(r'(?<!\d)0\d{7,9}(?!\d)',text),'masked document bank numbers '+id)
         with fitz.open(ROOT/d['pdf']) as pdf:
-            check(len(pdf)==1,'expected single page '+id)
-            page=pdf[0];pix=page.get_pixmap(matrix=fitz.Matrix(.5,.5));check(pix.width>0 and pix.height>0,'PDF render '+id);rendered+=1
-            if d['scanned']:check(bool(page.get_images()) and not page.get_text().strip(),'raster scan '+id)
-            else:check(set(amounts(page.get_text()))==set(d['amountCents']),'digital PDF amounts '+id)
+            check(len(pdf)==d['pageCount'],'document page count '+id)
+            pdf_text=''
+            for page in pdf:
+                pix=page.get_pixmap(matrix=fitz.Matrix(.5,.5));check(pix.width>0 and pix.height>0,'PDF render '+id);rendered+=1
+                if d['scanned']:check(bool(page.get_images()) and not page.get_text().strip(),'raster scan '+id)
+                else:pdf_text+=page.get_text()+'\n'
+            if not d['scanned']:check(set(amounts(pdf_text))==set(d['amountCents']),'digital PDF amounts '+id)
+    check(len(list((REPO/'docs/screenshots/hartwell-data').glob('*.png')))==6,'six sample pages')
     for p in (REPO/'docs/screenshots/hartwell-data').glob('*.png'):
         with Image.open(p) as im:im.verify()
     manifest=load('manifest.json')
     for relative,digest in manifest['sha256'].items():check(hashlib.sha256((REPO/relative).read_bytes()).hexdigest()==digest,'content hash '+relative)
-    check(len(docs)==221 and sum(d['scanned'] for d in docs.values())==108,'document counts')
+    check(len(docs)==227 and sum(d['scanned'] for d in docs.values())==108,'document counts')
     print(json.dumps(dict(result='PASS',clients=40,matters=25,bankTransactions=row_count,matchedMonths=6,pdfPagesRendered=rendered,scannedPdfs=108,answerKeyCases=len(cases),choMinimumCents=minimum['c04'],closingBankCents=bank),indent=2))
 if __name__=='__main__':
     import argparse, subprocess, sys

@@ -1,18 +1,35 @@
-Hartwell & Moreno LLP
-1846 Alder Quay, Suite 400 | Oakland, CA 94612
-Teleph0ne: (510) 555-0147
-Monthly Three-Way Reconciliation
-2026-09-01
-Period ended: 2026-08-31 | Bay Commerce Bank IOLTA ending 4417
-Opening bank balance: $127,093.94
-Closing bank balance: $164,087.93
-Outstanding checks: $0.00 | Deposits in transit: $0.00
-Adjusted bank balance: $164,087.93
-Trust book balance: $164,087.93
-Total client subsidiary ledgers: $164,087.93
-Firm charge clearing ledger: $0.00
-Difference: $0.00
-Reviewed and signed: /s/ Sam Whitfield | 2026-09-01
-This reconciliation compares ending balances; retain daily activity with the working papers.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+              Hartwell & Moreno LLP
+                                     ATTORNEYS AT LAW
+                            1846 Alder Quay, Suite 400 | Oakland, CA 94612 | Telephone: (510) 555-0147
+
+
+   Monthly Three-Way Reconciliation
+      Date: 2026-09-01 | Reference: RECON-08
+
+     Period ended: 2026-08-31 | Bay Commerce Bank IOLTA ending 4417
+
+    Opening bank balance: $127,093.94
+
+     Closing bank balance: $164,087.93
+
+     Outstanding checks: $0.00 | Deposits in transit: $0.00
+
+     Adjusted bank balance: $164,087.93
+
+     Trust book balance: $164,087.93
+
+     Total client subsidiary ledgers: $164,087.93
+
+     Firm charge clearing ledger: $0.00
+
+     Difference: $0.00
+
+    Reviewed and signed: /s/ Sam Whitfield | 2026-09-01
+
+     This reconciliation compares ending balances; retain daily activity with the working papers.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                   recon-08 | Paqe 1

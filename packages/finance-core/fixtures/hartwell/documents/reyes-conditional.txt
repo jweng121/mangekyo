@@ -1,17 +1,48 @@
-Conditional Payment Recovery Desk (fictional)
-583 Willow Anchorage | Oakland, CA 94612
-Teleph0ne: (510) 555-0131
-Final Payoff Letter
-2026-10-14
-Patient: Tomas Reyes
-Patient account: MC-260318
-Lien payoff, revision 1: $3,200.00
-Payoff valid through: 2026-11-15
-This amount replaces any earlier payoff quotation for this account.
-Include the patient account number on the remittance.
-Program reference: Medicare conditional payment; synthetic claim MC-260318.
-No real beneficiary or agency record is represented.
-Sincerely,
-/s/ Nora Ellis, Accounts Resolution
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+  FICTIONAL BENEFIT RECOVERY ADMINISTRATION
+   Conditional Payment Recovery Desk | Training case record
+
+   FORM CP-26    NOT A GOVERNMENT NOTICE    NO REAL BENEFICIARY
+
+
+  Final Payoff Letter
+   Date: 2026-10-14 | Reference: REYES-CONDITIONAL
+
+  Patient: Tomas Reyes
+
+   Patient account: MC-260318 | Revision 1
+  To: Sam Whitfield, Hartwell & Moreno LLP
+
+  The following account detail supports the payoff quotation for your client. Adjustments reflect the negotiated reductions
+   applied to the listed services. This quotation supersedes earlier payoff figures for this account.
+
+     Service date / description                                                        Billed             Adjustments       Payoff
+
+    2026-02-18                                                                $3,170.00         $1,250.00         $1,920.00
+      Clinical evaluation and diagnostic imaging
+
+    2026-03-10                                                                $2,030.00          $750.00         $1,280.00
+     Outpatient treatment and follow-up care
+
+   TOTAL                                                                    $5,200.00         $2,000.00         $3,200.00
+
+  Payoff valid through: 2026-11-15
+
+   Please identify the patient reference on your remittance. Contact the office if payment will arrive after the valid-through date.
+
+   Medicare-style conditional payment summary - synthetic claim MC-260318. This fictional training agency is not affiliated with
+  any government program. This form creates no payment obligation and contains no actual beneficiary data.
+
+   Recovery reference: MC-260318 | Remittance account ****6320 | Routing withheld
+
+  Case review officer: Nora Ellis | Fictional Recovery Desk
+
+
+
+
+                                                  OCTRECEIVED14                                                                     2026
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                      reyes-conditional | Paqe 1

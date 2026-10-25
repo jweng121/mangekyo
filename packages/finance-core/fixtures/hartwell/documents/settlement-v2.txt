@@ -1,29 +1,56 @@
-Hartwell & Moreno LLP
-1846 Alder Quay, Suite 400 | Oakland, CA 94612
-Teleph0ne: (510) 555-0147
-Settlement Statement - Version 2
-2026-10-22
-Delgado, Reyes & Bello v. Ridgeway Logistics
-Claim HL-50877 | Gross recovery: $125,000.00
-DRAFT - CLIENT CONFIRMATION AND SIGNATURES REQUIRED
-Maria Delgado | Allocation $62,500.00
-    Attorney fee: $20,625.00
-    Costs reimbursed to firm: $2,250.00
-    Bayside Medical Group lien: $14,500.00
-    Net to client: $25,125.00
-Tomas Reyes | Allocation $37,500.00
-    Attorney fee: $15,000.00
-    Costs reimbursed to firm: $1,350.00
-    Medicare conditional payment: $3,200.00
-    Net to client: $17,950.00
-Ana Bello | Allocation $25,000.00
-    Attorney fee: $6,025.00
-    Costs reimbursed to firm: $900.00
-    Net to client: $18,075.00
-Total distributions: $125,000.00
-Client signatures:
-Maria Delgado: __________________  Date: __________
-Tomas Reyes: _____________________  Date: __________
-Ana Bello: _______________________  Date: __________
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+              Hartwell & Moreno LLP
+                                     ATTORNEYS AT LAW
+                            1846 Alder Quay, Suite 400 | Oakland, CA 94612 | Telephone: (510) 555-0147
+
+
+   Settlement Statement - Version 2
+      Date: 2026-10-22 | Reference: SETTLEMENT-V2
+
+    Delgado, Reyes & Bello v. Ridgeway Logistics
+
+     Harborline claim HL-50877 | Gross recovery: $125,000.00
+
+    DRAFT - CLIENT CONFIRMATION AND SIGNATURES REQUIRED
+
+    Maria Delgado | Allocation $62,500.00
+
+        Allocation / fee basis                               Attorney fee        Costs             Liens              Net to client
+
+     50% / 33% of gross                                   $20,625.00        $2,250.00         $14,500.00           $25,125.00
+
+      Lien payee: Bayside Medical Group | Fees and cost reimbursement payable to Hartwell & Moreno LLP.
+
+        Client signature: ____________________________                                    Date: ____________
+
+    Tomas Reyes | Allocation $37,500.00
+
+        Allocation / fee basis                               Attorney fee        Costs             Liens              Net to client
+
+     30% / 40% of gross (suit filed)                          $15,000.00        $1,350.00           $3,200.00           $17,950.00
+
+      Lien payee: Medicare conditional payment | Fees and cost reimbursement payable to Hartwell & Moreno LLP.
+
+        Client signature: ____________________________                                    Date: ____________
+
+    Ana Bello | Allocation $25,000.00
+
+        Allocation / fee basis                               Attorney fee        Costs             Liens              Net to client
+
+     20% / 25% of net after costs                             $6,025.00          $900.00              $0.00           $18,075.00
+
+      Lien payee: None | Fees and cost reimbursement payable to Hartwell & Moreno LLP.
+
+        Client signature: ____________________________                                    Date: ____________
+
+    Total distributions: $125,000.00
+
+       Attorney signature: ____________________________                                 Date: ____________
+
+    By signing, each client acknowledges review of the allocation and listed deductions and authorizes distribution as shown, subject to
+      cleared funds and final payment approval. A copy of this statement will be retained in the matter file.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                     settlement-v2 | Paqe 1

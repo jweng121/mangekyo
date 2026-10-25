@@ -1,13 +1,19 @@
-Ethan Walsh
-583 Willow Anchorage | Oakland, CA 94612
-Teleph0ne: (510) 555-0131
-Client Payment Advice
-2026-06-17
-To: Hartwell & Moreno LLP
-Client reference: c18
-Amount: $5,227.51
-Method: ACH
-Memo: part pmt
-Please credit my trust ledger. This is an advance toward fees and costs.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+ Ethan Walsh
+  583 Willow Anchorage | Oakland, CA 94612 | Telephone: (510) 555-0131
+
+
+  Client Payment Advice
+   Date: 2026-06-17 | Reference: H06-06-DEPOSIT
+
+  To: Hartwell & Moreno LLP
+   Client reference: c18
+  Amount: $5,227.51
+  Method: ACH
+  Memo: part pmt
+  Please credit my trust ledger. This is an advance toward fees and costs.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                 h06-06-deposit | Paqe 1

@@ -1,19 +1,47 @@
-Bayside Medical Group
-726 Lantern Wharf, Suite 230 | Oakland, CA 94607
-Teleph0ne: (510) 555-0186
-Final Payoff Letter
-2026-06-08
-Patient: Elena Park
-Patient account: BG-61104
-Lien payoff, revision 1: $3,200.75
-Payoff valid through: 2026-06-30
-This amount replaces any earlier payoff quotation for this account.
-Include the patient account number on the remittance.
-Bank on file: Cedar Inlet Bank
-Routing: 000000000   Account: 0000831264
-Billing: billing@baysidemedical.com
-Confirm instructions at (510) 555-0186.
-Sincerely,
-/s/ Nora Ellis, Accounts Resolution
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+     BAYSIDE                                                     PATIENT FINANCIAL SERVICES
+        MEDICAL GROUP                                                          726 Lantern Wharf, Suite 230
+                                                                                                                Oakland, CA 94607
+                                                                                                          Telephone: (510) 555-0186
+
+
+  Final Payoff Letter
+   Date: 2026-06-08 | Reference: BAYSIDE-PRIOR-LETTER
+
+  Patient: Elena Park
+
+   Patient account: BG-61104 | Revision 1
+  To: Sam Whitfield, Hartwell & Moreno LLP
+
+  The following account detail supports the payoff quotation for your client. Adjustments reflect the negotiated reductions
+   applied to the listed services. This quotation supersedes earlier payoff figures for this account.
+
+     Service date / description                                                        Billed             Adjustments       Payoff
+
+    2026-02-18                                                                $3,170.45         $1,250.00         $1,920.45
+      Clinical evaluation and diagnostic imaging
+
+    2026-03-10                                                                $2,030.30          $750.00         $1,280.30
+     Outpatient treatment and follow-up care
+
+   TOTAL                                                                    $5,200.75         $2,000.00         $3,200.75
+
+  Payoff valid through: 2026-06-30
+
+   Please identify the patient reference on your remittance. Contact the office if payment will arrive after the valid-through date.
+
+    Remittance instructions on file                                     Contact
+
+    Cedar Inlet Bank | Account ****1264                                billing@baysidemedical.com
+     Routing: withheld in this copy                                     Telephone: (510) 555-0186
+   Sincerely,
+  Nora Ellis | Accounts Resolution
+
+
+
+                                                    JUNRECEIVED08                                                                     2026
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                           bayside-prior-letter | Paqe 1
