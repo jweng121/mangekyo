@@ -5,7 +5,7 @@
   Invoice CHO-EXPERT-INVOICE
    Date: 2026-10-08 | Reference: CHO-EXPERT-INVOICE
 
-    Bill to: Raymond Cho | Matter m02
+    Bill to: Raymond Hayes | Matter m02
   Professional services and authorized charges
 
      Service date       Description                                        Hours / units    Rate            Amount

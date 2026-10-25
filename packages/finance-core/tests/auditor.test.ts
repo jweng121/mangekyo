@@ -52,12 +52,12 @@ describe("Trust Compliance Auditor", () => {
   it("A1, A3 and A5 catch a negative client balance, firm money in trust and a payout of disputed money", () => {
     const base = drillInput();
     const extra = [...base.entries,
-      { accountId: A, currency: "USD", status: "posted" as const, entryId: "neg:1", ownerId: "demo:owner:raymond-cho", amountCents: -500_000, kind: "disbursement" as const, sourceRefs: ["x"], approvalId: "a", memo: "too much", effectiveAt: t0 + 6000, createdAt: t0 + 6000, createdBy: "sam" },
+      { accountId: A, currency: "USD", status: "posted" as const, entryId: "neg:1", ownerId: "demo:owner:raymond-cho", amountCents: -27_320_000, kind: "disbursement" as const, sourceRefs: ["x"], approvalId: "a", memo: "too much", effectiveAt: t0 + 6000, createdAt: t0 + 6000, createdBy: "sam" },
       { accountId: A, currency: "USD", status: "posted" as const, entryId: "firm:1", ownerId: FIRM_OWNER.ownerId, amountCents: 100_000, kind: "adjustment" as const, sourceRefs: ["x"], memo: "firm", effectiveAt: t0 + 6000, createdAt: t0 + 6000, createdBy: "sam" },
     ];
     const findings = codeAudit({ ...base, entries: extra, disputes: [{ disputeId: "d1", accountId: A, ownerId: DELGADO, amountCents: 3_000_000, reason: "lien", status: "open", recordedBy: "riley", recordedAt: t0 + 2500, sourceIds: [] }] });
     expect(findings.map(f => f.ruleId)).toEqual(expect.arrayContaining(["A1_NEGATIVE_CLIENT_BALANCE", "A3_COMMINGLING", "A5_DISPUTED_FUNDS_PAID"]));
-    expect(findings.find(f => f.ruleId === "A1_NEGATIVE_CLIENT_BALANCE")?.message).toContain("Raymond Cho's balance went to -$3,200.00");
+    expect(findings.find(f => f.ruleId === "A1_NEGATIVE_CLIENT_BALANCE")?.message).toContain("Raymond Hayes's balance went to -$3,200.00");
   });
 
   it("validation keeps the agent honest: known rules, cited entries from the input, at most 3 questions; code findings are never removed", () => {

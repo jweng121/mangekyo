@@ -280,7 +280,7 @@ async function advanceLawFirmFeed(ctx: MutationCtx, loaded: LoadedAccount) {
   if (step === 7) {
     const now = Date.now();
     await submitProposal(ctx, { proposalId: await nextProposalId(ctx, accountId, "payment"), accountId, kind: "payment", status: "proposed", currency: "USD",
-      requestedBy: "dev-unverified:riley", origin: { type: "person" }, ownerId: id("owner:raymond-cho"), amountCents: 600_000, purpose: "Raymond Cho expert witness",
+      requestedBy: "dev-unverified:riley", origin: { type: "person" }, ownerId: id("owner:raymond-cho"), amountCents: 90_000_000, purpose: "Raymond Hayes expert witness",
       evidenceSourceIds: [id("document:cho-expert:v1")], createdAt: now, updatedAt: now },
       { identity: "dev-unverified:riley", authenticated: false, role: "requester" });
   }

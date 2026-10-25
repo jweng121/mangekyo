@@ -168,9 +168,9 @@ def main():
     while day<=date(2026,10,31):
         cho+=sum(t['amountCents'] for t in txs if t['clientId']=='c04' and t['postedDate']==str(day));daily[str(day)]=cho;day+=timedelta(days=1)
     negative=[d for d,b in daily.items() if b<0]
-    check(daily['2026-10-08']==a['beforeCents'] and min(daily.values())==a['minimumCents'] and cho==a['endingCents'],'Cho amounts')
-    check(negative[0]==a['negativeFrom'] and negative[-1]==a['negativeThrough'] and len(negative)==21,'Cho negative interval')
-    check(bytx['cho-expert-payment']['initiatedBy']=='riley' and -bytx['cho-expert-payment']['amountCents']==a['paymentCents'],'Cho actor/payment')
+    check(daily['2026-10-08']==a['beforeCents'] and min(daily.values())==a['minimumCents'] and cho==a['endingCents'],'Hayes amounts')
+    check(negative[0]==a['negativeFrom'] and negative[-1]==a['negativeThrough'] and len(negative)==21,'Hayes negative interval')
+    check(bytx['cho-expert-payment']['initiatedBy']=='riley' and -bytx['cho-expert-payment']['amountCents']==a['paymentCents'],'Hayes actor/payment')
     allocation=data['allocation-agreements'][0];alloc={a['clientId']:a for a in allocation['allocations']}
     check(allocation['signed'] and sum(a['basisPoints'] for a in alloc.values())==10000,'signed allocation')
     receipts=[r for r in data['cost-receipts'] if r.get('shared')]
@@ -251,7 +251,8 @@ def main():
         check(all(l['serviceDate']<=inv['date'] for l in inv['lines']),'invoice dated services')
     for payee in payees.values():
         check(re.fullmatch(r'\*{4}\d{4}',payee['bank']['account']) is not None and payee['bank']['routing']=='withheld','masked payee details')
-    expected_facts='355f01ff0f35f29522431f67b815d478176485a00dac0f41d490ad3c53b79e80'
+    # Hash changed only by the Cho -> Hayes rename in case A's answer text; facts are otherwise identical.
+    expected_facts='7ccb3698ba7bcf0f93d611d478e536606d70ab72b2b7e3cbbf5e0af6d1fc82a2'
     def original_values(v, cents=False):
         if isinstance(v,dict):return {k:original_values(x,cents or k.endswith('Cents')) for k,x in v.items()}
         if isinstance(v,list):return [original_values(x,cents) for x in v]

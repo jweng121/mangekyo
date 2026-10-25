@@ -24,7 +24,7 @@ async function post(t: T, proposalId: string) {
 it.each([true, false])("runs all ten law-firm steps with Okafor posted and policy approved = %s", async (approved) => {
   const t = convexTest(schema, modules);
   await t.mutation(api.financeIntake.startFreshDemoRun, {});
-  expect((await view(t)).threeWay).toMatchObject({ status: "matched", bookCents: 33_950_000 });
+  expect((await view(t)).threeWay).toMatchObject({ status: "matched", bookCents: 3_287_270_000 });
   await next(t, 1);
   const original = (await runs(t, "harborline-delgado")).runs[0];
   expect(original.result?.proposedAllocations).toEqual([]);
@@ -105,7 +105,7 @@ it.each([true, false])("runs all ten law-firm steps with Okafor posted and polic
   await next(t, 7);
   const cho = (await view(t)).proposals.find(p => p.ownerId === "demo:owner:raymond-cho")!;
   expect(cho.status).toBe("blocked"); expect(cho.blockedReasons?.map(f => f.rule)).toContain("L1");
-  // Nothing later replaces Cho's request, so it needs a person until someone acknowledges it. Acknowledging moves no money.
+  // Nothing later replaces Hayes's request, so it needs a person until someone acknowledges it. Acknowledging moves no money.
   expect(cho.superseded).toBeUndefined();
   await expect(t.mutation(api.financeProposals.acknowledgeBlocked, { proposalId: second.proposalIds[0], dev: sam })).rejects.toThrow("is not a blocked payment");
   const beforeAck = await view(t);

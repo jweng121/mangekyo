@@ -43,8 +43,8 @@ describe("monthly reconciliation report", () => {
     const state = stateFrom(lawFirmBundle());
     state.entries.push(entry({ entryId: "pay:1", ownerId: "demo:owner:westbrook", amountCents: -100_000, kind: "disbursement", bankReference: "PAY:1", sourceRefs: ["demo:document:westbrook-settlement:v1"], effectiveAt: Date.UTC(2026, 9, 20) }));
     const report = monthlyReconciliation(state, "2026-10", { outstandingMaxDays: 30, now: Date.UTC(2026, 9, 31, 23, 59) });
-    expect(report).toMatchObject({ month: "2026-10", periodEnd: Date.UTC(2026, 10, 1) - 1, bookCents: 33_850_000, threeWay: { status: "matched", bankMinusBook: 0 } });
-    expect(report.bank.adjustedCents).toBe(33_850_000);
+    expect(report).toMatchObject({ month: "2026-10", periodEnd: Date.UTC(2026, 10, 1) - 1, bookCents: 3_287_170_000, threeWay: { status: "matched", bankMinusBook: 0 } });
+    expect(report.bank.adjustedCents).toBe(3_287_170_000);
     expect(report.clientLedgers.map(l => l.ownerKind)).toEqual(["client", "client", "client", "client", "client", "client", "firm", "unallocated"]);
     expect(report.reconcilingItems).toEqual([expect.objectContaining({ kind: "outstanding_payment", entryId: "pay:1", amountCents: -100_000 })]);
     expect(() => monthEnd("2026-13")).toThrow("YYYY-MM");

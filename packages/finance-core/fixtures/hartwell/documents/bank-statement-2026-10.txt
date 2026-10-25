@@ -87,7 +87,7 @@ FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                            
 
     10-25      ACH COST REIMB OPER 2290                                                  $22,506.00                           $54,529,723.50
 
-    10-30      ACH CR RAYMOND CHO                                                                        $780,000.00        $55,309,723.50
+    10-30      ACH CR RAYMOND HAYES                                                                      $780,000.00        $55,309,723.50
 
  Please compare this statement with your account records. This statement reports posted bank activity; it does not certify individual client ledger
   balances. Questions: (510) 555-0120.

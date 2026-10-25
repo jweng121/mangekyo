@@ -42,7 +42,8 @@ describe("trust rules in the lock (Convex)", () => {
     await feed(t, 0);
     const payment = await t.mutation(api.financeProposals.requestPayment, { accountId, ownerId: "demo:owner:westbrook", amountCents: 5_000_000, purpose: "Westbrook HOA repairs", evidenceSourceIds: ["demo:document:westbrook-settlement:v1"], dev: riley });
     expect(payment.proposal.status).toBe("pending_approval");
-    const dispute = await t.mutation(api.financeTrust.recordDispute, { accountId, ownerId: "demo:owner:westbrook", amountCents: 20_000_000, reason: "A board member disputes the repair invoice.", dev: riley });
+    // Westbrook opens at $32,475,000.00; disputing all but $10,000.00 of it leaves too little undisputed for the $50,000.00 payment.
+    const dispute = await t.mutation(api.financeTrust.recordDispute, { accountId, ownerId: "demo:owner:westbrook", amountCents: 3_246_500_000, reason: "A board member disputes the repair invoice.", dev: riley });
     expect(dispute).toMatchObject({ disputeId: `${accountId}:dispute:001`, status: "open", recordedBy: "dev-unverified:riley" });
     const held = await t.mutation(api.financeProposals.approveProposal, { proposalId: payment.proposal.proposalId, dev: sam });
     expect(held.proposal.status).toBe("on_hold");
@@ -61,7 +62,7 @@ describe("trust rules in the lock (Convex)", () => {
     expect(resumed.lock?.failures).toEqual([]);
     expect(await t.query(api.financeTrust.listDisputes, { accountId })).toHaveLength(1);
     const events = await t.query(api.finance.listMoneyEvents, { accountId });
-    expect(events.filter(e => e.type === "finance.money.hold_updated").map(e => e.payload.message)).toEqual(expect.arrayContaining([expect.stringContaining("recorded a $200,000.00 dispute"), expect.stringContaining("resolved dispute")]));
+    expect(events.filter(e => e.type === "finance.money.hold_updated").map(e => e.payload.message)).toEqual(expect.arrayContaining([expect.stringContaining("recorded a $32,465,000.00 dispute"), expect.stringContaining("resolved dispute")]));
   });
 
   it("the disbursement agent asks a person when the signed statement doesn't add up, and proposes no line", async () => {
@@ -225,8 +226,8 @@ describe("Trust Compliance Auditor", () => {
     expect(report.status).toBe("clean");
     expect(report.reviewed.owners).toBe(7);
     const unsigned = await t.query(api.financeAudit.monthlyReconciliationReport, { accountId, month: "2026-10" });
-    expect(unsigned).toMatchObject({ signedOff: null, bookCents: 33_950_000, threeWay: { status: "matched" } });
-    expect(unsigned.bank.adjustedCents).toBe(33_950_000);
+    expect(unsigned).toMatchObject({ signedOff: null, bookCents: 3_287_270_000, threeWay: { status: "matched" } });
+    expect(unsigned.bank.adjustedCents).toBe(3_287_270_000);
     await expect(t.mutation(api.financeAudit.signOffMonthlyReconciliation, { accountId, month: "2026-10", dev: riley })).rejects.toThrow("approver");
     await expect(t.mutation(api.financeAudit.signOffMonthlyReconciliation, { accountId, month: "2026-11", dev: sam })).rejects.toThrow("only after it ends");
     const signed = await t.mutation(api.financeAudit.signOffMonthlyReconciliation, { accountId, month: "2026-10", note: "Reviewed against the bank statement.", dev: sam });

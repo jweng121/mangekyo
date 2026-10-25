@@ -60,7 +60,7 @@
     "clientId": "c04",
     "matterId": "m02",
     "amountCents": 27000000,
-    "description": "ACH CR RAYMOND CHO",
+    "description": "ACH CR RAYMOND HAYES",
     "documentIds": [
       "cho-retainer"
     ],
@@ -3167,7 +3167,7 @@
     "clientId": "c04",
     "matterId": "m02",
     "amountCents": 78000000,
-    "description": "ACH CR RAYMOND CHO",
+    "description": "ACH CR RAYMOND HAYES",
     "documentIds": [
       "cho-topup"
     ],

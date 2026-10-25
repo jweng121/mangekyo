@@ -40,7 +40,7 @@ export const runPlanted = mutation({
     await importBundle(ctx, scorecardBundle(accountId, Date.now()), "demo");
     // Uncleared payout and overdraw: the lock decides at request time.
     await payment(ctx, accountId, id("owner:maria-delgado"), 5_600_000, UNCLEARED_PAYOUT_PURPOSE, id("document:delgado-settlement:v1"), id("bank:txn:plant-harborline-delgado"));
-    await payment(ctx, accountId, id("owner:raymond-cho"), 600_000, OVERDRAW_PURPOSE, id("document:cho-expert:v1"));
+    await payment(ctx, accountId, id("owner:raymond-cho"), 90_000_000, OVERDRAW_PURPOSE, id("document:cho-expert:v1"));
     // Bounced check: riley allocates Okafor's check, sam approves and posts it, then the bank returns it.
     const deposit = id("bank:txn:plant-okafor");
     const now = Date.now();
