@@ -4,12 +4,28 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, GitBranch, Landmark, PanelLeftClose, PanelLeftOpen, CircleHelp, ArrowUpRight, FlaskConical, Activity, Workflow, Bot, Wallet, BookOpen, MessageSquare } from "lucide-react";
 import "../platform.css";
+import {escalationCases,type WorkspaceData} from "../../../visual-audit-dev/lib/workspace-data";
 import {openWorkspaceChat} from "../../../visual-audit-dev/lib/workspace-chat";
 
-export function PlatformShell({ children }: { children: ReactNode }) {
+export function PlatformShell({ children, escalationBadges=false }: { children: ReactNode; escalationBadges?: boolean }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   useEffect(()=>{if(window.innerWidth<760)document.querySelector(".platform-nav [aria-current=page]")?.scrollIntoView({block:"nearest",inline:"center"});},[pathname]);
+  const [escalationCount,setEscalationCount]=useState(0);
+  useEffect(()=>{
+    if(!escalationBadges)return;
+    const controller=new AbortController();
+    let loading=false;
+    const refresh=async()=>{if(loading)return;loading=true;try{
+      const response=await fetch("/api/workspace",{cache:"no-store",signal:controller.signal});
+      if(!response.ok)return;
+      const data:WorkspaceData=await response.json();
+      if(!controller.signal.aborted)setEscalationCount(escalationCases(data.record).filter(item=>item.open).length);
+    }catch{}finally{loading=false;}};
+    void refresh();const timer=setInterval(refresh,1500);
+    window.addEventListener("mangekyo:workspace-refresh",refresh);
+    return()=>{controller.abort();clearInterval(timer);window.removeEventListener("mangekyo:workspace-refresh",refresh);};
+  },[escalationBadges]);
   const links = [
     { href: "/desk", label: "Overview", icon: LayoutDashboard, active: pathname === "/desk" || pathname === "/" },
     { href: "/activity", label: "Agent activity", icon: Activity, active: pathname === "/activity" },
@@ -27,7 +43,7 @@ export function PlatformShell({ children }: { children: ReactNode }) {
       <div className="workspace-label"><span className="workspace-initial">H</span><span>Hartwell & Moreno<small>ERP workspace</small></span></div>
       <button className="nav-collapse" aria-label={collapsed ? "Expand navigation" : "Collapse navigation"} onClick={()=>setCollapsed(!collapsed)}>{collapsed ? <PanelLeftOpen size={17}/> : <PanelLeftClose size={17}/>}</button>
       </div>
-      <nav>{links.map(({href,label,icon:Icon,active})=><Link key={href} href={href} title={label} aria-label={label} className={active ? "active" : ""} aria-current={active ? "page" : undefined}><Icon size={18}/><span>{label}</span></Link>)}<button className="platform-chat-button" aria-label="Chat" title="Chat" onClick={()=>openWorkspaceChat()}><MessageSquare size={18}/><span>Chat</span></button></nav>
+      <nav>{links.map(({href,label,icon:Icon,active})=><Link key={href} href={href} title={label} aria-label={label} className={active ? "active" : ""} aria-current={active ? "page" : undefined}><Icon size={18}/><span>{label}</span>{href==="/escalations"&&escalationCount>0&&<b className="nav-escalation-badge" aria-label={`${escalationCount} unresolved escalations`}>{escalationCount}</b>}</Link>)}<button className="platform-chat-button" aria-label="Chat" title="Chat" onClick={()=>openWorkspaceChat()}><MessageSquare size={18}/><span>Chat</span></button></nav>
       <div className="nav-bottom"><Link href="/examples"><FlaskConical size={17}/><span>Local examples</span><ArrowUpRight size={13}/></Link><details><summary><CircleHelp size={17}/><span>About this workspace</span></summary><p>Review recorded evidence, correct agent decisions, and approve financial actions on the overview.</p></details><div className="workspace-user"><span>OP</span><div>Operator<small>Trust operations</small></div></div></div>
     </aside>
     <div className="platform-content">{children}</div>

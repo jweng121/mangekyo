@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <PlatformShell>{children}<ChatDock/><DemoShortcuts/></PlatformShell>
+        <PlatformShell escalationBadges>{children}<ChatDock/><DemoShortcuts/></PlatformShell>
       </body>
     </html>
   );

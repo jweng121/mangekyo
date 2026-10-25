@@ -73,3 +73,8 @@
 .nav-collapsed .workspace-nav-row { justify-content:center; margin:14px 0 18px; }
 @media(max-width:1100px) { .workspace-nav-row { justify-content:center; margin:14px 0 18px; } }
 @media(max-width:760px) { .workspace-nav-row { display:none; } }
+
+.platform-nav nav a { position: relative; }
+.nav-escalation-badge { display: inline-flex; align-items: center; justify-content: center; margin-left: auto; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: #bd5278; color: #fff; font-size: 10px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.nav-collapsed .nav-escalation-badge { position: absolute; right: 0; top: 2px; min-width: 16px; height: 16px; padding: 0 4px; font-size: 9px; }
+@media (max-width:1100px) { .nav-escalation-badge { position: absolute; right: 0; top: 2px; min-width: 16px; height: 16px; padding: 0 4px; font-size: 9px; } }
