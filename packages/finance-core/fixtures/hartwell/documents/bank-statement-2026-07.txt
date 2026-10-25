@@ -1,0 +1,107 @@
+ BAY COMMERCE BANK
+                                                                        BUSINESS BANKING / TRUST SERVICES
+
+1128 Bracken Plaza, Oakland, CA 94612 | Telephone: (510) 555-0120
+
+ Client Trust Account Statement
+  Date: 2026-07-31 | Reference: BANK-STATEMENT-2026-07
+
+ Hartwell & Moreno LLP | IOLTA ****4417
+
+ Statement period: 2026-07-01 through 2026-07-31
+
+   Opening balance                Deposits / credits                Withdrawals / debits              Closing balance
+
+   $81,211.90                     $117,869.85                    $71,987.81                     $127,093.94
+
+
+    Posting        Description / check reference                                                  Debit                 Credit              Balance
+    date
+
+    07-02       ZELLE FROM MEI LIN                                                                               $5,587.89            $86,799.79
+
+    07-03      ACH TO HARTWELL OPER 2290                                                 $425.00                               $86,374.79
+
+    07-04      ACH REFUND MEI LIN                                                          $127.85                               $86,246.94
+
+    07-05      ACH FROM CARLOS VEGA                                                                          $5,125.73            $91,372.67
+
+    07-06      CHECK TIDEMARK CASUALTY / 8117                                                              $60,000.00          $151,372.67
+
+    07-06      ACH TO HARTWELL OPER 2290                                                 $357.50                              $151,015.17
+
+    07-07      ACH COST REIMB OPER 2290                                                   $131.02                              $150,884.15
+
+    07-07       WIRE IN ESTUARY TITLE ETS91                                                                     $7,341.25          $158,225.40
+
+    07-08       WIRE FROM FATIMA YUSUF                                                                         $5,652.19          $163,877.59
+
+    07-08       WIRE IN ESTUARY TITLE ETS91                                                                     $7,341.25          $171,218.84
+
+    07-09      ACH TO HARTWELL OPER 2290                                                 $427.50                              $170,791.34
+
+    07-10      ACH COST REIMB OPER 2290                                                   $134.19                              $170,657.15
+
+    07-10       WIRE OUT ESTUARY TITLE ETS91                                               $7,341.25                              $163,315.90
+
+    07-11      CHECK FROM PETER NOVAK / 6119                                                                 $5,140.01          $168,455.91
+
+    07-12      ACH TO HARTWELL OPER 2290                                                 $422.50                              $168,033.41
+
+    07-13       WIRE OUT BAYSIDE MED GRP                                                   $8,975.00                              $159,058.41
+
+    07-13      ACH TO HAROLD AMES                                                       $29,775.00                              $129,283.41
+
+    07-13      ACH COST REIMB OPER 2290                                                   $1,450.00                              $127,833.41
+
+    07-13      ACH TO HARTWELL OPER 2290                                                $19,800.00                              $108,033.41
+
+    07-13      ACH REFUND PETER NOVAK                                                   $137.36                              $107,896.05
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                     bank-statement-2026-07 | Paqe 1
+ BAY COMMERCE BANK
+                                                                        BUSINESS BANKING / TRUST SERVICES
+
+1128 Bracken Plaza, Oakland, CA 94612 | Telephone: (510) 555-0120
+
+
+
+    Posting        Description / check reference                                                  Debit                 Credit              Balance
+    date
+
+    07-14       ZELLE FROM LUCIA SANTOS                                                                        $5,502.93          $113,398.98
+
+    07-15      ACH TO HARTWELL OPER 2290                                                 $430.00                              $112,968.98
+
+    07-16      ACH COST REIMB OPER 2290                                                   $140.53                              $112,828.45
+
+    07-17      ACH FROM ANDRE LEWIS                                                                          $5,683.09          $118,511.54
+
+    07-18      ACH TO HARTWELL OPER 2290                                                 $487.50                              $118,024.04
+
+    07-19      ACH COST REIMB OPER 2290                                                   $143.70                              $117,880.34
+
+    07-20       WIRE FROM HELEN WU                                                                             $5,210.70          $123,091.04
+
+    07-21      ACH TO HARTWELL OPER 2290                                                 $432.50                              $122,658.54
+
+    07-22      ACH REFUND HELEN WU                                                       $146.87                              $122,511.67
+
+    07-23      CHECK FROM MATEO CRUZ / 6123                                                                  $5,284.81          $127,796.48
+
+    07-24      ACH TO HARTWELL OPER 2290                                                 $552.50                              $127,243.98
+
+    07-25      ACH COST REIMB OPER 2290                                                   $150.04                              $127,093.94
+
+ Please compare this statement with your account records. This statement reports posted bank activity; it does not certify individual client ledger
+  balances. Questions: (510) 555-0120.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                     bank-statement-2026-07 | Paqe 2

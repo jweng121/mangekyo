@@ -1,14 +1,28 @@
-Marlowe Forensic Services
-391 Alder Landing | Oakland, CA 94607
-Teleph0ne: (510) 555-0131
-Invoice CHO-EXPERT-INVOICE
-2026-10-08
-Bill to: Raymond Cho
-Matter: m02
-Site inspection and expert testimony preparation
-8 x $750.00     $6,000.00
-Total due: $6,000.00
-Approved for trust payment: /s/ Sam Whitfield
-Please include the invoice number with your remittance.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+ Marlowe Forensic Services
+  583 Willow Anchorage | Oakland, CA 94612 | Telephone: (510) 555-0131
+
+
+  Invoice CHO-EXPERT-INVOICE
+   Date: 2026-10-08 | Reference: CHO-EXPERT-INVOICE
+
+    Bill to: Raymond Cho | Matter m02
+  Professional services and authorized charges
+
+     Service date       Description                                        Hours / units    Rate            Amount
+
+    2026-10-06         Site inspection and measurements                              3          $750.00         $2,250.00
+
+    2026-10-07        Expert analysis and testimony preparation                        5          $750.00         $3,750.00
+
+  Total due: $6,000.00
+
+  Approved for trust payment: /s/ Sam Whitfield | 2026-10-08
+
+   Please include the invoice number with your remittance. Payments from trust require the ordinary balance and authorization
+   checks. Retain this invoice with the matter expense records.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                  cho-expert-invoice | Paqe 1

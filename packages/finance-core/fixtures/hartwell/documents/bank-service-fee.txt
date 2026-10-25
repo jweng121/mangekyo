@@ -1,10 +1,17 @@
-Bay Commerce Bank
-1128 Bracken Plaza | Oakland, CA 94612
-Teleph0ne: (510) 555-0131
-Account Service Notice
-2026-08-18
-Account: IOLTA ending 4417
-Service charge: $25.00
-Charge belongs to the firm; no client ledger is charged.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+ BAY COMMERCE BANK
+                                                                        BUSINESS BANKING / TRUST SERVICES
+
+1128 Bracken Plaza, Oakland, CA 94612 | Telephone: (510) 555-0120
+
+ Account Service Notice
+  Date: 2026-08-18 | Reference: BANK-SERVICE-FEE
+
+ Account: IOLTA ending 4417
+ Service charge: $25.00
+ Charge belongs to the firm; no client ledger is charged.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                  bank-service-fee | Paqe 1

@@ -1,13 +1,19 @@
-Jamie Nguyen
-583 Willow Anchorage | Oakland, CA 94612
-Teleph0ne: (510) 555-0131
-Client Payment Advice
-2026-09-17
-To: Hartwell & Moreno LLP
-Client reference: c06
-Amount: $5,320.63
-Method: ACH
-Memo: part pmt
-Please credit my trust ledger. This is an advance toward fees and costs.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+ Jamie Nguyen
+  583 Willow Anchorage | Oakland, CA 94612 | Telephone: (510) 555-0131
+
+
+  Client Payment Advice
+   Date: 2026-09-17 | Reference: H09-06-DEPOSIT
+
+  To: Hartwell & Moreno LLP
+   Client reference: c06
+  Amount: $5,320.63
+  Method: ACH
+  Memo: part pmt
+  Please credit my trust ledger. This is an advance toward fees and costs.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                 h09-06-deposit | Paqe 1

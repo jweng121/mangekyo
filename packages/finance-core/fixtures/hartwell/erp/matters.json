@@ -240,5 +240,45 @@
     ],
     "practiceArea": "real estate",
     "openedDate": "2026-04-27"
+  },
+  {
+    "id": "m26",
+    "name": "Ames collision",
+    "clientIds": [
+      "c41"
+    ],
+    "practiceArea": "personal injury",
+    "openedDate": "2026-02-09",
+    "claimNumber": "TC-61822"
+  },
+  {
+    "id": "m27",
+    "name": "Vasquez premises injury",
+    "clientIds": [
+      "c42"
+    ],
+    "practiceArea": "personal injury",
+    "openedDate": "2026-03-02",
+    "claimNumber": "HL-48215"
+  },
+  {
+    "id": "m28",
+    "name": "Ford collision",
+    "clientIds": [
+      "c43"
+    ],
+    "practiceArea": "personal injury",
+    "openedDate": "2026-04-06",
+    "claimNumber": "TC-63090"
+  },
+  {
+    "id": "m29",
+    "name": "Castillo collision",
+    "clientIds": [
+      "c44"
+    ],
+    "practiceArea": "personal injury",
+    "openedDate": "2026-05-11",
+    "claimNumber": "HL-51340"
   }
 ]

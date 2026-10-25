@@ -1,14 +1,29 @@
-Hartwell & Moreno LLP
-1846 Alder Quay, Suite 400 | Oakland, CA 94612
-Teleph0ne: (510) 555-0147
-Invoice H06-04-INVOICE
-2026-06-12
-Bill to: Grace Kim
-Matter: m14
-Review records, conference and correspondence
-1.3 hours x $325.00     $422.50
-Total due: $422.50
-Approved for trust payment: /s/ Sam Whitfield
-Please include the invoice number with your remittance.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+              Hartwell & Moreno LLP
+                                     ATTORNEYS AT LAW
+                            1846 Alder Quay, Suite 400 | Oakland, CA 94612 | Telephone: (510) 555-0147
+
+
+   Invoice H06-04-INVOICE
+      Date: 2026-06-12 | Reference: H06-04-INVOICE
+
+       Bill to: Grace Kim | Matter m14
+    Professional services and authorized charges
+
+       Service date       Description                                    Hours / units    Rate            Amount
+
+       2026-06-10       Review records and prepare case notes                      0.4 h          $325.00          $130.00
+
+       2026-06-11         Client conference and written follow-up                       0.9 h          $325.00          $292.50
+
+    Total due: $422.50
+
+     Approved for trust payment: /s/ Sam Whitfield | 2026-06-12
+
+     Please include the invoice number with your remittance. Payments from trust require the ordinary balance and
+      authorization checks. Retain this invoice with the matter expense records.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                   h06-04-invoice | Paqe 1

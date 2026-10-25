@@ -1,14 +1,27 @@
-Hartwell & Moreno LLP
-1846 Alder Quay, Suite 400 | Oakland, CA 94612
-Teleph0ne: (510) 555-0147
-Invoice H05-07-INVOICE
-2026-05-21
-Bill to: Omar Hassan
-Matter: m09
-Completed milestone: review and written advice
-1 x $432.50     $432.50
-Total due: $432.50
-Approved for trust payment: /s/ Sam Whitfield
-Please include the invoice number with your remittance.
-FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE
-Encl0sure: file copy
+              Hartwell & Moreno LLP
+                                     ATTORNEYS AT LAW
+                            1846 Alder Quay, Suite 400 | Oakland, CA 94612 | Telephone: (510) 555-0147
+
+
+   Invoice H05-07-INVOICE
+      Date: 2026-05-21 | Reference: H05-07-INVOICE
+
+       Bill to: Omar Hassan | Matter m09
+    Professional services and authorized charges
+
+       Service date       Description                                    Hours / units    Rate            Amount
+
+       2026-05-20       Completed milestone: review and written advice               1          $432.50          $432.50
+
+    Total due: $432.50
+
+     Approved for trust payment: /s/ Sam Whitfield | 2026-05-21
+
+     Please include the invoice number with your remittance. Payments from trust require the ordinary balance and
+      authorization checks. Retain this invoice with the matter expense records.
+
+
+
+
+
+FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                                                                                                   h05-07-invoice | Paqe 1

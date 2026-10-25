@@ -8,8 +8,8 @@
     "requestedAmountCents": 1450000,
     "requestedBank": {
       "bank": "Juniper Channel Bank",
-      "routing": "000000000",
-      "account": "0000975521"
+      "routing": "withheld",
+      "account": "****5521"
     },
     "scheduledPaymentDate": "2026-10-23"
   }

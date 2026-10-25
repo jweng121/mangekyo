@@ -679,7 +679,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "bayside",
-    "bankAccount": "0000831264",
+    "bankAccount": "****1264",
     "balanceCents": 6199391
   },
   {
@@ -1024,6 +1024,24 @@
     "balanceCents": 9137267
   },
   {
+    "id": "ames-deposit",
+    "postedDate": "2026-07-06",
+    "ledgerDate": "2026-07-06",
+    "clientId": "c41",
+    "matterId": "m26",
+    "amountCents": 6000000,
+    "description": "CHECK TIDEMARK CASUALTY",
+    "documentIds": [
+      "ames-settlement"
+    ],
+    "kind": "settlement",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "8117",
+    "balanceCents": 15137267
+  },
+  {
     "id": "h07-02-fee",
     "postedDate": "2026-07-06",
     "ledgerDate": "2026-07-06",
@@ -1039,7 +1057,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 9101517
+    "balanceCents": 15101517
   },
   {
     "id": "h07-02-out",
@@ -1057,7 +1075,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 9088415
+    "balanceCents": 15088415
   },
   {
     "id": "title-wire-1",
@@ -1076,7 +1094,7 @@
     "status": "posted",
     "reference": "ETS-260707-91",
     "payeeId": "title",
-    "balanceCents": 9822540
+    "balanceCents": 15822540
   },
   {
     "id": "h07-03-in",
@@ -1094,7 +1112,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 10387759
+    "balanceCents": 16387759
   },
   {
     "id": "title-wire-2",
@@ -1113,7 +1131,7 @@
     "status": "posted",
     "reference": "ETS-260707-91",
     "payeeId": "title",
-    "balanceCents": 11121884
+    "balanceCents": 17121884
   },
   {
     "id": "h07-03-fee",
@@ -1131,7 +1149,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 11079134
+    "balanceCents": 17079134
   },
   {
     "id": "h07-03-out",
@@ -1149,7 +1167,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 11065715
+    "balanceCents": 17065715
   },
   {
     "id": "title-return",
@@ -1168,7 +1186,7 @@
     "status": "posted",
     "reference": "ETS-260707-91",
     "payeeId": "title",
-    "balanceCents": 10331590
+    "balanceCents": 16331590
   },
   {
     "id": "h07-04-in",
@@ -1186,7 +1204,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6119",
-    "balanceCents": 10845591
+    "balanceCents": 16845591
   },
   {
     "id": "h07-04-fee",
@@ -1200,6 +1218,83 @@
       "h07-04-invoice"
     ],
     "kind": "attorney_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 16803341
+  },
+  {
+    "id": "ames-bayside-paid",
+    "postedDate": "2026-07-13",
+    "ledgerDate": "2026-07-13",
+    "clientId": "c41",
+    "matterId": "m26",
+    "amountCents": -897500,
+    "description": "WIRE OUT BAYSIDE MED GRP",
+    "documentIds": [
+      "ames-bayside-v2",
+      "ames-bayside-wire",
+      "ames-statement-v2"
+    ],
+    "kind": "lien",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "bayside",
+    "bankAccount": "****1264",
+    "balanceCents": 15905841
+  },
+  {
+    "id": "ames-client-share",
+    "postedDate": "2026-07-13",
+    "ledgerDate": "2026-07-13",
+    "clientId": "c41",
+    "matterId": "m26",
+    "amountCents": -2977500,
+    "description": "ACH TO HAROLD AMES",
+    "documentIds": [
+      "ames-statement-v2"
+    ],
+    "kind": "client_share",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c41",
+    "balanceCents": 12928341
+  },
+  {
+    "id": "ames-costs",
+    "postedDate": "2026-07-13",
+    "ledgerDate": "2026-07-13",
+    "clientId": "c41",
+    "matterId": "m26",
+    "amountCents": -145000,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "ames-statement-v2",
+      "ames-police-report",
+      "ames-reconstruction"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 12783341
+  },
+  {
+    "id": "ames-fee",
+    "postedDate": "2026-07-13",
+    "ledgerDate": "2026-07-13",
+    "clientId": "c41",
+    "matterId": "m26",
+    "amountCents": -1980000,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "ames-statement-v2"
+    ],
+    "kind": "settlement_fee",
     "initiatedBy": "riley",
     "approvedBy": "sam",
     "status": "posted",
@@ -1603,6 +1698,24 @@
     "balanceCents": 14098175
   },
   {
+    "id": "vasquez-deposit",
+    "postedDate": "2026-08-10",
+    "ledgerDate": "2026-08-10",
+    "clientId": "c42",
+    "matterId": "m27",
+    "amountCents": 3200000,
+    "description": "DEPOSIT HARBORLINE DRAFT 902033",
+    "documentIds": [
+      "vasquez-check"
+    ],
+    "kind": "settlement",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "902033",
+    "balanceCents": 17298175
+  },
+  {
     "id": "h08-04-in",
     "postedDate": "2026-08-11",
     "ledgerDate": "2026-08-11",
@@ -1618,7 +1731,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6127",
-    "balanceCents": 14622022
+    "balanceCents": 17822022
   },
   {
     "id": "h08-04-fee",
@@ -1636,7 +1749,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 14579772
+    "balanceCents": 17779772
   },
   {
     "id": "h08-04-out",
@@ -1654,7 +1767,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c32",
-    "balanceCents": 14566036
+    "balanceCents": 17766036
   },
   {
     "id": "h08-05-in",
@@ -1672,6 +1785,83 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
+    "balanceCents": 18295087
+  },
+  {
+    "id": "vasquez-bayside-paid",
+    "postedDate": "2026-08-14",
+    "ledgerDate": "2026-08-14",
+    "clientId": "c42",
+    "matterId": "m27",
+    "amountCents": -515000,
+    "description": "WIRE OUT BAYSIDE MED GRP",
+    "documentIds": [
+      "vasquez-bayside-v2",
+      "vasquez-bayside-wire",
+      "vasquez-statement-v2"
+    ],
+    "kind": "lien",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "bayside",
+    "bankAccount": "****1264",
+    "balanceCents": 17780087
+  },
+  {
+    "id": "vasquez-client-share",
+    "postedDate": "2026-08-14",
+    "ledgerDate": "2026-08-14",
+    "clientId": "c42",
+    "matterId": "m27",
+    "amountCents": -1750000,
+    "description": "ACH TO CORINNE VASQUEZ",
+    "documentIds": [
+      "vasquez-statement-v2"
+    ],
+    "kind": "client_share",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c42",
+    "balanceCents": 16030087
+  },
+  {
+    "id": "vasquez-costs",
+    "postedDate": "2026-08-14",
+    "ledgerDate": "2026-08-14",
+    "clientId": "c42",
+    "matterId": "m27",
+    "amountCents": -180000,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "vasquez-statement-v2",
+      "vasquez-records",
+      "vasquez-deposition"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 15850087
+  },
+  {
+    "id": "vasquez-fee",
+    "postedDate": "2026-08-14",
+    "ledgerDate": "2026-08-14",
+    "clientId": "c42",
+    "matterId": "m27",
+    "amountCents": -755000,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "vasquez-statement-v2"
+    ],
+    "kind": "settlement_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
     "balanceCents": 15095087
   },
   {
@@ -1945,6 +2135,24 @@
     "balanceCents": 16913536
   },
   {
+    "id": "ford-deposit",
+    "postedDate": "2026-09-04",
+    "ledgerDate": "2026-09-04",
+    "clientId": "c43",
+    "matterId": "m28",
+    "amountCents": 4800000,
+    "description": "CHECK TIDEMARK CASUALTY",
+    "documentIds": [
+      "ford-settlement"
+    ],
+    "kind": "settlement",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "8204",
+    "balanceCents": 21713536
+  },
+  {
     "id": "h09-01-out",
     "postedDate": "2026-09-04",
     "ledgerDate": "2026-09-04",
@@ -1960,7 +2168,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c37",
-    "balanceCents": 16900751
+    "balanceCents": 21700751
   },
   {
     "id": "h09-02-in",
@@ -1978,7 +2186,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 17434789
+    "balanceCents": 22234789
   },
   {
     "id": "h09-02-fee",
@@ -1996,7 +2204,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 17399039
+    "balanceCents": 22199039
   },
   {
     "id": "h09-02-out",
@@ -2014,7 +2222,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 17385937
+    "balanceCents": 22185937
   },
   {
     "id": "h09-03-in",
@@ -2032,6 +2240,62 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
+    "balanceCents": 22734180
+  },
+  {
+    "id": "ford-client-share",
+    "postedDate": "2026-09-09",
+    "ledgerDate": "2026-09-09",
+    "clientId": "c43",
+    "matterId": "m28",
+    "amountCents": -3121000,
+    "description": "ACH TO WESLEY FORD",
+    "documentIds": [
+      "ford-statement-v1"
+    ],
+    "kind": "client_share",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "c43",
+    "balanceCents": 19613180
+  },
+  {
+    "id": "ford-costs",
+    "postedDate": "2026-09-09",
+    "ledgerDate": "2026-09-09",
+    "clientId": "c43",
+    "matterId": "m28",
+    "amountCents": -95000,
+    "description": "ACH COST REIMB OPER 2290",
+    "documentIds": [
+      "ford-statement-v1",
+      "ford-records",
+      "ford-scene"
+    ],
+    "kind": "costs",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
+    "balanceCents": 19518180
+  },
+  {
+    "id": "ford-fee",
+    "postedDate": "2026-09-09",
+    "ledgerDate": "2026-09-09",
+    "clientId": "c43",
+    "matterId": "m28",
+    "amountCents": -1584000,
+    "description": "ACH TO HARTWELL OPER 2290",
+    "documentIds": [
+      "ford-statement-v1"
+    ],
+    "kind": "settlement_fee",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "payeeId": "firm",
     "balanceCents": 17934180
   },
   {
@@ -2810,6 +3074,39 @@
     "balanceCents": 23342642
   },
   {
+    "id": "harborline-deposit",
+    "postedDate": "2026-10-22",
+    "ledgerDate": "2026-10-22",
+    "clientId": null,
+    "matterId": "m01",
+    "amountCents": 12500000,
+    "description": "DEPOSIT HARBORLINE DRAFT 902174",
+    "documentIds": [
+      "global-check",
+      "allocation-global"
+    ],
+    "kind": "settlement",
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "status": "posted",
+    "checkNo": "902174",
+    "allocations": [
+      {
+        "clientId": "c01",
+        "amountCents": 6250000
+      },
+      {
+        "clientId": "c02",
+        "amountCents": 3750000
+      },
+      {
+        "clientId": "c03",
+        "amountCents": 2500000
+      }
+    ],
+    "balanceCents": 35842642
+  },
+  {
     "id": "h10-08-in",
     "postedDate": "2026-10-23",
     "ledgerDate": "2026-10-23",
@@ -2825,7 +3122,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6147",
-    "balanceCents": 23923403
+    "balanceCents": 36423403
   },
   {
     "id": "h10-08-fee",
@@ -2843,7 +3140,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 23868153
+    "balanceCents": 36368153
   },
   {
     "id": "h10-08-out",
@@ -2861,7 +3158,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 23853149
+    "balanceCents": 36353149
   },
   {
     "id": "cho-topup",
@@ -2878,6 +3175,6 @@
     "initiatedBy": "riley",
     "approvedBy": "sam",
     "status": "posted",
-    "balanceCents": 24373149
+    "balanceCents": 36873149
   }
 ]

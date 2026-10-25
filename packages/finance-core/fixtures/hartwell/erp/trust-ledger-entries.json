@@ -1369,6 +1369,30 @@
     ]
   },
   {
+    "id": "je-ames-deposit",
+    "transactionId": "ames-deposit",
+    "date": "2026-07-06",
+    "clientId": "c41",
+    "matterId": "m26",
+    "documentIds": [
+      "ames-settlement"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 6000000,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c41",
+        "debitCents": 0,
+        "creditCents": 6000000
+      }
+    ]
+  },
+  {
     "id": "je-h07-02-fee",
     "transactionId": "h07-02-fee",
     "date": "2026-07-06",
@@ -1604,6 +1628,106 @@
       {
         "account": "liability:c24",
         "debitCents": 42250,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-ames-bayside-paid",
+    "transactionId": "ames-bayside-paid",
+    "date": "2026-07-13",
+    "clientId": "c41",
+    "matterId": "m26",
+    "documentIds": [
+      "ames-bayside-v2",
+      "ames-bayside-wire",
+      "ames-statement-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 897500
+      },
+      {
+        "account": "liability:c41",
+        "debitCents": 897500,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-ames-client-share",
+    "transactionId": "ames-client-share",
+    "date": "2026-07-13",
+    "clientId": "c41",
+    "matterId": "m26",
+    "documentIds": [
+      "ames-statement-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 2977500
+      },
+      {
+        "account": "liability:c41",
+        "debitCents": 2977500,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-ames-costs",
+    "transactionId": "ames-costs",
+    "date": "2026-07-13",
+    "clientId": "c41",
+    "matterId": "m26",
+    "documentIds": [
+      "ames-statement-v2",
+      "ames-police-report",
+      "ames-reconstruction"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 145000
+      },
+      {
+        "account": "liability:c41",
+        "debitCents": 145000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-ames-fee",
+    "transactionId": "ames-fee",
+    "date": "2026-07-13",
+    "clientId": "c41",
+    "matterId": "m26",
+    "documentIds": [
+      "ames-statement-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 1980000
+      },
+      {
+        "account": "liability:c41",
+        "debitCents": 1980000,
         "creditCents": 0
       }
     ]
@@ -2137,6 +2261,30 @@
     ]
   },
   {
+    "id": "je-vasquez-deposit",
+    "transactionId": "vasquez-deposit",
+    "date": "2026-08-10",
+    "clientId": "c42",
+    "matterId": "m27",
+    "documentIds": [
+      "vasquez-check"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 3200000,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c42",
+        "debitCents": 0,
+        "creditCents": 3200000
+      }
+    ]
+  },
+  {
     "id": "je-h08-04-in",
     "transactionId": "h08-04-in",
     "date": "2026-08-11",
@@ -2229,6 +2377,106 @@
         "account": "liability:c33",
         "debitCents": 0,
         "creditCents": 529051
+      }
+    ]
+  },
+  {
+    "id": "je-vasquez-bayside-paid",
+    "transactionId": "vasquez-bayside-paid",
+    "date": "2026-08-14",
+    "clientId": "c42",
+    "matterId": "m27",
+    "documentIds": [
+      "vasquez-bayside-v2",
+      "vasquez-bayside-wire",
+      "vasquez-statement-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 515000
+      },
+      {
+        "account": "liability:c42",
+        "debitCents": 515000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-vasquez-client-share",
+    "transactionId": "vasquez-client-share",
+    "date": "2026-08-14",
+    "clientId": "c42",
+    "matterId": "m27",
+    "documentIds": [
+      "vasquez-statement-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 1750000
+      },
+      {
+        "account": "liability:c42",
+        "debitCents": 1750000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-vasquez-costs",
+    "transactionId": "vasquez-costs",
+    "date": "2026-08-14",
+    "clientId": "c42",
+    "matterId": "m27",
+    "documentIds": [
+      "vasquez-statement-v2",
+      "vasquez-records",
+      "vasquez-deposition"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 180000
+      },
+      {
+        "account": "liability:c42",
+        "debitCents": 180000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-vasquez-fee",
+    "transactionId": "vasquez-fee",
+    "date": "2026-08-14",
+    "clientId": "c42",
+    "matterId": "m27",
+    "documentIds": [
+      "vasquez-statement-v2"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 755000
+      },
+      {
+        "account": "liability:c42",
+        "debitCents": 755000,
+        "creditCents": 0
       }
     ]
   },
@@ -2593,6 +2841,30 @@
     ]
   },
   {
+    "id": "je-ford-deposit",
+    "transactionId": "ford-deposit",
+    "date": "2026-09-04",
+    "clientId": "c43",
+    "matterId": "m28",
+    "documentIds": [
+      "ford-settlement"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 4800000,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c43",
+        "debitCents": 0,
+        "creditCents": 4800000
+      }
+    ]
+  },
+  {
     "id": "je-h09-01-out",
     "transactionId": "h09-01-out",
     "date": "2026-09-04",
@@ -2709,6 +2981,80 @@
         "account": "liability:c39",
         "debitCents": 0,
         "creditCents": 548243
+      }
+    ]
+  },
+  {
+    "id": "je-ford-client-share",
+    "transactionId": "ford-client-share",
+    "date": "2026-09-09",
+    "clientId": "c43",
+    "matterId": "m28",
+    "documentIds": [
+      "ford-statement-v1"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 3121000
+      },
+      {
+        "account": "liability:c43",
+        "debitCents": 3121000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-ford-costs",
+    "transactionId": "ford-costs",
+    "date": "2026-09-09",
+    "clientId": "c43",
+    "matterId": "m28",
+    "documentIds": [
+      "ford-statement-v1",
+      "ford-records",
+      "ford-scene"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 95000
+      },
+      {
+        "account": "liability:c43",
+        "debitCents": 95000,
+        "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-ford-fee",
+    "transactionId": "ford-fee",
+    "date": "2026-09-09",
+    "clientId": "c43",
+    "matterId": "m28",
+    "documentIds": [
+      "ford-statement-v1"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 0,
+        "creditCents": 1584000
+      },
+      {
+        "account": "liability:c43",
+        "debitCents": 1584000,
+        "creditCents": 0
       }
     ]
   },
@@ -3741,6 +4087,41 @@
         "account": "liability:c15",
         "debitCents": 14687,
         "creditCents": 0
+      }
+    ]
+  },
+  {
+    "id": "je-harborline-deposit",
+    "transactionId": "harborline-deposit",
+    "date": "2026-10-22",
+    "clientId": null,
+    "matterId": "m01",
+    "documentIds": [
+      "global-check",
+      "allocation-global"
+    ],
+    "initiatedBy": "riley",
+    "approvedBy": "sam",
+    "lines": [
+      {
+        "account": "asset:trust:4417",
+        "debitCents": 12500000,
+        "creditCents": 0
+      },
+      {
+        "account": "liability:c01",
+        "debitCents": 0,
+        "creditCents": 6250000
+      },
+      {
+        "account": "liability:c02",
+        "debitCents": 0,
+        "creditCents": 3750000
+      },
+      {
+        "account": "liability:c03",
+        "debitCents": 0,
+        "creditCents": 2500000
       }
     ]
   },

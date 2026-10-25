@@ -360,5 +360,41 @@
     ],
     "email": "client40@example.test",
     "phone": "(510) 555-0139"
+  },
+  {
+    "id": "c41",
+    "name": "Harold Ames",
+    "aliases": [
+      "Harold Ames"
+    ],
+    "email": "client41@example.test",
+    "phone": "(510) 555-0140"
+  },
+  {
+    "id": "c42",
+    "name": "Corinne Vasquez",
+    "aliases": [
+      "Corinne Vasquez"
+    ],
+    "email": "client42@example.test",
+    "phone": "(510) 555-0141"
+  },
+  {
+    "id": "c43",
+    "name": "Wesley Ford",
+    "aliases": [
+      "Wesley Ford"
+    ],
+    "email": "client43@example.test",
+    "phone": "(510) 555-0142"
+  },
+  {
+    "id": "c44",
+    "name": "Owen Castillo",
+    "aliases": [
+      "Owen Castillo"
+    ],
+    "email": "client44@example.test",
+    "phone": "(510) 555-0143"
   }
 ]

@@ -11,7 +11,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 42500,
-        "amountCents": 42500
+        "amountCents": 42500,
+        "serviceDate": "2026-05-02"
       }
     ],
     "status": "approved",
@@ -26,10 +27,18 @@
     "amountCents": 35750,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 11,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 35750
+        "amountCents": 13000,
+        "serviceDate": "2026-05-04"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 7,
+        "rateCents": 32500,
+        "amountCents": 22750,
+        "serviceDate": "2026-05-05"
       }
     ],
     "status": "approved",
@@ -47,7 +56,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 42750,
-        "amountCents": 42750
+        "amountCents": 42750,
+        "serviceDate": "2026-05-08"
       }
     ],
     "status": "approved",
@@ -62,10 +72,18 @@
     "amountCents": 42250,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 13,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 42250
+        "amountCents": 13000,
+        "serviceDate": "2026-05-10"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 9,
+        "rateCents": 32500,
+        "amountCents": 29250,
+        "serviceDate": "2026-05-11"
       }
     ],
     "status": "approved",
@@ -83,7 +101,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 43000,
-        "amountCents": 43000
+        "amountCents": 43000,
+        "serviceDate": "2026-05-14"
       }
     ],
     "status": "approved",
@@ -98,10 +117,18 @@
     "amountCents": 48750,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 15,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 48750
+        "amountCents": 13000,
+        "serviceDate": "2026-05-16"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 11,
+        "rateCents": 32500,
+        "amountCents": 35750,
+        "serviceDate": "2026-05-17"
       }
     ],
     "status": "approved",
@@ -119,7 +146,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 43250,
-        "amountCents": 43250
+        "amountCents": 43250,
+        "serviceDate": "2026-05-20"
       }
     ],
     "status": "approved",
@@ -134,10 +162,18 @@
     "amountCents": 55250,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 17,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 55250
+        "amountCents": 13000,
+        "serviceDate": "2026-05-22"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 13,
+        "rateCents": 32500,
+        "amountCents": 42250,
+        "serviceDate": "2026-05-23"
       }
     ],
     "status": "approved",
@@ -155,7 +191,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 42500,
-        "amountCents": 42500
+        "amountCents": 42500,
+        "serviceDate": "2026-06-02"
       }
     ],
     "status": "approved",
@@ -170,10 +207,18 @@
     "amountCents": 35750,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 11,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 35750
+        "amountCents": 13000,
+        "serviceDate": "2026-06-04"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 7,
+        "rateCents": 32500,
+        "amountCents": 22750,
+        "serviceDate": "2026-06-05"
       }
     ],
     "status": "approved",
@@ -191,7 +236,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 42750,
-        "amountCents": 42750
+        "amountCents": 42750,
+        "serviceDate": "2026-06-08"
       }
     ],
     "status": "approved",
@@ -206,10 +252,18 @@
     "amountCents": 42250,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 13,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 42250
+        "amountCents": 13000,
+        "serviceDate": "2026-06-10"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 9,
+        "rateCents": 32500,
+        "amountCents": 29250,
+        "serviceDate": "2026-06-11"
       }
     ],
     "status": "approved",
@@ -227,7 +281,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 43000,
-        "amountCents": 43000
+        "amountCents": 43000,
+        "serviceDate": "2026-06-14"
       }
     ],
     "status": "approved",
@@ -242,10 +297,18 @@
     "amountCents": 48750,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 15,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 48750
+        "amountCents": 13000,
+        "serviceDate": "2026-06-16"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 11,
+        "rateCents": 32500,
+        "amountCents": 35750,
+        "serviceDate": "2026-06-17"
       }
     ],
     "status": "approved",
@@ -263,7 +326,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 43250,
-        "amountCents": 43250
+        "amountCents": 43250,
+        "serviceDate": "2026-06-20"
       }
     ],
     "status": "approved",
@@ -278,10 +342,18 @@
     "amountCents": 55250,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 17,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 55250
+        "amountCents": 13000,
+        "serviceDate": "2026-06-22"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 13,
+        "rateCents": 32500,
+        "amountCents": 42250,
+        "serviceDate": "2026-06-23"
       }
     ],
     "status": "approved",
@@ -299,7 +371,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 42500,
-        "amountCents": 42500
+        "amountCents": 42500,
+        "serviceDate": "2026-07-02"
       }
     ],
     "status": "approved",
@@ -314,10 +387,18 @@
     "amountCents": 35750,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 11,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 35750
+        "amountCents": 13000,
+        "serviceDate": "2026-07-04"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 7,
+        "rateCents": 32500,
+        "amountCents": 22750,
+        "serviceDate": "2026-07-05"
       }
     ],
     "status": "approved",
@@ -335,7 +416,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 42750,
-        "amountCents": 42750
+        "amountCents": 42750,
+        "serviceDate": "2026-07-08"
       }
     ],
     "status": "approved",
@@ -350,10 +432,18 @@
     "amountCents": 42250,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 13,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 42250
+        "amountCents": 13000,
+        "serviceDate": "2026-07-10"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 9,
+        "rateCents": 32500,
+        "amountCents": 29250,
+        "serviceDate": "2026-07-11"
       }
     ],
     "status": "approved",
@@ -371,7 +461,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 43000,
-        "amountCents": 43000
+        "amountCents": 43000,
+        "serviceDate": "2026-07-14"
       }
     ],
     "status": "approved",
@@ -386,10 +477,18 @@
     "amountCents": 48750,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 15,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 48750
+        "amountCents": 13000,
+        "serviceDate": "2026-07-16"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 11,
+        "rateCents": 32500,
+        "amountCents": 35750,
+        "serviceDate": "2026-07-17"
       }
     ],
     "status": "approved",
@@ -407,7 +506,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 43250,
-        "amountCents": 43250
+        "amountCents": 43250,
+        "serviceDate": "2026-07-20"
       }
     ],
     "status": "approved",
@@ -422,10 +522,18 @@
     "amountCents": 55250,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 17,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 55250
+        "amountCents": 13000,
+        "serviceDate": "2026-07-22"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 13,
+        "rateCents": 32500,
+        "amountCents": 42250,
+        "serviceDate": "2026-07-23"
       }
     ],
     "status": "approved",
@@ -443,7 +551,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 42500,
-        "amountCents": 42500
+        "amountCents": 42500,
+        "serviceDate": "2026-08-02"
       }
     ],
     "status": "approved",
@@ -458,10 +567,18 @@
     "amountCents": 35750,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 11,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 35750
+        "amountCents": 13000,
+        "serviceDate": "2026-08-04"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 7,
+        "rateCents": 32500,
+        "amountCents": 22750,
+        "serviceDate": "2026-08-05"
       }
     ],
     "status": "approved",
@@ -479,7 +596,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 42750,
-        "amountCents": 42750
+        "amountCents": 42750,
+        "serviceDate": "2026-08-08"
       }
     ],
     "status": "approved",
@@ -494,10 +612,18 @@
     "amountCents": 42250,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 13,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 42250
+        "amountCents": 13000,
+        "serviceDate": "2026-08-10"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 9,
+        "rateCents": 32500,
+        "amountCents": 29250,
+        "serviceDate": "2026-08-11"
       }
     ],
     "status": "approved",
@@ -515,7 +641,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 43000,
-        "amountCents": 43000
+        "amountCents": 43000,
+        "serviceDate": "2026-08-14"
       }
     ],
     "status": "approved",
@@ -530,10 +657,18 @@
     "amountCents": 48750,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 15,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 48750
+        "amountCents": 13000,
+        "serviceDate": "2026-08-16"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 11,
+        "rateCents": 32500,
+        "amountCents": 35750,
+        "serviceDate": "2026-08-17"
       }
     ],
     "status": "approved",
@@ -551,7 +686,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 43250,
-        "amountCents": 43250
+        "amountCents": 43250,
+        "serviceDate": "2026-08-20"
       }
     ],
     "status": "approved",
@@ -566,10 +702,18 @@
     "amountCents": 55250,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 17,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 55250
+        "amountCents": 13000,
+        "serviceDate": "2026-08-22"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 13,
+        "rateCents": 32500,
+        "amountCents": 42250,
+        "serviceDate": "2026-08-23"
       }
     ],
     "status": "approved",
@@ -587,7 +731,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 42500,
-        "amountCents": 42500
+        "amountCents": 42500,
+        "serviceDate": "2026-09-02"
       }
     ],
     "status": "approved",
@@ -602,10 +747,18 @@
     "amountCents": 35750,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 11,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 35750
+        "amountCents": 13000,
+        "serviceDate": "2026-09-04"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 7,
+        "rateCents": 32500,
+        "amountCents": 22750,
+        "serviceDate": "2026-09-05"
       }
     ],
     "status": "approved",
@@ -623,7 +776,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 42750,
-        "amountCents": 42750
+        "amountCents": 42750,
+        "serviceDate": "2026-09-08"
       }
     ],
     "status": "approved",
@@ -638,10 +792,18 @@
     "amountCents": 42250,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 13,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 42250
+        "amountCents": 13000,
+        "serviceDate": "2026-09-10"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 9,
+        "rateCents": 32500,
+        "amountCents": 29250,
+        "serviceDate": "2026-09-11"
       }
     ],
     "status": "approved",
@@ -659,7 +821,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 43000,
-        "amountCents": 43000
+        "amountCents": 43000,
+        "serviceDate": "2026-09-14"
       }
     ],
     "status": "approved",
@@ -674,10 +837,18 @@
     "amountCents": 48750,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 15,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 48750
+        "amountCents": 13000,
+        "serviceDate": "2026-09-16"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 11,
+        "rateCents": 32500,
+        "amountCents": 35750,
+        "serviceDate": "2026-09-17"
       }
     ],
     "status": "approved",
@@ -695,7 +866,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 43250,
-        "amountCents": 43250
+        "amountCents": 43250,
+        "serviceDate": "2026-09-20"
       }
     ],
     "status": "approved",
@@ -710,10 +882,18 @@
     "amountCents": 55250,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 17,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 55250
+        "amountCents": 13000,
+        "serviceDate": "2026-09-22"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 13,
+        "rateCents": 32500,
+        "amountCents": 42250,
+        "serviceDate": "2026-09-23"
       }
     ],
     "status": "approved",
@@ -731,7 +911,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 42500,
-        "amountCents": 42500
+        "amountCents": 42500,
+        "serviceDate": "2026-10-02"
       }
     ],
     "status": "approved",
@@ -746,10 +927,18 @@
     "amountCents": 35750,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 11,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 35750
+        "amountCents": 13000,
+        "serviceDate": "2026-10-04"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 7,
+        "rateCents": 32500,
+        "amountCents": 22750,
+        "serviceDate": "2026-10-05"
       }
     ],
     "status": "approved",
@@ -767,7 +956,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 42750,
-        "amountCents": 42750
+        "amountCents": 42750,
+        "serviceDate": "2026-10-08"
       }
     ],
     "status": "approved",
@@ -782,10 +972,18 @@
     "amountCents": 42250,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 13,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 42250
+        "amountCents": 13000,
+        "serviceDate": "2026-10-10"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 9,
+        "rateCents": 32500,
+        "amountCents": 29250,
+        "serviceDate": "2026-10-11"
       }
     ],
     "status": "approved",
@@ -803,7 +1001,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 43000,
-        "amountCents": 43000
+        "amountCents": 43000,
+        "serviceDate": "2026-10-14"
       }
     ],
     "status": "approved",
@@ -818,10 +1017,18 @@
     "amountCents": 48750,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 15,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 48750
+        "amountCents": 13000,
+        "serviceDate": "2026-10-16"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 11,
+        "rateCents": 32500,
+        "amountCents": 35750,
+        "serviceDate": "2026-10-17"
       }
     ],
     "status": "approved",
@@ -839,7 +1046,8 @@
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
         "unitCents": 43250,
-        "amountCents": 43250
+        "amountCents": 43250,
+        "serviceDate": "2026-10-20"
       }
     ],
     "status": "approved",
@@ -854,10 +1062,18 @@
     "amountCents": 55250,
     "lines": [
       {
-        "description": "Review records, conference and correspondence",
-        "hoursTenths": 17,
+        "description": "Review records and prepare case notes",
+        "hoursTenths": 4,
         "rateCents": 32500,
-        "amountCents": 55250
+        "amountCents": 13000,
+        "serviceDate": "2026-10-22"
+      },
+      {
+        "description": "Client conference and written follow-up",
+        "hoursTenths": 13,
+        "rateCents": 32500,
+        "amountCents": 42250,
+        "serviceDate": "2026-10-23"
       }
     ],
     "status": "approved",
@@ -872,10 +1088,18 @@
     "amountCents": 600000,
     "lines": [
       {
-        "description": "Site inspection and expert testimony preparation",
-        "quantity": 8,
+        "description": "Site inspection and measurements",
+        "quantity": 3,
         "unitCents": 75000,
-        "amountCents": 600000
+        "amountCents": 225000,
+        "serviceDate": "2026-10-06"
+      },
+      {
+        "description": "Expert analysis and testimony preparation",
+        "quantity": 5,
+        "unitCents": 75000,
+        "amountCents": 375000,
+        "serviceDate": "2026-10-07"
       }
     ],
     "status": "approved",

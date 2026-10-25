@@ -8,7 +8,13 @@
     "scanned": true,
     "amountCents": [],
     "pdf": "documents/fee-c01.pdf",
-    "text": "documents/fee-c01.txt"
+    "text": "documents/fee-c01.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.6419
+    ]
   },
   {
     "id": "fee-c02",
@@ -19,7 +25,15 @@
     "scanned": true,
     "amountCents": [],
     "pdf": "documents/fee-c02.pdf",
-    "text": "documents/fee-c02.txt"
+    "text": "documents/fee-c02.txt",
+    "notes": [
+      "signed copy - RO"
+    ],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.0232
+    ]
   },
   {
     "id": "fee-c03",
@@ -30,7 +44,15 @@
     "scanned": true,
     "amountCents": [],
     "pdf": "documents/fee-c03.pdf",
-    "text": "documents/fee-c03.txt"
+    "text": "documents/fee-c03.txt",
+    "notes": [
+      "signed copy - RO"
+    ],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.2442
+    ]
   },
   {
     "id": "fee-c04",
@@ -44,7 +66,13 @@
       500000
     ],
     "pdf": "documents/fee-c04.pdf",
-    "text": "documents/fee-c04.txt"
+    "text": "documents/fee-c04.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.5431
+    ]
   },
   {
     "id": "fee-c05",
@@ -58,7 +86,13 @@
       450000
     ],
     "pdf": "documents/fee-c05.pdf",
-    "text": "documents/fee-c05.txt"
+    "text": "documents/fee-c05.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.1665
+    ]
   },
   {
     "id": "fee-c06",
@@ -72,7 +106,13 @@
       500000
     ],
     "pdf": "documents/fee-c06.pdf",
-    "text": "documents/fee-c06.txt"
+    "text": "documents/fee-c06.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.9825
+    ]
   },
   {
     "id": "fee-c07",
@@ -86,7 +126,13 @@
       450000
     ],
     "pdf": "documents/fee-c07.pdf",
-    "text": "documents/fee-c07.txt"
+    "text": "documents/fee-c07.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.471
+    ]
   },
   {
     "id": "fee-c08",
@@ -100,7 +146,13 @@
       500000
     ],
     "pdf": "documents/fee-c08.pdf",
-    "text": "documents/fee-c08.txt"
+    "text": "documents/fee-c08.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.5586
+    ]
   },
   {
     "id": "fee-c09",
@@ -114,7 +166,13 @@
       450000
     ],
     "pdf": "documents/fee-c09.pdf",
-    "text": "documents/fee-c09.txt"
+    "text": "documents/fee-c09.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.1219
+    ]
   },
   {
     "id": "fee-c10",
@@ -128,7 +186,13 @@
       500000
     ],
     "pdf": "documents/fee-c10.pdf",
-    "text": "documents/fee-c10.txt"
+    "text": "documents/fee-c10.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4981
+    ]
   },
   {
     "id": "fee-c11",
@@ -142,7 +206,13 @@
       450000
     ],
     "pdf": "documents/fee-c11.pdf",
-    "text": "documents/fee-c11.txt"
+    "text": "documents/fee-c11.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      0.997
+    ]
   },
   {
     "id": "fee-c12",
@@ -156,7 +226,13 @@
       500000
     ],
     "pdf": "documents/fee-c12.pdf",
-    "text": "documents/fee-c12.txt"
+    "text": "documents/fee-c12.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.5312
+    ]
   },
   {
     "id": "fee-c13",
@@ -170,7 +246,13 @@
       450000
     ],
     "pdf": "documents/fee-c13.pdf",
-    "text": "documents/fee-c13.txt"
+    "text": "documents/fee-c13.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.5392
+    ]
   },
   {
     "id": "fee-c14",
@@ -184,7 +266,13 @@
       500000
     ],
     "pdf": "documents/fee-c14.pdf",
-    "text": "documents/fee-c14.txt"
+    "text": "documents/fee-c14.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.8775
+    ]
   },
   {
     "id": "fee-c15",
@@ -198,7 +286,13 @@
       450000
     ],
     "pdf": "documents/fee-c15.pdf",
-    "text": "documents/fee-c15.txt"
+    "text": "documents/fee-c15.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.5846
+    ]
   },
   {
     "id": "fee-c16",
@@ -212,7 +306,13 @@
       500000
     ],
     "pdf": "documents/fee-c16.pdf",
-    "text": "documents/fee-c16.txt"
+    "text": "documents/fee-c16.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.8764
+    ]
   },
   {
     "id": "fee-c17",
@@ -226,7 +326,13 @@
       450000
     ],
     "pdf": "documents/fee-c17.pdf",
-    "text": "documents/fee-c17.txt"
+    "text": "documents/fee-c17.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      0.8224
+    ]
   },
   {
     "id": "fee-c18",
@@ -240,7 +346,13 @@
       500000
     ],
     "pdf": "documents/fee-c18.pdf",
-    "text": "documents/fee-c18.txt"
+    "text": "documents/fee-c18.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.5985
+    ]
   },
   {
     "id": "fee-c19",
@@ -254,7 +366,13 @@
       450000
     ],
     "pdf": "documents/fee-c19.pdf",
-    "text": "documents/fee-c19.txt"
+    "text": "documents/fee-c19.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.6854
+    ]
   },
   {
     "id": "fee-c20",
@@ -268,7 +386,13 @@
       500000
     ],
     "pdf": "documents/fee-c20.pdf",
-    "text": "documents/fee-c20.txt"
+    "text": "documents/fee-c20.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.2148
+    ]
   },
   {
     "id": "fee-c21",
@@ -282,7 +406,13 @@
       450000
     ],
     "pdf": "documents/fee-c21.pdf",
-    "text": "documents/fee-c21.txt"
+    "text": "documents/fee-c21.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.4828
+    ]
   },
   {
     "id": "fee-c22",
@@ -296,7 +426,13 @@
       500000
     ],
     "pdf": "documents/fee-c22.pdf",
-    "text": "documents/fee-c22.txt"
+    "text": "documents/fee-c22.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.9073
+    ]
   },
   {
     "id": "fee-c23",
@@ -310,7 +446,13 @@
       450000
     ],
     "pdf": "documents/fee-c23.pdf",
-    "text": "documents/fee-c23.txt"
+    "text": "documents/fee-c23.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.0121
+    ]
   },
   {
     "id": "fee-c24",
@@ -324,7 +466,13 @@
       500000
     ],
     "pdf": "documents/fee-c24.pdf",
-    "text": "documents/fee-c24.txt"
+    "text": "documents/fee-c24.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.6945
+    ]
   },
   {
     "id": "fee-c25",
@@ -338,7 +486,13 @@
       450000
     ],
     "pdf": "documents/fee-c25.pdf",
-    "text": "documents/fee-c25.txt"
+    "text": "documents/fee-c25.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.3992
+    ]
   },
   {
     "id": "fee-c26",
@@ -352,7 +506,13 @@
       500000
     ],
     "pdf": "documents/fee-c26.pdf",
-    "text": "documents/fee-c26.txt"
+    "text": "documents/fee-c26.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.9914
+    ]
   },
   {
     "id": "fee-c27",
@@ -366,7 +526,13 @@
       450000
     ],
     "pdf": "documents/fee-c27.pdf",
-    "text": "documents/fee-c27.txt"
+    "text": "documents/fee-c27.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.3218
+    ]
   },
   {
     "id": "fee-c28",
@@ -380,7 +546,13 @@
       500000
     ],
     "pdf": "documents/fee-c28.pdf",
-    "text": "documents/fee-c28.txt"
+    "text": "documents/fee-c28.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.2653
+    ]
   },
   {
     "id": "fee-c29",
@@ -394,7 +566,13 @@
       450000
     ],
     "pdf": "documents/fee-c29.pdf",
-    "text": "documents/fee-c29.txt"
+    "text": "documents/fee-c29.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.2006
+    ]
   },
   {
     "id": "fee-c30",
@@ -408,7 +586,13 @@
       500000
     ],
     "pdf": "documents/fee-c30.pdf",
-    "text": "documents/fee-c30.txt"
+    "text": "documents/fee-c30.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.2693
+    ]
   },
   {
     "id": "fee-c31",
@@ -422,7 +606,13 @@
       450000
     ],
     "pdf": "documents/fee-c31.pdf",
-    "text": "documents/fee-c31.txt"
+    "text": "documents/fee-c31.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      0.8893
+    ]
   },
   {
     "id": "fee-c32",
@@ -436,7 +626,13 @@
       500000
     ],
     "pdf": "documents/fee-c32.pdf",
-    "text": "documents/fee-c32.txt"
+    "text": "documents/fee-c32.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.0753
+    ]
   },
   {
     "id": "fee-c33",
@@ -450,7 +646,13 @@
       450000
     ],
     "pdf": "documents/fee-c33.pdf",
-    "text": "documents/fee-c33.txt"
+    "text": "documents/fee-c33.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      0.8234
+    ]
   },
   {
     "id": "fee-c34",
@@ -464,7 +666,13 @@
       500000
     ],
     "pdf": "documents/fee-c34.pdf",
-    "text": "documents/fee-c34.txt"
+    "text": "documents/fee-c34.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.2548
+    ]
   },
   {
     "id": "fee-c35",
@@ -478,7 +686,13 @@
       450000
     ],
     "pdf": "documents/fee-c35.pdf",
-    "text": "documents/fee-c35.txt"
+    "text": "documents/fee-c35.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.1708
+    ]
   },
   {
     "id": "fee-c36",
@@ -492,7 +706,13 @@
       500000
     ],
     "pdf": "documents/fee-c36.pdf",
-    "text": "documents/fee-c36.txt"
+    "text": "documents/fee-c36.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.4938
+    ]
   },
   {
     "id": "fee-c37",
@@ -506,7 +726,13 @@
       450000
     ],
     "pdf": "documents/fee-c37.pdf",
-    "text": "documents/fee-c37.txt"
+    "text": "documents/fee-c37.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.3364
+    ]
   },
   {
     "id": "fee-c38",
@@ -520,7 +746,13 @@
       500000
     ],
     "pdf": "documents/fee-c38.pdf",
-    "text": "documents/fee-c38.txt"
+    "text": "documents/fee-c38.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.1083
+    ]
   },
   {
     "id": "fee-c39",
@@ -534,7 +766,13 @@
       450000
     ],
     "pdf": "documents/fee-c39.pdf",
-    "text": "documents/fee-c39.txt"
+    "text": "documents/fee-c39.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.6379
+    ]
   },
   {
     "id": "fee-c40",
@@ -548,7 +786,13 @@
       500000
     ],
     "pdf": "documents/fee-c40.pdf",
-    "text": "documents/fee-c40.txt"
+    "text": "documents/fee-c40.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.8273
+    ]
   },
   {
     "id": "h05-01-deposit",
@@ -561,7 +805,13 @@
       566032
     ],
     "pdf": "documents/h05-01-deposit.pdf",
-    "text": "documents/h05-01-deposit.txt"
+    "text": "documents/h05-01-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.45
+    ]
   },
   {
     "id": "h05-01-invoice",
@@ -571,11 +821,13 @@
     "date": "2026-05-03",
     "scanned": false,
     "amountCents": [
-      42500,
       42500
     ],
     "pdf": "documents/h05-01-invoice.pdf",
-    "text": "documents/h05-01-invoice.txt"
+    "text": "documents/h05-01-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-01-refund",
@@ -588,7 +840,10 @@
       12785
     ],
     "pdf": "documents/h05-01-refund.pdf",
-    "text": "documents/h05-01-refund.txt"
+    "text": "documents/h05-01-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-02-deposit",
@@ -601,7 +856,10 @@
       550596
     ],
     "pdf": "documents/h05-02-deposit.pdf",
-    "text": "documents/h05-02-deposit.txt"
+    "text": "documents/h05-02-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-02-invoice",
@@ -611,11 +869,16 @@
     "date": "2026-05-06",
     "scanned": false,
     "amountCents": [
-      35750,
-      32500
+      13000,
+      22750,
+      32500,
+      35750
     ],
     "pdf": "documents/h05-02-invoice.pdf",
-    "text": "documents/h05-02-invoice.txt"
+    "text": "documents/h05-02-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-02-cost",
@@ -628,7 +891,13 @@
       13102
     ],
     "pdf": "documents/h05-02-cost.pdf",
-    "text": "documents/h05-02-cost.txt"
+    "text": "documents/h05-02-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.2009
+    ]
   },
   {
     "id": "h05-03-deposit",
@@ -641,7 +910,13 @@
       505924
     ],
     "pdf": "documents/h05-03-deposit.pdf",
-    "text": "documents/h05-03-deposit.txt"
+    "text": "documents/h05-03-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.3531
+    ]
   },
   {
     "id": "h05-03-invoice",
@@ -651,11 +926,13 @@
     "date": "2026-05-09",
     "scanned": false,
     "amountCents": [
-      42750,
       42750
     ],
     "pdf": "documents/h05-03-invoice.pdf",
-    "text": "documents/h05-03-invoice.txt"
+    "text": "documents/h05-03-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-03-cost",
@@ -668,7 +945,13 @@
       13419
     ],
     "pdf": "documents/h05-03-cost.pdf",
-    "text": "documents/h05-03-cost.txt"
+    "text": "documents/h05-03-cost.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.0263
+    ]
   },
   {
     "id": "h05-04-deposit",
@@ -681,7 +964,10 @@
       552768
     ],
     "pdf": "documents/h05-04-deposit.pdf",
-    "text": "documents/h05-04-deposit.txt"
+    "text": "documents/h05-04-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-04-invoice",
@@ -691,11 +977,16 @@
     "date": "2026-05-12",
     "scanned": false,
     "amountCents": [
-      42250,
-      32500
+      13000,
+      29250,
+      32500,
+      42250
     ],
     "pdf": "documents/h05-04-invoice.pdf",
-    "text": "documents/h05-04-invoice.txt"
+    "text": "documents/h05-04-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-04-refund",
@@ -708,7 +999,10 @@
       13736
     ],
     "pdf": "documents/h05-04-refund.pdf",
-    "text": "documents/h05-04-refund.txt"
+    "text": "documents/h05-04-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-05-deposit",
@@ -721,7 +1015,13 @@
       567370
     ],
     "pdf": "documents/h05-05-deposit.pdf",
-    "text": "documents/h05-05-deposit.txt"
+    "text": "documents/h05-05-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.5731
+    ]
   },
   {
     "id": "h05-05-invoice",
@@ -731,11 +1031,13 @@
     "date": "2026-05-15",
     "scanned": false,
     "amountCents": [
-      43000,
       43000
     ],
     "pdf": "documents/h05-05-invoice.pdf",
-    "text": "documents/h05-05-invoice.txt"
+    "text": "documents/h05-05-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-05-cost",
@@ -748,7 +1050,13 @@
       14053
     ],
     "pdf": "documents/h05-05-cost.pdf",
-    "text": "documents/h05-05-cost.txt"
+    "text": "documents/h05-05-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.6666
+    ]
   },
   {
     "id": "h05-06-deposit",
@@ -761,7 +1069,10 @@
       515951
     ],
     "pdf": "documents/h05-06-deposit.pdf",
-    "text": "documents/h05-06-deposit.txt"
+    "text": "documents/h05-06-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-06-invoice",
@@ -771,11 +1082,16 @@
     "date": "2026-05-18",
     "scanned": false,
     "amountCents": [
-      48750,
-      32500
+      13000,
+      32500,
+      35750,
+      48750
     ],
     "pdf": "documents/h05-06-invoice.pdf",
-    "text": "documents/h05-06-invoice.txt"
+    "text": "documents/h05-06-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-06-cost",
@@ -788,7 +1104,13 @@
       14370
     ],
     "pdf": "documents/h05-06-cost.pdf",
-    "text": "documents/h05-06-cost.txt"
+    "text": "documents/h05-06-cost.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.5696
+    ]
   },
   {
     "id": "h05-07-deposit",
@@ -801,7 +1123,13 @@
       584443
     ],
     "pdf": "documents/h05-07-deposit.pdf",
-    "text": "documents/h05-07-deposit.txt"
+    "text": "documents/h05-07-deposit.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.6119
+    ]
   },
   {
     "id": "h05-07-invoice",
@@ -811,11 +1139,13 @@
     "date": "2026-05-21",
     "scanned": false,
     "amountCents": [
-      43250,
       43250
     ],
     "pdf": "documents/h05-07-invoice.pdf",
-    "text": "documents/h05-07-invoice.txt"
+    "text": "documents/h05-07-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-07-refund",
@@ -828,7 +1158,10 @@
       14687
     ],
     "pdf": "documents/h05-07-refund.pdf",
-    "text": "documents/h05-07-refund.txt"
+    "text": "documents/h05-07-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-08-deposit",
@@ -841,7 +1174,10 @@
       534417
     ],
     "pdf": "documents/h05-08-deposit.pdf",
-    "text": "documents/h05-08-deposit.txt"
+    "text": "documents/h05-08-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-08-invoice",
@@ -851,11 +1187,16 @@
     "date": "2026-05-24",
     "scanned": false,
     "amountCents": [
-      55250,
-      32500
+      13000,
+      32500,
+      42250,
+      55250
     ],
     "pdf": "documents/h05-08-invoice.pdf",
-    "text": "documents/h05-08-invoice.txt"
+    "text": "documents/h05-08-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h05-08-cost",
@@ -868,7 +1209,13 @@
       15004
     ],
     "pdf": "documents/h05-08-cost.pdf",
-    "text": "documents/h05-08-cost.txt"
+    "text": "documents/h05-08-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.0824
+    ]
   },
   {
     "id": "h06-01-deposit",
@@ -881,7 +1228,13 @@
       514306
     ],
     "pdf": "documents/h06-01-deposit.pdf",
-    "text": "documents/h06-01-deposit.txt"
+    "text": "documents/h06-01-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.0273
+    ]
   },
   {
     "id": "h06-01-invoice",
@@ -891,11 +1244,13 @@
     "date": "2026-06-03",
     "scanned": false,
     "amountCents": [
-      42500,
       42500
     ],
     "pdf": "documents/h06-01-invoice.pdf",
-    "text": "documents/h06-01-invoice.txt"
+    "text": "documents/h06-01-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-01-refund",
@@ -908,7 +1263,10 @@
       12785
     ],
     "pdf": "documents/h06-01-refund.pdf",
-    "text": "documents/h06-01-refund.txt"
+    "text": "documents/h06-01-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-02-deposit",
@@ -921,7 +1279,10 @@
       523408
     ],
     "pdf": "documents/h06-02-deposit.pdf",
-    "text": "documents/h06-02-deposit.txt"
+    "text": "documents/h06-02-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-02-invoice",
@@ -931,11 +1292,16 @@
     "date": "2026-06-06",
     "scanned": false,
     "amountCents": [
-      35750,
-      32500
+      13000,
+      22750,
+      32500,
+      35750
     ],
     "pdf": "documents/h06-02-invoice.pdf",
-    "text": "documents/h06-02-invoice.txt"
+    "text": "documents/h06-02-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-02-cost",
@@ -948,7 +1314,13 @@
       13102
     ],
     "pdf": "documents/h06-02-cost.pdf",
-    "text": "documents/h06-02-cost.txt"
+    "text": "documents/h06-02-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4209
+    ]
   },
   {
     "id": "h06-03-deposit",
@@ -961,7 +1333,13 @@
       577425
     ],
     "pdf": "documents/h06-03-deposit.pdf",
-    "text": "documents/h06-03-deposit.txt"
+    "text": "documents/h06-03-deposit.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.0453
+    ]
   },
   {
     "id": "h06-03-invoice",
@@ -971,11 +1349,13 @@
     "date": "2026-06-09",
     "scanned": false,
     "amountCents": [
-      42750,
       42750
     ],
     "pdf": "documents/h06-03-invoice.pdf",
-    "text": "documents/h06-03-invoice.txt"
+    "text": "documents/h06-03-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-03-cost",
@@ -988,7 +1368,13 @@
       13419
     ],
     "pdf": "documents/h06-03-cost.pdf",
-    "text": "documents/h06-03-cost.txt"
+    "text": "documents/h06-03-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      0.8857
+    ]
   },
   {
     "id": "h06-04-deposit",
@@ -1001,7 +1387,10 @@
       564188
     ],
     "pdf": "documents/h06-04-deposit.pdf",
-    "text": "documents/h06-04-deposit.txt"
+    "text": "documents/h06-04-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-04-invoice",
@@ -1011,11 +1400,16 @@
     "date": "2026-06-12",
     "scanned": false,
     "amountCents": [
-      42250,
-      32500
+      13000,
+      29250,
+      32500,
+      42250
     ],
     "pdf": "documents/h06-04-invoice.pdf",
-    "text": "documents/h06-04-invoice.txt"
+    "text": "documents/h06-04-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-04-refund",
@@ -1028,7 +1422,10 @@
       13736
     ],
     "pdf": "documents/h06-04-refund.pdf",
-    "text": "documents/h06-04-refund.txt"
+    "text": "documents/h06-04-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-05-deposit",
@@ -1041,7 +1438,13 @@
       581167
     ],
     "pdf": "documents/h06-05-deposit.pdf",
-    "text": "documents/h06-05-deposit.txt"
+    "text": "documents/h06-05-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4412
+    ]
   },
   {
     "id": "h06-05-invoice",
@@ -1051,11 +1454,13 @@
     "date": "2026-06-15",
     "scanned": false,
     "amountCents": [
-      43000,
       43000
     ],
     "pdf": "documents/h06-05-invoice.pdf",
-    "text": "documents/h06-05-invoice.txt"
+    "text": "documents/h06-05-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-05-cost",
@@ -1068,7 +1473,13 @@
       14053
     ],
     "pdf": "documents/h06-05-cost.pdf",
-    "text": "documents/h06-05-cost.txt"
+    "text": "documents/h06-05-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.163
+    ]
   },
   {
     "id": "h06-06-deposit",
@@ -1081,7 +1492,10 @@
       522751
     ],
     "pdf": "documents/h06-06-deposit.pdf",
-    "text": "documents/h06-06-deposit.txt"
+    "text": "documents/h06-06-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-06-invoice",
@@ -1091,11 +1505,16 @@
     "date": "2026-06-18",
     "scanned": false,
     "amountCents": [
-      48750,
-      32500
+      13000,
+      32500,
+      35750,
+      48750
     ],
     "pdf": "documents/h06-06-invoice.pdf",
-    "text": "documents/h06-06-invoice.txt"
+    "text": "documents/h06-06-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-06-cost",
@@ -1108,7 +1527,13 @@
       14370
     ],
     "pdf": "documents/h06-06-cost.pdf",
-    "text": "documents/h06-06-cost.txt"
+    "text": "documents/h06-06-cost.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.8383
+    ]
   },
   {
     "id": "h06-07-deposit",
@@ -1121,7 +1546,13 @@
       525584
     ],
     "pdf": "documents/h06-07-deposit.pdf",
-    "text": "documents/h06-07-deposit.txt"
+    "text": "documents/h06-07-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.2796
+    ]
   },
   {
     "id": "h06-07-invoice",
@@ -1131,11 +1562,13 @@
     "date": "2026-06-21",
     "scanned": false,
     "amountCents": [
-      43250,
       43250
     ],
     "pdf": "documents/h06-07-invoice.pdf",
-    "text": "documents/h06-07-invoice.txt"
+    "text": "documents/h06-07-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-07-refund",
@@ -1148,7 +1581,10 @@
       14687
     ],
     "pdf": "documents/h06-07-refund.pdf",
-    "text": "documents/h06-07-refund.txt"
+    "text": "documents/h06-07-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-08-deposit",
@@ -1161,7 +1597,10 @@
       504607
     ],
     "pdf": "documents/h06-08-deposit.pdf",
-    "text": "documents/h06-08-deposit.txt"
+    "text": "documents/h06-08-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-08-invoice",
@@ -1171,11 +1610,16 @@
     "date": "2026-06-24",
     "scanned": false,
     "amountCents": [
-      55250,
-      32500
+      13000,
+      32500,
+      42250,
+      55250
     ],
     "pdf": "documents/h06-08-invoice.pdf",
-    "text": "documents/h06-08-invoice.txt"
+    "text": "documents/h06-08-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h06-08-cost",
@@ -1188,7 +1632,13 @@
       15004
     ],
     "pdf": "documents/h06-08-cost.pdf",
-    "text": "documents/h06-08-cost.txt"
+    "text": "documents/h06-08-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.2027
+    ]
   },
   {
     "id": "h07-01-deposit",
@@ -1201,7 +1651,13 @@
       558789
     ],
     "pdf": "documents/h07-01-deposit.pdf",
-    "text": "documents/h07-01-deposit.txt"
+    "text": "documents/h07-01-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.2389
+    ]
   },
   {
     "id": "h07-01-invoice",
@@ -1211,11 +1667,13 @@
     "date": "2026-07-03",
     "scanned": false,
     "amountCents": [
-      42500,
       42500
     ],
     "pdf": "documents/h07-01-invoice.pdf",
-    "text": "documents/h07-01-invoice.txt"
+    "text": "documents/h07-01-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-01-refund",
@@ -1228,7 +1686,10 @@
       12785
     ],
     "pdf": "documents/h07-01-refund.pdf",
-    "text": "documents/h07-01-refund.txt"
+    "text": "documents/h07-01-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-02-deposit",
@@ -1241,7 +1702,10 @@
       512573
     ],
     "pdf": "documents/h07-02-deposit.pdf",
-    "text": "documents/h07-02-deposit.txt"
+    "text": "documents/h07-02-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-02-invoice",
@@ -1251,11 +1715,16 @@
     "date": "2026-07-06",
     "scanned": false,
     "amountCents": [
-      35750,
-      32500
+      13000,
+      22750,
+      32500,
+      35750
     ],
     "pdf": "documents/h07-02-invoice.pdf",
-    "text": "documents/h07-02-invoice.txt"
+    "text": "documents/h07-02-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-02-cost",
@@ -1268,7 +1737,13 @@
       13102
     ],
     "pdf": "documents/h07-02-cost.pdf",
-    "text": "documents/h07-02-cost.txt"
+    "text": "documents/h07-02-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.3931
+    ]
   },
   {
     "id": "h07-03-deposit",
@@ -1281,7 +1756,13 @@
       565219
     ],
     "pdf": "documents/h07-03-deposit.pdf",
-    "text": "documents/h07-03-deposit.txt"
+    "text": "documents/h07-03-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.1405
+    ]
   },
   {
     "id": "h07-03-invoice",
@@ -1291,11 +1772,13 @@
     "date": "2026-07-09",
     "scanned": false,
     "amountCents": [
-      42750,
       42750
     ],
     "pdf": "documents/h07-03-invoice.pdf",
-    "text": "documents/h07-03-invoice.txt"
+    "text": "documents/h07-03-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-03-cost",
@@ -1308,7 +1791,13 @@
       13419
     ],
     "pdf": "documents/h07-03-cost.pdf",
-    "text": "documents/h07-03-cost.txt"
+    "text": "documents/h07-03-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.6857
+    ]
   },
   {
     "id": "h07-04-deposit",
@@ -1321,7 +1810,10 @@
       514001
     ],
     "pdf": "documents/h07-04-deposit.pdf",
-    "text": "documents/h07-04-deposit.txt"
+    "text": "documents/h07-04-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-04-invoice",
@@ -1331,11 +1823,16 @@
     "date": "2026-07-12",
     "scanned": false,
     "amountCents": [
-      42250,
-      32500
+      13000,
+      29250,
+      32500,
+      42250
     ],
     "pdf": "documents/h07-04-invoice.pdf",
-    "text": "documents/h07-04-invoice.txt"
+    "text": "documents/h07-04-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-04-refund",
@@ -1348,7 +1845,10 @@
       13736
     ],
     "pdf": "documents/h07-04-refund.pdf",
-    "text": "documents/h07-04-refund.txt"
+    "text": "documents/h07-04-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-05-deposit",
@@ -1361,7 +1861,13 @@
       550293
     ],
     "pdf": "documents/h07-05-deposit.pdf",
-    "text": "documents/h07-05-deposit.txt"
+    "text": "documents/h07-05-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.5587
+    ]
   },
   {
     "id": "h07-05-invoice",
@@ -1371,11 +1877,13 @@
     "date": "2026-07-15",
     "scanned": false,
     "amountCents": [
-      43000,
       43000
     ],
     "pdf": "documents/h07-05-invoice.pdf",
-    "text": "documents/h07-05-invoice.txt"
+    "text": "documents/h07-05-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-05-cost",
@@ -1388,7 +1896,13 @@
       14053
     ],
     "pdf": "documents/h07-05-cost.pdf",
-    "text": "documents/h07-05-cost.txt"
+    "text": "documents/h07-05-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.0862
+    ]
   },
   {
     "id": "h07-06-deposit",
@@ -1401,7 +1915,10 @@
       568309
     ],
     "pdf": "documents/h07-06-deposit.pdf",
-    "text": "documents/h07-06-deposit.txt"
+    "text": "documents/h07-06-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-06-invoice",
@@ -1411,11 +1928,16 @@
     "date": "2026-07-18",
     "scanned": false,
     "amountCents": [
-      48750,
-      32500
+      13000,
+      32500,
+      35750,
+      48750
     ],
     "pdf": "documents/h07-06-invoice.pdf",
-    "text": "documents/h07-06-invoice.txt"
+    "text": "documents/h07-06-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-06-cost",
@@ -1428,7 +1950,13 @@
       14370
     ],
     "pdf": "documents/h07-06-cost.pdf",
-    "text": "documents/h07-06-cost.txt"
+    "text": "documents/h07-06-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.1522
+    ]
   },
   {
     "id": "h07-07-deposit",
@@ -1441,7 +1969,13 @@
       521070
     ],
     "pdf": "documents/h07-07-deposit.pdf",
-    "text": "documents/h07-07-deposit.txt"
+    "text": "documents/h07-07-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.2756
+    ]
   },
   {
     "id": "h07-07-invoice",
@@ -1451,11 +1985,13 @@
     "date": "2026-07-21",
     "scanned": false,
     "amountCents": [
-      43250,
       43250
     ],
     "pdf": "documents/h07-07-invoice.pdf",
-    "text": "documents/h07-07-invoice.txt"
+    "text": "documents/h07-07-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-07-refund",
@@ -1468,7 +2004,10 @@
       14687
     ],
     "pdf": "documents/h07-07-refund.pdf",
-    "text": "documents/h07-07-refund.txt"
+    "text": "documents/h07-07-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-08-deposit",
@@ -1481,7 +2020,10 @@
       528481
     ],
     "pdf": "documents/h07-08-deposit.pdf",
-    "text": "documents/h07-08-deposit.txt"
+    "text": "documents/h07-08-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-08-invoice",
@@ -1491,11 +2033,16 @@
     "date": "2026-07-24",
     "scanned": false,
     "amountCents": [
-      55250,
-      32500
+      13000,
+      32500,
+      42250,
+      55250
     ],
     "pdf": "documents/h07-08-invoice.pdf",
-    "text": "documents/h07-08-invoice.txt"
+    "text": "documents/h07-08-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h07-08-cost",
@@ -1508,7 +2055,13 @@
       15004
     ],
     "pdf": "documents/h07-08-cost.pdf",
-    "text": "documents/h07-08-cost.txt"
+    "text": "documents/h07-08-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.4512
+    ]
   },
   {
     "id": "h08-01-deposit",
@@ -1521,7 +2074,13 @@
       525351
     ],
     "pdf": "documents/h08-01-deposit.pdf",
-    "text": "documents/h08-01-deposit.txt"
+    "text": "documents/h08-01-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.6177
+    ]
   },
   {
     "id": "h08-01-invoice",
@@ -1531,11 +2090,13 @@
     "date": "2026-08-03",
     "scanned": false,
     "amountCents": [
-      42500,
       42500
     ],
     "pdf": "documents/h08-01-invoice.pdf",
-    "text": "documents/h08-01-invoice.txt"
+    "text": "documents/h08-01-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-01-refund",
@@ -1548,7 +2109,10 @@
       12785
     ],
     "pdf": "documents/h08-01-refund.pdf",
-    "text": "documents/h08-01-refund.txt"
+    "text": "documents/h08-01-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-02-deposit",
@@ -1561,7 +2125,10 @@
       518665
     ],
     "pdf": "documents/h08-02-deposit.pdf",
-    "text": "documents/h08-02-deposit.txt"
+    "text": "documents/h08-02-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-02-invoice",
@@ -1571,11 +2138,16 @@
     "date": "2026-08-06",
     "scanned": false,
     "amountCents": [
-      35750,
-      32500
+      13000,
+      22750,
+      32500,
+      35750
     ],
     "pdf": "documents/h08-02-invoice.pdf",
-    "text": "documents/h08-02-invoice.txt"
+    "text": "documents/h08-02-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-02-cost",
@@ -1588,7 +2160,13 @@
       13102
     ],
     "pdf": "documents/h08-02-cost.pdf",
-    "text": "documents/h08-02-cost.txt"
+    "text": "documents/h08-02-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.299
+    ]
   },
   {
     "id": "h08-03-deposit",
@@ -1601,7 +2179,13 @@
       505071
     ],
     "pdf": "documents/h08-03-deposit.pdf",
-    "text": "documents/h08-03-deposit.txt"
+    "text": "documents/h08-03-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.0588
+    ]
   },
   {
     "id": "h08-03-invoice",
@@ -1611,11 +2195,13 @@
     "date": "2026-08-09",
     "scanned": false,
     "amountCents": [
-      42750,
       42750
     ],
     "pdf": "documents/h08-03-invoice.pdf",
-    "text": "documents/h08-03-invoice.txt"
+    "text": "documents/h08-03-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-03-cost",
@@ -1628,7 +2214,13 @@
       13419
     ],
     "pdf": "documents/h08-03-cost.pdf",
-    "text": "documents/h08-03-cost.txt"
+    "text": "documents/h08-03-cost.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.1496
+    ]
   },
   {
     "id": "h08-04-deposit",
@@ -1641,7 +2233,10 @@
       523847
     ],
     "pdf": "documents/h08-04-deposit.pdf",
-    "text": "documents/h08-04-deposit.txt"
+    "text": "documents/h08-04-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-04-invoice",
@@ -1651,11 +2246,16 @@
     "date": "2026-08-12",
     "scanned": false,
     "amountCents": [
-      42250,
-      32500
+      13000,
+      29250,
+      32500,
+      42250
     ],
     "pdf": "documents/h08-04-invoice.pdf",
-    "text": "documents/h08-04-invoice.txt"
+    "text": "documents/h08-04-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-04-refund",
@@ -1668,7 +2268,10 @@
       13736
     ],
     "pdf": "documents/h08-04-refund.pdf",
-    "text": "documents/h08-04-refund.txt"
+    "text": "documents/h08-04-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-05-deposit",
@@ -1681,7 +2284,13 @@
       529051
     ],
     "pdf": "documents/h08-05-deposit.pdf",
-    "text": "documents/h08-05-deposit.txt"
+    "text": "documents/h08-05-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.3415
+    ]
   },
   {
     "id": "h08-05-invoice",
@@ -1691,11 +2300,13 @@
     "date": "2026-08-15",
     "scanned": false,
     "amountCents": [
-      43000,
       43000
     ],
     "pdf": "documents/h08-05-invoice.pdf",
-    "text": "documents/h08-05-invoice.txt"
+    "text": "documents/h08-05-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-05-cost",
@@ -1708,7 +2319,13 @@
       14053
     ],
     "pdf": "documents/h08-05-cost.pdf",
-    "text": "documents/h08-05-cost.txt"
+    "text": "documents/h08-05-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.5385
+    ]
   },
   {
     "id": "h08-06-deposit",
@@ -1721,7 +2338,10 @@
       533625
     ],
     "pdf": "documents/h08-06-deposit.pdf",
-    "text": "documents/h08-06-deposit.txt"
+    "text": "documents/h08-06-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-06-invoice",
@@ -1731,11 +2351,16 @@
     "date": "2026-08-18",
     "scanned": false,
     "amountCents": [
-      48750,
-      32500
+      13000,
+      32500,
+      35750,
+      48750
     ],
     "pdf": "documents/h08-06-invoice.pdf",
-    "text": "documents/h08-06-invoice.txt"
+    "text": "documents/h08-06-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-06-cost",
@@ -1748,7 +2373,13 @@
       14370
     ],
     "pdf": "documents/h08-06-cost.pdf",
-    "text": "documents/h08-06-cost.txt"
+    "text": "documents/h08-06-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.2881
+    ]
   },
   {
     "id": "h08-07-deposit",
@@ -1761,7 +2392,13 @@
       500222
     ],
     "pdf": "documents/h08-07-deposit.pdf",
-    "text": "documents/h08-07-deposit.txt"
+    "text": "documents/h08-07-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.9935
+    ]
   },
   {
     "id": "h08-07-invoice",
@@ -1771,11 +2408,13 @@
     "date": "2026-08-21",
     "scanned": false,
     "amountCents": [
-      43250,
       43250
     ],
     "pdf": "documents/h08-07-invoice.pdf",
-    "text": "documents/h08-07-invoice.txt"
+    "text": "documents/h08-07-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-07-refund",
@@ -1788,7 +2427,10 @@
       14687
     ],
     "pdf": "documents/h08-07-refund.pdf",
-    "text": "documents/h08-07-refund.txt"
+    "text": "documents/h08-07-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-08-deposit",
@@ -1801,7 +2443,10 @@
       528223
     ],
     "pdf": "documents/h08-08-deposit.pdf",
-    "text": "documents/h08-08-deposit.txt"
+    "text": "documents/h08-08-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-08-invoice",
@@ -1811,11 +2456,16 @@
     "date": "2026-08-24",
     "scanned": false,
     "amountCents": [
-      55250,
-      32500
+      13000,
+      32500,
+      42250,
+      55250
     ],
     "pdf": "documents/h08-08-invoice.pdf",
-    "text": "documents/h08-08-invoice.txt"
+    "text": "documents/h08-08-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h08-08-cost",
@@ -1828,7 +2478,13 @@
       15004
     ],
     "pdf": "documents/h08-08-cost.pdf",
-    "text": "documents/h08-08-cost.txt"
+    "text": "documents/h08-08-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.0199
+    ]
   },
   {
     "id": "h09-01-deposit",
@@ -1841,7 +2497,13 @@
       547243
     ],
     "pdf": "documents/h09-01-deposit.pdf",
-    "text": "documents/h09-01-deposit.txt"
+    "text": "documents/h09-01-deposit.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4916
+    ]
   },
   {
     "id": "h09-01-invoice",
@@ -1851,11 +2513,13 @@
     "date": "2026-09-03",
     "scanned": false,
     "amountCents": [
-      42500,
       42500
     ],
     "pdf": "documents/h09-01-invoice.pdf",
-    "text": "documents/h09-01-invoice.txt"
+    "text": "documents/h09-01-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-01-refund",
@@ -1868,7 +2532,10 @@
       12785
     ],
     "pdf": "documents/h09-01-refund.pdf",
-    "text": "documents/h09-01-refund.txt"
+    "text": "documents/h09-01-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-02-deposit",
@@ -1881,7 +2548,10 @@
       534038
     ],
     "pdf": "documents/h09-02-deposit.pdf",
-    "text": "documents/h09-02-deposit.txt"
+    "text": "documents/h09-02-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-02-invoice",
@@ -1891,11 +2561,16 @@
     "date": "2026-09-06",
     "scanned": false,
     "amountCents": [
-      35750,
-      32500
+      13000,
+      22750,
+      32500,
+      35750
     ],
     "pdf": "documents/h09-02-invoice.pdf",
-    "text": "documents/h09-02-invoice.txt"
+    "text": "documents/h09-02-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-02-cost",
@@ -1908,7 +2583,13 @@
       13102
     ],
     "pdf": "documents/h09-02-cost.pdf",
-    "text": "documents/h09-02-cost.txt"
+    "text": "documents/h09-02-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.9043
+    ]
   },
   {
     "id": "h09-03-deposit",
@@ -1921,7 +2602,13 @@
       548243
     ],
     "pdf": "documents/h09-03-deposit.pdf",
-    "text": "documents/h09-03-deposit.txt"
+    "text": "documents/h09-03-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.2718
+    ]
   },
   {
     "id": "h09-03-invoice",
@@ -1931,11 +2618,13 @@
     "date": "2026-09-09",
     "scanned": false,
     "amountCents": [
-      42750,
       42750
     ],
     "pdf": "documents/h09-03-invoice.pdf",
-    "text": "documents/h09-03-invoice.txt"
+    "text": "documents/h09-03-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-03-cost",
@@ -1948,7 +2637,13 @@
       13419
     ],
     "pdf": "documents/h09-03-cost.pdf",
-    "text": "documents/h09-03-cost.txt"
+    "text": "documents/h09-03-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.175
+    ]
   },
   {
     "id": "h09-04-deposit",
@@ -1961,7 +2656,10 @@
       572729
     ],
     "pdf": "documents/h09-04-deposit.pdf",
-    "text": "documents/h09-04-deposit.txt"
+    "text": "documents/h09-04-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-04-invoice",
@@ -1971,11 +2669,16 @@
     "date": "2026-09-12",
     "scanned": false,
     "amountCents": [
-      42250,
-      32500
+      13000,
+      29250,
+      32500,
+      42250
     ],
     "pdf": "documents/h09-04-invoice.pdf",
-    "text": "documents/h09-04-invoice.txt"
+    "text": "documents/h09-04-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-04-refund",
@@ -1988,7 +2691,10 @@
       13736
     ],
     "pdf": "documents/h09-04-refund.pdf",
-    "text": "documents/h09-04-refund.txt"
+    "text": "documents/h09-04-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-05-deposit",
@@ -2001,7 +2707,13 @@
       589908
     ],
     "pdf": "documents/h09-05-deposit.pdf",
-    "text": "documents/h09-05-deposit.txt"
+    "text": "documents/h09-05-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.238
+    ]
   },
   {
     "id": "h09-05-invoice",
@@ -2011,11 +2723,13 @@
     "date": "2026-09-15",
     "scanned": false,
     "amountCents": [
-      43000,
       43000
     ],
     "pdf": "documents/h09-05-invoice.pdf",
-    "text": "documents/h09-05-invoice.txt"
+    "text": "documents/h09-05-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-05-cost",
@@ -2028,7 +2742,13 @@
       14053
     ],
     "pdf": "documents/h09-05-cost.pdf",
-    "text": "documents/h09-05-cost.txt"
+    "text": "documents/h09-05-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.0176
+    ]
   },
   {
     "id": "h09-06-deposit",
@@ -2041,7 +2761,10 @@
       532063
     ],
     "pdf": "documents/h09-06-deposit.pdf",
-    "text": "documents/h09-06-deposit.txt"
+    "text": "documents/h09-06-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-06-invoice",
@@ -2051,11 +2774,16 @@
     "date": "2026-09-18",
     "scanned": false,
     "amountCents": [
-      48750,
-      32500
+      13000,
+      32500,
+      35750,
+      48750
     ],
     "pdf": "documents/h09-06-invoice.pdf",
-    "text": "documents/h09-06-invoice.txt"
+    "text": "documents/h09-06-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-06-cost",
@@ -2068,7 +2796,13 @@
       14370
     ],
     "pdf": "documents/h09-06-cost.pdf",
-    "text": "documents/h09-06-cost.txt"
+    "text": "documents/h09-06-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.1632
+    ]
   },
   {
     "id": "h09-07-deposit",
@@ -2081,7 +2815,13 @@
       560958
     ],
     "pdf": "documents/h09-07-deposit.pdf",
-    "text": "documents/h09-07-deposit.txt"
+    "text": "documents/h09-07-deposit.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4525
+    ]
   },
   {
     "id": "h09-07-invoice",
@@ -2091,11 +2831,13 @@
     "date": "2026-09-21",
     "scanned": false,
     "amountCents": [
-      43250,
       43250
     ],
     "pdf": "documents/h09-07-invoice.pdf",
-    "text": "documents/h09-07-invoice.txt"
+    "text": "documents/h09-07-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-07-refund",
@@ -2108,7 +2850,10 @@
       14687
     ],
     "pdf": "documents/h09-07-refund.pdf",
-    "text": "documents/h09-07-refund.txt"
+    "text": "documents/h09-07-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-08-deposit",
@@ -2121,7 +2866,10 @@
       519339
     ],
     "pdf": "documents/h09-08-deposit.pdf",
-    "text": "documents/h09-08-deposit.txt"
+    "text": "documents/h09-08-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-08-invoice",
@@ -2131,11 +2879,16 @@
     "date": "2026-09-24",
     "scanned": false,
     "amountCents": [
-      55250,
-      32500
+      13000,
+      32500,
+      42250,
+      55250
     ],
     "pdf": "documents/h09-08-invoice.pdf",
-    "text": "documents/h09-08-invoice.txt"
+    "text": "documents/h09-08-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h09-08-cost",
@@ -2148,7 +2901,13 @@
       15004
     ],
     "pdf": "documents/h09-08-cost.pdf",
-    "text": "documents/h09-08-cost.txt"
+    "text": "documents/h09-08-cost.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.3447
+    ]
   },
   {
     "id": "h10-01-deposit",
@@ -2161,7 +2920,13 @@
       518784
     ],
     "pdf": "documents/h10-01-deposit.pdf",
-    "text": "documents/h10-01-deposit.txt"
+    "text": "documents/h10-01-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.512
+    ]
   },
   {
     "id": "h10-01-invoice",
@@ -2171,11 +2936,13 @@
     "date": "2026-10-03",
     "scanned": false,
     "amountCents": [
-      42500,
       42500
     ],
     "pdf": "documents/h10-01-invoice.pdf",
-    "text": "documents/h10-01-invoice.txt"
+    "text": "documents/h10-01-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-01-refund",
@@ -2188,7 +2955,10 @@
       12785
     ],
     "pdf": "documents/h10-01-refund.pdf",
-    "text": "documents/h10-01-refund.txt"
+    "text": "documents/h10-01-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-02-deposit",
@@ -2201,7 +2971,10 @@
       556708
     ],
     "pdf": "documents/h10-02-deposit.pdf",
-    "text": "documents/h10-02-deposit.txt"
+    "text": "documents/h10-02-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-02-invoice",
@@ -2211,11 +2984,16 @@
     "date": "2026-10-06",
     "scanned": false,
     "amountCents": [
-      35750,
-      32500
+      13000,
+      22750,
+      32500,
+      35750
     ],
     "pdf": "documents/h10-02-invoice.pdf",
-    "text": "documents/h10-02-invoice.txt"
+    "text": "documents/h10-02-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-02-cost",
@@ -2228,7 +3006,13 @@
       13102
     ],
     "pdf": "documents/h10-02-cost.pdf",
-    "text": "documents/h10-02-cost.txt"
+    "text": "documents/h10-02-cost.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.2561
+    ]
   },
   {
     "id": "h10-03-deposit",
@@ -2241,7 +3025,13 @@
       526182
     ],
     "pdf": "documents/h10-03-deposit.pdf",
-    "text": "documents/h10-03-deposit.txt"
+    "text": "documents/h10-03-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      0.881
+    ]
   },
   {
     "id": "h10-03-invoice",
@@ -2251,11 +3041,13 @@
     "date": "2026-10-09",
     "scanned": false,
     "amountCents": [
-      42750,
       42750
     ],
     "pdf": "documents/h10-03-invoice.pdf",
-    "text": "documents/h10-03-invoice.txt"
+    "text": "documents/h10-03-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-03-cost",
@@ -2268,7 +3060,13 @@
       13419
     ],
     "pdf": "documents/h10-03-cost.pdf",
-    "text": "documents/h10-03-cost.txt"
+    "text": "documents/h10-03-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.9689
+    ]
   },
   {
     "id": "h10-04-deposit",
@@ -2281,7 +3079,10 @@
       547216
     ],
     "pdf": "documents/h10-04-deposit.pdf",
-    "text": "documents/h10-04-deposit.txt"
+    "text": "documents/h10-04-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-04-invoice",
@@ -2291,11 +3092,16 @@
     "date": "2026-10-12",
     "scanned": false,
     "amountCents": [
-      42250,
-      32500
+      13000,
+      29250,
+      32500,
+      42250
     ],
     "pdf": "documents/h10-04-invoice.pdf",
-    "text": "documents/h10-04-invoice.txt"
+    "text": "documents/h10-04-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-04-refund",
@@ -2308,7 +3114,10 @@
       13736
     ],
     "pdf": "documents/h10-04-refund.pdf",
-    "text": "documents/h10-04-refund.txt"
+    "text": "documents/h10-04-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-05-deposit",
@@ -2321,7 +3130,13 @@
       508690
     ],
     "pdf": "documents/h10-05-deposit.pdf",
-    "text": "documents/h10-05-deposit.txt"
+    "text": "documents/h10-05-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.1537
+    ]
   },
   {
     "id": "h10-05-invoice",
@@ -2331,11 +3146,13 @@
     "date": "2026-10-15",
     "scanned": false,
     "amountCents": [
-      43000,
       43000
     ],
     "pdf": "documents/h10-05-invoice.pdf",
-    "text": "documents/h10-05-invoice.txt"
+    "text": "documents/h10-05-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-05-cost",
@@ -2348,7 +3165,13 @@
       14053
     ],
     "pdf": "documents/h10-05-cost.pdf",
-    "text": "documents/h10-05-cost.txt"
+    "text": "documents/h10-05-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.6984
+    ]
   },
   {
     "id": "h10-06-deposit",
@@ -2361,7 +3184,10 @@
       551492
     ],
     "pdf": "documents/h10-06-deposit.pdf",
-    "text": "documents/h10-06-deposit.txt"
+    "text": "documents/h10-06-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-06-invoice",
@@ -2371,11 +3197,16 @@
     "date": "2026-10-18",
     "scanned": false,
     "amountCents": [
-      48750,
-      32500
+      13000,
+      32500,
+      35750,
+      48750
     ],
     "pdf": "documents/h10-06-invoice.pdf",
-    "text": "documents/h10-06-invoice.txt"
+    "text": "documents/h10-06-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-06-cost",
@@ -2388,7 +3219,13 @@
       14370
     ],
     "pdf": "documents/h10-06-cost.pdf",
-    "text": "documents/h10-06-cost.txt"
+    "text": "documents/h10-06-cost.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.0683
+    ]
   },
   {
     "id": "h10-07-deposit",
@@ -2401,7 +3238,13 @@
       566814
     ],
     "pdf": "documents/h10-07-deposit.pdf",
-    "text": "documents/h10-07-deposit.txt"
+    "text": "documents/h10-07-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4042
+    ]
   },
   {
     "id": "h10-07-invoice",
@@ -2411,11 +3254,13 @@
     "date": "2026-10-21",
     "scanned": false,
     "amountCents": [
-      43250,
       43250
     ],
     "pdf": "documents/h10-07-invoice.pdf",
-    "text": "documents/h10-07-invoice.txt"
+    "text": "documents/h10-07-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-07-refund",
@@ -2428,7 +3273,10 @@
       14687
     ],
     "pdf": "documents/h10-07-refund.pdf",
-    "text": "documents/h10-07-refund.txt"
+    "text": "documents/h10-07-refund.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-08-deposit",
@@ -2441,7 +3289,10 @@
       580761
     ],
     "pdf": "documents/h10-08-deposit.pdf",
-    "text": "documents/h10-08-deposit.txt"
+    "text": "documents/h10-08-deposit.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-08-invoice",
@@ -2451,11 +3302,16 @@
     "date": "2026-10-24",
     "scanned": false,
     "amountCents": [
-      55250,
-      32500
+      13000,
+      32500,
+      42250,
+      55250
     ],
     "pdf": "documents/h10-08-invoice.pdf",
-    "text": "documents/h10-08-invoice.txt"
+    "text": "documents/h10-08-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "h10-08-cost",
@@ -2468,7 +3324,13 @@
       15004
     ],
     "pdf": "documents/h10-08-cost.pdf",
-    "text": "documents/h10-08-cost.txt"
+    "text": "documents/h10-08-cost.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.2767
+    ]
   },
   {
     "id": "cho-retainer",
@@ -2481,7 +3343,13 @@
       180000
     ],
     "pdf": "documents/cho-retainer.pdf",
-    "text": "documents/cho-retainer.txt"
+    "text": "documents/cho-retainer.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.5481
+    ]
   },
   {
     "id": "cho-topup",
@@ -2494,7 +3362,13 @@
       520000
     ],
     "pdf": "documents/cho-topup.pdf",
-    "text": "documents/cho-topup.txt"
+    "text": "documents/cho-topup.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.8858
+    ]
   },
   {
     "id": "cho-expert-invoice",
@@ -2504,50 +3378,67 @@
     "date": "2026-10-08",
     "scanned": true,
     "amountCents": [
-      600000,
-      75000
+      75000,
+      225000,
+      375000,
+      600000
     ],
     "pdf": "documents/cho-expert-invoice.pdf",
-    "text": "documents/cho-expert-invoice.txt"
+    "text": "documents/cho-expert-invoice.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4377
+    ]
   },
   {
     "id": "title-wire-1",
     "kind": "bank_advice",
-    "title": "Wire Transfer Advice",
-    "issuer": "Bay Commerce Bank",
+    "title": "Escrow Wire Confirmation",
+    "issuer": "Estuary Title Services",
     "date": "2026-07-07",
     "scanned": false,
     "amountCents": [
       734125
     ],
     "pdf": "documents/title-wire-1.pdf",
-    "text": "documents/title-wire-1.txt"
+    "text": "documents/title-wire-1.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "title-wire-2",
     "kind": "bank_advice",
-    "title": "Wire Transfer Advice",
-    "issuer": "Bay Commerce Bank",
+    "title": "Escrow Wire Confirmation",
+    "issuer": "Estuary Title Services",
     "date": "2026-07-08",
     "scanned": false,
     "amountCents": [
       734125
     ],
     "pdf": "documents/title-wire-2.pdf",
-    "text": "documents/title-wire-2.txt"
+    "text": "documents/title-wire-2.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "title-return",
     "kind": "bank_advice",
-    "title": "Wire Transfer Advice",
-    "issuer": "Bay Commerce Bank",
+    "title": "Escrow Wire Confirmation",
+    "issuer": "Estuary Title Services",
     "date": "2026-07-10",
     "scanned": false,
     "amountCents": [
       734125
     ],
     "pdf": "documents/title-return.pdf",
-    "text": "documents/title-return.txt"
+    "text": "documents/title-return.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "bank-service-fee",
@@ -2560,7 +3451,10 @@
       2500
     ],
     "pdf": "documents/bank-service-fee.pdf",
-    "text": "documents/bank-service-fee.txt"
+    "text": "documents/bank-service-fee.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "firm-fee-replacement",
@@ -2573,7 +3467,10 @@
       2500
     ],
     "pdf": "documents/firm-fee-replacement.pdf",
-    "text": "documents/firm-fee-replacement.txt"
+    "text": "documents/firm-fee-replacement.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "bayside-prior-letter",
@@ -2583,10 +3480,24 @@
     "date": "2026-06-08",
     "scanned": true,
     "amountCents": [
-      320075
+      75000,
+      125000,
+      128030,
+      192045,
+      200000,
+      203030,
+      317045,
+      320075,
+      520075
     ],
     "pdf": "documents/bayside-prior-letter.pdf",
-    "text": "documents/bayside-prior-letter.txt"
+    "text": "documents/bayside-prior-letter.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      0.9635
+    ]
   },
   {
     "id": "bayside-prior-confirmation",
@@ -2599,7 +3510,10 @@
       320075
     ],
     "pdf": "documents/bayside-prior-confirmation.pdf",
-    "text": "documents/bayside-prior-confirmation.txt"
+    "text": "documents/bayside-prior-confirmation.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "park-funding",
@@ -2612,7 +3526,13 @@
       320075
     ],
     "pdf": "documents/park-funding.pdf",
-    "text": "documents/park-funding.txt"
+    "text": "documents/park-funding.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.2152
+    ]
   },
   {
     "id": "brooks-settlement",
@@ -2625,7 +3545,10 @@
       1867341
     ],
     "pdf": "documents/brooks-settlement.pdf",
-    "text": "documents/brooks-settlement.txt"
+    "text": "documents/brooks-settlement.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "brooks-client-payment",
@@ -2638,7 +3561,10 @@
       1867341
     ],
     "pdf": "documents/brooks-client-payment.pdf",
-    "text": "documents/brooks-client-payment.txt"
+    "text": "documents/brooks-client-payment.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "noise-1",
@@ -2651,7 +3577,10 @@
       87525
     ],
     "pdf": "documents/noise-1.pdf",
-    "text": "documents/noise-1.txt"
+    "text": "documents/noise-1.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "noise-2",
@@ -2664,7 +3593,10 @@
       92040
     ],
     "pdf": "documents/noise-2.pdf",
-    "text": "documents/noise-2.txt"
+    "text": "documents/noise-2.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "noise-3",
@@ -2677,7 +3609,10 @@
       125000
     ],
     "pdf": "documents/noise-3.pdf",
-    "text": "documents/noise-3.txt"
+    "text": "documents/noise-3.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "noise-4",
@@ -2690,7 +3625,10 @@
       87500
     ],
     "pdf": "documents/noise-4.pdf",
-    "text": "documents/noise-4.txt"
+    "text": "documents/noise-4.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "complaint-filed",
@@ -2701,7 +3639,13 @@
     "scanned": true,
     "amountCents": [],
     "pdf": "documents/complaint-filed.pdf",
-    "text": "documents/complaint-filed.txt"
+    "text": "documents/complaint-filed.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.5929
+    ]
   },
   {
     "id": "allocation-global",
@@ -2711,17 +3655,22 @@
     "date": "2026-10-15",
     "scanned": false,
     "amountCents": [
-      12500000,
-      6250000,
-      3750000,
-      2500000,
-      450000,
-      225000,
+      90000,
       135000,
-      90000
+      225000,
+      450000,
+      2500000,
+      3750000,
+      6250000,
+      12500000
     ],
     "pdf": "documents/allocation-global.pdf",
-    "text": "documents/allocation-global.txt"
+    "text": "documents/allocation-global.txt",
+    "notes": [
+      "signed copy - RO"
+    ],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "global-expert",
@@ -2731,11 +3680,17 @@
     "date": "2026-09-28",
     "scanned": true,
     "amountCents": [
-      300000,
-      75000
+      75000,
+      300000
     ],
     "pdf": "documents/global-expert.pdf",
-    "text": "documents/global-expert.txt"
+    "text": "documents/global-expert.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      0.9049
+    ]
   },
   {
     "id": "global-reporter",
@@ -2748,7 +3703,13 @@
       105000
     ],
     "pdf": "documents/global-reporter.pdf",
-    "text": "documents/global-reporter.txt"
+    "text": "documents/global-reporter.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.6938
+    ]
   },
   {
     "id": "global-filing",
@@ -2761,7 +3722,13 @@
       45000
     ],
     "pdf": "documents/global-filing.pdf",
-    "text": "documents/global-filing.txt"
+    "text": "documents/global-filing.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.4221
+    ]
   },
   {
     "id": "bayside-v1",
@@ -2771,10 +3738,24 @@
     "date": "2026-10-14",
     "scanned": true,
     "amountCents": [
-      1200000
+      75000,
+      125000,
+      200000,
+      480000,
+      555000,
+      720000,
+      845000,
+      1200000,
+      1400000
     ],
     "pdf": "documents/bayside-v1.pdf",
-    "text": "documents/bayside-v1.txt"
+    "text": "documents/bayside-v1.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4492
+    ]
   },
   {
     "id": "bayside-v2",
@@ -2784,10 +3765,29 @@
     "date": "2026-10-21",
     "scanned": true,
     "amountCents": [
-      1450000
+      50000,
+      75000,
+      125000,
+      250000,
+      300000,
+      480000,
+      555000,
+      720000,
+      845000,
+      1450000,
+      1700000
     ],
     "pdf": "documents/bayside-v2.pdf",
-    "text": "documents/bayside-v2.txt"
+    "text": "documents/bayside-v2.txt",
+    "notes": [
+      "review payoff - SW",
+      "copy to matter file - RO"
+    ],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.9688
+    ]
   },
   {
     "id": "reyes-conditional",
@@ -2797,10 +3797,24 @@
     "date": "2026-10-14",
     "scanned": true,
     "amountCents": [
-      320000
+      75000,
+      125000,
+      128000,
+      192000,
+      200000,
+      203000,
+      317000,
+      320000,
+      520000
     ],
     "pdf": "documents/reyes-conditional.pdf",
-    "text": "documents/reyes-conditional.txt"
+    "text": "documents/reyes-conditional.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.2088
+    ]
   },
   {
     "id": "settlement-v1",
@@ -2810,24 +3824,28 @@
     "date": "2026-10-19",
     "scanned": false,
     "amountCents": [
-      12500000,
-      2062500,
-      225000,
-      1200000,
-      2762500,
-      1500000,
-      135000,
-      320000,
-      1795000,
-      625000,
+      0,
       90000,
+      135000,
+      225000,
+      320000,
+      625000,
+      1200000,
+      1500000,
       1785000,
-      6250000,
+      1795000,
+      2062500,
+      2500000,
+      2762500,
       3750000,
-      2500000
+      6250000,
+      12500000
     ],
     "pdf": "documents/settlement-v1.pdf",
-    "text": "documents/settlement-v1.txt"
+    "text": "documents/settlement-v1.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "settlement-v2",
@@ -2837,24 +3855,28 @@
     "date": "2026-10-22",
     "scanned": false,
     "amountCents": [
-      12500000,
-      2062500,
-      225000,
-      1450000,
-      2512500,
-      1500000,
-      135000,
-      320000,
-      1795000,
-      602500,
+      0,
       90000,
+      135000,
+      225000,
+      320000,
+      602500,
+      1450000,
+      1500000,
+      1795000,
       1807500,
-      6250000,
+      2062500,
+      2500000,
+      2512500,
       3750000,
-      2500000
+      6250000,
+      12500000
     ],
     "pdf": "documents/settlement-v2.pdf",
-    "text": "documents/settlement-v2.txt"
+    "text": "documents/settlement-v2.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "global-check",
@@ -2868,7 +3890,13 @@
     ],
     "pdf": "documents/global-check.pdf",
     "text": "documents/global-check.txt",
-    "checkNumber": "902174"
+    "checkNumber": "902174",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.0027
+    ]
   },
   {
     "id": "supplemental-check",
@@ -2882,7 +3910,13 @@
     ],
     "pdf": "documents/supplemental-check.pdf",
     "text": "documents/supplemental-check.txt",
-    "checkNumber": "902618"
+    "checkNumber": "902618",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -0.909
+    ]
   },
   {
     "id": "policy-hl50877",
@@ -2893,7 +3927,10 @@
     "scanned": false,
     "amountCents": [],
     "pdf": "documents/policy-hl50877.pdf",
-    "text": "documents/policy-hl50877.txt"
+    "text": "documents/policy-hl50877.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "bayside-bank-change",
@@ -2907,7 +3944,633 @@
     ],
     "pdf": "documents/bayside-bank-change.pdf",
     "text": "documents/bayside-bank-change.txt",
-    "eml": "documents/bayside-bank-change.eml"
+    "eml": "documents/bayside-bank-change.eml",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "fee-c41",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-02-09",
+    "scanned": true,
+    "amountCents": [],
+    "pdf": "documents/fee-c41.pdf",
+    "text": "documents/fee-c41.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.575
+    ]
+  },
+  {
+    "id": "fee-c42",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-03-02",
+    "scanned": true,
+    "amountCents": [],
+    "pdf": "documents/fee-c42.pdf",
+    "text": "documents/fee-c42.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.6878
+    ]
+  },
+  {
+    "id": "fee-c43",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-04-06",
+    "scanned": true,
+    "amountCents": [],
+    "pdf": "documents/fee-c43.pdf",
+    "text": "documents/fee-c43.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4857
+    ]
+  },
+  {
+    "id": "fee-c44",
+    "kind": "fee_agreement",
+    "title": "Agreement for Legal Services",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-05-11",
+    "scanned": true,
+    "amountCents": [],
+    "pdf": "documents/fee-c44.pdf",
+    "text": "documents/fee-c44.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.2081
+    ]
+  },
+  {
+    "id": "ames-police-report",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Fictional County Filing Desk",
+    "date": "2026-03-04",
+    "scanned": true,
+    "amountCents": [
+      18500
+    ],
+    "pdf": "documents/ames-police-report.pdf",
+    "text": "documents/ames-police-report.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.4168
+    ]
+  },
+  {
+    "id": "ames-reconstruction",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Marlowe Forensic Services",
+    "date": "2026-05-20",
+    "scanned": true,
+    "amountCents": [
+      126500
+    ],
+    "pdf": "documents/ames-reconstruction.pdf",
+    "text": "documents/ames-reconstruction.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.318
+    ]
+  },
+  {
+    "id": "ames-bayside-v1",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-06-29",
+    "scanned": true,
+    "amountCents": [
+      75000,
+      125000,
+      200000,
+      328000,
+      403000,
+      492000,
+      617000,
+      820000,
+      1020000
+    ],
+    "pdf": "documents/ames-bayside-v1.pdf",
+    "text": "documents/ames-bayside-v1.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.6112
+    ]
+  },
+  {
+    "id": "ames-settlement",
+    "kind": "settlement_advice",
+    "title": "Bodily Injury Settlement",
+    "issuer": "Tidemark Casualty Cooperative",
+    "date": "2026-07-02",
+    "scanned": true,
+    "amountCents": [
+      6000000
+    ],
+    "pdf": "documents/ames-settlement.pdf",
+    "text": "documents/ames-settlement.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.3326
+    ]
+  },
+  {
+    "id": "ames-statement-v1",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 1",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-06",
+    "scanned": false,
+    "amountCents": [
+      145000,
+      820000,
+      1980000,
+      3055000,
+      6000000
+    ],
+    "pdf": "documents/ames-statement-v1.pdf",
+    "text": "documents/ames-statement-v1.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "ames-bayside-v2",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-07-09",
+    "scanned": true,
+    "amountCents": [
+      15500,
+      75000,
+      77500,
+      93000,
+      125000,
+      215500,
+      328000,
+      403000,
+      492000,
+      617000,
+      897500,
+      1113000
+    ],
+    "pdf": "documents/ames-bayside-v2.pdf",
+    "text": "documents/ames-bayside-v2.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.3548
+    ]
+  },
+  {
+    "id": "ames-statement-v2",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 2",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-07-10",
+    "scanned": false,
+    "amountCents": [
+      145000,
+      820000,
+      897500,
+      1980000,
+      2977500,
+      6000000
+    ],
+    "pdf": "documents/ames-statement-v2.pdf",
+    "text": "documents/ames-statement-v2.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "ames-bayside-wire",
+    "kind": "bank_advice",
+    "title": "Executed Wire Confirmation",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-07-13",
+    "scanned": false,
+    "amountCents": [
+      897500
+    ],
+    "pdf": "documents/ames-bayside-wire.pdf",
+    "text": "documents/ames-bayside-wire.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "vasquez-records",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Fictional County Filing Desk",
+    "date": "2026-04-14",
+    "scanned": true,
+    "amountCents": [
+      34000
+    ],
+    "pdf": "documents/vasquez-records.pdf",
+    "text": "documents/vasquez-records.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.2654
+    ]
+  },
+  {
+    "id": "vasquez-deposition",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-06-23",
+    "scanned": true,
+    "amountCents": [
+      146000
+    ],
+    "pdf": "documents/vasquez-deposition.pdf",
+    "text": "documents/vasquez-deposition.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4544
+    ]
+  },
+  {
+    "id": "vasquez-bayside-v1",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-08-03",
+    "scanned": true,
+    "amountCents": [
+      75000,
+      125000,
+      200000,
+      216000,
+      291000,
+      324000,
+      449000,
+      540000,
+      740000
+    ],
+    "pdf": "documents/vasquez-bayside-v1.pdf",
+    "text": "documents/vasquez-bayside-v1.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.4884
+    ]
+  },
+  {
+    "id": "vasquez-check",
+    "kind": "check",
+    "title": "Settlement Draft",
+    "issuer": "Harborline Mutual Insurance",
+    "date": "2026-08-07",
+    "scanned": true,
+    "amountCents": [
+      3200000
+    ],
+    "pdf": "documents/vasquez-check.pdf",
+    "text": "documents/vasquez-check.txt",
+    "checkNumber": "902033",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      0.9027
+    ]
+  },
+  {
+    "id": "vasquez-statement-v1",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 1",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-10",
+    "scanned": false,
+    "amountCents": [
+      180000,
+      540000,
+      755000,
+      1725000,
+      3020000,
+      3200000
+    ],
+    "pdf": "documents/vasquez-statement-v1.pdf",
+    "text": "documents/vasquez-statement-v1.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "vasquez-bayside-v2",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-08-12",
+    "scanned": true,
+    "amountCents": [
+      75000,
+      150000,
+      216000,
+      225000,
+      291000,
+      299000,
+      449000,
+      515000,
+      740000
+    ],
+    "pdf": "documents/vasquez-bayside-v2.pdf",
+    "text": "documents/vasquez-bayside-v2.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.3337
+    ]
+  },
+  {
+    "id": "vasquez-statement-v2",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 2",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-08-13",
+    "scanned": false,
+    "amountCents": [
+      180000,
+      515000,
+      540000,
+      755000,
+      1750000,
+      3020000,
+      3200000
+    ],
+    "pdf": "documents/vasquez-statement-v2.pdf",
+    "text": "documents/vasquez-statement-v2.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "vasquez-bayside-wire",
+    "kind": "bank_advice",
+    "title": "Executed Wire Confirmation",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-08-14",
+    "scanned": false,
+    "amountCents": [
+      515000
+    ],
+    "pdf": "documents/vasquez-bayside-wire.pdf",
+    "text": "documents/vasquez-bayside-wire.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "ford-records",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Fictional County Filing Desk",
+    "date": "2026-05-12",
+    "scanned": true,
+    "amountCents": [
+      21500
+    ],
+    "pdf": "documents/ford-records.pdf",
+    "text": "documents/ford-records.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.1377
+    ]
+  },
+  {
+    "id": "ford-scene",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Marlowe Forensic Services",
+    "date": "2026-07-21",
+    "scanned": true,
+    "amountCents": [
+      73500
+    ],
+    "pdf": "documents/ford-scene.pdf",
+    "text": "documents/ford-scene.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.1041
+    ]
+  },
+  {
+    "id": "ford-settlement",
+    "kind": "settlement_advice",
+    "title": "Bodily Injury Settlement",
+    "issuer": "Tidemark Casualty Cooperative",
+    "date": "2026-09-02",
+    "scanned": true,
+    "amountCents": [
+      4800000
+    ],
+    "pdf": "documents/ford-settlement.pdf",
+    "text": "documents/ford-settlement.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.1693
+    ]
+  },
+  {
+    "id": "ford-statement-v1",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 1",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-09-08",
+    "scanned": false,
+    "amountCents": [
+      0,
+      95000,
+      1584000,
+      3121000,
+      4800000
+    ],
+    "pdf": "documents/ford-statement-v1.pdf",
+    "text": "documents/ford-statement-v1.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "castillo-records",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Fictional County Filing Desk",
+    "date": "2026-07-15",
+    "scanned": true,
+    "amountCents": [
+      26000
+    ],
+    "pdf": "documents/castillo-records.pdf",
+    "text": "documents/castillo-records.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.2357
+    ]
+  },
+  {
+    "id": "castillo-deposition",
+    "kind": "receipt",
+    "title": "Receipt / Paid Invoice",
+    "issuer": "Quay Court Reporting",
+    "date": "2026-10-06",
+    "scanned": true,
+    "amountCents": [
+      94000
+    ],
+    "pdf": "documents/castillo-deposition.pdf",
+    "text": "documents/castillo-deposition.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.1352
+    ]
+  },
+  {
+    "id": "castillo-bayside-v1",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-11-02",
+    "scanned": true,
+    "amountCents": [
+      75000,
+      125000,
+      200000,
+      272000,
+      347000,
+      408000,
+      533000,
+      680000,
+      880000
+    ],
+    "pdf": "documents/castillo-bayside-v1.pdf",
+    "text": "documents/castillo-bayside-v1.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.5179
+    ]
+  },
+  {
+    "id": "castillo-bayside-v2",
+    "kind": "lien_letter",
+    "title": "Final Payoff Letter",
+    "issuer": "Bayside Medical Group",
+    "date": "2026-11-09",
+    "scanned": true,
+    "amountCents": [
+      11000,
+      55000,
+      66000,
+      75000,
+      125000,
+      211000,
+      272000,
+      347000,
+      408000,
+      533000,
+      735000,
+      946000
+    ],
+    "pdf": "documents/castillo-bayside-v2.pdf",
+    "text": "documents/castillo-bayside-v2.txt",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      1.6743
+    ]
+  },
+  {
+    "id": "castillo-check",
+    "kind": "check",
+    "title": "Settlement Draft",
+    "issuer": "Harborline Mutual Insurance",
+    "date": "2026-11-10",
+    "scanned": true,
+    "amountCents": [
+      4000000
+    ],
+    "pdf": "documents/castillo-check.pdf",
+    "text": "documents/castillo-check.txt",
+    "checkNumber": "902655",
+    "notes": [],
+    "receivedStamp": true,
+    "pageCount": 1,
+    "scanRotationDegrees": [
+      -1.0396
+    ]
+  },
+  {
+    "id": "castillo-statement-v1",
+    "kind": "settlement_statement",
+    "title": "Settlement Statement - Version 1",
+    "issuer": "Hartwell & Moreno LLP",
+    "date": "2026-11-12",
+    "scanned": false,
+    "amountCents": [
+      120000,
+      735000,
+      1164000,
+      1981000,
+      3880000,
+      4000000
+    ],
+    "pdf": "documents/castillo-statement-v1.pdf",
+    "text": "documents/castillo-statement-v1.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "recon-05",
@@ -2918,13 +4581,13 @@
     "scanned": false,
     "amountCents": [
       0,
-      4180370,
-      4180370,
-      0,
-      0
+      4180370
     ],
     "pdf": "documents/recon-05.pdf",
-    "text": "documents/recon-05.txt"
+    "text": "documents/recon-05.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "recon-06",
@@ -2934,14 +4597,15 @@
     "date": "2026-07-01",
     "scanned": false,
     "amountCents": [
-      4180370,
-      8121190,
-      8121190,
       0,
-      0
+      4180370,
+      8121190
     ],
     "pdf": "documents/recon-06.pdf",
-    "text": "documents/recon-06.txt"
+    "text": "documents/recon-06.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "recon-07",
@@ -2951,14 +4615,15 @@
     "date": "2026-08-01",
     "scanned": false,
     "amountCents": [
-      8121190,
-      12709394,
-      12709394,
       0,
-      0
+      8121190,
+      12709394
     ],
     "pdf": "documents/recon-07.pdf",
-    "text": "documents/recon-07.txt"
+    "text": "documents/recon-07.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "recon-08",
@@ -2968,14 +4633,15 @@
     "date": "2026-09-01",
     "scanned": false,
     "amountCents": [
-      12709394,
-      16408793,
-      16408793,
       0,
-      0
+      12709394,
+      16408793
     ],
     "pdf": "documents/recon-08.pdf",
-    "text": "documents/recon-08.txt"
+    "text": "documents/recon-08.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "recon-09",
@@ -2985,14 +4651,15 @@
     "date": "2026-10-01",
     "scanned": false,
     "amountCents": [
-      16408793,
-      20473658,
-      20473658,
       0,
-      0
+      16408793,
+      20473658
     ],
     "pdf": "documents/recon-09.pdf",
-    "text": "documents/recon-09.txt"
+    "text": "documents/recon-09.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
   },
   {
     "id": "recon-10",
@@ -3002,13 +4669,465 @@
     "date": "2026-11-01",
     "scanned": false,
     "amountCents": [
-      20473658,
-      24373149,
-      24373149,
       0,
-      0
+      20473658,
+      36873149
     ],
     "pdf": "documents/recon-10.pdf",
-    "text": "documents/recon-10.txt"
+    "text": "documents/recon-10.txt",
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 1
+  },
+  {
+    "id": "bank-statement-2026-05",
+    "kind": "bank_statement",
+    "title": "Client Trust Account Statement",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-05-31",
+    "scanned": false,
+    "pdf": "documents/bank-statement-2026-05.pdf",
+    "text": "documents/bank-statement-2026-05.txt",
+    "amountCents": [
+      0,
+      12785,
+      13102,
+      13419,
+      13736,
+      14053,
+      14370,
+      14687,
+      15004,
+      35750,
+      42250,
+      42500,
+      42750,
+      43000,
+      43250,
+      48750,
+      55250,
+      87525,
+      180000,
+      464656,
+      505924,
+      510747,
+      515951,
+      523532,
+      534417,
+      550596,
+      552768,
+      566032,
+      567370,
+      584443,
+      690747,
+      1192491,
+      1205593,
+      1241343,
+      1642246,
+      1655665,
+      1698415,
+      2139028,
+      2152764,
+      2195014,
+      2649345,
+      2663398,
+      2706398,
+      3102176,
+      3116546,
+      3165296,
+      3189701,
+      3716207,
+      3730894,
+      3774144,
+      4180370,
+      4195374,
+      4250624,
+      4645026
+    ],
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 2
+  },
+  {
+    "id": "bank-statement-2026-06",
+    "kind": "bank_statement",
+    "title": "Client Trust Account Statement",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-06-30",
+    "scanned": false,
+    "pdf": "documents/bank-statement-2026-06.pdf",
+    "text": "documents/bank-statement-2026-06.txt",
+    "amountCents": [
+      12785,
+      13102,
+      13419,
+      13736,
+      14053,
+      14370,
+      14687,
+      15004,
+      35750,
+      42250,
+      42500,
+      42750,
+      43000,
+      43250,
+      48750,
+      55250,
+      92040,
+      320075,
+      504607,
+      514306,
+      522751,
+      523408,
+      525584,
+      564188,
+      577425,
+      581167,
+      784731,
+      4180370,
+      4639391,
+      4652176,
+      4694676,
+      4725551,
+      5113947,
+      5127049,
+      5162799,
+      5635203,
+      5648622,
+      5691372,
+      6143405,
+      6157141,
+      6199391,
+      6519466,
+      6667519,
+      6681572,
+      6724572,
+      7141520,
+      7190270,
+      7219190,
+      7233560,
+      7686837,
+      7701524,
+      7744774,
+      8121190,
+      8136194,
+      8191444
+    ],
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 2
+  },
+  {
+    "id": "bank-statement-2026-07",
+    "kind": "bank_statement",
+    "title": "Client Trust Account Statement",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-07-31",
+    "scanned": false,
+    "pdf": "documents/bank-statement-2026-07.pdf",
+    "text": "documents/bank-statement-2026-07.txt",
+    "amountCents": [
+      12785,
+      13102,
+      13419,
+      13736,
+      14053,
+      14370,
+      14687,
+      15004,
+      35750,
+      42250,
+      42500,
+      42750,
+      43000,
+      43250,
+      48750,
+      55250,
+      145000,
+      512573,
+      514001,
+      521070,
+      528481,
+      550293,
+      558789,
+      565219,
+      568309,
+      734125,
+      897500,
+      1980000,
+      2977500,
+      6000000,
+      7198781,
+      8121190,
+      8624694,
+      8637479,
+      8679979,
+      9137267,
+      10789605,
+      10803341,
+      11282845,
+      11296898,
+      11339898,
+      11786985,
+      11788034,
+      11802404,
+      11851154,
+      12251167,
+      12265854,
+      12309104,
+      12709394,
+      12724398,
+      12779648,
+      12783341,
+      12928341,
+      15088415,
+      15101517,
+      15137267,
+      15822540,
+      15905841,
+      16331590,
+      16387759,
+      16803341,
+      16845591,
+      17065715,
+      17079134,
+      17121884
+    ],
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 2
+  },
+  {
+    "id": "bank-statement-2026-08",
+    "kind": "bank_statement",
+    "title": "Client Trust Account Statement",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-08-31",
+    "scanned": false,
+    "pdf": "documents/bank-statement-2026-08.pdf",
+    "text": "documents/bank-statement-2026-08.txt",
+    "amountCents": [
+      2500,
+      12785,
+      13102,
+      13419,
+      13736,
+      14053,
+      14370,
+      14687,
+      15004,
+      35750,
+      42250,
+      42500,
+      42750,
+      43000,
+      43250,
+      48750,
+      55250,
+      180000,
+      500222,
+      505071,
+      515000,
+      518665,
+      523847,
+      525351,
+      528223,
+      529051,
+      533625,
+      755000,
+      1750000,
+      3200000,
+      3667156,
+      7366555,
+      12709394,
+      13179460,
+      13192245,
+      13234745,
+      13649273,
+      13662375,
+      13698125,
+      14098175,
+      14111594,
+      14154344,
+      15038034,
+      15052087,
+      15095087,
+      15508539,
+      15520409,
+      15522909,
+      15569159,
+      15571659,
+      15850087,
+      15950824,
+      15965511,
+      16008761,
+      16030087,
+      16408793,
+      16423797,
+      16479047,
+      17298175,
+      17766036,
+      17779772,
+      17780087,
+      17822022,
+      18295087
+    ],
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 2
+  },
+  {
+    "id": "bank-statement-2026-09",
+    "kind": "bank_statement",
+    "title": "Client Trust Account Statement",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-09-30",
+    "scanned": false,
+    "pdf": "documents/bank-statement-2026-09.pdf",
+    "text": "documents/bank-statement-2026-09.txt",
+    "amountCents": [
+      12785,
+      13102,
+      13419,
+      13736,
+      14053,
+      14370,
+      14687,
+      15004,
+      35750,
+      42250,
+      42500,
+      42750,
+      43000,
+      43250,
+      48750,
+      55250,
+      95000,
+      125000,
+      519339,
+      532063,
+      534038,
+      547243,
+      548243,
+      560958,
+      572729,
+      589908,
+      1584000,
+      1867341,
+      3121000,
+      4800000,
+      7131997,
+      11196862,
+      16408793,
+      16913536,
+      16956036,
+      17878011,
+      17891430,
+      17934180,
+      18394754,
+      18408490,
+      18450740,
+      18927609,
+      18984662,
+      19396552,
+      19410922,
+      19459672,
+      19518180,
+      19613180,
+      19914260,
+      19957510,
+      20024573,
+      20039260,
+      20473658,
+      20488662,
+      20543912,
+      20794950,
+      20809003,
+      20852003,
+      21700751,
+      21713536,
+      22185937,
+      22199039,
+      22234789,
+      22734180
+    ],
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 2
+  },
+  {
+    "id": "bank-statement-2026-10",
+    "kind": "bank_statement",
+    "title": "Client Trust Account Statement",
+    "issuer": "Bay Commerce Bank",
+    "date": "2026-10-31",
+    "scanned": false,
+    "pdf": "documents/bank-statement-2026-10.pdf",
+    "text": "documents/bank-statement-2026-10.txt",
+    "amountCents": [
+      12785,
+      13102,
+      13419,
+      13736,
+      14053,
+      14370,
+      14687,
+      15004,
+      35750,
+      42250,
+      42500,
+      42750,
+      43000,
+      43250,
+      48750,
+      55250,
+      87500,
+      508690,
+      518784,
+      520000,
+      526182,
+      547216,
+      551492,
+      556708,
+      566814,
+      580761,
+      600000,
+      1064656,
+      12500000,
+      17464147,
+      20473658,
+      20937157,
+      20949942,
+      20992442,
+      21315026,
+      21328445,
+      21371195,
+      21445013,
+      21458115,
+      21493865,
+      21806256,
+      21819992,
+      21862242,
+      21971195,
+      22257893,
+      22271946,
+      22314946,
+      22746265,
+      22760635,
+      22809385,
+      23313079,
+      23342642,
+      23357329,
+      23400579,
+      35842642,
+      36353149,
+      36368153,
+      36423403,
+      36873149
+    ],
+    "notes": [],
+    "receivedStamp": false,
+    "pageCount": 2
   }
 ]

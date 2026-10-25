@@ -341,5 +341,85 @@
     "paidBy": "firm operating",
     "allocationAgreementId": "allocation-global",
     "shared": true
+  },
+  {
+    "id": "ames-police-report",
+    "documentId": "ames-police-report",
+    "clientId": "c41",
+    "matterId": "m26",
+    "date": "2026-03-04",
+    "amountCents": 18500,
+    "description": "Collision report and certified records",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "ames-reconstruction",
+    "documentId": "ames-reconstruction",
+    "clientId": "c41",
+    "matterId": "m26",
+    "date": "2026-05-20",
+    "amountCents": 126500,
+    "description": "Collision reconstruction consult",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "vasquez-records",
+    "documentId": "vasquez-records",
+    "clientId": "c42",
+    "matterId": "m27",
+    "date": "2026-04-14",
+    "amountCents": 34000,
+    "description": "Certified incident and code-inspection records",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "vasquez-deposition",
+    "documentId": "vasquez-deposition",
+    "clientId": "c42",
+    "matterId": "m27",
+    "date": "2026-06-23",
+    "amountCents": 146000,
+    "description": "Deposition transcript and attendance",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "ford-records",
+    "documentId": "ford-records",
+    "clientId": "c43",
+    "matterId": "m28",
+    "date": "2026-05-12",
+    "amountCents": 21500,
+    "description": "Collision report and certified records",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "ford-scene",
+    "documentId": "ford-scene",
+    "clientId": "c43",
+    "matterId": "m28",
+    "date": "2026-07-21",
+    "amountCents": 73500,
+    "description": "Scene photographs and diagram",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "castillo-records",
+    "documentId": "castillo-records",
+    "clientId": "c44",
+    "matterId": "m29",
+    "date": "2026-07-15",
+    "amountCents": 26000,
+    "description": "Collision report and certified records",
+    "paidBy": "firm operating"
+  },
+  {
+    "id": "castillo-deposition",
+    "documentId": "castillo-deposition",
+    "clientId": "c44",
+    "matterId": "m29",
+    "date": "2026-10-06",
+    "amountCents": 94000,
+    "description": "Deposition transcript and attendance",
+    "paidBy": "firm operating"
   }
 ]
