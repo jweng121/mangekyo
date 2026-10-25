@@ -171,4 +171,3 @@ if __name__=='__main__':
         check(before==(ROOT/'manifest.json').read_bytes(),'byte-identical regeneration manifest')
         main()
         print('PASS: regeneration preserved all '+str(len(load('manifest.json')['sha256']))+' artifact hashes.')
-

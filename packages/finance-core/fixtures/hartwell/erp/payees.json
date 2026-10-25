@@ -1,0 +1,488 @@
+[
+  {
+    "id": "firm",
+    "name": "Hartwell & Moreno LLP",
+    "phone": "(510) 555-0147",
+    "bank": {
+      "bank": "Bay Commerce Bank",
+      "account": "00002290",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "bayside",
+    "name": "Bayside Medical Group",
+    "phone": "(510) 555-0186",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000831264",
+      "routing": "000000000"
+    },
+    "email": "billing@baysidemedical.com",
+    "verifiedDate": "2026-06-10",
+    "sourceDocumentIds": [
+      "bayside-prior-letter",
+      "bayside-prior-confirmation"
+    ]
+  },
+  {
+    "id": "medicare",
+    "name": "Medicare conditional payment (fictional case record)",
+    "phone": "(800) 555-0132",
+    "bank": {
+      "bank": "Bay Commerce Bank",
+      "account": "00006320",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "expert",
+    "name": "Marlowe Forensic Services",
+    "phone": "(510) 555-0131",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "00004610",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "reporter",
+    "name": "Quay Court Reporting",
+    "phone": "(510) 555-0124",
+    "bank": {
+      "bank": "Bay Commerce Bank",
+      "account": "00004892",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "clerk",
+    "name": "Fictional County Filing Desk",
+    "phone": "(510) 555-0163",
+    "bank": {
+      "bank": "Bay Commerce Bank",
+      "account": "00004590",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "title",
+    "name": "Estuary Title Services",
+    "phone": "(510) 555-0175",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000319276",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "bank",
+    "name": "Bay Commerce Bank",
+    "phone": "(510) 555-0120",
+    "bank": {
+      "bank": "Bay Commerce Bank",
+      "account": "00004417",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c01",
+    "name": "Maria Delgado",
+    "phone": "(510) 555-0100",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700001",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c02",
+    "name": "Tomas Reyes",
+    "phone": "(510) 555-0101",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700002",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c03",
+    "name": "Ana Bello",
+    "phone": "(510) 555-0102",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700003",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c04",
+    "name": "Raymond Cho",
+    "phone": "(510) 555-0103",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700004",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c05",
+    "name": "Daniel Okafor",
+    "phone": "(510) 555-0104",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700005",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c06",
+    "name": "Jamie Nguyen",
+    "phone": "(510) 555-0105",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700006",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c07",
+    "name": "Jordan Nguyen",
+    "phone": "(510) 555-0106",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700007",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c08",
+    "name": "Elena Park",
+    "phone": "(510) 555-0107",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700008",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c09",
+    "name": "Victor Chen",
+    "phone": "(510) 555-0108",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700009",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c10",
+    "name": "Nadia Flores",
+    "phone": "(510) 555-0109",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700010",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c11",
+    "name": "Omar Hassan",
+    "phone": "(510) 555-0110",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700011",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c12",
+    "name": "Lena Brooks",
+    "phone": "(510) 555-0111",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700012",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c13",
+    "name": "Isaac Patel",
+    "phone": "(510) 555-0112",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700013",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c14",
+    "name": "Sofia Rivera",
+    "phone": "(510) 555-0113",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700014",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c15",
+    "name": "Marcus Reed",
+    "phone": "(510) 555-0114",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700015",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c16",
+    "name": "Grace Kim",
+    "phone": "(510) 555-0115",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700016",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c17",
+    "name": "Rosa Alvarez",
+    "phone": "(510) 555-0116",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700017",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c18",
+    "name": "Ethan Walsh",
+    "phone": "(510) 555-0117",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700018",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c19",
+    "name": "Amira Saleh",
+    "phone": "(510) 555-0118",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700019",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c20",
+    "name": "Noah Bennett",
+    "phone": "(510) 555-0119",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700020",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c21",
+    "name": "Mei Lin",
+    "phone": "(510) 555-0120",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700021",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c22",
+    "name": "Carlos Vega",
+    "phone": "(510) 555-0121",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700022",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c23",
+    "name": "Fatima Yusuf",
+    "phone": "(510) 555-0122",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700023",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c24",
+    "name": "Peter Novak",
+    "phone": "(510) 555-0123",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700024",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c25",
+    "name": "Lucia Santos",
+    "phone": "(510) 555-0124",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700025",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c26",
+    "name": "Andre Lewis",
+    "phone": "(510) 555-0125",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700026",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c27",
+    "name": "Helen Wu",
+    "phone": "(510) 555-0126",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700027",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c28",
+    "name": "Mateo Cruz",
+    "phone": "(510) 555-0127",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700028",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c29",
+    "name": "Tessa Morgan",
+    "phone": "(510) 555-0128",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700029",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c30",
+    "name": "Jamal Price",
+    "phone": "(510) 555-0129",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700030",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c31",
+    "name": "Anita Shah",
+    "phone": "(510) 555-0130",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700031",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c32",
+    "name": "Felix Ortiz",
+    "phone": "(510) 555-0131",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700032",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c33",
+    "name": "Ruth Coleman",
+    "phone": "(510) 555-0132",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700033",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c34",
+    "name": "Leila Haddad",
+    "phone": "(510) 555-0133",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700034",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c35",
+    "name": "Simon Blake",
+    "phone": "(510) 555-0134",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700035",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c36",
+    "name": "Dina Farouk",
+    "phone": "(510) 555-0135",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700036",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c37",
+    "name": "Adrian Moss",
+    "phone": "(510) 555-0136",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700037",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c38",
+    "name": "Nina Petrov",
+    "phone": "(510) 555-0137",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700038",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c39",
+    "name": "Caleb Ross",
+    "phone": "(510) 555-0138",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700039",
+      "routing": "000000000"
+    }
+  },
+  {
+    "id": "c40",
+    "name": "Iris Tran",
+    "phone": "(510) 555-0139",
+    "bank": {
+      "bank": "Cedar Inlet Bank",
+      "account": "0000700040",
+      "routing": "000000000"
+    }
+  }
+]

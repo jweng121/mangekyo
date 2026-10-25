@@ -1,0 +1,46 @@
+[
+  {
+    "id": "bayside-prior-letter",
+    "documentId": "bayside-prior-letter",
+    "clientId": "c08",
+    "date": "2026-06-08",
+    "amountCents": 320075,
+    "version": 1,
+    "validThrough": "2026-06-30",
+    "patientAccount": "BG-61104",
+    "payeeId": "bayside"
+  },
+  {
+    "id": "bayside-v1",
+    "documentId": "bayside-v1",
+    "clientId": "c01",
+    "date": "2026-10-14",
+    "amountCents": 1200000,
+    "version": 1,
+    "validThrough": "2026-10-20",
+    "patientAccount": "BG-50877-D",
+    "payeeId": "bayside"
+  },
+  {
+    "id": "bayside-v2",
+    "documentId": "bayside-v2",
+    "clientId": "c01",
+    "date": "2026-10-21",
+    "amountCents": 1450000,
+    "version": 2,
+    "validThrough": "2026-11-15",
+    "patientAccount": "BG-50877-D",
+    "payeeId": "bayside"
+  },
+  {
+    "id": "reyes-conditional",
+    "documentId": "reyes-conditional",
+    "clientId": "c02",
+    "date": "2026-10-14",
+    "amountCents": 320000,
+    "version": 1,
+    "validThrough": "2026-11-15",
+    "patientAccount": "MC-260318",
+    "payeeId": "medicare"
+  }
+]

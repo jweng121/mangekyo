@@ -20,7 +20,7 @@ def money(n):
     return f'{"-" if n<0 else ""}${abs(n)//100:,}.{abs(n)%100:02}'
 def dump(path,obj):
     path.parent.mkdir(parents=True,exist_ok=True)
-    path.write_text(json.dumps(obj,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+    path.write_text(json.dumps(obj,indent=2,ensure_ascii=False)+'\n',encoding='utf-8',newline='\n')
 def doc(id,kind,title,issuer,day,body,scanned=False,amounts=(),**extra):
     DOCS.append(dict(id=id,kind=kind,title=title,issuer=issuer,date=day,body=body,scanned=scanned,amountCents=list(amounts),pdf=f'documents/{id}.pdf',text=f'documents/{id}.txt',**extra))
     return id
@@ -249,7 +249,7 @@ def render(d):
     else:output=clean
     (ROOT/d['pdf']).write_bytes(output)
     text='\n'.join([d['issuer'],addr,'Teleph0ne: '+phone,d['title'],d['date'],*d['body'],'FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE','Encl0sure: file copy'])+'\n'
-    (ROOT/d['text']).write_text(text,encoding='utf-8')
+    (ROOT/d['text']).write_text(text,encoding='utf-8',newline='\n')
 
 def main():
     setup();history();live();book();answer_key()

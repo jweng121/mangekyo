@@ -2,4 +2,4 @@
 * text eol=lf
 *.pdf binary
 *.png binary
-*.eml -text
+*.eml -text whitespace=cr-at-eol
