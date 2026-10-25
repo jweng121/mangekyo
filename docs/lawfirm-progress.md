@@ -54,12 +54,26 @@ What changed in the feed:
   228).
 - `npx --yes pnpm@10.20.0 build:finance`: exit 0.
 
+## Browser click-through (mock, local desk on :3001, dev deployment)
+
+Run on `demo:account:pool-026` on 2026-10-24 with Playwright; screenshots and
+the step log are in `docs/screenshots/trust-agents/`. Zero console errors.
+
+| Step | Observed on the desk | Screenshot |
+| --- | --- | --- |
+| 2 | Three blocked payout lines, e.g. "$28,050.00 for Maria Delgado can't go out · rule L2, rule L1, rule L9 · Requested by Agent. At request time, the $85,000.00 Harborline check hadn't cleared yet" | `01-step2-disbursement-blocked-l2.png` |
+| 3 | After Sam approves and posts the allocation, three payment proposals appear on their own ("3 ready for approval"); Sam approves and posts each; Delgado ends at $0 with three outstanding payments ($28,050.00, $950.00, $56,000.00) | `02-step3-three-lines-pending.png`, `03-step3-lines-posted.png` |
+| 4–9 | Unchanged cards: Okafor and Nguyen questions, Bayview duplicate, Cho L1, the insurance policy with its backtest, Westbrook sent for sign-off | — |
+| 10 | "Blocked by the lock · rule L9 · $3,000.00 for Chen & Park Holdings can't go out · Requested by priya. Stopped because fee not earned."; bank = books = owners at $441,200.00; "Live feed finished" | `04-step10-paralegal-fee-blocked-l9.png` |
+
+The activity feed shows the `finance.snapshot.captured` steps and the firm's
+own-money owner at $0.
+
 ## Not done here
 
-- No browser click-through of the ten-step feed on this branch yet; the desk
-  shows the three payout lines as ordinary payment proposals (approve/post),
-  but has no card for the Disbursement run, disputes, audits, monthly reports
-  or step snapshots. Those are backend-only, reachable through
+- The desk shows the three payout lines as ordinary payment proposals
+  (approve/post), but has no card for the Disbursement run, disputes, audits,
+  monthly reports or step snapshots. Those are backend-only, reachable through
   [agent-api.md](agent-api.md).
 - No real CREAO or external model call. The external adapter and the per-agent
   CREAO adapters are verified only with fake HTTP.

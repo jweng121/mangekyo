@@ -109,6 +109,8 @@ Commands from the repository root, pnpm as `npx --yes pnpm@10.20.0`.
 | Final `… test` | 36 files, 260 tests, all pass |
 | Final `… build:finance` | exit 0 |
 
+Browser click-through: ten feed steps on `demo:account:pool-026`, see [lawfirm-progress.md](lawfirm-progress.md).
+
 New tests: trust rules L8–L11 (contingency fee passing L9, no-invoice fee failing it, disputed funds held then released, settlement mismatch, commingling), the Disbursement split and its ask-when-unsure cases, the reconciler asking, memory reused on the next similar case and becoming a used policy, `submitCorrection` for every kind, eval replay, step snapshots, the auditor drill, the monthly report and sign-off, the agent registry and the external adapter with fake fetch, and the ten-step law-firm flow.
 
 ## 11. Environment variables (Convex deployment)
@@ -138,5 +140,5 @@ Each `creao-<agent>-agent.md` has the steps: create the CREAO agent with one `fi
 - **Eval cases are recorded for Trust Intake only.** `evaluateInstructions` refuses other agents with a message.
 - **At request stage, any lock failure still blocks** (including L10); the hold path applies at approval and posting, as before.
 - **A2 good funds** reconstructs cleared money from the bank feed's current clearing status, so a deposit that cleared after a payout is judged by the time order of entries, not by a historical clearing timestamp (the feed doesn't record one).
-- **No browser click-through on this branch** (see lawfirm-progress.md); the ten-step flow is verified by the Convex test suite.
+- **The browser click-through** of the ten-step feed ran once on `demo:account:pool-026` (local desk on :3001, dev deployment, zero console errors; screenshots in `docs/screenshots/trust-agents/`). The push of this branch's functions to the shared dev deployment (`convex dev --once`) replaced the previous branch's code there, as before; no environment variable was changed.
 - Left untouched: `packages/visual-audit`, `scripts/monitored-agent`, the teammate's ERP data, the uncommitted `packages/visual-audit/playground/next-env.d.ts` and `stash@{0}`.
