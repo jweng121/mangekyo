@@ -19,3 +19,11 @@ it("does not turn a failed corrected checkpoint green",()=>{
  expect(html).toContain('conflict corrected');
  expect(html).not.toContain('completed corrected');
 });
+
+it("does not retire the original path while a correction is running or failed",()=>{
+ for(const correctedStatus of ["running","failed"]) {
+  const html=renderToString(<SnapshotBranchGraph original={[snapshot("error",1,true),snapshot("old-draft",2)]} corrected={[snapshot("reread",1)]} correctedStatus={correctedStatus} onSelect={()=>{}}/>);
+  expect(html).not.toContain('Superseded Snapshot');
+  expect(html).not.toContain('branch-success');
+ }
+});
