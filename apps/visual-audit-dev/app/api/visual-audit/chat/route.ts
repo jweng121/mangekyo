@@ -3,6 +3,7 @@ import type { InvestigationChatMessage } from "../../../../../../packages/contra
 import { auditProvider } from "../../../../lib/audit-provider";
 import { assertLocalAccess } from "../../../../lib/local-access";
 import { appendChatMessage, readInvestigation } from "../../../../lib/local-store";
+import {demoConversation} from "../../../../lib/demo-conversation";
 
 export const runtime = "nodejs";
 export async function POST(request: NextRequest) {
@@ -15,13 +16,14 @@ export async function POST(request: NextRequest) {
     const selected = record.snapshots.find(snapshot => snapshot.id === snapshotId);
     if (!selected) return NextResponse.json({ error: "Select a saved snapshot" }, { status: 400 });
     const provider = auditProvider();
-    const answer = await provider.answer(question, selected, { ...record, chatMessages: record.chatMessages.filter(message => (message.conversationId ?? "default") === (conversationId ?? "default")) });
+    const demo = demoConversation(question,selected,record);
+    const answer = demo ?? await provider.answer(question, selected, { ...record, chatMessages: record.chatMessages.filter(message => (message.conversationId ?? "default") === (conversationId ?? "default")) });
     const createdAt = new Date().toISOString();
     const user: InvestigationChatMessage = { id: crypto.randomUUID(), runId: selected.runId, role: "user", text: question.trim(), snapshotIds: [selected.id], provider: "local", createdAt };
     const assistant: InvestigationChatMessage = { id: crypto.randomUUID(), runId: selected.runId, role: "assistant", text: answer.text, sections: answer.sections, snapshotIds: answer.snapshotIds, provider: answer.provider, createdAt };
     if (conversationId) { user.conversationId = assistant.conversationId = conversationId; user.conversationTitle = assistant.conversationTitle = conversationTitle; }
     await appendChatMessage(user);
     await appendChatMessage(assistant);
-    return NextResponse.json({ user, assistant });
+    return NextResponse.json({ user, assistant, correction:demo?.correction, rehearsed:!!demo });
   } catch (error) { return NextResponse.json({ error: (error as Error).message }, { status: 500 }); }
 }

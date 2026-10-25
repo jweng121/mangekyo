@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { assertLocalAccess } from "../../../../lib/local-access";
 import {retryFetch} from "../../../../lib/retry-fetch";
+import {demoAudioCachePath,readDemoAudio,saveDemoAudio} from "../../../../lib/demo-audio-cache";
 
 export const runtime = "nodejs";
 export async function GET(request: NextRequest) {
@@ -21,8 +22,19 @@ export async function POST(request: NextRequest) {
       const model = process.env.MANGEKYO_TTS_MODEL || "s2.1-pro-free";
       if (!["s2.1-pro-free", "s2.1-pro", "s2-pro", "s1", "drama-3"].includes(model)) return NextResponse.json({ error: `Unsupported Fish Audio model: ${model}` }, { status: 400 });
       const voice = process.env.MANGEKYO_TTS_VOICE;
+      const cacheFile=demoAudioCachePath(text,model,voice,timestamps);
+      const cached=await readDemoAudio(cacheFile);
+      const contentType=timestamps ? "text/event-stream" : "audio/mpeg";
+      if(cached)return new NextResponse(cached,{headers:{"Content-Type":contentType,"Cache-Control":"private, no-store","X-Mangekyo-Audio-Cache":"hit"}});
       const response = await retryFetch(timestamps ? "https://api.fish.audio/v1/tts/stream/with-timestamp" : "https://api.fish.audio/v1/tts", { method: "POST", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", model }, body: JSON.stringify({ text, format: "mp3", ...(voice ? { reference_id: voice } : {}) }), signal: request.signal },60000);
       if (!response.ok) return NextResponse.json({ error: `Fish Audio TTS failed (${response.status})` }, { status: 502 });
+      if(cacheFile){
+        const bytes=new Uint8Array(await response.arrayBuffer());
+        // Never preserve a failed or truncated timestamp stream for future rehearsals.
+        const events=timestamps ? new TextDecoder().decode(bytes).split(/\r?\n/).filter(line=>line.startsWith("data:")).map(line=>line.slice(5).trim()).filter(line=>line&&line!=="[DONE]").map(line=>JSON.parse(line)) : [];
+        if(bytes.length && (!timestamps || events.some(e=>e.audio_base64)&&events.some(e=>e.alignment)&&!events.some(e=>e.error)))await saveDemoAudio(cacheFile,bytes);
+        return new NextResponse(bytes,{headers:{"Content-Type":contentType,"Cache-Control":"private, no-store","X-Mangekyo-Audio-Cache":"miss"}});
+      }
       return new NextResponse(response.body, { headers: { "Content-Type": timestamps ? "text/event-stream" : "audio/mpeg", "Cache-Control": "private, no-store" } });
     }
     const key = process.env.ELEVENLABS_API_KEY;

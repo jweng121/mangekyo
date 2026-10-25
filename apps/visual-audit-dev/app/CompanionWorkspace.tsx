@@ -222,6 +222,9 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
       const response = await fetch(apiPath("/chat"), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: prompt, snapshotId: selected.id, conversationId, conversationTitle: chatTitle }) });
       const data = await response.json(); if (!response.ok) throw new Error(data.error);
       setRecord(current => ({ ...current, chatMessages: [...current.chatMessages, ...[data.user, data.assistant].filter(message => !current.chatMessages.some(existing => existing.id === message.id))] }));
+      if(data.correction?.snapshotId===proposal?.id && typeof data.correction?.instruction==="string" && voiceSession.current===replySession){
+        setDraft(data.correction.instruction);setComposeMode("correction");setInspectorTab("chat");
+      }
       const actions = visualActionsForQuestion(prompt, selected, record, data.assistant.snapshotIds);
       if (voiceSession.current === replySession) {
         if (!data.assistant.sections?.length && actions[0] && actions[0].kind !== "walkthrough") runAction(actions[0]);
@@ -247,7 +250,7 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
   }, [walkthroughOpen, voiceStatus, segmentIndex, speechSupported, thinking, replyError, capture.transcribing, capture.error]);
   const post = async (body: object) => {
     setBusy(true); setError("");
-    if ("action" in body && body.action === "steer") { setBranchId(undefined); steeringStartedAt.current = Date.now() - 1000; steeringStage.current = "none"; addFlow("I'm preparing a correction for the tasked agent based on this evidence."); }
+    if ("action" in body && body.action === "steer") { voiceSession.current++;stopDictation();narrator.current?.stop();setWalkthroughOpen(false);setComposeMode("question");setDraft("");setBranchId(undefined); steeringStartedAt.current = Date.now() - 1000; steeringStage.current = "none"; addFlow("I'm preparing a correction for the tasked agent based on this evidence."); }
     try { const response = await fetch(apiPath(), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({...body,...(platformRunId ? {choice:correctionChoice,runId:record.platformReview?.runId} : {})}) }); const data = await response.json(); if (!response.ok) throw new Error(data.error);
       if(platformRunId) {setRecord(data.record);setRunId(data.runId);setBranchId(data.runId);setSnapshotId(undefined);setSteerOpen(false);setNotice("Correction sent. The new attempt will appear as evidence is recorded.");return;}
       setRecord(data.record); const resultRun = data.corrected ?? data.run;
@@ -255,6 +258,7 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
       setTaskId(data.corrected ? data.corrected.parentRunId : resultRun.id); setRunId(resultRun.id); setBranchId(resultRun.id);
       setSnapshotId(data.corrected ? (resultSnapshots.find(item => item.actionType === "PROPOSE" && item.screenshot) ?? resultSnapshots.filter(item => item.screenshot).at(-1))?.id : undefined); setFollow(!data.corrected); setSteerOpen(false);
       if (data.corrected) { addFlow("The corrected run is complete. I've recorded the updated observations."); const clear = resultRun.status === "corrected" && !data.record.findings.some((item: { runId: string; reviewStatus: string }) => item.runId === resultRun.id && item.reviewStatus === "open"); addFlow(clear ? "The conflict has been resolved in the corrected branch. The case is ready for your approval." : "The new branch still needs review. Check the evidence before approving."); }
+      if(data.corrected)setCompareOpen(true);
       setNotice(data.corrected ? "Corrected run completed. Review the correction branch." : "The monitored agent finished.");
     } catch (cause) { setError((cause as Error).message); } finally { setBusy(false); }
   };
@@ -349,6 +353,7 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
               {record.steeringRequests.some(item => item.parentRunId === originalRun?.id) && <CorrectionStatusMessage kind="sent" agent={originalRun ? agentName(originalRun.agentId) : undefined}/>}{correctedRun?.status === "corrected" && <CorrectionStatusMessage kind="completed" agent={correctedRun ? agentName(correctedRun.agentId) : undefined}/>}{memory?.status === "approved" && <CorrectionStatusMessage kind="memory" agent={memory.agentRole} context={memory.taskType.replaceAll("_", " ")}/>}
             </div>
             <form className={`review-composer ${listening ? "listening" : ""}`} onSubmit={event => { event.preventDefault(); submitComposer(); }}>
+              {composeMode==="correction" && <button className="review-primary wide" type="submit" disabled={busy||thinking||draft.trim().length<12}><GitBranch size={15}/>Correct decision<ArrowRight size={15}/></button>}
               <textarea onFocus={() => narrator.current?.pause()} maxLength={2000} ref={chatInput} aria-label={composeMode === "correction" ? "Correction instruction" : "Ask Mangekyo"} placeholder={listening ? "Listening…" : composeMode === "correction" ? "What should the agent reconsider?" : "Ask anything about this case…"} rows={3} value={draft} onChange={event => setDraft(event.target.value)} onKeyDown={event => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); submitComposer(); } }}/>
               <div className="composer-controls"><DropdownMenu.Root><DropdownMenu.Trigger asChild><button type="button" className="composer-mode">{composeMode === "correction" ? <GitBranch size={13}/> : <MessageSquare size={13}/>} {composeMode === "correction" ? "Correction" : "Ask"}<ChevronDown size={12}/></button></DropdownMenu.Trigger><DropdownMenu.Portal><DropdownMenu.Content className="review-dropdown" side="top" align="start" sideOffset={8}><DropdownMenu.Item className="review-dropdown-item" onSelect={() => setComposeMode("question")}><MessageSquare size={14}/>Ask a question</DropdownMenu.Item><DropdownMenu.Item className="review-dropdown-item" disabled={!proposal} onSelect={() => setComposeMode("correction")}><GitBranch size={14}/>Send a correction</DropdownMenu.Item></DropdownMenu.Content></DropdownMenu.Portal></DropdownMenu.Root><div><IconButton label={listening ? "Stop dictation" : speechSupported ? "Dictate message" : "Dictation unavailable in this browser"} disabled={!speechSupported} onClick={microphone}>{listening ? <Square size={14}/> : <Mic size={16}/>}</IconButton><button className="composer-send" type="submit" aria-label={composeMode === "correction" ? "Send correction" : "Send message"} disabled={busy || thinking || !draft.trim() || (composeMode === "correction" && draft.trim().length < 12)}><ArrowUp size={16}/></button></div></div>
             </form>
