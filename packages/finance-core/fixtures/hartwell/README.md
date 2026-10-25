@@ -1,4 +1,4 @@
-﻿# Hartwell & Moreno trust-account fixture
+# Hartwell & Moreno trust-account fixture
 
 Fictional data and source documents for the Mangekyo demo. No app integration,
 backend changes, deployment, external model calls, or real financial records.
@@ -21,11 +21,12 @@ The Bay Commerce Bank IOLTA ends in 4417; operating ends in 2290.
 | `erp/payees.json` | 48 payees with synthetic bank details; Bayside includes verification sources |
 | `erp/trust-ledger-entries.json` | 160 balanced two-leg journal entries |
 | `erp/disbursements.json` | 101 posted outflows, 1 unapproved live request |
+| `erp/bank-statements.json` | 6 bank statement PDFs with opening/closing summaries and transaction tables |
 | `erp/reconciliations.json` | 6 signed month-end three-way reconciliations and every client balance |
 | `erp/incoming-items.json` | Unposted global check and separate November supplemental check |
 | `erp/policies.json`, `communications.json` | Approved claim-scoped allocation policy; suspicious email request |
 | `erp/documents.json` | Document index with PDF and text paths, dates, kinds, scan flags, monetary inventory |
-| `documents/` | 221 PDFs, 221 OCR-style text sidecars, 1 raw `.eml` |
+| `documents/` | 227 PDFs (233 pages), 227 OCR-style text sidecars, 1 raw `.eml` |
 | `answer-key.json` | 10 cases including correct behavior / noise controls, evidence and responsible agents |
 | `manifest.json` | Seed, counts, SHA-256 hashes for every generated artifact and screenshot |
 
@@ -82,7 +83,7 @@ All people, addresses, organizations, account numbers and signatures are
 invented demo records. The requested Medicare label denotes a fictional
 conditional-payment case, not a real agency record. The two requested domain
 strings are inert document content: no DNS lookups or email were performed.
-Phones use 555-01xx; routing numbers are intentionally non-routable. Checks
+Phones use 555-01xx; account numbers are masked and routing numbers are withheld. Checks
 are marked non-negotiable. No real company or person was researched or used
 as a source; any name resemblance is coincidental.
 
@@ -102,18 +103,37 @@ On Unix use `python3.11 -m venv` and `.venv/bin/python` at the equivalent paths.
 No network is used after dependency installation. The generator always uses
 seed **44172026**, fixed dates, invariant ReportLab metadata, deterministic
 per-document rotation/noise, and JPEG compression. Repeat runs overwrite only
-the named fixture outputs and four sample images. Generated text is LF; the
+the named fixture outputs and six sample images. Generated text is LF; the
 raw email is CRLF. Byte reproducibility was checked with the pinned Windows
 Python 3.11 environment; other PDF/image library versions can change bytes.
 
-108 of 221 PDFs (48.9%) are rasterized grayscale scans with seeded 0.3-1.2
-degree rotation, grain, JPEG artifacts, and occasional fax headers or a
-received stamp. Firm statements and bank letters remain digital. The `.txt`
-files simulate extracted OCR, with two harmless boilerplate substitutions per
-page (`Teleph0ne`, `Encl0sure`); monetary values are never altered. They are
-synthetic sidecars, not output from an external OCR engine. Before rasterizing,
-the generator extracts text from the clean PDF and checks every registered
-monetary amount is actually printed.
+108 of 227 PDFs (47.6%) are rasterized scans with seeded 0.8-1.7 degree
+rotation, visible paper grain, a shaded edge, JPEG artifacts and angled colored
+RECEIVED stamps. A few pages carry portable pen-style review notes; none assert
+that the suspicious email was verified. Digital firm and bank records remain
+clean. Every page has the small light-grey fictional-record footer.
+
+`document_layouts.py` supplies separate issuer layouts: Harborline claims
+forms/checks, Bayside medical letterhead with a drawn mark, a clearly fictional
+government-style conditional-payment form, Estuary escrow confirmations,
+Bay Commerce statements and firm stationery. Lien charges include service dates,
+billed amounts, adjustments and payoff totals. Time invoices have dated service
+lines. Settlement tables retain v1's planted figures and show each client's fee
+basis and signatures; corrected v2 remains unsigned. Fee agreements spell out
+gross/net calculations and the Reyes filing-triggered tier.
+
+Text sidecars are extracted from each actual typeset PDF before rasterization,
+including tables, stamps and notes, then receive one harmless page-marker OCR
+substitution (`Page` to `Paqe`) per page. Form feeds separate pages. No external
+OCR engine is used. Monetary figures are checked before rasterization and in
+the independent verifier. The obsolete enclosure footer is gone.
+
+Account identifiers are masked consistently in PDFs, sidecars, raw email and
+ERP exports. The answer key's only changes are `****1264` and `****5521` in
+place of the full synthetic account strings; all last-four distinctions,
+amounts, dates, expected actions, domains and other case facts are preserved.
+The verifier fingerprints the original answer key with that masking applied.
+The fake agency wording is deliberately distinct from an actual agency notice.
 
 `verify.py` independently reads the exported JSON, CSV, PDF and text files.
 It recomputes bank running balances and journal debit/credit totals, reconciles
@@ -132,7 +152,9 @@ These PNGs are rendered from the actual final PDFs, not illustrative mockups:
 - [Signed settlement statement v1](../../../../docs/screenshots/hartwell-data/settlement-statement-v1.png)
 - [Harborline settlement check](../../../../docs/screenshots/hartwell-data/settlement-check.png)
 - [Fraud email print](../../../../docs/screenshots/hartwell-data/fraud-email.png)
+- [Reyes fee agreement](../../../../docs/screenshots/hartwell-data/fee-agreement.png)
+- [October bank statement, page 1](../../../../docs/screenshots/hartwell-data/bank-statement.png)
 
-All other task files stay in this fixture directory. The four screenshots are
+All other task files stay in this fixture directory. The six screenshots are
 the requested exception. There is no ERP wiring, Convex deployment, real agent
 execution, or actual payment in this change.

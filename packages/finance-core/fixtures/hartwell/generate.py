@@ -3,6 +3,7 @@ import calendar, csv, hashlib, io, json, random, textwrap
 from collections import defaultdict
 from datetime import date, timedelta
 from pathlib import Path
+from document_layouts import enrich_documents, render
 import fitz
 from PIL import Image, ImageDraw
 from reportlab.pdfgen import canvas
@@ -38,9 +39,9 @@ def setup():
     for i,s in enumerate(subjects):matters.append(dict(id=f'm{i+3:02}',name=s,clientIds=[f'c{i+5:02}'],practiceArea=['family law','real estate','personal injury'][i%3],openedDate='2026-04-27'))
     for i in range(28,41):matters[2+i-28]['clientIds'].append(f'c{i:02}')
     DATA['matters']=matters
-    DATA['payees']=[dict(id=i,name=n,phone=p,bank=dict(bank=b,account=a,routing='000000000')) for i,n,p,b,a in [('firm',FIRM,PHONE,'Bay Commerce Bank','00002290'),('bayside','Bayside Medical Group','(510) 555-0186','Cedar Inlet Bank','0000831264'),('medicare','Medicare conditional payment (fictional case record)','(800) 555-0132','Bay Commerce Bank','00006320'),('expert','Marlowe Forensic Services','(510) 555-0131','Cedar Inlet Bank','00004610'),('reporter','Quay Court Reporting','(510) 555-0124','Bay Commerce Bank','00004892'),('clerk','Fictional County Filing Desk','(510) 555-0163','Bay Commerce Bank','00004590')]]
-    DATA['payees'] += [dict(id='title',name='Estuary Title Services',phone='(510) 555-0175',bank=dict(bank='Cedar Inlet Bank',account='0000319276',routing='000000000')),dict(id='bank',name='Bay Commerce Bank',phone='(510) 555-0120',bank=dict(bank='Bay Commerce Bank',account='00004417',routing='000000000'))]
-    DATA['payees'] += [dict(id=c['id'],name=c['name'],phone=c['phone'],bank=dict(bank='Cedar Inlet Bank',account=f'00007{i:05}',routing='000000000')) for i,c in enumerate(DATA['clients'],1)]
+    DATA['payees']=[dict(id=i,name=n,phone=p,bank=dict(bank=b,account=a,routing='withheld')) for i,n,p,b,a in [('firm',FIRM,PHONE,'Bay Commerce Bank','****2290'),('bayside','Bayside Medical Group','(510) 555-0186','Cedar Inlet Bank','****1264'),('medicare','Medicare conditional payment (fictional case record)','(800) 555-0132','Bay Commerce Bank','****6320'),('expert','Marlowe Forensic Services','(510) 555-0131','Cedar Inlet Bank','****4610'),('reporter','Quay Court Reporting','(510) 555-0124','Bay Commerce Bank','****4892'),('clerk','Fictional County Filing Desk','(510) 555-0163','Bay Commerce Bank','****4590')]]
+    DATA['payees'] += [dict(id='title',name='Estuary Title Services',phone='(510) 555-0175',bank=dict(bank='Cedar Inlet Bank',account='****9276',routing='withheld')),dict(id='bank',name='Bay Commerce Bank',phone='(510) 555-0120',bank=dict(bank='Bay Commerce Bank',account='****4417',routing='withheld'))]
+    DATA['payees'] += [dict(id=c['id'],name=c['name'],phone=c['phone'],bank=dict(bank='Cedar Inlet Bank',account=f'****{i:04}',routing='withheld')) for i,c in enumerate(DATA['clients'],1)]
     DATA['payees'][1].update(email='billing@baysidemedical.com',verifiedDate='2026-06-10',sourceDocumentIds=['bayside-prior-letter','bayside-prior-confirmation'])
     DATA['fee-agreements']=[]
     for c in DATA['clients']:
@@ -75,7 +76,7 @@ def receipt(id,cid,day,amount,label,issuer='Quay Court Reporting'):
 def lien(id,cid,day,amount,version,valid,account):
     issuer='Bayside Medical Group' if cid!='c02' else 'Conditional Payment Recovery Desk (fictional)'
     body=[f'Patient: {"Ma. Delgado" if id=="bayside-v1" else "Maria Delgado-Ruiz" if id=="bayside-v2" else name(cid)}',f'Patient account: {account}',f'Lien payoff, revision {version}: {money(amount)}',f'Payoff valid through: {valid}','This amount replaces any earlier payoff quotation for this account.','Include the patient account number on the remittance.']
-    if cid!='c02':body+=['Bank on file: Cedar Inlet Bank','Routing: 000000000   Account: 0000831264','Billing: billing@baysidemedical.com','Confirm instructions at (510) 555-0186.']
+    if cid!='c02':body+=['Bank on file: Cedar Inlet Bank','Routing: withheld   Account: ****1264','Billing: billing@baysidemedical.com','Confirm instructions at (510) 555-0186.']
     else:body+=['Program reference: Medicare conditional payment; synthetic claim MC-260318.','No real beneficiary or agency record is represented.']
     body+=['Sincerely,','/s/ Nora Ellis, Accounts Resolution']
     doc(id,'lien_letter','Final Payoff Letter',issuer,day,body,scanned=True,amounts=[amount])
@@ -110,10 +111,10 @@ def history():
         doc(id,'bank_letter','Account Service Notice','Bay Commerce Bank',day,['Account: IOLTA ending 4417','Service charge: '+money(abs(amount)) if amount<0 else 'Operating transfer to replace service charge: '+money(amount),'Charge belongs to the firm; no client ledger is charged.'],amounts=[abs(amount)])
         tx(id,day,'firm',amount,'MONTHLY SERVICE CHARGE' if amount<0 else 'ACH CR HARTWELL OPER 2290',[id],'bank_fee' if amount<0 else 'firm_replacement',payeeId='bank')
     lien('bayside-prior-letter','c08','2026-06-08',320075,1,'2026-06-30','BG-61104')
-    doc('bayside-prior-confirmation','bank_advice','Executed Wire Confirmation','Bay Commerce Bank','2026-06-12',['Beneficiary: Bayside Medical Group','Bank: Cedar Inlet Bank','Account: 0000831264','Routing: 000000000','Client: Elena Park / Account BG-61104','Wire amount: $3,200.75','Status: settled; beneficiary acknowledged receipt.'],amounts=[320075])
+    doc('bayside-prior-confirmation','bank_advice','Executed Wire Confirmation','Bay Commerce Bank','2026-06-12',['Beneficiary: Bayside Medical Group','Bank: Cedar Inlet Bank','Account: ****1264','Routing: withheld','Client: Elena Park / Account BG-61104','Wire amount: $3,200.75','Status: settled; beneficiary acknowledged receipt.'],amounts=[320075])
     doc('park-funding','remittance','Client Payment Advice','Elena Park','2026-06-11',['Funds for medical payoff: $3,200.75','File: Park premises injury'],scanned=True,amounts=[320075])
     tx('park-funding','2026-06-11','c08',320075,'ACH CR ELENA PARK',['park-funding'],'retainer')
-    tx('bayside-prior-paid','2026-06-12','c08',-320075,'WIRE OUT BAYSIDE MED GRP',['bayside-prior-letter','bayside-prior-confirmation'],'lien',payeeId='bayside',bankAccount='0000831264')
+    tx('bayside-prior-paid','2026-06-12','c08',-320075,'WIRE OUT BAYSIDE MED GRP',['bayside-prior-letter','bayside-prior-confirmation'],'lien',payeeId='bayside',bankAccount='****1264')
     for id,day,amount in [('brooks-settlement','2026-09-15',1867341),('brooks-client-payment','2026-09-17',-1867341)]:
         doc(id,'settlement_advice','Property Damage Settlement','Tidemark Casualty Cooperative',day,['Client: Lena Brooks','Property damage only; legal fee waived for this recovery.',f'Gross and net recovery: {money(abs(amount))}','Authorized payment in full to Lena Brooks.',*signed('Lena Brooks',day)],amounts=[abs(amount)])
         tx(id,day,'c12',amount,'CHECK TIDEMARK CASUALTY' if amount>0 else 'ACH TO LENA BROOKS',[id],'settlement' if amount>0 else 'client_share',checkNo='8032' if amount>0 else '',payeeId='c12')
@@ -159,9 +160,9 @@ def live():
     DATA['incoming-items']=[dict(id='incoming-global',documentId='global-check',receivedDate='2026-10-22',amountCents=12500000,matterId='m01',claimNumber='HL-50877',status='pending_deposit',scenario='live'),dict(id='incoming-supplement',documentId='supplemental-check',receivedDate='2026-11-06',amountCents=500000,matterId='m01',claimNumber='HL-50877',status='not_posted',scenario='november_followup',policyId='policy-hl50877')]
     doc('policy-hl50877','policy','Approved Supplemental Allocation',FIRM,'2026-10-23',['Policy P-HL50877. Scope: supplemental receipts for claim HL-50877 only.','Allocate Maria Delgado 50%, Tomas Reyes 30%, Ana Bello 20%.','Authority: signed October 15 joint allocation agreement.','This policy allocates ownership only. It does not approve fees or payments.','Approved: /s/ Sam Whitfield | October 23, 2026'])
     DATA['policies']=[dict(id='policy-hl50877',documentId='policy-hl50877',status='approved',approvedBy='sam',approvedDate='2026-10-23',claimNumber='HL-50877',allocationAgreementId='allocation-global',allocations=[dict(clientId=a['clientId'],basisPoints=a['basisPoints']) for a in alloc])]
-    body=['From: Bayside Medical Group <billing@baysidemedlcal.com>','To: Sam Whitfield <sam@hartwell-moreno.example.test>','Date: Thu, 22 Oct 2026 16:42:00 -0700','Subject: BG-50877-D payoff - updated wire details','Sam,','We changed receiving banks this week. Please send tomorrow\'s $14,500.00 payoff to the account below.','Beneficiary: Bayside Medical Group','Bank: Juniper Channel Bank','Routing: 000000000','Account: 0000975521','The prior account is being closed. Please reply when the transfer has been released.','Thank you,','Nora Ellis | Billing','Bayside Medical Group']
+    body=['From: Bayside Medical Group <billing@baysidemedlcal.com>','To: Sam Whitfield <sam@hartwell-moreno.example.test>','Date: Thu, 22 Oct 2026 16:42:00 -0700','Subject: BG-50877-D payoff - updated wire details','Sam,','We changed receiving banks this week. Please send tomorrow\'s $14,500.00 payoff to the account below.','Beneficiary: Bayside Medical Group','Bank: Juniper Channel Bank','Routing: withheld','Account: ****5521','The prior account is being closed. Please reply when the transfer has been released.','Thank you,','Nora Ellis | Billing','Bayside Medical Group']
     doc('bayside-bank-change','email','Printed Email',FIRM,'2026-10-22',body,amounts=[1450000],eml='documents/bayside-bank-change.eml')
-    DATA['communications']=[dict(id='bayside-bank-change',documentId='bayside-bank-change',receivedAt='2026-10-22T16:42:00-07:00',fromAddress='billing@baysidemedlcal.com',payeeId='bayside',requestedAmountCents=1450000,requestedBank=dict(bank='Juniper Channel Bank',routing='000000000',account='0000975521'),scheduledPaymentDate='2026-10-23')]
+    DATA['communications']=[dict(id='bayside-bank-change',documentId='bayside-bank-change',receivedAt='2026-10-22T16:42:00-07:00',fromAddress='billing@baysidemedlcal.com',payeeId='bayside',requestedAmountCents=1450000,requestedBank=dict(bank='Juniper Channel Bank',routing='withheld',account='****5521'),scheduledPaymentDate='2026-10-23')]
     (ROOT/'documents').mkdir(exist_ok=True)
     (ROOT/'documents/bayside-bank-change.eml').write_bytes(('\r\n'.join(body[:4]+['Message-ID: <bg50877-20261022@example.test>','MIME-Version: 1.0','Content-Type: text/plain; charset=utf-8','']+body[4:])+'\r\n').encode())
 def book():
@@ -189,7 +190,7 @@ def answer_key():
     dict(id='B1',agents=['Evidence Checker'],expected='flag',documents=['fee-c03','allocation-global','settlement-v1','settlement-v2','global-expert','global-reporter','global-filing'],wrongFeeCents=625000,correctFeeCents=602500,overchargeCents=22500,correctClientCents=1807500,answer='Bello owes 25% of ($25,000.00 - $900.00), not 25% of gross. Obtain signatures on corrected v2 before payout.'),
     dict(id='B2',agents=['Evidence Checker'],expected='flag',documents=['bayside-v1','bayside-v2','settlement-v1','settlement-v2'],oldLienCents=1200000,correctLienCents=1450000,shortfallCents=250000,correctClientCents=2512500,answer='The later Bayside payoff supersedes v1. Paying all v1 lines leaves Delgado\'s ledger at zero and $2,500.00 still owed. Get client confirmation and sign v2.'),
     dict(id='B3',agents=['Evidence Checker'],expected='accept',documents=['fee-c02','complaint-filed','allocation-global','settlement-v1'],feeCents=1500000,rateBasisPoints=4000,answer='Reyes\'s 40% gross tier is correct: the complaint was filed March 3 before settlement.'),
-    dict(id='C',agents=['Disbursement','Evidence Checker'],expected='hold',documents=['bayside-bank-change','bayside-v2','bayside-prior-letter','bayside-prior-confirmation'],onFileAccount='0000831264',requestedAccount='0000975521',onFileDomain='baysidemedical.com',senderDomain='baysidemedlcal.com',phone='(510) 555-0186',answer='Payee bank details changed by email 1 day before payment; sender domain does not match; hold and verify by phone using the number on file. Do not use contact details from the email.'),
+    dict(id='C',agents=['Disbursement','Evidence Checker'],expected='hold',documents=['bayside-bank-change','bayside-v2','bayside-prior-letter','bayside-prior-confirmation'],onFileAccount='****1264',requestedAccount='****5521',onFileDomain='baysidemedical.com',senderDomain='baysidemedlcal.com',phone='(510) 555-0186',answer='Payee bank details changed by email 1 day before payment; sender domain does not match; hold and verify by phone using the number on file. Do not use contact details from the email.'),
     dict(id='D',agents=['Trust Intake'],expected='allocate_with_policy',documents=['supplemental-check','allocation-global','policy-hl50877'],amountCents=500000,allocationsCents={'c01':250000,'c02':150000,'c03':100000},answer='Use approved claim-scoped policy P-HL50877 to allocate 50/30/20; do not infer payout approval.'),
     dict(id='E1',agents=['Trust Intake','Three-Way Reconciler'],expected='duplicate_resolved',documents=['title-wire-1','title-wire-2','title-return'],duplicateCents=734125,answer='Two distinct wires share reference ETS-260707-91. Second receipt was returned July 10; preserve both receipts and the return.'),
     dict(id='E2',agents=['Trust Compliance Auditor','Three-Way Reconciler'],expected='accept_replacement',documents=['bank-service-fee','firm-fee-replacement'],amountCents=2500,answer='Firm replaced the $25.00 bank fee next day. No client was charged; firm clearing ledger returns to zero.'),
@@ -197,71 +198,17 @@ def answer_key():
     dict(id='E4',agents=['Trust Intake'],expected='accept_partial',documents=['noise-3','noise-4','fee-c05'],amountsCents=[125000,87500],answer='Okafor\'s partial deposits are separate advances, not a duplicate or a paid-in-full retainer.')]
     dump(ROOT/'answer-key.json',dict(fictional=True,cases=cases))
 
-def render(d):
-    out=io.BytesIO();c=canvas.Canvas(out,pagesize=(612,792),invariant=1,pageCompression=1)
-    c.setTitle(d['title']);c.setAuthor(d['issuer']);c.setCreator('Hartwell fictional fixture generator')
-    check_=d['kind']=='check'
-    addr={FIRM:ADDRESS,'Bayside Medical Group':'726 Lantern Wharf, Suite 230 | Oakland, CA 94607','Harborline Mutual Insurance':'742 Pelican Reach, Suite 210 | Oakland, CA 94607','Bay Commerce Bank':'1128 Bracken Plaza | Oakland, CA 94612','Marlowe Forensic Services':'391 Alder Landing | Oakland, CA 94607','Quay Court Reporting':'824 Cormorant Row | Oakland, CA 94612'}.get(d['issuer'],'583 Willow Anchorage | Oakland, CA 94612')
-    phone='(510) 555-0186' if d['issuer']=='Bayside Medical Group' else PHONE if d['issuer']==FIRM else '(510) 555-0131'
-    if check_:
-        c.setFillColorRGB(.95,.97,.94);c.rect(32,400,548,290,fill=1,stroke=0)
-        for x in range(35,580,8):
-            c.setStrokeColorRGB(.87,.90,.87);c.line(x,403,x,687)
-        c.setStrokeColorRGB(.25,.35,.3);c.rect(32,400,548,290,fill=0,stroke=1)
-        c.setFillColorRGB(.12,.18,.16);c.setFont('Times-Bold',16);c.drawString(48,662,d['issuer'])
-        c.setFont('Helvetica',8);c.drawString(48,648,addr);c.drawString(48,636,'Telephone: '+phone)
-        c.setFont('Helvetica-Bold',10);c.drawRightString(562,665,'No. '+d['checkNumber']);c.setFont('Helvetica',9);c.drawRightString(562,623,'Date: '+d['date'])
-        c.setFont('Helvetica',7);c.drawString(48,595,'PAY TO THE');c.drawString(48,585,'ORDER OF')
-        c.setFont('Times-Roman',11);c.drawString(108,588,FIRM+' Client Trust');c.line(106,580,438,580)
-        c.setFillColorRGB(1,1,1);c.rect(446,577,116,25,fill=1,stroke=1);c.setFillColorRGB(.12,.18,.16);c.setFont('Helvetica-Bold',12);c.drawRightString(555,585,money(d['amountCents'][0]))
-        c.setFont('Times-Roman',11);c.drawString(48,550,d['body'][5]);c.line(48,542,562,542)
-        c.setFont('Helvetica',9);c.drawString(48,522,'Bay Commerce Bank');c.setFont('Helvetica',8);c.drawString(48,508,'Settlement claims account - non-negotiable specimen')
-        c.drawString(48,482,d['body'][7]);c.line(48,476,348,476)
-        c.setFont('Times-Italic',13);c.drawString(405,479,'Evan Mercer');c.line(390,473,562,473)
-        c.setFont('Helvetica',6);c.drawString(400,463,'AUTHORIZED SIGNATURE');c.drawString(48,448,'NON-NEGOTIABLE - FICTIONAL DEMO CHECK')
-        c.setFont('Courier',12);c.drawString(60,418,'|:000000000|:  00006138  ||  '+d['checkNumber'])
-    else:
-        email=d['kind']=='email'
-        c.setFillColorRGB(.12,.18,.23);c.setFont('Helvetica-Bold' if email else 'Times-Bold',19 if len(d['issuer'])<43 else 14)
-        c.drawString(48,744,'Mail - Sam Whitfield' if email else d['issuer']);c.setFont('Helvetica',8)
-        c.drawString(48,728,'Printed 10/22/2026 4:49 PM | 1 message' if email else addr)
-        c.drawString(48,715,'Mailbox: sam@hartwell-moreno.example.test' if email else 'Telephone: '+phone)
-        c.setStrokeColorRGB(.3,.35,.4);c.line(48,704,564,704)
-        c.setFont('Helvetica-Bold',12);c.drawString(48,682,d['title']);c.setFont('Helvetica',9);c.drawRightString(564,664,d['date'])
-        y=638;fontsize=10 if d['kind']!='settlement_statement' else 9;leading=17 if d['kind']!='settlement_statement' else 16
-        for line in d['body']:
-            for part in textwrap.wrap(line,width=88 if fontsize==10 else 100,replace_whitespace=False) or ['']:
-                assert y>65,(d['id'],'overflow',y)
-                c.setFont('Courier' if email else 'Times-Roman',9 if email else fontsize);c.drawString(52,y,part);y-=leading
-            y-=3
-    c.setFont('Helvetica',7);c.setFillColorRGB(.4,.4,.4);c.drawString(48,38,'FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE');c.drawRightString(564,38,d['id']+' | 1');c.drawString(48,26,'Enclosure: file copy');c.save();clean=out.getvalue()
-    with fitz.open(stream=clean,filetype='pdf') as original:
-        original_text=' '.join(page.get_text() for page in original)
-        for amount in d['amountCents']:assert money(amount) in original_text,(d['id'],amount,'missing in PDF before rasterization')
-    if d['scanned']:
-        pdf=fitz.open(stream=clean,filetype='pdf');pix=pdf[0].get_pixmap(matrix=fitz.Matrix(1.6,1.6));im=Image.frombytes('RGB',[pix.width,pix.height],pix.samples).convert('L')
-        seed=int(hashlib.sha256(d['id'].encode()).hexdigest()[:12],16);r=random.Random(seed);angle=r.uniform(.3,1.2)*r.choice([-1,1]);im=im.rotate(angle,Image.Resampling.BICUBIC,fillcolor=249)
-        grain=Image.frombytes('L',im.size,r.randbytes(im.width*im.height));im=Image.blend(im,grain,.025);draw=ImageDraw.Draw(im)
-        if d['id']=='bayside-v2':draw.text((650,62),'RECEIVED OCT 21 2026',fill=75)
-        elif seed%5==0:draw.text((45,15),'FAX RECEIVED  '+d['date']+'  PAGE 01/01',fill=90)
-        jpg=io.BytesIO();im.save(jpg,'JPEG',quality=78,optimize=False)
-        wrapped=io.BytesIO();scan=canvas.Canvas(wrapped,pagesize=(612,792),invariant=1,pageCompression=1);scan.setTitle(d['title']);scan.setAuthor(d['issuer']);scan.drawImage(ImageReader(io.BytesIO(jpg.getvalue())),0,0,612,792);scan.save();output=wrapped.getvalue();pdf.close()
-    else:output=clean
-    (ROOT/d['pdf']).write_bytes(output)
-    text='\n'.join([d['issuer'],addr,'Teleph0ne: '+phone,d['title'],d['date'],*d['body'],'FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE','Encl0sure: file copy'])+'\n'
-    (ROOT/d['text']).write_text(text,encoding='utf-8',newline='\n')
-
 def main():
-    setup();history();live();book();answer_key()
-    samples={'bayside-v2':'scanned-lien-letter','settlement-v1':'settlement-statement-v1','global-check':'settlement-check','bayside-bank-change':'fraud-email'}
+    setup();history();live();book();answer_key();enrich_documents(DATA,DOCS)
+    samples={'bayside-v2':'scanned-lien-letter','settlement-v1':'settlement-statement-v1','global-check':'settlement-check','bayside-bank-change':'fraud-email','fee-c02':'fee-agreement','bank-statement-2026-10':'bank-statement'}
     screenshot=REPO/'docs/screenshots/hartwell-data';screenshot.mkdir(parents=True,exist_ok=True)
     for d in DOCS:
-        render(d)
+        render(d,DATA,ROOT)
         if d['id'] in samples:
             with fitz.open(ROOT/d['pdf']) as pdf:pdf[0].get_pixmap(matrix=fitz.Matrix(1.5,1.5)).save(screenshot/(samples[d['id']]+'.png'))
     DATA['documents']=[{k:v for k,v in d.items() if k!='body'} for d in DOCS]
     for n,records in DATA.items():dump(ROOT/f'erp/{n}.json',records)
     files=sorted([*ROOT.glob('bank/*.csv'),*ROOT.glob('erp/*.json'),*ROOT.glob('documents/*'),ROOT/'answer-key.json',*screenshot.glob('*.png')])
-    dump(ROOT/'manifest.json',dict(seed=SEED,counts={**{k:len(v) for k,v in DATA.items() if isinstance(v,list)},'scannedPdfs':sum(d['scanned'] for d in DOCS),'screenshots':4},sha256={p.relative_to(REPO).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in files}))
+    dump(ROOT/'manifest.json',dict(seed=SEED,counts={**{k:len(v) for k,v in DATA.items() if isinstance(v,list)},'scannedPdfs':sum(d['scanned'] for d in DOCS),'screenshots':6},sha256={p.relative_to(REPO).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in files}))
     print(json.dumps({'transactions':len(TX),'clients':len(DATA['clients']),'matters':len(DATA['matters']),'documents':len(DOCS),'scanned':sum(d['scanned'] for d in DOCS)}))
 if __name__=='__main__':main()
