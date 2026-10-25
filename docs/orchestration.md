@@ -1,6 +1,6 @@
 # Agent orchestration
 
-Branch `edwin-trust-agents` (from `edwin-orchestration`). Everything was verified in mock mode; no CREAO or external model run was started. No existing lock rule or validator was loosened; `packages/contracts` changed additively; no deployment setting changed. Frontend code (`apps/web`, `apps/finance-dev`, `packages/visual-audit`, `scripts/monitored-agent`) was not edited; `apps/finance-dev` still compiles and builds.
+Branch `edwin-trust-agents` (from `edwin-orchestration`). Everything was verified in mock mode; no CREAO or external model run was started. No existing lock rule or validator was loosened; `packages/contracts` changed additively; no deployment setting changed. Frontend code (`apps/web`, `packages/visual-audit`, `scripts/monitored-agent`) was not edited. `apps/finance-dev` changed in one place: blocked payment cards that are superseded (a later request for the same line passed, or a person acknowledged them) leave "Needs a person", and lock cards show one pool figure, the adjusted cleared balance ([agent-api.md](agent-api.md#lock-results)).
 
 Companion documents: [agent-api.md](agent-api.md) (every query and mutation for the desk and the visual audit), the five agent instruction files (`creao-trust-intake-agent.md`, `creao-disbursement-agent.md`, `creao-evidence-checker-agent.md`, `creao-three-way-reconciler-agent.md`, `creao-trust-compliance-auditor-agent.md`), [lawfirm-progress.md](lawfirm-progress.md) and the walkthrough in [ui-report.md](ui-report.md#current-law-firm-demo-walkthrough).
 
@@ -106,7 +106,7 @@ Commands from the repository root, pnpm as `npx --yes pnpm@10.20.0`.
 | --- | --- |
 | Baseline `… typecheck` / `… test` | exit 0 / 31 files, 228 tests |
 | Final `… typecheck` | exit 0 |
-| Final `… test` | 36 files, 260 tests, all pass |
+| Final `… test` | 37 files, 269 tests, all pass (after the superseded-card and pool-figure fixes and the merge of `origin/main`) |
 | Final `… build:finance` | exit 0 |
 
 Browser click-through: ten feed steps on `demo:account:pool-026`, see [lawfirm-progress.md](lawfirm-progress.md).
