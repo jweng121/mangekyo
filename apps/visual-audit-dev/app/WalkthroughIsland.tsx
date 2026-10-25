@@ -35,7 +35,7 @@ export function WalkthroughIsland({ replyError, onRetry, title, thinking, autoSe
     <section className={`walkthrough-island ${open ? "expanded" : ""}`} aria-label="Evidence walkthrough" style={{ height: open ? expandedHeight : 38 }}>
       <button className="walkthrough-anchor" onClick={onStart} tabIndex={open ? -1 : 0} aria-hidden={open} aria-label="Start walkthrough" title="Start the analysis with Mangekyo"><MangekyoAvatar size={32}/></button>
       <div ref={contentRef} className="walkthrough-content" aria-hidden={!open} inert={!open}>
-        <div className="walkthrough-callout">{!title && <span className="annotation-number">{annotation ? annotationNumbers[annotation.id] : index + 1}</span>}<strong>{title ?? annotation?.label ?? snapshot?.title}</strong></div>
+        <div className="walkthrough-callout">{!title && snapshot && <span className="annotation-number">{annotation ? annotationNumbers[annotation.id] : index + 1}</span>}<strong>{title ?? annotation?.label ?? snapshot?.title ?? "Mangekyo"}</strong></div>
         <div className="walkthrough-caption" aria-label="Live captions" aria-live="off">
           {conversation ? <div className="island-conversation">
             <div className="island-listening-row"><span className={`operator-waveform ${listening && speaking ? "speaking" : ""}`} aria-hidden="true">{levels.map((level, i) => <i key={i} style={{ height: 26, transform: `scaleY(${listening ? level : .12})` }}/>)}</span><span role="status">{replyError ? "Unable to answer" : thinking ? "Thinking" : listening ? speaking ? "You're speaking" : "Listening" : reply ? "Reply ready" : "Your turn"}</span></div>

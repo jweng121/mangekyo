@@ -144,12 +144,13 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
   const filteredTasks = tasks.filter(item => item.status === caseStatus && item.searchable.includes(query.toLowerCase()));
   const canSteer = !!selected && selected.id === proposal?.id && originalRun?.status === "escalated";
   const narration = useMemo<NarratedExplanation | undefined>(() => {
+    const welcome=(explanation:NarratedExplanation):NarratedExplanation=>({...explanation,segments:[{id:explanation.id+"-welcome",text:"Hey, let's get started. Anything you want to address first?",evidenceRefs:[],highlightIds:[]},...explanation.segments]});
     if(originalRun && (platformRunId || originalRun.taskId.startsWith("hartwell-"))) {
       const parts=record.snapshots.filter(item=>item.runId===activeRun?.id).map(item=>({snapshotId:item.id,text:item.summary,annotationIds:item.annotations?.slice(0,1).map(a=>a.id)??[]}));
-      return buildSpokenReply(`platform-${originalRun.id}`,"",parts,record.snapshots);
+      return welcome(buildSpokenReply(`platform-${originalRun.id}`,"",parts,record.snapshots));
     }
     if (!originalRun || !finding) return;
-    return buildWalkthroughDialogue(originalRun.id, finding, record.snapshots);
+    return welcome(buildWalkthroughDialogue(originalRun.id, finding, record.snapshots));
   }, [originalRun?.id, activeRun?.id, finding?.id, record.snapshots, platformRunId]);
 
   useEffect(() => {

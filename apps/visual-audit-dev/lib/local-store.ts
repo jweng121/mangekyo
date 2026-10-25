@@ -1,3 +1,4 @@
+import {withVerifiedDemoAnnotations} from "./verified-demo-annotations";
 import {atomicRename} from "./atomic-rename";
 import "server-only";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -22,7 +23,7 @@ export async function readInvestigation(): Promise<InvestigationRecord> {
     const data = JSON.parse(await readFile(file, "utf8")) as InvestigationRecord;
     const runs = data.runs.filter(run => run.tenantId === tenantId);
     const ids = new Set(runs.map(run => run.id));
-    return { runs, events: data.events.filter(event => ids.has(event.runId)), snapshots: data.snapshots.filter(snapshot => ids.has(snapshot.runId)), steeringRequests: data.steeringRequests.filter(request => ids.has(request.parentRunId)), reports: data.reports.filter(report => ids.has(report.runId)), chatMessages: (data.chatMessages ?? []).filter(message => ids.has(message.runId)), memoryRecords: (data.memoryRecords ?? []).filter(memory => ids.has(memory.sourceRunId)), findings: (data.findings ?? []).filter(finding => ids.has(finding.runId)), escalations: (data.escalations ?? []).filter(escalation => ids.has(escalation.runId)) };
+    return { runs, events: data.events.filter(event => ids.has(event.runId)), snapshots: data.snapshots.filter(snapshot => ids.has(snapshot.runId)).map(withVerifiedDemoAnnotations), steeringRequests: data.steeringRequests.filter(request => ids.has(request.parentRunId)), reports: data.reports.filter(report => ids.has(report.runId)), chatMessages: (data.chatMessages ?? []).filter(message => ids.has(message.runId)), memoryRecords: (data.memoryRecords ?? []).filter(memory => ids.has(memory.sourceRunId)), findings: (data.findings ?? []).filter(finding => ids.has(finding.runId)), escalations: (data.escalations ?? []).filter(escalation => ids.has(escalation.runId)) };
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return empty();
     throw error;
