@@ -1,4 +1,4 @@
-﻿"""Deterministic offline fixture. Python 3.11; see requirements.txt."""
+"""Deterministic offline fixture. Python 3.11; see requirements.txt."""
 import calendar, csv, hashlib, io, json, random, textwrap
 from collections import defaultdict
 from datetime import date, timedelta
@@ -39,6 +39,8 @@ def setup():
     for i in range(28,41):matters[2+i-28]['clientIds'].append(f'c{i:02}')
     DATA['matters']=matters
     DATA['payees']=[dict(id=i,name=n,phone=p,bank=dict(bank=b,account=a,routing='000000000')) for i,n,p,b,a in [('firm',FIRM,PHONE,'Bay Commerce Bank','00002290'),('bayside','Bayside Medical Group','(510) 555-0186','Cedar Inlet Bank','0000831264'),('medicare','Medicare conditional payment (fictional case record)','(800) 555-0132','Bay Commerce Bank','00006320'),('expert','Marlowe Forensic Services','(510) 555-0131','Cedar Inlet Bank','00004610'),('reporter','Quay Court Reporting','(510) 555-0124','Bay Commerce Bank','00004892'),('clerk','Fictional County Filing Desk','(510) 555-0163','Bay Commerce Bank','00004590')]]
+    DATA['payees'] += [dict(id='title',name='Estuary Title Services',phone='(510) 555-0175',bank=dict(bank='Cedar Inlet Bank',account='0000319276',routing='000000000')),dict(id='bank',name='Bay Commerce Bank',phone='(510) 555-0120',bank=dict(bank='Bay Commerce Bank',account='00004417',routing='000000000'))]
+    DATA['payees'] += [dict(id=c['id'],name=c['name'],phone=c['phone'],bank=dict(bank='Cedar Inlet Bank',account=f'00007{i:05}',routing='000000000')) for i,c in enumerate(DATA['clients'],1)]
     DATA['payees'][1].update(email='billing@baysidemedical.com',verifiedDate='2026-06-10',sourceDocumentIds=['bayside-prior-letter','bayside-prior-confirmation'])
     DATA['fee-agreements']=[]
     for c in DATA['clients']:
@@ -72,7 +74,7 @@ def receipt(id,cid,day,amount,label,issuer='Quay Court Reporting'):
     return id
 def lien(id,cid,day,amount,version,valid,account):
     issuer='Bayside Medical Group' if cid!='c02' else 'Conditional Payment Recovery Desk (fictional)'
-    body=[f'Patient: {name(cid)}',f'Patient account: {account}',f'Lien payoff, revision {version}: {money(amount)}',f'Payoff valid through: {valid}','This amount replaces any earlier payoff quotation for this account.','Include the patient account number on the remittance.']
+    body=[f'Patient: {"Ma. Delgado" if id=="bayside-v1" else "Maria Delgado-Ruiz" if id=="bayside-v2" else name(cid)}',f'Patient account: {account}',f'Lien payoff, revision {version}: {money(amount)}',f'Payoff valid through: {valid}','This amount replaces any earlier payoff quotation for this account.','Include the patient account number on the remittance.']
     if cid!='c02':body+=['Bank on file: Cedar Inlet Bank','Routing: 000000000   Account: 0000831264','Billing: billing@baysidemedical.com','Confirm instructions at (510) 555-0186.']
     else:body+=['Program reference: Medicare conditional payment; synthetic claim MC-260318.','No real beneficiary or agency record is represented.']
     body+=['Sincerely,','/s/ Nora Ellis, Accounts Resolution']
@@ -127,7 +129,10 @@ def live():
     DATA['allocation-agreements']=[dict(id='allocation-global',documentId='allocation-global',matterId='m01',signed=True,date='2026-10-15',grossCents=12500000,sharedCostCents=450000,allocations=alloc)]
     doc('allocation-global','allocation_agreement','Joint Recovery Allocation Agreement',FIRM,'2026-10-15',['Delgado, Reyes & Bello v. Ridgeway Logistics','Harborline claim HL50877; one global recovery of $125,000.00.','Maria Delgado: 50% / $62,500.00; shared costs $2,250.00.','Tomas Reyes: 30% / $37,500.00; shared costs $1,350.00.','Ana Bello: 20% / $25,000.00; shared costs $900.00.','Total shared costs $4,500.00, apportioned in these same percentages.','Supplemental recovery on this claim follows the same 50/30/20 allocation.','Each client retains a separate fee agreement; fees are calculated after allocation.',*signed('Maria Delgado','10/15/2026'),*signed('Tomas Reyes','10/15/2026'),*signed('Ana Bello','10/15/2026')],amounts=[12500000,6250000,3750000,2500000,450000,225000,135000,90000])
     for id,amt,label,issuer in [('global-expert',300000,'Collision reconstruction: 4 hours x $750.00','Marlowe Forensic Services'),('global-reporter',105000,'Deposition transcript and attendance','Quay Court Reporting'),('global-filing',45000,'Civil complaint filing fee','Fictional County Filing Desk')]:
-        receipt(id,'c01','2026-10-12',amt,label,issuer);DATA['cost-receipts'][-1].update(clientId=None,allocationAgreementId='allocation-global',shared=True)
+        receipt(id,'c01',{'global-filing':'2026-03-03','global-reporter':'2026-04-16','global-expert':'2026-09-28'}[id],amt,label,issuer);DATA['cost-receipts'][-1].update(clientId=None,allocationAgreementId='allocation-global',shared=True)
+        if id=='global-expert':
+            DATA['cost-receipts'][-1]['lines']=[dict(hours=4,rateCents=75000,amountCents=300000)]
+            DOCS[-1]['amountCents'].append(75000)
     lien('bayside-v1','c01','2026-10-14',1200000,1,'2026-10-20','BG-50877-D')
     lien('bayside-v2','c01','2026-10-21',1450000,2,'2026-11-15','BG-50877-D')
     lien('reyes-conditional','c02','2026-10-14',320000,1,'2026-11-15','MC-260318')
@@ -143,7 +148,9 @@ def live():
         for cid,vals in values:
             body+=[name(cid)+' | Allocation '+money(sum(vals))]
             for kind,amt in zip(['Attorney fee','Costs reimbursed to firm','Medical lien','Net to client'],vals):
-                if amt:body+=[f'    {kind}: {money(amt)}']
+                if amt:
+                    label=('Bayside Medical Group lien' if cid=='c01' else 'Medicare conditional payment') if kind=='Medical lien' else kind
+                    body+=[f'    {label}: {money(amt)}']
         body+=['Total distributions: $125,000.00','Client signatures:']
         body+=['/s/ Maria Delgado    /s/ Tomas Reyes    /s/ Ana Bello','Signed October 19, 2026'] if version==1 else ['Maria Delgado: __________________  Date: __________','Tomas Reyes: _____________________  Date: __________','Ana Bello: _______________________  Date: __________']
         doc(id,'settlement_statement',f'Settlement Statement - Version {version}',FIRM,day,body,amounts=[12500000]+[l['amountCents'] for l in lines]+[6250000,3750000,2500000])
@@ -159,7 +166,7 @@ def live():
     (ROOT/'documents/bayside-bank-change.eml').write_bytes(('\r\n'.join(body[:4]+['Message-ID: <bg50877-20261022@example.test>','MIME-Version: 1.0','Content-Type: text/plain; charset=utf-8','']+body[4:])+'\r\n').encode())
 def book():
     TX.sort(key=lambda t:(t['postedDate'],t['id']))
-    balance=0;ledgers=defaultdict(int);journal=[];disbursements=[];recs=[]
+    balance=0;ledgers=defaultdict(int,{c['id']:0 for c in DATA['clients']});ledgers['firm']=0;journal=[];disbursements=[];recs=[]
     for month in range(5,11):
         rows=[];opening=balance
         for t in [t for t in TX if t['postedDate'].startswith(f'2026-{month:02}')]:
@@ -194,27 +201,43 @@ def render(d):
     out=io.BytesIO();c=canvas.Canvas(out,pagesize=(612,792),invariant=1,pageCompression=1)
     c.setTitle(d['title']);c.setAuthor(d['issuer']);c.setCreator('Hartwell fictional fixture generator')
     check_=d['kind']=='check'
-    if check_:
-        c.setFillColorRGB(.96,.97,.93);c.rect(32,290,548,434,fill=1,stroke=0)
-        c.setStrokeColorRGB(.3,.4,.35);c.rect(38,296,536,422,fill=0,stroke=1)
-        for x in range(42,570,12):c.setStrokeColorRGB(.89,.91,.86);c.line(x,300,x,710)
-    c.setFillColorRGB(.12,.18,.23);c.setFont('Times-Bold',19 if len(d['issuer'])<43 else 14)
-    c.drawString(48,744 if not check_ else 688,d['issuer']);c.setFont('Helvetica',8)
-    addr=ADDRESS if d['issuer']==FIRM else '726 Lantern Wharf, Suite 230 | Oakland, CA 94607'
+    addr={FIRM:ADDRESS,'Bayside Medical Group':'726 Lantern Wharf, Suite 230 | Oakland, CA 94607','Harborline Mutual Insurance':'742 Pelican Reach, Suite 210 | Oakland, CA 94607','Bay Commerce Bank':'1128 Bracken Plaza | Oakland, CA 94612','Marlowe Forensic Services':'391 Alder Landing | Oakland, CA 94607','Quay Court Reporting':'824 Cormorant Row | Oakland, CA 94612'}.get(d['issuer'],'583 Willow Anchorage | Oakland, CA 94612')
     phone='(510) 555-0186' if d['issuer']=='Bayside Medical Group' else PHONE if d['issuer']==FIRM else '(510) 555-0131'
-    c.drawString(48,728 if not check_ else 671,addr);c.drawString(48,715 if not check_ else 658,'Telephone: '+phone)
-    c.setStrokeColorRGB(.3,.35,.4);c.line(48,704 if not check_ else 648,564,704 if not check_ else 648)
-    c.setFont('Helvetica-Bold',12);c.drawString(48,682 if not check_ else 627,d['title'])
-    c.setFont('Helvetica',9);c.drawRightString(564,664 if not check_ else 610,d['date'])
-    y=638 if not check_ else 580;fontsize=10 if d['kind']!='settlement_statement' else 9;leading=17 if d['kind']!='settlement_statement' else 16
-    for line in d['body']:
-        for part in textwrap.wrap(line,width=88 if fontsize==10 else 100,replace_whitespace=False) or ['']:
-            assert y>65,(d['id'],'overflow',y)
-            c.setFont('Courier' if d['kind']=='email' else 'Times-Roman',fontsize if d['kind']!='email' else 9)
-            c.drawString(52,y,part);y-=leading
-        y-=3
-    if check_:c.setFont('Courier',12);c.drawString(60,310,'|:000000000|:  00004417  ||  '+d['checkNumber'])
+    if check_:
+        c.setFillColorRGB(.95,.97,.94);c.rect(32,400,548,290,fill=1,stroke=0)
+        for x in range(35,580,8):
+            c.setStrokeColorRGB(.87,.90,.87);c.line(x,403,x,687)
+        c.setStrokeColorRGB(.25,.35,.3);c.rect(32,400,548,290,fill=0,stroke=1)
+        c.setFillColorRGB(.12,.18,.16);c.setFont('Times-Bold',16);c.drawString(48,662,d['issuer'])
+        c.setFont('Helvetica',8);c.drawString(48,648,addr);c.drawString(48,636,'Telephone: '+phone)
+        c.setFont('Helvetica-Bold',10);c.drawRightString(562,665,'No. '+d['checkNumber']);c.setFont('Helvetica',9);c.drawRightString(562,623,'Date: '+d['date'])
+        c.setFont('Helvetica',7);c.drawString(48,595,'PAY TO THE');c.drawString(48,585,'ORDER OF')
+        c.setFont('Times-Roman',11);c.drawString(108,588,FIRM+' Client Trust');c.line(106,580,438,580)
+        c.setFillColorRGB(1,1,1);c.rect(446,577,116,25,fill=1,stroke=1);c.setFillColorRGB(.12,.18,.16);c.setFont('Helvetica-Bold',12);c.drawRightString(555,585,money(d['amountCents'][0]))
+        c.setFont('Times-Roman',11);c.drawString(48,550,d['body'][5]);c.line(48,542,562,542)
+        c.setFont('Helvetica',9);c.drawString(48,522,'Bay Commerce Bank');c.setFont('Helvetica',8);c.drawString(48,508,'Settlement claims account - non-negotiable specimen')
+        c.drawString(48,482,d['body'][7]);c.line(48,476,348,476)
+        c.setFont('Times-Italic',13);c.drawString(405,479,'Evan Mercer');c.line(390,473,562,473)
+        c.setFont('Helvetica',6);c.drawString(400,463,'AUTHORIZED SIGNATURE');c.drawString(48,448,'NON-NEGOTIABLE - FICTIONAL DEMO CHECK')
+        c.setFont('Courier',12);c.drawString(60,418,'|:000000000|:  00006138  ||  '+d['checkNumber'])
+    else:
+        email=d['kind']=='email'
+        c.setFillColorRGB(.12,.18,.23);c.setFont('Helvetica-Bold' if email else 'Times-Bold',19 if len(d['issuer'])<43 else 14)
+        c.drawString(48,744,'Mail - Sam Whitfield' if email else d['issuer']);c.setFont('Helvetica',8)
+        c.drawString(48,728,'Printed 10/22/2026 4:49 PM | 1 message' if email else addr)
+        c.drawString(48,715,'Mailbox: sam@hartwell-moreno.example.test' if email else 'Telephone: '+phone)
+        c.setStrokeColorRGB(.3,.35,.4);c.line(48,704,564,704)
+        c.setFont('Helvetica-Bold',12);c.drawString(48,682,d['title']);c.setFont('Helvetica',9);c.drawRightString(564,664,d['date'])
+        y=638;fontsize=10 if d['kind']!='settlement_statement' else 9;leading=17 if d['kind']!='settlement_statement' else 16
+        for line in d['body']:
+            for part in textwrap.wrap(line,width=88 if fontsize==10 else 100,replace_whitespace=False) or ['']:
+                assert y>65,(d['id'],'overflow',y)
+                c.setFont('Courier' if email else 'Times-Roman',9 if email else fontsize);c.drawString(52,y,part);y-=leading
+            y-=3
     c.setFont('Helvetica',7);c.setFillColorRGB(.4,.4,.4);c.drawString(48,38,'FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE');c.drawRightString(564,38,d['id']+' | 1');c.drawString(48,26,'Enclosure: file copy');c.save();clean=out.getvalue()
+    with fitz.open(stream=clean,filetype='pdf') as original:
+        original_text=' '.join(page.get_text() for page in original)
+        for amount in d['amountCents']:assert money(amount) in original_text,(d['id'],amount,'missing in PDF before rasterization')
     if d['scanned']:
         pdf=fitz.open(stream=clean,filetype='pdf');pix=pdf[0].get_pixmap(matrix=fitz.Matrix(1.6,1.6));im=Image.frombytes('RGB',[pix.width,pix.height],pix.samples).convert('L')
         seed=int(hashlib.sha256(d['id'].encode()).hexdigest()[:12],16);r=random.Random(seed);angle=r.uniform(.3,1.2)*r.choice([-1,1]);im=im.rotate(angle,Image.Resampling.BICUBIC,fillcolor=249)
