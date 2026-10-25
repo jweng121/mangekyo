@@ -39,7 +39,7 @@ async function findRun(ctx: MutationCtx, runId: string) {
 }
 
 /** The deposit's matter (from its signed settlement statement) and the client: the owner the deposit is allocated to, else the one the statement names. */
-function matterOf(loaded: LoadedAccount, bankSourceId: string) {
+export function matterOf(loaded: LoadedAccount, bankSourceId: string) {
   const deposit = loaded.state.bankTransactions.find(t => t.sourceId === bankSourceId);
   if (!deposit) throw new ConvexError("Unknown deposit for this account.");
   const matter = matterForDeposit(deposit, loaded.documents);

@@ -108,6 +108,7 @@ Commands from the repository root, pnpm as `npx --yes pnpm@10.20.0`.
 | Final `… typecheck` | exit 0 |
 | Final `… test` | 37 files, 269 tests, all pass (after the superseded-card and pool-figure fixes and the merge of `origin/main`) |
 | Final `… build:finance` | exit 0 |
+| `edwin-smoke`: `… typecheck` / `… test` / `… build:finance` | exit 0 / 38 files, 279 tests, all pass / exit 0 (adds the real-agent smoke test, §14, with 10 fake-HTTP tests) |
 
 Browser click-through: ten feed steps on `demo:account:pool-026`, see [lawfirm-progress.md](lawfirm-progress.md).
 
@@ -134,7 +135,7 @@ Each `creao-<agent>-agent.md` has the steps: create the CREAO agent with one `fi
 
 ## 13. Limits and not done
 
-- **No real run of any agent.** CREAO and external adapters are verified with fake HTTP only. The default external model IDs are configurable and should be checked against the providers' current catalogues before use.
+- **No real run of any agent.** CREAO and external adapters are verified with fake HTTP only. §14 is the one-call smoke test to try each agent for real. The default external model IDs are configurable and should be checked against the providers' current catalogues before use.
 - **Backend only.** The desk has no card for Disbursement runs (the three lines appear as ordinary payment proposals), disputes, audits, monthly reports, step snapshots or agent configuration; see [agent-api.md](agent-api.md).
 - **Paid checker on a disbursement run** polls inside the action for up to the run deadline rather than through scheduled polls.
 - **Eval cases are recorded for Trust Intake only.** `evaluateInstructions` refuses other agents with a message.
@@ -142,3 +143,78 @@ Each `creao-<agent>-agent.md` has the steps: create the CREAO agent with one `fi
 - **A2 good funds** reconstructs cleared money from the bank feed's current clearing status, so a deposit that cleared after a payout is judged by the time order of entries, not by a historical clearing timestamp (the feed doesn't record one).
 - **The browser click-through** of the ten-step feed ran once on `demo:account:pool-026` (local desk on :3001, dev deployment, zero console errors; screenshots in `docs/screenshots/trust-agents/`). The push of this branch's functions to the shared dev deployment (`convex dev --once`) replaced the previous branch's code there, as before; no environment variable was changed.
 - Left untouched: `packages/visual-audit`, `scripts/monitored-agent`, the teammate's ERP data, the uncommitted `packages/visual-audit/playground/next-env.d.ts` and `stash@{0}`.
+
+## 14. Real-agent smoke test
+
+`convex/financeSmoke.ts`, branch `edwin-smoke`. `financeSmoke:runAgentOnce({agent})` is an internal action (run it from the CLI; no client can call it). It calls one agent once on that agent's normal frozen input for a fixed law-firm case, on a fresh DEMO account (the next `demo:account:pool-NNN`), and runs the agent's normal strict validator on the answer.
+
+| `agent` | Frozen input | Built with |
+| --- | --- | --- |
+| `intake` | Harborline's $85,000.00 check for Maria Delgado, cleared | `buildDepositRecordSet` + `buildIntakeInput` (the same code as every Intake attempt) |
+| `disbursement` | the Delgado matter after the deposit cleared and was allocated to her | `matterOf` + `buildDisbursementInput` |
+| `evidence_checker` | the mock Intake's claims for that deposit | `codeCheckClaims` + `buildCheckerInput` |
+| `reconciler` | Daniel Okafor's $2,500.00 retainer check, allocated to him, then returned by the bank (`client-check-return`) | `reconcilableCauses` + `buildReconciliationInput` |
+| `auditor` | the auditor drill's posted history (four planted mistakes) over the drill period | `drillHistory` + `auditInputFrom` |
+
+What it does and doesn't do:
+- **Refuses unless that agent's mode is `creao` or `external`**, and unless its credentials are set, before it creates or sends anything.
+- **Counts one real run** (`financeRealRuns`, provider = the agent) and checks `MAX_REAL_RUNS_PER_DAY` first; past the limit it returns `ok: false` with `BUDGET_DAY_EXCEEDED` and calls nothing. The default limit is 5 a day, so all five smoke runs fit only if nothing else ran for real that UTC day. For `evidence_checker` the Intake claims come from the mock Intake, so it costs one run too.
+- **Never posts money.** The account gets the law-firm fixture through the normal import with automatic starts off (no investigation, reconciler or disbursement is scheduled). The allocation, the returned check and the drill's history exist only in the frozen input; the account's ledger holds import entries only. The answer is validated and returned, never checked further, queued or posted.
+- **No automatic retry.** One start, then polls every 3 s (CREAO) for up to 8 minutes; an unfinished CREAO run comes back as `provider_timeout` with its external run ID.
+- Saves two step snapshots on run `smoke:<account>:<agent>:run:1` (`input_frozen`, then `output_validated` or `failed`), readable with `financeAgentApi:getRunSteps`.
+
+It returns `{agent, mode, model, appId, runId, accountId, ok, outcome, validationErrors, error, rawOutputPreview, durationMs}`. `outcome` is the validated answer's outcome (`proposal_ready`, `needs_information`, `correction_proposed`; the checker's `passed`/`rejected`; the auditor's `findings`/`clean`). `validationErrors` are the validator's `{path, reason}` details. `rawOutputPreview` is the first 2,000 characters of the agent's answer, or of the provider's last response body when there was no usable answer (a fenced or prose reply, a CREAO failure). `error` is `{code, message}` or null; it never contains a key.
+
+### Commands (PowerShell, repository root)
+
+The functions are on the dev deployment (`convex dev --once` from this branch). Each agent's CREAO app and app-scoped `capi_` key must be set once; an app-scoped key only works for its own app, so the Intake key can't be reused for the others:
+
+```powershell
+npx convex env set CREAO_DISBURSEMENT_APP_ID "<app id>"
+npx convex env set CREAO_DISBURSEMENT_API_KEY "<capi_ key>"
+# likewise CREAO_EVIDENCE_CHECKER_*, CREAO_RECONCILER_*, CREAO_AUDITOR_*. Intake already uses CREAO_APP_ID / CREAO_API_KEY.
+```
+
+Then, one agent at a time. Keep the desk idle between the first and last line: while an agent is `creao`, anything that starts that agent automatically (the Evidence Checker on any mock Intake run, the Reconciler on any new mismatch) would be a real run too.
+
+Trust Intake:
+
+```powershell
+npx convex env set INTAKE_MODE creao
+npx convex run financeSmoke:runAgentOnce "{agent: 'intake'}"
+npx convex env set INTAKE_MODE mock
+```
+
+Disbursement:
+
+```powershell
+npx convex env set DISBURSEMENT_MODE creao
+npx convex run financeSmoke:runAgentOnce "{agent: 'disbursement'}"
+npx convex env set DISBURSEMENT_MODE mock
+```
+
+Evidence Checker:
+
+```powershell
+npx convex env set EVIDENCE_CHECKER_MODE creao
+npx convex run financeSmoke:runAgentOnce "{agent: 'evidence_checker'}"
+npx convex env set EVIDENCE_CHECKER_MODE mock
+```
+
+Three-Way Reconciler:
+
+```powershell
+npx convex env set RECONCILER_MODE creao
+npx convex run financeSmoke:runAgentOnce "{agent: 'reconciler'}"
+npx convex env set RECONCILER_MODE mock
+```
+
+Trust Compliance Auditor:
+
+```powershell
+npx convex env set AUDITOR_MODE creao
+npx convex run financeSmoke:runAgentOnce "{agent: 'auditor'}"
+npx convex env set AUDITOR_MODE mock
+```
+
+The argument is JSON5 (the CLI parses it that way), so `"{agent: 'intake'}"` passes through Windows PowerShell 5.1 and PowerShell 7 alike. To read the two saved steps afterwards: `npx convex run financeAgentApi:getRunSteps "{runId: '<runId from the result>'}"`. For an external model instead of CREAO, set `<AGENT>_EXTERNAL_API_KEY` and use `external` in place of `creao`; if a long answer hits the 20 s default call timeout (`provider_start_ambiguous`), set `PROVIDER_TIMEOUT_MS` to `120000` for the run.

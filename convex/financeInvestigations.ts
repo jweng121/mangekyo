@@ -3,7 +3,7 @@ import {
   FINANCE_INPUT_VERSION, FINANCE_INSTRUCTION_VERSION,
   type FinanceAgentInput, type FinanceAgentOutput, type FinanceInvestigationRun, type LockResult,
   type InvestigationEvent, type InvestigationEventType, type InvestigationError,
-  type InvestigationStartScope, type InvestigationScope, type TaskInvestigationView,
+  type InvestigationStartScope, type InvestigationScope, type TaskInvestigationView, type ThreeWayCheckResult,
 } from "@mangekyo/contracts";
 import type { CorrectionKind } from "@mangekyo/contracts/orchestration";
 import { runDeterministicChecks } from "@mangekyo/finance-core/checks";
@@ -154,6 +154,21 @@ async function applyInputCorrections(ctx: MutationCtx, taskId: string, records: 
   return next;
 }
 
+/** Exactly what the Trust Intake agent is given for one attempt (also the smoke test's input). */
+export function buildIntakeInput(args: {
+  caseId: string; taskId: string; runId: string; scope: InvestigationScope; now: number; records: FinanceAgentInput["records"]; threeWay: ThreeWayCheckResult | null;
+  approvedPolicies: FinanceAgentInput["approvedPolicies"]; humanClarifications: FinanceAgentInput["humanClarifications"];
+}): FinanceAgentInput {
+  const { records, scope } = args;
+  const evidenceRefs = records.documents.map((document) => ({ documentId: document.documentId, sourceId: document.sourceId, excerpt: document.excerpt }));
+  const providerInput: FinanceAgentInput = {
+    schemaVersion: FINANCE_INPUT_VERSION, instructionVersion: FINANCE_INSTRUCTION_VERSION, caseId: args.caseId,
+    taskId: args.taskId, runId: args.runId, scope, contextAsOf: args.now, records, evidenceRefs, deterministicChecks: { ...runDeterministicChecks(records, scope), ...(args.threeWay ? { threeWay: args.threeWay } : {}) }, approvedPolicies: args.approvedPolicies, humanClarifications: args.humanClarifications,
+  };
+  if (JSON.stringify(providerInput).length > 180_000) throw new Error("Evidence context exceeds the safe development snapshot size; narrow the source adapter");
+  return providerInput;
+}
+
 async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requestedScope: InvestigationStartScope, parent: Doc<"financeInvestigationRuns"> | null, cause: AttemptCause): Promise<StartResult> {
   const now = Date.now();
   const scope: InvestigationScope = { ...requestedScope, cutoff: requestedScope.cutoff ?? now };
@@ -194,12 +209,7 @@ async function makeAttempt(ctx: MutationCtx, task: Doc<"financeTasks">, requeste
   const approvedPolicies = (await ctx.db.query("financeApprovedPolicies")
     .withIndex("by_accountId_and_currency_and_approvedAt", (q) => q.eq("accountId", scope.accountId).eq("currency", scope.currency).lte("approvedAt", scope.cutoff)).take(101)).map(recordOnly);
   if (approvedPolicies.length > 100) throw new Error("Context exceeds the bounded development policy/clarification limit");
-  const evidenceRefs = records.documents.map((document) => ({ documentId: document.documentId, sourceId: document.sourceId, excerpt: document.excerpt }));
-  const providerInput: FinanceAgentInput = {
-    schemaVersion: FINANCE_INPUT_VERSION, instructionVersion: FINANCE_INSTRUCTION_VERSION, caseId: task.caseId,
-    taskId: task.taskId, runId, scope, contextAsOf: now, records, evidenceRefs, deterministicChecks: { ...runDeterministicChecks(records, scope), ...(intake ? { threeWay: intake.threeWay } : {}) }, approvedPolicies, humanClarifications,
-  };
-  if (JSON.stringify(providerInput).length > 180_000) throw new Error("Evidence context exceeds the safe development snapshot size; narrow the source adapter");
+  const providerInput = buildIntakeInput({ caseId: task.caseId, taskId: task.taskId, runId, scope, now, records, threeWay: intake?.threeWay ?? null, approvedPolicies, humanClarifications });
   const provenance = provenanceFor("intake");
   const checkerProvenance = provenanceFor("evidence_checker");
   const run: FinanceInvestigationRun = {
