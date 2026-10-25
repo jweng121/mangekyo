@@ -19,6 +19,7 @@ import type * as financeOrchestrator from "../financeOrchestrator.js";
 import type * as financeProposals from "../financeProposals.js";
 import type * as financeReconciliation from "../financeReconciliation.js";
 import type * as financeScorecard from "../financeScorecard.js";
+import type * as financeSmoke from "../financeSmoke.js";
 import type * as financeTrust from "../financeTrust.js";
 import type * as lib_agents from "../lib/agents.js";
 import type * as lib_investigationRecords from "../lib/investigationRecords.js";
@@ -46,6 +47,7 @@ declare const fullApi: ApiFromModules<{
   financeProposals: typeof financeProposals;
   financeReconciliation: typeof financeReconciliation;
   financeScorecard: typeof financeScorecard;
+  financeSmoke: typeof financeSmoke;
   financeTrust: typeof financeTrust;
   "lib/agents": typeof lib_agents;
   "lib/investigationRecords": typeof lib_investigationRecords;

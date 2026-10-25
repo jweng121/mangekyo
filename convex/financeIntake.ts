@@ -38,7 +38,8 @@ async function upsert(ctx: MutationCtx, table: SourceTable, row: { sourceId: str
 
 const importResult = v.object({ accountId: v.string(), inserted: v.number(), updated: v.number(), unchanged: v.number(), entriesInserted: v.number(), issues: v.array(money.issue) });
 
-export async function importBundle(ctx: MutationCtx, bundle: NormalizedAccountBundle, system: "erp" | "demo") {
+/** `automatic: false` imports without scheduling investigations or the reconciler (the smoke test's fresh accounts start nothing). */
+export async function importBundle(ctx: MutationCtx, bundle: NormalizedAccountBundle, system: "erp" | "demo", options: { automatic?: boolean } = {}) {
   const now = Date.now();
   const accountId = bundle.account.accountId;
   const counts = { inserted: 0, updated: 0, unchanged: 0 };
@@ -73,6 +74,7 @@ export async function importBundle(ctx: MutationCtx, bundle: NormalizedAccountBu
   await appendMoneyEvent(ctx, { accountId, type: "finance.money.import_completed", actor: SYSTEM, operationId: `import:${accountId}:${now}`, stage: "import",
     message: `${system} import: ${counts.inserted} inserted, ${counts.updated} updated, ${counts.unchanged} unchanged source records; ${entriesInserted} new ledger entries; ${issues.length} issue(s).`,
     threeWay: checkAccount(loaded.state, now), sourceIds: issues.map(row => row.rawId) });
+  if (options.automatic === false) return { accountId, ...counts, entriesInserted, issues };
   // A bulk import (more than 10 new deposits, e.g. the 200-deposit batch) starts its investigations a little apart: every settle reads the
   // whole account for the lock, so hundreds settling at once mostly conflict with each other.
   let order = 0;

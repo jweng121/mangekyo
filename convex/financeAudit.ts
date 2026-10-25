@@ -1,5 +1,5 @@
 import { ConvexError, v } from "convex/values";
-import type { LedgerEntry, MoneyProposal, ProposalTransition } from "@mangekyo/contracts";
+import type { LedgerEntry, MoneyProposal, NormalizedBankTransaction, ProposalTransition } from "@mangekyo/contracts";
 import type { AuditFinding, AuditReport, OrchestratorActor } from "@mangekyo/contracts/orchestration";
 import { FinanceProviderError } from "@mangekyo/finance-core/agent";
 import { createAgentProvider } from "@mangekyo/finance-core/agents";
@@ -41,13 +41,17 @@ async function signedMonths(ctx: QueryCtx | MutationCtx, accountId: string): Pro
 }
 
 async function auditInputFor(ctx: QueryCtx | MutationCtx, loaded: LoadedAccount, runId: string, from: number, to: number): Promise<AuditInput> {
-  const transitions = await transitionsFor(ctx, loaded.proposals);
+  return auditInputFrom(loaded, await transitionsFor(ctx, loaded.proposals), await signedMonths(ctx, loaded.state.account.accountId), runId, from, to);
+}
+
+/** The auditor's frozen input from an account's records, its proposals' transitions and its signed months. */
+export function auditInputFrom(loaded: Pick<LoadedAccount, "state" | "proposals" | "documents" | "obligations">, transitions: ProposalTransition[], months: string[], runId: string, from: number, to: number): AuditInput {
   return buildAuditInput({
     runId, accountId: loaded.state.account.accountId, currency: loaded.state.account.currency, period: { from, to },
     owners: loaded.state.owners.map(o => ({ ownerId: o.ownerId, sourceId: o.sourceId, name: o.name, ...(o.ownerKind ? { ownerKind: o.ownerKind } : {}) })),
     entries: loaded.state.entries, bankTransactions: loaded.state.bankTransactions, proposals: loaded.proposals, transitions,
     documents: loaded.documents.map(d => ({ sourceId: d.sourceId, title: d.title, namedOwnerSourceIds: d.namedOwnerSourceIds, ...(d.signed !== undefined ? { signed: d.signed } : {}), ...(d.matterId ? { matterId: d.matterId } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.feeBasisPoints ? { feeBasisPoints: d.feeBasisPoints } : {}) })),
-    invoices: loaded.obligations.filter(o => o.kind === "invoice"), disputes: loaded.state.disputes ?? [], signedMonths: await signedMonths(ctx, loaded.state.account.accountId),
+    invoices: loaded.obligations.filter(o => o.kind === "invoice"), disputes: loaded.state.disputes ?? [], signedMonths: months,
   });
 }
 
@@ -193,40 +197,50 @@ export const listAuditReports = query({
 const RILEY = "dev-unverified:riley";
 const SAM = "dev-unverified:sam";
 
+/** The drill's four mistakes as posted-history rows: the drill inserts them, the smoke test freezes them without writing. */
+export function drillHistory(accountId: string, t0: number): { proposals: MoneyProposal[]; transitions: ProposalTransition[]; entries: LedgerEntry[]; bankTransactions: NormalizedBankTransaction[] } {
+  const id = (suffix: string) => lawId(accountId, suffix);
+  const history = { proposals: [] as MoneyProposal[], transitions: [] as ProposalTransition[], entries: [] as LedgerEntry[], bankTransactions: [] as NormalizedBankTransaction[] };
+  const base = { accountId, currency: "USD", status: "posted" as const };
+  const proposal = (p: Omit<MoneyProposal, "accountId" | "currency" | "createdAt" | "updatedAt" | "origin">, approvedBy: string, approvedAt: number) => {
+    history.proposals.push({ ...p, accountId, currency: "USD", origin: { type: "person" }, createdAt: approvedAt - 1000, updatedAt: approvedAt, approvedBy, approvalId: `${p.proposalId}:transition:2` });
+    history.transitions.push({ transitionId: `${p.proposalId}:transition:2`, proposalId: p.proposalId, accountId, from: "pending_approval", to: "approved", actor: approvedBy, reason: null, lock: null, at: approvedAt });
+    history.transitions.push({ transitionId: `${p.proposalId}:transition:3`, proposalId: p.proposalId, accountId, from: "approved", to: "posted", actor: approvedBy, reason: null, lock: null, at: approvedAt + 1 });
+  };
+  const entry = (e: Omit<LedgerEntry, "accountId" | "currency" | "status">) => { history.entries.push({ ...base, ...e }); };
+  // 1. Self-approved: riley requested, approved and posted her own $1,500 payment for Westbrook HOA.
+  proposal({ proposalId: `${accountId}:pay:drill-1`, kind: "payment", status: "posted", requestedBy: RILEY, evidenceSourceIds: [id("document:westbrook-settlement:v1")], ownerId: id("owner:westbrook"), amountCents: 150_000, purpose: "Westbrook HOA filing fees (drill)", postedEntryIds: ["drill:self-approved:entry:1"] }, RILEY, t0);
+  entry({ entryId: "drill:self-approved:entry:1", ownerId: id("owner:westbrook"), amountCents: -150_000, kind: "disbursement", sourceRefs: [id("document:westbrook-settlement:v1")], proposalId: `${accountId}:pay:drill-1`, approvalId: `${accountId}:pay:drill-1:transition:2`, bankReference: `PAY:${accountId}:pay:drill-1`, memo: "Westbrook HOA filing fees (drill)", effectiveAt: t0, createdAt: t0, createdBy: RILEY });
+  // 2. Payout before funds cleared: Harborline's $85,000 check is still pending, yet $56,000 went to Maria Delgado.
+  const deposit = id("bank:txn:drill-harborline");
+  history.bankTransactions.push({ sourceId: deposit, accountId, subAccount: "IOLTA", direction: "inflow", amountCents: 8_500_000, currency: "USD", bookedAt: t0 + 1000, clearing: "pending", reference: "Claim HL-44812", counterparty: "Harborline Insurance", ownerHintSourceId: null, documentSourceIds: [id("document:delgado-settlement:v1")], duplicateOfSourceId: null, raw: { system: "demo", recordType: "bank-transaction", rawId: "drill-harborline", datasetVersion: "law-firm-demo-v1" } });
+  entry({ entryId: `import:${deposit}`, ownerId: null, amountCents: 8_500_000, kind: "deposit_received", sourceRefs: [deposit], fundsSourceId: deposit, memo: "Deposit received from bank feed; unallocated", effectiveAt: t0 + 1000, createdAt: t0 + 1000, createdBy: "import:demo-adapter" });
+  proposal({ proposalId: `${accountId}:alloc:drill-2`, kind: "allocation", status: "posted", requestedBy: RILEY, evidenceSourceIds: [deposit, id("document:delgado-settlement:v1")], bankSourceId: deposit, shares: [{ ownerId: id("owner:maria-delgado"), amountCents: 8_500_000 }], amountCents: 8_500_000, purpose: "Delgado settlement (drill)", postedEntryIds: ["drill:alloc:entry:1", "drill:alloc:entry:2"] }, SAM, t0 + 2000);
+  entry({ entryId: "drill:alloc:entry:1", ownerId: null, amountCents: -8_500_000, kind: "allocation", sourceRefs: [deposit], fundsSourceId: deposit, proposalId: `${accountId}:alloc:drill-2`, approvalId: `${accountId}:alloc:drill-2:transition:2`, memo: "Allocate to Maria Delgado", effectiveAt: t0 + 2000, createdAt: t0 + 2000, createdBy: SAM });
+  entry({ entryId: "drill:alloc:entry:2", ownerId: id("owner:maria-delgado"), amountCents: 8_500_000, kind: "allocation", sourceRefs: [deposit], fundsSourceId: deposit, proposalId: `${accountId}:alloc:drill-2`, approvalId: `${accountId}:alloc:drill-2:transition:2`, memo: "Delgado settlement (drill)", effectiveAt: t0 + 2000, createdAt: t0 + 2000, createdBy: SAM });
+  proposal({ proposalId: `${accountId}:pay:drill-2`, kind: "payment", status: "posted", requestedBy: RILEY, evidenceSourceIds: [id("document:delgado-settlement:v1")], ownerId: id("owner:maria-delgado"), amountCents: 5_600_000, purpose: "Delgado client share (drill)", payoutKind: "client_share", fundingSourceId: deposit, postedEntryIds: ["drill:uncleared:entry:1"] }, SAM, t0 + 3000);
+  entry({ entryId: "drill:uncleared:entry:1", ownerId: id("owner:maria-delgado"), amountCents: -5_600_000, kind: "disbursement", sourceRefs: [id("document:delgado-settlement:v1")], proposalId: `${accountId}:pay:drill-2`, approvalId: `${accountId}:pay:drill-2:transition:2`, bankReference: `PAY:${accountId}:pay:drill-2`, memo: "Delgado client share (drill)", effectiveAt: t0 + 3000, createdAt: t0 + 3000, createdBy: SAM });
+  // 3. Fee taken with no invoice: $3,000 attorney fee from Chen & Park to the firm, approved by sam, with nothing earning it.
+  proposal({ proposalId: `${accountId}:pay:drill-3`, kind: "payment", status: "posted", requestedBy: RILEY, evidenceSourceIds: [id("owner-record:chen-park")], ownerId: id("owner:chen-park"), payeeOwnerId: id("owner:firm"), amountCents: 300_000, purpose: "Chen & Park attorney fee (drill)", payoutKind: "attorney_fee", postedEntryIds: ["drill:fee:entry:1"] }, SAM, t0 + 4000);
+  entry({ entryId: "drill:fee:entry:1", ownerId: id("owner:chen-park"), amountCents: -300_000, kind: "fee", sourceRefs: [id("owner-record:chen-park")], proposalId: `${accountId}:pay:drill-3`, approvalId: `${accountId}:pay:drill-3:transition:2`, bankReference: `PAY:${accountId}:pay:drill-3`, memo: "Attorney fee to the firm (drill)", effectiveAt: t0 + 4000, createdAt: t0 + 4000, createdBy: SAM });
+  // 4. Unlinked reversal: a $1,200 reversal for James Nguyen that names an entry nobody can find.
+  entry({ entryId: "drill:reversal:entry:1", ownerId: id("owner:james-nguyen"), amountCents: 120_000, kind: "reversal", reversesEntryId: "drill:ghost-entry", sourceRefs: [id("owner-record:james-nguyen")], approvalId: "drill:reversal:approval", memo: "Reversal: refund of case fees (drill)", effectiveAt: t0 + 5000, createdAt: t0 + 5000, createdBy: SAM });
+  return history;
+}
+
 /** Plants four mistakes directly into a fresh law-firm account's posted history, runs the mock audit, and returns the account for scoring. */
 export const runAuditorDrill = mutation({
   args: {}, returns: v.object({ accountId: v.string(), reportId: v.union(v.string(), v.null()), scorecardId: v.string() }),
   handler: async (ctx) => {
     if (providerMode() !== "mock" || configFor("auditor").mode !== "mock") throw new ConvexError("The auditor drill runs only in mock mode.");
     const accountId = demoAccountId(await nextDemoRun(ctx));
-    const id = (suffix: string) => lawId(accountId, suffix);
     await importBundle(ctx, lawFirmBundle(accountId), "demo");
     const t0 = Date.now() - 3 * 86_400_000;
-    const base = { accountId, currency: "USD", status: "posted" as const };
-    const proposal = async (p: Omit<MoneyProposal, "accountId" | "currency" | "createdAt" | "updatedAt" | "origin">, approvedBy: string, approvedAt: number) => {
-      const row: MoneyProposal = { ...p, accountId, currency: "USD", origin: { type: "person" }, createdAt: approvedAt - 1000, updatedAt: approvedAt, approvedBy, approvalId: `${p.proposalId}:transition:2` };
-      await ctx.db.insert("financeProposals", compact(row));
-      await ctx.db.insert("financeProposalTransitions", { transitionId: `${p.proposalId}:transition:2`, proposalId: p.proposalId, accountId, from: "pending_approval", to: "approved", actor: approvedBy, reason: null, lock: null, at: approvedAt });
-      await ctx.db.insert("financeProposalTransitions", { transitionId: `${p.proposalId}:transition:3`, proposalId: p.proposalId, accountId, from: "approved", to: "posted", actor: approvedBy, reason: null, lock: null, at: approvedAt + 1 });
-    };
-    const entry = async (e: Omit<LedgerEntry, "accountId" | "currency" | "status">) => ctx.db.insert("financeLedgerEntries", compact({ ...base, ...e }));
-    // 1. Self-approved: riley requested, approved and posted her own $1,500 payment for Westbrook HOA.
-    await proposal({ proposalId: `${accountId}:pay:drill-1`, kind: "payment", status: "posted", requestedBy: RILEY, evidenceSourceIds: [id("document:westbrook-settlement:v1")], ownerId: id("owner:westbrook"), amountCents: 150_000, purpose: "Westbrook HOA filing fees (drill)", postedEntryIds: ["drill:self-approved:entry:1"] }, RILEY, t0);
-    await entry({ entryId: "drill:self-approved:entry:1", ownerId: id("owner:westbrook"), amountCents: -150_000, kind: "disbursement", sourceRefs: [id("document:westbrook-settlement:v1")], proposalId: `${accountId}:pay:drill-1`, approvalId: `${accountId}:pay:drill-1:transition:2`, bankReference: `PAY:${accountId}:pay:drill-1`, memo: "Westbrook HOA filing fees (drill)", effectiveAt: t0, createdAt: t0, createdBy: RILEY });
-    // 2. Payout before funds cleared: Harborline's $85,000 check is still pending, yet $56,000 went to Maria Delgado.
-    const deposit = id("bank:txn:drill-harborline");
-    await ctx.db.insert("financeBankTransactions", { sourceId: deposit, accountId, subAccount: "IOLTA", direction: "inflow", amountCents: 8_500_000, currency: "USD", bookedAt: t0 + 1000, clearing: "pending", reference: "Claim HL-44812", counterparty: "Harborline Insurance", ownerHintSourceId: null, documentSourceIds: [id("document:delgado-settlement:v1")], duplicateOfSourceId: null, raw: { system: "demo", recordType: "bank-transaction", rawId: "drill-harborline", datasetVersion: "law-firm-demo-v1" } });
-    await entry({ entryId: `import:${deposit}`, ownerId: null, amountCents: 8_500_000, kind: "deposit_received", sourceRefs: [deposit], fundsSourceId: deposit, memo: "Deposit received from bank feed; unallocated", effectiveAt: t0 + 1000, createdAt: t0 + 1000, createdBy: "import:demo-adapter" });
-    await proposal({ proposalId: `${accountId}:alloc:drill-2`, kind: "allocation", status: "posted", requestedBy: RILEY, evidenceSourceIds: [deposit, id("document:delgado-settlement:v1")], bankSourceId: deposit, shares: [{ ownerId: id("owner:maria-delgado"), amountCents: 8_500_000 }], amountCents: 8_500_000, purpose: "Delgado settlement (drill)", postedEntryIds: ["drill:alloc:entry:1", "drill:alloc:entry:2"] }, SAM, t0 + 2000);
-    await entry({ entryId: "drill:alloc:entry:1", ownerId: null, amountCents: -8_500_000, kind: "allocation", sourceRefs: [deposit], fundsSourceId: deposit, proposalId: `${accountId}:alloc:drill-2`, approvalId: `${accountId}:alloc:drill-2:transition:2`, memo: "Allocate to Maria Delgado", effectiveAt: t0 + 2000, createdAt: t0 + 2000, createdBy: SAM });
-    await entry({ entryId: "drill:alloc:entry:2", ownerId: id("owner:maria-delgado"), amountCents: 8_500_000, kind: "allocation", sourceRefs: [deposit], fundsSourceId: deposit, proposalId: `${accountId}:alloc:drill-2`, approvalId: `${accountId}:alloc:drill-2:transition:2`, memo: "Delgado settlement (drill)", effectiveAt: t0 + 2000, createdAt: t0 + 2000, createdBy: SAM });
-    await proposal({ proposalId: `${accountId}:pay:drill-2`, kind: "payment", status: "posted", requestedBy: RILEY, evidenceSourceIds: [id("document:delgado-settlement:v1")], ownerId: id("owner:maria-delgado"), amountCents: 5_600_000, purpose: "Delgado client share (drill)", payoutKind: "client_share", fundingSourceId: deposit, postedEntryIds: ["drill:uncleared:entry:1"] }, SAM, t0 + 3000);
-    await entry({ entryId: "drill:uncleared:entry:1", ownerId: id("owner:maria-delgado"), amountCents: -5_600_000, kind: "disbursement", sourceRefs: [id("document:delgado-settlement:v1")], proposalId: `${accountId}:pay:drill-2`, approvalId: `${accountId}:pay:drill-2:transition:2`, bankReference: `PAY:${accountId}:pay:drill-2`, memo: "Delgado client share (drill)", effectiveAt: t0 + 3000, createdAt: t0 + 3000, createdBy: SAM });
-    // 3. Fee taken with no invoice: $3,000 attorney fee from Chen & Park to the firm, approved by sam, with nothing earning it.
-    await proposal({ proposalId: `${accountId}:pay:drill-3`, kind: "payment", status: "posted", requestedBy: RILEY, evidenceSourceIds: [id("owner-record:chen-park")], ownerId: id("owner:chen-park"), payeeOwnerId: id("owner:firm"), amountCents: 300_000, purpose: "Chen & Park attorney fee (drill)", payoutKind: "attorney_fee", postedEntryIds: ["drill:fee:entry:1"] }, SAM, t0 + 4000);
-    await entry({ entryId: "drill:fee:entry:1", ownerId: id("owner:chen-park"), amountCents: -300_000, kind: "fee", sourceRefs: [id("owner-record:chen-park")], proposalId: `${accountId}:pay:drill-3`, approvalId: `${accountId}:pay:drill-3:transition:2`, bankReference: `PAY:${accountId}:pay:drill-3`, memo: "Attorney fee to the firm (drill)", effectiveAt: t0 + 4000, createdAt: t0 + 4000, createdBy: SAM });
-    // 4. Unlinked reversal: a $1,200 reversal for James Nguyen that names an entry nobody can find.
-    await entry({ entryId: "drill:reversal:entry:1", ownerId: id("owner:james-nguyen"), amountCents: 120_000, kind: "reversal", reversesEntryId: "drill:ghost-entry", sourceRefs: [id("owner-record:james-nguyen")], approvalId: "drill:reversal:approval", memo: "Reversal: refund of case fees (drill)", effectiveAt: t0 + 5000, createdAt: t0 + 5000, createdBy: SAM });
+    const history = drillHistory(accountId, t0);
+    for (const row of history.proposals) await ctx.db.insert("financeProposals", compact(row));
+    for (const row of history.transitions) await ctx.db.insert("financeProposalTransitions", row);
+    for (const row of history.bankTransactions) await ctx.db.insert("financeBankTransactions", row);
+    for (const row of history.entries) await ctx.db.insert("financeLedgerEntries", compact(row));
     const scorecardId = `${accountId}:scorecard:audit_drill`;
     await ctx.db.insert("financeScorecards", { scorecardId, accountId, kind: "audit_drill", count: DRILL_PLANTS.length, startedAt: Date.now() });
     await appendMoneyEvent(ctx, { accountId, type: "finance.money.import_completed", actor: { identity: "system:finance-money", authenticated: false, role: "system" }, operationId: scorecardId, stage: "audit_drill", message: `Auditor drill: ${DRILL_PLANTS.length} mistakes planted in posted history: ${DRILL_PLANTS.map(p => p.label).join(", ")}.` });
