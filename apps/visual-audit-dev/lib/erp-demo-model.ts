@@ -11,3 +11,11 @@ export function ownerBalances(rows:BankRow[]) {
   for(const row of rows)for(const allocation of row.allocations??(row.clientId?[{clientId:row.clientId,amountCents:row.amountCents}]:[]))balances[allocation.clientId]=(balances[allocation.clientId]??0)+allocation.amountCents;
   return balances;
 }
+
+export function initialImportBatches(rows:BankRow[]){
+ const boundary=rows.findIndex(row=>row.id==="harborline-deposit");
+ if(boundary<1)throw new Error("Settlement bank post missing");
+ const groups=new Map<string,BankRow[]>();
+ for(const row of rows.slice(0,boundary)){const month=row.postedDate.slice(0,7);groups.set(month,[...(groups.get(month)??[]),row]);}
+ return [...groups].map(([month,transactions])=>({month,transactions}));
+}

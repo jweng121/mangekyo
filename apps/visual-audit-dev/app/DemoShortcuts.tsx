@@ -20,6 +20,7 @@ export function DemoShortcuts(){
     setNotice(action==="reset"?"Demo reset. Pre-simulation data restored.":action==="connect"?"ERP connection started.":"Incoming data simulation started.");
     window.dispatchEvent(new Event("mangekyo:workspace-refresh"));
     if(action==="reset")router.push("/desk");
+    else if(action==="connect")router.push("/activity");
    }catch(error){setNotice((error as Error).message)}finally{pending.current=false}
   }
   window.addEventListener("keydown",handle);return()=>window.removeEventListener("keydown",handle);

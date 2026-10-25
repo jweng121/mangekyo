@@ -8,7 +8,7 @@ import {artifactDirectory,localTenantId,addRun,updateRun,appendAudit,appendCheck
 import {captureStructuredCheckpoint} from "./capture-agent";
 import {capturePdfRead} from "./pdf-evidence";
 import {evidenceWorker} from "./evidence-worker";
-import {checkSettlement,ownerBalances,type BankRow,type DemoState} from "./erp-demo-model";
+import {checkSettlement,ownerBalances,initialImportBatches,type BankRow,type DemoState} from "./erp-demo-model";
 export const fixtureRoot=path.resolve(process.cwd(),"../../packages/finance-core/fixtures/hartwell");
 export async function fixture<T=any[]>(name:string):Promise<T>{return JSON.parse(await readFile(path.join(fixtureRoot,"erp",name+".json"),"utf8"));}
 const file=()=>path.join(artifactDirectory(),"..","erp-simulation.json");
@@ -72,18 +72,42 @@ async function settlementEvidence(r:InvestigationRun){
 export async function executeDemo(action:string,sessionId:string){
  const mutate=(fn:(s:DemoState)=>void)=>updateDemo(s=>{if(s.sessionId!==sessionId)throw new Error("Demo reset");fn(s)});
  let active:InvestigationRun|undefined;
+ const queued:InvestigationRun[]=[];
  try{
   const all=await fixture<BankRow[]>("bank-transactions");const boundary=all.findIndex(row=>row.id==="harborline-deposit");if(boundary<1)throw new Error("Settlement bank post missing");
   if(action==="connect"){
-   active=await run("Connect IOLTA account 4417","bank-sync-agent",sessionId);await pause();
-   await records(active,1,"connection",[{account:"IOLTA 4417",source:"Hartwell ERP fixture",mode:"Demo replay"}],"Opened the ERP demo source. Importing posted transactions into the local workspace.");
-   for(const count of [Math.ceil(boundary/3),Math.ceil(boundary*2/3),boundary]){await mutate(s=>{s.imported=count;s.step=`Imported ${count} bank transactions`});await pause();}
-   const baseline=all.slice(0,boundary);const total=baseline.reduce((n,r)=>n+r.amountCents,0);
-   if(total!==baseline.at(-1)!.balanceCents)throw new Error("ERP running balance does not reconcile");
-   await records(active,2,"bank-sync",[{account:"IOLTA 4417",transactions:baseline.length,balanceCents:total}],`Imported ${baseline.length} posted transactions. The running cash balance agrees with the ERP: ${dollars(total)}.`);
+   const batches=initialImportBatches(all);
+   const connection=await run("Connect IOLTA account 4417","bank-sync-agent",sessionId);queued.push(connection);
+   const batchRuns:InvestigationRun[]=[];
+   for(const batch of batches){const label=new Date(batch.month+"-01T12:00:00Z").toLocaleDateString("en-US",{month:"long",year:"numeric",timeZone:"UTC"});const job=await run(`${label} / ${batch.transactions.length} transactions`,"transaction-import-agent",sessionId);queued.push(job);batchRuns.push(job);}
+   const documentRun=await run("Index source documents","document-indexing-agent",sessionId);queued.push(documentRun);
+   const ledgerRun=await run("Reconcile client ledgers","ledger-reconciliation-agent",sessionId);queued.push(ledgerRun);
+   active=connection;await pause();
+   await records(active,1,"connection",[{account:"IOLTA 4417",source:"Hartwell ERP fixture",mode:"Demo replay"}],"Opened the ERP demo source. Queued transaction imports, source document indexing, and ledger reconciliation.");await pause();await updateRun(active.id,{status:"completed"});
+   let imported=0;
+   for(let index=0;index<batches.length;index++){
+    const batch=batches[index];active=batchRuns[index];
+    await records(active,1,"bank-transactions",batch.transactions,`Read ${batch.transactions.length} posted bank transactions for ${batch.month}. Importing the recorded amounts and client allocations.`);
+    await pause();imported+=batch.transactions.length;
+    await mutate(s=>{s.imported=imported;s.step=`Imported ${imported} bank transactions`});
+    await records(active,2,"import-result",[{month:batch.month,transactions:batch.transactions.length,status:"Imported",newPayments:0}],`Imported ${batch.transactions.length} existing ERP bank posts. No new payments were created.`);
+    await updateRun(active.id,{status:"completed"});
+   }
+   const baseline=all.slice(0,boundary),documentIds=new Set(baseline.flatMap(row=>row.documentIds));
+   active=documentRun;
+   const manifest=(await fixture("documents")).filter((document:any)=>documentIds.has(document.id));
+   if(manifest.length!==documentIds.size)throw new Error("An imported transaction is missing its source document");
+   await records(active,1,"document-manifest",manifest.map((document:any)=>({id:document.id,title:document.title,date:document.date,format:"PDF"})),`Reading the source manifest for ${manifest.length} supporting documents.`);await pause();
+   const files=await Promise.all(manifest.map(async(document:any)=>{const bytes=await readFile(path.join(fixtureRoot,document.pdf));if(bytes.subarray(0,5).toString()!=="%PDF-")throw new Error(`Invalid PDF: ${document.id}`);return {id:document.id,bytes:bytes.length,sha256:createHash("sha256").update(bytes).digest("hex")};}));
+   await records(active,2,"document-index",files,`Indexed ${files.length} source PDFs and verified their file hashes. Document content has not been approved by this indexing step.`);await updateRun(active.id,{status:"completed"});
+   active=ledgerRun;
+   const clients=await fixture("clients");const balances=ownerBalances(baseline);
+   await records(active,1,"client-balances",Object.entries(balances).map(([clientId,balanceCents])=>({clientId,client:clients.find((c:any)=>c.id===clientId)?.name??clientId,balanceCents})),`Read balances for ${Object.keys(balances).length} client ledgers. Reconciling them against imported trust cash.`);await pause();
+   const total=baseline.reduce((n,r)=>n+r.amountCents,0);
+   const journal=(await fixture("trust-ledger-entries")).filter((entry:any)=>baseline.some(row=>row.id===entry.transactionId));
+   if(total!==baseline.at(-1)!.balanceCents||Object.values(balances).reduce((n,v)=>n+v,0)!==total||journal.length!==baseline.length||journal.some((entry:any)=>entry.lines.reduce((n:number,line:any)=>n+line.debitCents-line.creditCents,0)!==0))throw new Error("Imported cash and client journals do not reconcile");
+   await records(active,2,"ledger-reconciliation",[{account:"IOLTA 4417",cashCents:total,clientLiabilityCents:total,balancedJournals:journal.length}],`Reconciled ${journal.length} balanced journal entries and client liabilities to ${dollars(total)} in trust cash. This verifies totals; it does not approve historical transactions or perform a full compliance audit.`);
    await updateRun(active.id,{status:"completed"});
-   active=await run("Index client ownership","ledger-indexing-agent",sessionId);await pause();
-   await records(active,1,"client-balances",Object.entries(ownerBalances(baseline)).map(([clientId,balanceCents])=>({clientId,balanceCents})),"Indexed posted balances by beneficial owner. This import does not approve historical transactions.");await pause();await updateRun(active.id,{status:"completed"});
    await mutate(s=>{s.phase="connected";s.step="ERP connected. Ready for incoming data."});
   }else{
    active=await run("Harborline settlement received","settlement-intake-agent",sessionId);await pause();
@@ -100,7 +124,7 @@ export async function executeDemo(action:string,sessionId:string){
    const findingId=crypto.randomUUID();await appendAudit({id:findingId,schemaVersion:1,runId:active.id,snapshotId:proposal.id,category:"risky_write",severity:"high",explanation,evidence:(await readInvestigation()).snapshots.filter(s=>s.runId===active!.id&&s.sequence<=5).flatMap(s=>s.evidence),suggestedAction:"Recalculate the fee after costs. Hold payment until the corrected statement is signed and approved.",reviewStatus:"open",reviewedThroughSequence:8},{id:crypto.randomUUID(),findingId,snapshotId:proposal.id,runId:active.id,status:"open",createdAt:new Date().toISOString()});
    await updateRun(active.id,{status:"escalated"});await mutate(s=>{s.phase="escalated";s.escalationRunId=active!.id;s.step="Ana Bello's distribution needs human review"});
   }
- }catch(e){if(active)await updateRun(active.id,{status:"failed"});if((await demoState()).sessionId!==sessionId)return;await mutate(s=>{s.phase="failed";s.error=(e as Error).message;s.step="Simulation stopped"});}
+ }catch(e){const current=await readInvestigation();for(const job of queued)if(current.runs.some(r=>r.id===job.id&&r.status==="running"))await updateRun(job.id,{status:"failed"});if(active&&!queued.some(job=>job.id===active!.id))await updateRun(active.id,{status:"failed"});if((await demoState()).sessionId!==sessionId)return;await mutate(s=>{s.phase="failed";s.error=(e as Error).message;s.step="Simulation stopped"});}
 }
 export async function correctSettlement(parent:InvestigationRun,steering:SteeringRequest){
  if(!/net|cost|6025|6,025/i.test(steering.instruction))throw new Error("For this demo, direct the agent to calculate the fee after costs. Other corrections require a different workflow.");

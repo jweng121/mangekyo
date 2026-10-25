@@ -13,5 +13,5 @@ export function updateWorkspace(change:(state:State)=>void){const next=queue.the
 export async function readWorkspace():Promise<WorkspaceData>{
   const [source,record,state]=await Promise.all([demoWorkspace(),readInvestigation(),workspaceState()]);
   if(source.simulation.escalationRunId && escalationCases(record).some(c=>c.run.id===source.simulation.escalationRunId&&c.completed))source.simulation.step="Correction completed. Distribution held for signatures and payment approval.";
-  return {...source,record,...state};
+  return {...source,record,...state,storage:{workspace:"local",investigations:process.env.NEXT_PUBLIC_VISUAL_AUDIT_MODE==="convex"?"convex":"local",platformConvexConfigured:!!process.env.NEXT_PUBLIC_PLATFORM_CONVEX_URL}};
 }

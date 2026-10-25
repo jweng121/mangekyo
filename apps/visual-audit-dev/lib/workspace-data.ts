@@ -15,7 +15,7 @@ export type WorkspaceClient = {id:string;name:string;legal:string;code:string;tr
 export type AllocationDraft = {id:string;bankLine:string;client:string;legalEntity:string;liabilityAccount:string;invoice:string;amount:string;currency:string;status:string;ledgerPosted:number;createdAt:string};
 export type AgentDefinition = {id:string;name:string;instructions:string;createdAt:string;status:"draft"};
 export type OrchestratorMessage = {id:string;role:"user"|"assistant";text:string;createdAt:string};
-export type WorkspaceData = {bank:typeof bankStatement;clients:WorkspaceClient[];drafts:AllocationDraft[];record:InvestigationRecord;agents:AgentDefinition[];messages:OrchestratorMessage[];simulation?:DemoState;documents?:{id:string;name:string;date:string;kind:string;href:string}[];invoices?:any[]};
+export type WorkspaceData = {bank:typeof bankStatement;clients:WorkspaceClient[];drafts:AllocationDraft[];record:InvestigationRecord;agents:AgentDefinition[];messages:OrchestratorMessage[];storage?:{workspace:"local";investigations:"local"|"convex";platformConvexConfigured:boolean};simulation?:DemoState;documents?:{id:string;name:string;date:string;kind:string;href:string}[];invoices?:any[]};
 export function escalationCases(record:InvestigationRecord) {
   return record.runs.filter(run=>!run.parentRunId && record.escalations.some(e=>e.runId===run.id)).map(run=>{
     const family=new Set([run.id]);

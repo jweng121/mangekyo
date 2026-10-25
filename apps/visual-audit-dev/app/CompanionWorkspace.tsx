@@ -55,6 +55,7 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
   const [liveCaption, setLiveCaption] = useState("");
   const [spokenCharIndex, setSpokenCharIndex] = useState(-1);
   const [record, setRecord] = useState<InvestigationRecord>(empty);
+  const [recordLoaded,setRecordLoaded]=useState(false);
   const [taskId, setTaskId] = useState<string | undefined>(initialRunId);
   const [runId, setRunId] = useState<string | undefined>(platformRunId ?? initialRunId);
   const [snapshotId, setSnapshotId] = useState<string>();
@@ -106,7 +107,7 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
   useEffect(() => { if (window.innerWidth < 760) setSidebarOpen(false); }, []);
 
   const tasks = useMemo(() => tasksFrom(record, !!platformRunId || !!initialRunId), [record, platformRunId, initialRunId]);
-  const task = tasks.find(item => item.id === taskId || item.runIds.includes(taskId ?? "")) ?? tasks.find(item => item.status === caseStatus) ?? (platformRunId ? tasks[0] : undefined);
+  const task = taskId ? tasks.find(item => item.id === taskId || item.runIds.includes(taskId)) : tasks.find(item => item.status === caseStatus) ?? (platformRunId ? tasks[0] : undefined);
   const taskRuns = record.runs.filter(item => task?.runIds.includes(item.id));
   const activeRun = taskRuns.find(item => item.id === runId) ?? taskRuns.find(item => item.id === task?.id) ?? taskRuns[0];
   const originalRun = taskRuns.find(item => item.id === task?.id);
@@ -166,13 +167,20 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
     return () => { narrator.current?.stop(); stopDictation(); };
   }, []);
   useEffect(() => {
-    let active=true;
-    const refresh = async () => { try {const response=await fetch(apiPath(),{cache:"no-store"});const data=await response.json();if(!response.ok)throw new Error(data.error);if(active){setRecord(data);setError("");}}catch(cause){if(active)setError((cause as Error).message);} };
+    let active=true,streamRevision=0;
+    const controller=new AbortController();
+    const accept=(data:InvestigationRecord)=>{if(active){setRecord(data);setRecordLoaded(true);setError("");}};
+    const refresh=async()=>{const revision=streamRevision;try{
+      const response=await fetch(apiPath(),{cache:"no-store",signal:controller.signal});const data=await response.json();
+      if(!response.ok)throw new Error(data.error??"Could not load this review");
+      if(revision===streamRevision)accept(data);
+    }catch(cause){if(active&&revision===streamRevision){setRecordLoaded(true);setError((cause as Error).message);}}};
     void refresh();
-    if(platformRunId) { const timer=setInterval(refresh,5000);return ()=>{active=false;clearInterval(timer);}; }
-    const source=new EventSource("/api/visual-audit/stream");source.onmessage=event=>{try{setRecord(JSON.parse(event.data));setError("");}catch{}};source.onerror=()=>setError("Connection interrupted. Refresh to reconnect.");
-    return ()=>{active=false;source.close();};
-  }, [platformRunId]);
+    const timer=setInterval(refresh,platformRunId?5000:3000);
+    const source=platformRunId?undefined:new EventSource("/api/visual-audit/stream");
+    if(source){source.onmessage=event=>{try{const data=JSON.parse(event.data);streamRevision++;accept(data);}catch{}};source.onerror=()=>{void refresh();};}
+    return ()=>{active=false;controller.abort();clearInterval(timer);source?.close();};
+  }, [platformRunId,initialRunId]);
   useEffect(() => { setHighlightIds(current => current.some(id => selected?.annotations?.some(item => item.id === id)) ? current : selected?.annotations?.map(item => item.id) ?? []); setFocusBubble(undefined); setFocusedAnnotationId(current => selected?.annotations?.some(item => item.id === current) ? current : undefined); }, [selected?.id]);
   useEffect(() => { setReportText(report?.content ?? ""); }, [report?.version, report?.id]);
   useEffect(() => { setMemoryText(memory?.content ?? ""); }, [memory?.id, memory?.version]);
@@ -349,7 +357,7 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
         {task && <div className="case-header-actions"><span className={`case-status ${task.status==="resolved"?"completed":""}`}>{platformRunId ? <>{record.platformReview?.status === "resolved" ? "Completed" : record.platformReview?.status === "ready_for_approval" ? "Ready for approval" : record.platformReview?.status === "running" ? "Agent running" : "Needs escalation"}</> : runReviewStatus(record,originalRun?.id??"") === "Completed" ? <><Check size={12}/>Completed</> : <><i/>{runReviewStatus(record,originalRun?.id??"")}</>}</span>{platformRunId && <a className="review-primary" href={`/desk?tab=reviews&accountId=${encodeURIComponent(record.platformReview?.accountId ?? "")}`}>Review on overview</a>}{canResolve && <button className="review-primary" onClick={resolveCase} disabled={busy}><Check size={15}/> Approve correction</button>}<ReviewMenu items={[
           { label: "Compare evidence", icon: <Columns2 size={15}/>, onSelect: () => setCompareOpen(value => !value), disabled: comparisonSnapshots.length < 2 },
           { label: "Review report", icon: <FileText size={15}/>, onSelect: () => setReportOpen(true), disabled: !report },
-          { label: "Correct decision", icon: <GitBranch size={15}/>, onSelect: () => suggest(originalRun?.taskId.startsWith("hartwell-") ? "Recalculate Ana Bello?s fee using the signed net-after-costs agreement. Save a held draft and keep payment blocked pending signatures and approval." : "Re-evaluate ownership using the bank payment reference and customer record.", "correction"), disabled: !proposal || busy },
+          { label: "Correct decision", icon: <GitBranch size={15}/>, onSelect: () => suggest(originalRun?.taskId.startsWith("hartwell-") ? "Recalculate Ana Bello’s fee using the signed net-after-costs agreement. Save a held draft and keep payment blocked pending signatures and approval." : "Re-evaluate ownership using the bank payment reference and customer record.", "correction"), disabled: !proposal || busy },
         ]}/></div>}
       </header>
       {task && <div className="case-facts">{amount && <div><span>Amount</span><strong>{amount}</strong></div>}{reference && <div><span>Reference</span><strong>{reference}</strong></div>}{!platformRunId && !originalRun?.taskId.startsWith("hartwell-") && <div><span>Proposed owner</span><strong className={originalRun?.proposedOwner ? "conflicting-value" : ""}>{originalRun?.proposedOwner ?? "Unassigned"}</strong>{canResolve && <><ArrowRight size={13}/><strong className="corrected-value">{correctedRun?.proposedOwner}</strong></>}</div>}<div className="case-facts-agent"><span>Agent</span><strong>{agentName(task.agentId)}</strong></div></div>}
@@ -369,7 +377,7 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
           <Tabs.Content value="annotations" className="inspector-content notes-content">
             <div className="notes-scroll"><div className="issue-note"><span className="issue-title"><CircleAlert size={15}/>{task?.status === "resolved" ? "Original finding" : finding?.category === "ownership_conflict" ? "Ownership mismatch" : "Needs escalation"}</span><p>{finding?.explanation ?? selected?.summary}</p></div>
             <div className="annotation-list">{caseAnnotations.map(({ snapshot, annotation }, index) => <button key={annotation.id} ref={node => { annotationRefs.current[annotation.id] = node; }} className={`annotation-row ${focusedAnnotationId === annotation.id ? "active" : ""} ${snapshot.id === selected?.id ? "current-snapshot" : ""}`} onClick={() => { chooseSnapshot(snapshot); setCompareOpen(false); focusAnnotation(annotation.id, annotation.evidenceRef); }}><span className="annotation-number">{index + 1}</span><span className="annotation-copy"><strong>{annotation.label}</strong><span>{annotationContext(snapshot, annotation.evidenceRef, annotation.textQuote)}</span>{snapshot.actionType !== "READ" && snapshot.recordedJustification && <span className="annotation-context">{snapshot.recordedJustification}</span>}<small>{snapshot.runId === correctedRun?.id ? "Corrected · " : ""}Snapshot {snapshot.sequence}</small></span><ArrowUpRight size={13}/></button>)}</div></div>
-            <div className="inspector-bottom"><button className="review-primary wide" disabled={!proposal || busy || (!!platformRunId && !record.platformReview?.canCorrect)} onClick={() => suggest(originalRun?.taskId.startsWith("hartwell-") ? "Recalculate Ana Bello?s fee using the signed net-after-costs agreement. Save a held draft and keep payment blocked pending signatures and approval." : "Re-evaluate ownership using the bank payment reference and customer record.", "correction")}><GitBranch size={15}/> {correctedRun ? "Refine correction" : "Correct decision"}<ArrowRight size={15}/></button></div>
+            <div className="inspector-bottom"><button className="review-primary wide" disabled={!proposal || busy || (!!platformRunId && !record.platformReview?.canCorrect)} onClick={() => suggest(originalRun?.taskId.startsWith("hartwell-") ? "Recalculate Ana Bello’s fee using the signed net-after-costs agreement. Save a held draft and keep payment blocked pending signatures and approval." : "Re-evaluate ownership using the bank payment reference and customer record.", "correction")}><GitBranch size={15}/> {correctedRun ? "Refine correction" : "Correct decision"}<ArrowRight size={15}/></button></div>
           </Tabs.Content>
           <Tabs.Content value="chat" className="inspector-content chat-content">
             <div className="chat-titlebar"><select aria-label="Chat title" value={conversationId} disabled={thinking || busy} onChange={event => switchConversation(event.target.value)}>{conversations.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}</select><IconButton label="New chat" disabled={thinking || busy} onClick={newConversation}><Plus size={16}/></IconButton></div>
@@ -388,7 +396,7 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
           </Tabs.Content>
           <Tabs.Content value="details" className="inspector-content details-content"><h3>{selected?.title}</h3><dl>{selected?.observation.fields.map(field => <div key={field.id}><dt>{field.label}</dt><dd>{field.value}</dd></div>)}<div><dt>Agent</dt><dd>{task && agentName(task.agentId)}</dd></div><div><dt>Captured</dt><dd>{selected && new Date(selected.timestamp).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</dd></div></dl>{selected?.recordedJustification && <div className="agent-reason"><h4>Decision context</h4><p>{selected.recordedJustification}</p></div>}{report && <button className="details-report" onClick={() => setReportOpen(true)}><FileText size={16}/><span>Investigation report<small>{report.status.replaceAll("_", " ")}</small></span><ArrowUpRight size={14}/></button>}<details className="provenance-details"><summary>Provenance</summary><code>Snapshot {selected?.id}<br/>Run {selected?.runId}<br/>Source {selected?.source}</code></details></Tabs.Content>
         </Tabs.Root>
-      </div> : <div className="review-empty"><Check size={28}/><h2>You're all caught up.</h2><p>Cases appear here when an agent needs your review.</p></div>}
+      </div> : <div className="review-empty" role="status">{!recordLoaded?<><FileText size={28}/><h2>Loading review</h2><p>Retrieving the agent run and its evidence.</p></>:error?<><CircleAlert size={28}/><h2>Unable to load review</h2><p>Your review data could not be retrieved. Reconnecting automatically.</p></>:(taskId||initialRunId||platformRunId)?<><FileText size={28}/><h2>Review unavailable</h2><p>This run is not available in the current workspace.</p><a href="/escalations">Back to escalations</a></>:<><Check size={28}/><h2>You're all caught up.</h2><p>Cases appear here when an agent needs your review.</p></>}</div>}
     </main>
     {notice && <div className="review-toast" role="status"><Check size={15}/><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notification"><X size={14}/></button></div>}
 
