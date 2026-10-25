@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Snapshot } from "@mangekyo/contracts";
 
 const shortTitle = (snapshot: Snapshot) => {
@@ -8,9 +8,34 @@ const shortTitle = (snapshot: Snapshot) => {
   return titles[snapshot.title] ?? (snapshot.actionType === "ESCALATE" ? "Human review" : snapshot.title);
 };
 
-export function SnapshotBranchGraph({ original, corrected, selectedId, conflictId, onSelect, branchControl }: {
-  original: Snapshot[]; corrected: Snapshot[]; selectedId?: string; conflictId?: string; onSelect: (snapshot: Snapshot) => void; branchControl?: ReactNode;
+export function SnapshotBranchGraph({ original, corrected, selectedId, conflictId, onSelect, branchControl, correctedStatus }: {
+  original: Snapshot[]; corrected: Snapshot[]; selectedId?: string; conflictId?: string; onSelect: (snapshot: Snapshot) => void; branchControl?: ReactNode; correctedStatus?: string;
 }) {
+  const branchKey = corrected[0]?.runId ?? corrected[0]?.id ?? "";
+  const passed = corrected.length > 0 && (correctedStatus ? correctedStatus === "corrected" || correctedStatus === "completed" : true) && corrected.every(s => s.executionStatus === "completed" && !["flagged", "needs_review"].includes(s.auditStatus ?? "") && s.actionType !== "ESCALATE");
+  const [playback, setPlayback] = useState(() => ({ key: branchKey, count: corrected.length, live: !passed, settled: passed }));
+  const [glowing, setGlowing] = useState(false);
+  const visibleCount = playback.key === branchKey ? playback.count : 0;
+  useEffect(() => {
+    if (playback.key !== branchKey) {
+      setGlowing(false);
+      setPlayback({ key: branchKey, count: 0, live: true, settled: false });
+      return;
+    }
+    if (visibleCount < corrected.length) {
+      const timer = setTimeout(() => setPlayback(p => ({ ...p, count: p.count + 1 })), 550);
+      return () => clearTimeout(timer);
+    }
+  }, [branchKey, playback.key, visibleCount, corrected.length]);
+  useEffect(() => {
+    if (!passed || visibleCount !== corrected.length || playback.settled || playback.key !== branchKey) return;
+    // Let the last connector and check finish before celebrating and retiring the old path.
+    const start = setTimeout(() => setGlowing(true), 600);
+    const finish = setTimeout(() => { setGlowing(false); setPlayback(p => ({ ...p, settled: true, live: false })); }, 1800);
+    return () => { clearTimeout(start); clearTimeout(finish); };
+  }, [passed, visibleCount, corrected.length, playback.settled, playback.key, branchKey]);
+  const visibleCorrected = corrected.slice(0, visibleCount);
+  const retired = passed && playback.settled && playback.key === branchKey;
   const scroll = useRef<HTMLDivElement>(null);
   const selected = useRef<HTMLButtonElement>(null);
   const gap = 88;
@@ -28,22 +53,28 @@ export function SnapshotBranchGraph({ original, corrected, selectedId, conflictI
     const viewport = scroll.current;
     if (node.offsetLeft < viewport.scrollLeft || node.offsetLeft + node.offsetWidth > viewport.scrollLeft + viewport.clientWidth) viewport.scrollTo({ left: Math.max(0, node.offsetLeft - viewport.clientWidth / 2), behavior: "smooth" });
   }, [selectedId]);
+  useEffect(() => {
+    if (!playback.live || visibleCount === 0 || !scroll.current) return;
+    const viewport = scroll.current;
+    const edge = branchStart + (visibleCount - 1) * gap + 40;
+    if (edge > viewport.scrollLeft + viewport.clientWidth) viewport.scrollTo({ left: edge - viewport.clientWidth + 40, behavior: "smooth" });
+  }, [visibleCount, playback.live, branchStart]);
   const node = (snapshot: Snapshot, index: number, isCorrected: boolean) => {
     const active = snapshot.id === selectedId;
-    const superseded = hasBranch && !isCorrected && index > conflictIndex;
+    const superseded = retired && hasBranch && !isCorrected && index > conflictIndex;
     const flagged = !superseded && ((!isCorrected && index === conflictIndex) || snapshot.auditStatus === "flagged" || snapshot.auditStatus === "needs_review" || snapshot.actionType === "ESCALATE");
     const completed = !superseded && !flagged && snapshot.executionStatus === "completed";
-    return <button key={snapshot.id} ref={active ? selected : undefined} className={`history-node ${active ? "selected" : ""} ${superseded ? "superseded" : flagged ? "conflict" : completed ? "completed" : "pending"} ${isCorrected ? "corrected" : ""}`} style={{ left: (isCorrected ? branchStart : inset) + index * gap - 36, top: isCorrected ? 51 : 19 }} onClick={() => onSelect(snapshot)} aria-label={`${superseded ? "Superseded " : isCorrected ? "Corrected " : ""}Snapshot ${snapshot.sequence}: ${snapshot.title}`} aria-current={active ? "true" : undefined} title={`${superseded ? "Superseded checkpoint" : flagged ? "Flagged checkpoint" : completed ? "Completed checkpoint" : "Pending checkpoint"}: ${isCorrected ? "Corrected branch · " : ""}Snapshot ${snapshot.sequence}: ${snapshot.title}`}><span className="history-dot" aria-hidden="true">{flagged ? <svg viewBox="0 0 16 16"><path d="M8 4v5"/><circle cx="8" cy="12" r=".7" fill="currentColor" stroke="none"/></svg> : completed ? <svg viewBox="0 0 16 16"><path d="m4 8 3 3 5-6"/></svg> : null}</span><span className="history-node-label">{shortTitle(snapshot)}</span></button>;
+    return <button key={snapshot.id} ref={active ? selected : undefined} className={`history-node ${active ? "selected" : ""} ${superseded ? "superseded" : flagged ? "conflict" : completed ? "completed" : "pending"} ${isCorrected ? "corrected" : ""} ${isCorrected && playback.live && index === visibleCount - 1 ? "arriving" : ""}`} style={{ left: (isCorrected ? branchStart : inset) + index * gap - 36, top: isCorrected ? 51 : 19 }} onClick={() => onSelect(snapshot)} aria-label={`${superseded ? "Superseded " : isCorrected ? "Corrected " : ""}Snapshot ${snapshot.sequence}: ${snapshot.title}`} aria-current={active ? "true" : undefined} title={`${superseded ? "Superseded checkpoint" : flagged ? "Flagged checkpoint" : completed ? "Completed checkpoint" : "Pending checkpoint"}: ${isCorrected ? "Corrected branch · " : ""}Snapshot ${snapshot.sequence}: ${snapshot.title}`}><span className="history-dot" aria-hidden="true">{flagged ? <svg viewBox="0 0 16 16"><path d="M8 4v5"/><circle cx="8" cy="12" r=".7" fill="currentColor" stroke="none"/></svg> : completed ? <svg viewBox="0 0 16 16"><path d="m4 8 3 3 5-6"/></svg> : null}</span><span className="history-node-label">{shortTitle(snapshot)}</span></button>;
   };
-  return <section className={`snapshot-history ${corrected.length ? "has-branch" : ""}`} aria-label="Snapshot history">
+  return <section className={`snapshot-history ${corrected.length ? "has-branch" : ""} ${glowing ? "branch-success" : ""}`} aria-label="Snapshot history">
     {branchControl && <div className="history-branch-picker">{branchControl}</div>}
     <div className="history-scroll" ref={scroll}><div className="history-track" style={{ width, height: corrected.length ? 96 : 52 }}>
       <svg width={width} height={corrected.length ? 96 : 52} aria-hidden="true">
         <path className="history-trunk" d={`M${inset} 30 H${hasBranch ? fork : inset + Math.max(0, original.length - 1) * gap}`}/>
-        {hasBranch && <path className="history-superseded" d={`M${fork} 30 H${inset + Math.max(0, original.length - 1) * gap}`}/>}
-        {hasBranch && <path className="history-fork" d={`M${fork} 30 C${fork} 48 ${branchStart} 44 ${branchStart} 62 H${branchStart + (corrected.length - 1) * gap}`}/>}
+        {hasBranch && <path className={retired ? "history-superseded" : "history-trunk"} d={`M${fork} 30 H${inset + Math.max(0, original.length - 1) * gap}`}/>}
+        {hasBranch && visibleCorrected.map((snapshot, index) => <path key={snapshot.id} pathLength={1} className={`history-correction-edge ${playback.live ? "drawing" : ""}`} d={index === 0 ? `M${fork} 30 C${fork} 48 ${branchStart} 44 ${branchStart} 62` : `M${branchStart + (index - 1) * gap} 62 H${branchStart + index * gap}`}/>)}
       </svg>
-      {original.map((item, index) => node(item, index, false))}{corrected.map((item, index) => node(item, index, true))}
+      {original.map((item, index) => node(item, index, false))}{visibleCorrected.map((item, index) => node(item, index, true))}
     </div></div>
   </section>;
 }

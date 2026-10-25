@@ -570,3 +570,19 @@
 .snapshot-history .history-node.superseded.selected .history-dot { background:#d0d0d5; border-color:#b8b8bf; box-shadow:0 0 0 3px #fff,0 0 0 4px #c9c9cf; }
 .snapshot-history .history-node.superseded.selected .history-node-label { color:#777780; }
 .case-status.completed{color:#528166}
+
+/* Correction playback follows recorded checkpoints; only a passed run retires the old path. */
+.history-correction-edge { fill: none; stroke: #428461; stroke-width: 2; }
+.history-correction-edge.drawing { stroke-dasharray: 1; animation: correction-edge-draw .5s ease-out both; }
+.snapshot-history .history-node.corrected.arriving .history-dot { animation: correction-check-in .3s .35s ease-out both; }
+.snapshot-history.branch-success .history-node.corrected.completed .history-dot { animation: correction-success-glow 1.2s ease-in-out; }
+.snapshot-history.branch-success .history-correction-edge { animation: correction-line-glow 1.2s ease-in-out; }
+@keyframes correction-edge-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes correction-check-in { from { opacity: 0; transform: scale(.65); } to { opacity: 1; transform: scale(1); } }
+@keyframes correction-success-glow { 50% { background: #428461; border-color: #428461; color: white; box-shadow: 0 0 0 3px white, 0 0 14px 5px #65b98570; } }
+@keyframes correction-line-glow { 50% { stroke: #39a66a; filter: drop-shadow(0 0 4px #65b985); } }
+@media (prefers-reduced-motion: reduce) {
+  .history-correction-edge.drawing, .snapshot-history .history-node.corrected.arriving .history-dot,
+  .snapshot-history.branch-success .history-node.corrected.completed .history-dot,
+  .snapshot-history.branch-success .history-correction-edge { animation: none; }
+}
