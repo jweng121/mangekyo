@@ -6,8 +6,8 @@ import { currentCaption, MangekyoAvatar } from "@mangekyo/visual-audit";
 import type { NarratedExplanation, Snapshot } from "../../../packages/contracts";
 import { IconButton } from "./ReviewControls";
 
-export function WalkthroughIsland({ transcribing = false, replyError, onRetry, title, thinking, autoSend, listening, speaking, levels, reply, inputError, speechSupported, onListen, error, open, status, available, explanation, index, snapshots, annotationNumbers, caption, spokenCharIndex, onStart, onPause, onResume, onClose, onSeek, onContinue }: {
-  transcribing?: boolean;
+export function WalkthroughIsland({ starting = false, transcribing = false, replyError, onRetry, title, thinking, autoSend, listening, speaking, levels, reply, inputError, speechSupported, onListen, error, open, status, available, explanation, index, snapshots, annotationNumbers, caption, spokenCharIndex, onStart, onPause, onResume, onClose, onSeek, onContinue }: {
+  starting?: boolean; transcribing?: boolean;
   replyError?: string; onRetry?: () => void;
   title?: string; thinking: boolean; autoSend: boolean; listening: boolean; speaking: boolean; levels: number[]; reply: string; inputError: string; speechSupported: boolean; onListen: () => void;
   error?: string; caption: string; spokenCharIndex: number;
@@ -30,7 +30,7 @@ export function WalkthroughIsland({ transcribing = false, replyError, onRetry, t
   const unavailable = !available || status === "unavailable" || status === "error";
   const text = unavailable ? segment?.text ?? "" : caption;
   const phrase = currentCaption(text, spokenCharIndex);
-  const conversation = !!replyError || transcribing || thinking || status === "paused" || status === "awaiting_input";
+  const conversation = !!replyError || starting || transcribing || thinking || status === "paused" || status === "awaiting_input";
   return <div className={`walkthrough-layer ${open ? "is-open" : ""}`}>
 
     <section className={`walkthrough-island ${open ? "expanded" : ""}`} aria-label="Evidence walkthrough" style={{ height: open ? expandedHeight : 38 }}>
@@ -39,8 +39,8 @@ export function WalkthroughIsland({ transcribing = false, replyError, onRetry, t
         <div className="walkthrough-callout">{!title && snapshot && <span className="annotation-number">{annotation ? annotationNumbers[annotation.id] : index + 1}</span>}<strong>{title ?? annotation?.label ?? snapshot?.title ?? "Mangekyo"}</strong></div>
         <div className="walkthrough-caption" aria-label="Live captions" aria-live="off">
           {conversation ? <div className="island-conversation">
-            <div className="island-listening-row"><span className={`operator-waveform ${listening && speaking ? "speaking" : ""}`} aria-hidden="true">{levels.map((level, i) => <i key={i} style={{ height: 26, transform: `scaleY(${listening ? level : .12})` }}/>)}</span><span role="status">{replyError ? "Unable to answer" : transcribing ? "Transcribing" : thinking ? "Thinking" : listening ? speaking ? "You're speaking" : "Listening" : reply ? "Reply ready" : "Your turn"}</span></div>
-            <small>{replyError || inputError || (transcribing ? "Understanding your question" : thinking ? "Preparing your answer" : reply ? `${reply.split(/\s+/).slice(-12).join(" ")} / ${autoSend ? "Sends when you finish" : "Review and send in chat"}` : listening ? "Ask your question" : "Speak or type in chat")}</small>
+            <div className="island-listening-row"><span className={`operator-waveform ${listening && speaking ? "speaking" : ""}`} aria-hidden="true">{levels.map((level, i) => <i key={i} style={{ height: 26, transform: `scaleY(${listening ? level : .12})` }}/>)}</span><span role="status">{replyError ? "Unable to answer" : starting ? "Opening microphone" : transcribing ? "Transcribing" : thinking ? "Thinking" : listening ? speaking ? "You're speaking" : "Listening" : reply ? "Reply ready" : "Your turn"}</span></div>
+            <small>{replyError || inputError || (starting ? "Allow microphone access if your browser asks" : transcribing ? "Understanding your question" : thinking ? "Preparing your answer" : reply ? `${reply.split(/\s+/).slice(-12).join(" ")} / ${autoSend ? "Sends when you finish" : "Review and send in chat"}` : listening ? "Ask your question" : "Speak or type in chat")}</small>
           </div> : <>{text ? <span className="caption-phrase">{phrase || "\u00a0"}</span> : <span className="caption-waiting">Preparing audio...</span>}{unavailable && <small role="status">{error || "Audio unavailable"}</small>}</>}
 
         </div>
