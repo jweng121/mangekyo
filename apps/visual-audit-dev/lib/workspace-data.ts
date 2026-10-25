@@ -16,10 +16,19 @@ export type AllocationDraft = {id:string;bankLine:string;client:string;legalEnti
 export type AgentDefinition = {id:string;name:string;instructions:string;createdAt:string;status:"draft"};
 export type OrchestratorMessage = {id:string;role:"user"|"assistant";text:string;createdAt:string};
 export type WorkspaceData = {bank:typeof bankStatement;clients:WorkspaceClient[];drafts:AllocationDraft[];record:InvestigationRecord;agents:AgentDefinition[];messages:OrchestratorMessage[];storage?:{workspace:"local";investigations:"local"|"convex";platformConvexConfigured:boolean};simulation?:DemoState;documents?:{id:string;name:string;date:string;kind:string;href:string}[];invoices?:any[]};
+// Keep prior demo replays in saved history, not in the active workspace queue.
+export function currentWorkspaceRecord(record:InvestigationRecord, simulation?:DemoState) {
+  if(!simulation)return record;
+  const ids=new Set(simulation.runIds);
+  let changed=true;
+  while(changed){changed=false;for(const run of record.runs)if(run.parentRunId&&ids.has(run.parentRunId)&&!ids.has(run.id)){ids.add(run.id);changed=true;}}
+  return {...record,runs:record.runs.filter(run=>ids.has(run.id))};
+}
 export function escalationCases(record:InvestigationRecord) {
   return record.runs.filter(run=>!run.parentRunId && record.escalations.some(e=>e.runId===run.id)).map(run=>{
     const family=new Set([run.id]);
-    for(let pass=0;pass<record.runs.length;pass++)for(const attempt of record.runs)if(attempt.parentRunId&&family.has(attempt.parentRunId))family.add(attempt.id);
+    let changed=true;
+    while(changed){changed=false;for(const attempt of record.runs)if(attempt.parentRunId&&family.has(attempt.parentRunId)&&!family.has(attempt.id)){family.add(attempt.id);changed=true;}}
     const latest=record.runs.filter(r=>family.has(r.id)).sort((a,b)=>(a.createdAt??"").localeCompare(b.createdAt??"")).at(-1)!;
     const blocked=record.findings.some(f=>f.runId===latest.id&&f.reviewStatus==="open") || record.escalations.some(e=>e.runId===latest.id&&e.status==="open");
     const validated=record.snapshots.some(s=>s.runId===latest.id && s.actionType==="AUDIT" && s.auditStatus==="clear" && s.executionStatus==="completed") || record.reports?.some(r=>r.correctedRunId===latest.id);

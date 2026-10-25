@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, GitBranch, Landmark, PanelLeftClose, PanelLeftOpen, CircleHelp, ArrowUpRight, FlaskConical, Activity, Workflow, Bot, Wallet, BookOpen, MessageSquare } from "lucide-react";
 import "../platform.css";
-import {escalationCases,type WorkspaceData} from "../../../visual-audit-dev/lib/workspace-data";
+import {currentWorkspaceRecord,escalationCases,type WorkspaceData} from "../../../visual-audit-dev/lib/workspace-data";
 import {openWorkspaceChat} from "../../../visual-audit-dev/lib/workspace-chat";
 
 export function PlatformShell({ children, escalationBadges=false }: { children: ReactNode; escalationBadges?: boolean }) {
@@ -20,7 +20,7 @@ export function PlatformShell({ children, escalationBadges=false }: { children: 
       const response=await fetch("/api/workspace",{cache:"no-store",signal:controller.signal});
       if(!response.ok)return;
       const data:WorkspaceData=await response.json();
-      if(!controller.signal.aborted)setEscalationCount(escalationCases(data.record).filter(item=>item.open).length);
+      if(!controller.signal.aborted)setEscalationCount(escalationCases(currentWorkspaceRecord(data.record,data.simulation)).filter(item=>item.open).length);
     }catch{}finally{loading=false;}};
     void refresh();const timer=setInterval(refresh,1500);
     window.addEventListener("mangekyo:workspace-refresh",refresh);

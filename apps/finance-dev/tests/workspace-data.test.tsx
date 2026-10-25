@@ -1,5 +1,5 @@
 import {describe,it,expect} from "vitest";
-import {bankStatement,escalationCases,runReviewStatus} from "../../visual-audit-dev/lib/workspace-data";
+import {currentWorkspaceRecord,bankStatement,escalationCases,runReviewStatus} from "../../visual-audit-dev/lib/workspace-data";
 import type {InvestigationRecord} from "../../../packages/contracts";
 describe("Harbor Trust workspace",()=>{
  it("reconciles every statement row to its recorded closing balance",()=>{
@@ -28,4 +28,12 @@ describe("Harbor Trust workspace",()=>{
    expect(runReviewStatus(record,"work")).toBe("Processing");
    expect(runReviewStatus(record,"human")).toBe("Needs escalation");
  });
+});
+
+it("keeps archived simulations out of the current queue while retaining correction descendants",()=>{
+ const record={runs:[{id:"old"},{id:"current"},{id:"child",parentRunId:"current"},{id:"grandchild",parentRunId:"child"}]} as InvestigationRecord;
+ const simulation={phase:"connected",sessionId:"session",runIds:["current"],imported:1,step:""} as const;
+ expect(currentWorkspaceRecord(record,{...simulation,runIds:[...simulation.runIds]}).runs.map(r=>r.id)).toEqual(["current","child","grandchild"]);
+ expect(currentWorkspaceRecord(record,{...simulation,runIds:[]}).runs).toEqual([]);
+ expect(record.runs).toHaveLength(4);
 });

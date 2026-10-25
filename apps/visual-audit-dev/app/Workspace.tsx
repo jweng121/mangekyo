@@ -4,7 +4,7 @@ import Link from "next/link";
 import {CloudTtsProvider,BrowserTtsProvider} from "@mangekyo/visual-audit";
 import ReactMarkdown from "react-markdown";
 import {ArrowUpRight,ArrowUp,ArrowDown,Check,ChevronRight,Flag,GitBranch,FileText,Search,Plus,X,Mic,Square,Play,RefreshCw,LoaderCircle} from "lucide-react";
-import {escalationCases,runReviewStatus,type WorkspaceData} from "../lib/workspace-data";
+import {currentWorkspaceRecord,escalationCases,runReviewStatus,type WorkspaceData} from "../lib/workspace-data";
 import "./workspace.css";
 import {openWorkspaceChat} from "../lib/workspace-chat";
 
@@ -33,9 +33,7 @@ export default function Workspace({section="overview",embedded=false,chatActive=
  function dictate(){if(listening){speech?.stop();return;}const C=(window as unknown as {SpeechRecognition?:new()=>Recognition;webkitSpeechRecognition?:new()=>Recognition}).SpeechRecognition??(window as unknown as {webkitSpeechRecognition?:new()=>Recognition}).webkitSpeechRecognition;if(!C)return;tts.current.stop();window.speechSynthesis?.cancel();const recognition=new C();recognition.lang="en-CA";recognition.interimResults=true;recognition.continuous=false;recognition.onresult=e=>setDraft(Array.from(e.results).map(x=>x[0].transcript).join(" "));recognition.onend=()=>setListening(false);recognition.onerror=()=>{setListening(false);setError("Microphone unavailable. Check browser microphone permission, or type your message.")};setSpeech(recognition);recognition.start();setListening(true);}
  async function saveAgent(){setBusy(true);setError("");try{const r=await fetch("/api/workspace",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"create_agent",name:agentName,instructions})});const d=await r.json();if(!r.ok)throw new Error(d.error);await refresh();setCreate(false);setAgentName("");setInstructions("")}catch(e){setError((e as Error).message)}finally{setBusy(false)}}
  const simulation=data?.simulation;
- const demoIds=new Set(simulation?.runIds??[]);
- for(const run of data?.record.runs??[])if(run.parentRunId&&demoIds.has(run.parentRunId))demoIds.add(run.id);
- const visibleRecord=data?(["activity","escalations"].includes(section)?data.record:{...data.record,runs:data.record.runs.filter(r=>demoIds.has(r.id))}):undefined;
+ const visibleRecord=data?currentWorkspaceRecord(data.record,simulation):undefined;
  const values=data?[data.bank.opening,...data.bank.transactions.map(t=>t.balance)]:[];const low=Math.min(...values),high=Math.max(...values);const trend=values.map((v,i)=>`${i===0?"M":"L"}${i*300/Math.max(1,values.length-1)} ${50-(v-low)/(high-low||1)*46}`).join(" ");
  const cases=visibleRecord?escalationCases(visibleRecord):[];const open=cases.filter(c=>c.open);const completed=cases.filter(c=>c.completed);const runs=visibleRecord?.runs??[];const match=(s:string)=>s.toLowerCase().includes(query.toLowerCase());const agents=[...new Set(runs.map(r=>r.agentId))];
  const caseRows=(all=false,limit=1000)=><>{[...cases].sort((a,b)=>b.run.createdAt.localeCompare(a.run.createdAt)).filter(c=>(all||(showCompleted?c.completed:c.open))&&match(`${c.run.displayName??c.run.taskId} ${c.agent} ${c.workflow}`)).slice(0,limit).map(c=><Link className="ws-case" key={c.run.id} href={`/escalations/${encodeURIComponent(c.completed?c.latest.id:c.run.id)}`}><span className={`ws-event-icon ${c.open?"flagged":"success"}`}>{c.open?<Flag size={17}/>:<Check size={17}/>}</span><span className="ws-grow"><strong>{c.run.displayName??title(c.run.taskId)}</strong><small className="ws-case-agent">{c.agent}</small></span><Status tone={c.open?"warning":"success"}>{c.open?"Needs escalation":"Completed"}</Status><ChevronRight size={16}/></Link>)}{!(all?cases:cases.filter(c=>showCompleted?c.completed:c.open)).length&&<Empty>{showCompleted?"No completed escalations yet.":"No escalations need human review."}</Empty>}</>;
