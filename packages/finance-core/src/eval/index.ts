@@ -23,7 +23,9 @@ export function evalCaseFromCorrection(corrected: FinanceInvestigationRun, newRu
   const owner = newRun.result.proposedAllocations[0]?.ownerId;
   return { evalCaseId: `eval:${newRun.runId}:correction`, agent: "intake", instructionVersion: newRun.providerInput.instructionVersion, kind: "correction", runId: newRun.runId, taskId: newRun.taskId,
     input: newRun.providerInput, observedOutput: newRun.result,
-    expectation: { expectedOutcome: newRun.status === "checker_rejected" ? "checker_rejected" : newRun.result.outcome, ...(owner ? { expectedOwnerId: owner } : {}), mustCite: kind === "cite_clarification" ? newRun.providerInput.humanClarifications.filter(c => c.questionId.endsWith(":correction")).map(c => c.sourceId) : [] }, createdAt: now };
+    // For a cited answer, the replay must keep citing whichever of the person's answers the corrected run relied on.
+    expectation: { expectedOutcome: newRun.status === "checker_rejected" ? "checker_rejected" : newRun.result.outcome, ...(owner ? { expectedOwnerId: owner } : {}),
+      mustCite: kind === "cite_clarification" ? newRun.providerInput.humanClarifications.map(c => c.sourceId).filter(id => newRun.result!.findings.some(f => f.sourceRefs.includes(id)) || newRun.result!.proposedAllocations.some(a => a.evidenceSourceIds.includes(id))) : [] }, createdAt: now };
 }
 
 const canonical = (value: unknown): string => JSON.stringify(value, (_, v) => v && typeof v === "object" && !Array.isArray(v) ? Object.fromEntries(Object.entries(v).sort(([a], [b]) => a.localeCompare(b))) : v);

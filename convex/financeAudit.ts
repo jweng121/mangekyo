@@ -144,11 +144,11 @@ export const recordResult = internalMutation({
 /** Validates the auditor's answer (never repaired), combines it with code's findings and writes the append-only report. */
 async function settleAudit(ctx: MutationCtx, run: Doc<"financeAuditRuns">, externalRunId: string, outputJson: string): Promise<string | null> {
   const input = run.input as AuditInput;
-  const orchestration = (await findOrchestration(ctx, run.taskId))!;
+  let orchestration = (await findOrchestration(ctx, run.taskId))!;
   const answeredAt = run.updatedAt;
   await ctx.db.patch("financeAuditRuns", run._id, { status: "validating", externalRunId, updatedAt: Date.now() });
   const agent: OrchestratorActor = { type: "agent", identity: `agent:auditor:${run.provenance.mode}` };
-  await step(ctx, orchestration, { to: "validating", trigger: "provider_result", actor: agent, runId: run.runId, reason: { code: "ANSWER_RECEIVED", message: "The auditor answered; validating every finding's citations." } });
+  orchestration = await step(ctx, orchestration, { to: "validating", trigger: "provider_result", actor: agent, runId: run.runId, reason: { code: "ANSWER_RECEIVED", message: "The auditor answered; validating every finding's citations." } });
   let output;
   try {
     if (outputJson.length > 200_000) throw new Error("too large");
@@ -160,6 +160,7 @@ async function settleAudit(ctx: MutationCtx, run: Doc<"financeAuditRuns">, exter
     await step(ctx, orchestration, { to: "failed", trigger: "validation_failed", actor: CODE_ACTOR, runId: run.runId, activeRunId: null, error: failure, reason: { code: failure.code, message: `Failed, needs a person: ${failure.message}` } });
     return null;
   }
+  orchestration = await step(ctx, orchestration, { to: "checking", trigger: "validated", actor: CODE_ACTOR, runId: run.runId, reason: { code: "VALIDATED", message: "Every finding cites entries from the input. Code combines its own findings with the auditor's." } });
   const findings: AuditFinding[] = combineAuditFindings(input.codeFindings, output);
   const now = Date.now();
   const reportId = `${run.runId}:report`;

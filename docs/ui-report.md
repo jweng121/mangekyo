@@ -192,21 +192,32 @@ In CREAO mode, auto-investigation is off unless `AUTO_INVESTIGATE=true`, and the
 ## Current law-firm demo walkthrough
 
 Use mock mode at `/desk`. The fixture opens with $339,500 in a fictional law
-firm's trust account. Use **Next step** to pause for the human decisions;
-the nine feed steps are separate from approval and posting actions.
+firm's trust account, plus the firm's own-money owner at zero and Maria
+Delgado's signed settlement statement ($85,000.00 = attorney fee 33%
+$28,050.00 + costs $950.00 + client $56,000.00) and signed 33% fee agreement.
+Use **Next step** to pause for the human decisions; the ten feed steps are
+separate from approval and posting actions.
 
 1. **Fresh DEMO run, then Next step.** Harborline's $85,000 Delgado check arrives
-   pending. The investigator reviews evidence but proposes no allocation.
-2. **Next step.** Riley's $56,000 client-share request is blocked while funds
-   are unavailable. This request remains blocked in history.
+   pending. Trust Intake reviews the evidence but proposes no allocation.
+2. **Next step.** The Disbursement agent reads the signed settlement statement
+   and fee agreement and prepares all three payout lines (fee, costs, client
+   share). The Evidence Checker verifies each line against the documents. The
+   lock blocks each line by L2: the check hasn't cleared yet. The three blocked
+   lines stay in history.
 3. **Next step.** The check clears. As Sam, approve and post the $85,000
-   allocation. Switch to Riley, select **Make a new request as riley**, then
-   **Check and request**. As Sam, approve and post the new payment. Delgado
-   retains $29,000; the payment is outstanding.
+   allocation. The Disbursement agent runs again on its own: three payment
+   proposals wait for approval, each citing the statement (and the fee
+   agreement for the fee). As Sam, approve and post each one. L9 passes the fee
+   because the statement's 33% line matches the signed fee agreement; L11
+   passes because every line matches the statement exactly. Delgado's balance
+   ends at $0; the three payouts are outstanding until the bank settles them.
 4. **Next step.** Answer Okafor's question with “Yes, a partial retainer
-   payment.” As Sam, approve and post the $2,500 allocation.
-5. **Next step.** Answer the Nguyen question with “James”. The checker stops
-   the unsupported citation. Select **Open run and fix**, retain **Cite the
+   payment.” As Sam, approve and post the $2,500 allocation. The answer is
+   saved as account memory, and the pattern appears later as a candidate
+   policy.
+5. **Next step.** Answer the Nguyen question with “James”. The Evidence Checker
+   stops the unsupported citation. Select **Open run and fix**, keep **Cite the
    person's answer as the source for the claim**, and **Rerun from step 3**.
    Return to the desk and approve/post the corrected $1,200 allocation.
 6. **Next step.** Two $40,000 Bayview wires arrive. As Riley, choose **Mark
@@ -216,16 +227,31 @@ the nine feed steps are separate from approval and posting actions.
    a separate item for individual review.
 7. **Next step.** Cho's $6,000 request is blocked by L1: only $1,800 belongs to
    Cho, regardless of the pooled account's cash.
-8. **Next step.** As Sam, approve the insurance claim-number policy.
-9. **Next step.** Westbrook's $18,000 allocation cites the approved policy.
-   **Approve all proven items** selects it; **Post to ledger** remains a human
-   action. The first Bayview allocation stays pending.
+8. **Next step.** As Sam, approve the insurance claim-number policy. The
+   partial-retainer policy from step 4 is also offered, backtested against
+   Okafor's decision.
+9. **Next step.** Westbrook's $18,000 allocation cites the approved policy
+   ("Used policy P-1, approved by sam"). **Approve all proven items** selects
+   it; **Post to ledger** remains a human action.
+10. **Next step.** A paralegal (priya) moves $3,000 of Chen & Park fees to the
+    firm with no invoice. The lock blocks it by L9: no approved invoice and no
+    signed settlement fee line. Nothing moves.
 
 For the correction demonstration, switch to Riley and select **Break it… →
-Client check bounces**. The return creates a $2,500 mismatch for Okafor. Switch
-to Sam and **Approve entry**. Adjusted bank, books and owners match at $427,700.
-Both outgoing payments remain outstanding until bank settlement. **Load older
-activity** reveals earlier saved events.
+Client check bounces**. The return creates a $2,500 mismatch for Okafor. The
+Three-Way Reconciler explains the bounced check and proposes the correcting
+entry; switch to Sam and **Approve entry**. For an outflow the records don't
+explain, the reconciler asks one question instead ("The bank is $2,500.00
+short. Did Daniel Okafor's check bounce, or is this a bank fee?").
 
-Verified on dev run 011 on 2026-10-24. See [results and screenshots](lawfirm-progress.md)
-for observed outcomes, the mobile-header fix, and the state left behind.
+Backend-only pieces a presenter can call from the Convex dashboard (no desk UI
+yet): `financeAudit.runAudit` and `getAuditReport` (eight trust rules over
+posted history), `financeAudit.runAuditorDrill` and `getAuditorScorecard`
+("Caught 4 of 4 · missed 0 · false alarms 0"),
+`financeAudit.monthlyReconciliationReport` and `signOffMonthlyReconciliation`,
+`financeTrust.recordDispute` / `resolveDispute` (L10 holds), and
+`financeAgentApi.getRunSteps` / `getSnapshot` for every step of every run.
+
+Verified in mock mode by the Convex test suite on 2026-10-24 (ten steps, both
+with and without the policy). See [results](lawfirm-progress.md) for what was
+observed and what was left out.

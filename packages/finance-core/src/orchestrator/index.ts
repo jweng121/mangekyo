@@ -135,7 +135,7 @@ export function parseMockFault(raw: string | undefined): MockFault | null {
   return value === "network_once" || value === "network_always" || value === "hang" || value === "invalid_output" ? value : null;
 }
 
-export interface StartableProvider<I> { mode: "mock" | "creao"; start(input: I): Promise<{ status: string; externalRunId: string } & Record<string, unknown>> }
+export interface StartableProvider<I> { mode: "mock" | "creao" | "external"; start(input: I): Promise<{ status: string; externalRunId: string } & Record<string, unknown>> }
 
 /** Wraps a mock provider so its first (or every) call fails, hangs, or answers with invalid output. Calls are counted per instance. */
 export function withMockFault<I, P extends StartableProvider<I>>(provider: P, fault: MockFault | null): P {

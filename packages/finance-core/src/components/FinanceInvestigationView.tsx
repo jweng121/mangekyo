@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import type { FinanceCaseBundle, FinanceTask, HumanClarification, InvestigationScope, InvestigationStartScope, TaskInvestigationView } from "@mangekyo/contracts";
 import { investigationPeriod } from "../investigationPeriod";
 
-export interface FinanceProviderConfiguration { mode: "mock" | "creao" | null; configured: boolean; message: string }
+export interface FinanceProviderConfiguration { mode: "mock" | "creao" | "external" | null; configured: boolean; message: string }
 /** What is being investigated: the legacy synthetic case or an intake deposit task. */
 export interface InvestigationSubject {
   task: FinanceTask;

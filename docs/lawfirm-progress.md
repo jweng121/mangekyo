@@ -1,58 +1,69 @@
-# Law-firm demo verification — 2026-10-24
+# Law-firm demo verification — 2026-10-24 (trust agents)
 
-The law-firm fixture and nine-step mock feed are connected. The browser
-walkthrough is complete on `demo:account:pool-011`, using the local desk at
-`http://localhost:3001/desk` and dev deployment `laudable-sturgeon-5` in mock mode.
-This continuation resumed after step 3; the opening and first two steps have
-screenshots from the earlier session. No paid CREAO investigation was started.
+Branch `edwin-trust-agents` (from `edwin-orchestration`). The law-firm fixture
+and the ten-step mock feed are connected. The ten-step flow was verified end to
+end in mock mode by the Convex test suite (`convex/financeLawFirm.test.ts`, run
+twice: with and without the insurance policy approved), plus the trust-rule,
+disbursement, memory, correction, snapshot, audit and monthly-report tests in
+`convex/financeTrust.test.ts`. No CREAO or external model run was started. The
+earlier browser walkthrough of the nine-step feed (dev run 011, screenshots in
+`docs/screenshots/lawfirm/`) still describes steps 4–9, which did not change.
 
-The existing money gates remain in force: a pending check can receive an
-evidence-only review, but cannot produce an allocation. The initial payment
-request is blocked by L2 (and insufficient available funds), not held. After
-clearing and allocation, Riley makes a separate request for Sam to approve.
+What changed in the feed:
 
-## Browser results
-
-Screenshots are in `docs/screenshots/lawfirm/`.
-
-| Flow | Observed result | Screenshot |
+| Step | Before | Now |
 | --- | --- | --- |
-| Delgado after clearing | New $56,000 payment posted; $29,000 remains; original blocked request preserved | `03-cleared-delgado-payment.png` |
-| Okafor partial retainer | Answer recorded; $2,500 allocation approved and posted | `04-okafor-question.png`, `04b-okafor-posted.png` |
-| Nguyen clarification | “James” triggers the intentional citation rejection; citing the saved answer permits a new reviewed attempt and $1,200 posting | `05-checker-stopped.png`, `05b-corrected-and-posted.png` |
-| Bayview duplicate | Riley confirms duplicate; Sam posts refund-payable allocation; Riley requests $40,000 refund; Sam approves/posts payment | `06-duplicate-refund-posted.png` |
-| Cho payment | $6,000 blocked by L1 against $1,800 available | `07-cho-blocked.png` |
-| Insurance policy | Approved policy cited by Westbrook's $18,000 allocation; bulk approval selects it; Sam posts manually | `08-policy-approved.png`, `09-policy-used.png` |
-| Bounced check | Riley simulates Okafor's $2,500 return; mismatch appears; Sam records return and restores matching totals | `10-client-check-bounced.png`, `10b-return-recorded.png` |
-| Activity | Loaded all 180 saved rows through three additional pages | `13-full-activity.png` |
-| Responsive header | All header buttons/selects fit at 320, 390 and 1440 pixels after CSS fix | `11-mobile.png`, `12-header-320.png`, `12-header-1440.png` |
+| 2 | Riley's direct $56,000.00 request, blocked by L2 | The Disbursement agent prepares the three payout lines from the signed settlement statement; the Evidence Checker verifies each; the lock blocks each line by L2 ("has not cleared") |
+| 3 | Check clears; a person approves the allocation and Riley requests the payment again | Check clears; a person approves the allocation; Disbursement runs again on its own; a person approves and posts three lines; L9 passes via the 33% contingency fee, L11 passes because every line matches the statement |
+| 10 | — | A paralegal moves $3,000.00 of Chen & Park fees to the firm with no invoice; blocked by L9 |
 
-Screenshot review found the long account selector pushed header buttons outside
-the mobile viewport, even though root overflow was clipped. The control group
-and labels now shrink within the header. Playwright checked each control's
-actual bounds; the owners table retains its horizontal scroll.
+## Observed results (mock mode, convex-test)
 
-## State left behind
+| Flow | Observed result |
+| --- | --- |
+| Delgado pending | Trust Intake: "Waiting for the check to clear"; no allocation; run `provenance` = intake · mock · model mock |
+| Disbursement before clearing | Three lines (attorney_fee 2,805,000 · costs 95,000 · client_share 5,600,000), Evidence Checker passed, every proposal `blocked` with L2 "has not cleared" (and L1/L9 on the empty balance) |
+| Disbursement after clearing and allocation | Attempt 2 `ready_for_approval`; each line's lock passed at request; every claim supported; the fee line cites the statement and the fee agreement |
+| Approving and posting the lines | Lock evaluated L9 and L11 at approval and posting; all three posted; Delgado's posted balance $0; the step-2 blocked lines unchanged |
+| Okafor partial retainer | Question asked; answer saved with `accountId` (memory); allocation posted; partial-retainer candidate policy offered later |
+| Nguyen clarification | "James" → checker stops the memo citation; cite-the-answer rerun passes; `submitCorrection` at a step creates a linked attempt; `correct_input_field` changes only the new attempt's input |
+| Bayview duplicate, Cho L1, insurance policy, Westbrook approve-all | Unchanged from the nine-step flow |
+| Paralegal fee (step 10) | `blocked`, L9 "no approved invoice for Chen & Park Holdings … and no signed settlement statement with a matching fee line"; Chen & Park still $120,000.00 |
+| Bounced check | Three-way mismatched; reconciler proposes recording the return; a different person records it; matched again |
+| Unexplained outflow | Reconciler asks "The bank is $2,500.00 short. Did Daniel Okafor's check bounce, or is this a bank fee?" and proposes nothing |
+| Disputed funds | A $200,000.00 dispute on Westbrook holds a $50,000.00 payout at approval (L10); resolution by a different approver re-checks it; a person continues it |
+| Memory | Priya Raman's partial retainer is proposed from Okafor's earlier answer; the pattern becomes policy P-1 (backtest 1 agree, 0 disagree); Kemi Adeyemi's deposit says "Used policy P-1, approved by dev-unverified:sam" |
+| Snapshots | Every run has `input_frozen`, `output_validated`, `claims_checked` and `lock_evaluated` steps with actor, model, mode, frozen input, output, verdicts and lock results; `finance.snapshot.captured` events |
+| Auditor drill | "Caught 4 of 4 · missed 0 · false alarms 0"; the audit changed no ledger entry |
+| Monthly report | October 2026 report matched at $339,500.00; signed off once by sam; a second sign-off refused; the next audit has no A7 warning |
 
-- Adjusted bank = books = owners: **$427,700.00**, matched.
-- Cleared bank cash: **$523,700.00**. Delgado's $56,000 payment and Bayview's
-  $40,000 refund are outstanding reconciling items, not yet bank-settled.
-- Okafor has $0 after the return; James Nguyen has $5,400; Westbrook has
-  $228,000; Delgado has $29,000.
-- The first Bayview wire's $40,000 Chen & Park allocation remains pending
-  individual approval. Bulk approval correctly left it alone.
-- Both blocked requests remain in history. Earlier demo accounts are retained.
+## State left behind (after the ten steps, policy approved)
+
+- Adjusted bank = books = owners, matched.
+- Delgado: $0 (three payouts outstanding until bank settlement). Okafor: $0
+  after the bounce is recorded. James Nguyen: $5,400. Westbrook: $228,000
+  pending posting of the approve-all allocation. Chen & Park: $120,000 (the
+  paralegal's fee never moved). The firm's own-money owner: $0.
+- The step-2 blocked lines, Cho's blocked request and the paralegal's blocked
+  fee stay in history. Earlier demo accounts are untouched.
 
 ## Validation
 
-- Installed Vitest: **22 files, 158 tests passed**.
-- Workspace `pnpm typecheck`: passed.
-- Finance production build: passed before the CSS adjustment; the adjustment
-  was verified in the running UI at three viewport widths.
-- Automated tests also cover the unapproved-policy branch, Nguyen bounce
-  fallback, refund self-approval refusal, return-entry separation of duties,
-  idempotent bounce, and complete ordered activity pagination.
+- `npx --yes pnpm@10.20.0 typecheck`: exit 0.
+- `npx --yes pnpm@10.20.0 test`: 36 files, 260 tests, all pass (was 31 files,
+  228).
+- `npx --yes pnpm@10.20.0 build:finance`: exit 0.
+
+## Not done here
+
+- No browser click-through of the ten-step feed on this branch yet; the desk
+  shows the three payout lines as ordinary payment proposals (approve/post),
+  but has no card for the Disbursement run, disputes, audits, monthly reports
+  or step snapshots. Those are backend-only, reachable through
+  [agent-api.md](agent-api.md).
+- No real CREAO or external model call. The external adapter and the per-agent
+  CREAO adapters are verified only with fake HTTP.
 
 See [the current walkthrough](ui-report.md#current-law-firm-demo-walkthrough)
-for presenter instructions. Earlier preparation blockers are resolved by
-preserving the existing allocation and request gates.
+for presenter instructions and [orchestration.md](orchestration.md) for the
+system as built.

@@ -341,8 +341,11 @@ export async function applyCorrection(ctx: MutationCtx, args: CorrectionArgs): P
   const now = Date.now();
   await ctx.db.insert("financeClarifications", { clarificationId, sourceId: `clarification:${clarificationId}`, questionId: clarificationId, question, answer, caseId: task.caseId, taskId: task.taskId, runId: run.runId, timestamp: now, respondent, evidenceRefs: [], ...(task.accountId ? { accountId: task.accountId } : {}) });
   await appendBoundary(ctx, publicRun(run), "finance.clarification.saved", `${respondent.identity} chose "${args.kind.replace(/_/g, " ")}"${args.stepIndex !== null ? ` at step ${args.stepIndex}` : ""} and reran from step 3. Run ${run.attempt} stays as it was.${reason ? ` Reason: ${reason}` : ""}`, { clarificationId }, { type: "human", component: "finance-dev", ...respondent });
+  // The correction row is written before the new attempt starts, so the attempt's frozen input can apply a corrected field.
+  const expectedRunId = `${task.taskId}:investigation:${latest.attempt + 1}`;
+  const rowId = await ctx.db.insert("financeRunCorrections", { correctionId, runId: run.runId, taskId: task.taskId, stepIndex: args.stepIndex ?? 0, kind: args.kind, payload: args.payload, reason, actor: respondent.identity, newRunId: expectedRunId, clarificationId, createdAt: now });
   const started = await makeAttempt(ctx, task, latest.scope, latest, { trigger: "person_corrected", actor: { type: "person", identity: respondent.identity } });
-  await ctx.db.insert("financeRunCorrections", { correctionId, runId: run.runId, taskId: task.taskId, stepIndex: args.stepIndex ?? 0, kind: args.kind, payload: args.payload, reason, actor: respondent.identity, newRunId: started.runId, clarificationId, createdAt: now });
+  if (started.runId !== expectedRunId) await ctx.db.patch("financeRunCorrections", rowId, { newRunId: started.runId });
   return { ...started, correctionId };
 }
 
