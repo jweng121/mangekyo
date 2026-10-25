@@ -13,6 +13,7 @@ import { useMicrophoneMeter } from "./useMicrophoneMeter";
 import { SnapshotChatReply } from "./SnapshotChatReply";
 import { WalkthroughIsland } from "./WalkthroughIsland";
 import { EvidenceCanvas } from "./EvidenceCanvas";
+import {escalationCases} from "../lib/workspace-data";
 
 const empty: InvestigationRecord = { runs: [], events: [], snapshots: [], steeringRequests: [], reports: [], chatMessages: [], memoryRecords: [], findings: [], escalations: [] };
 const taskName = (id: string) => id === "bank-line-1042" ? "Deposit ownership" : id.replaceAll(/[-_]/g, " ").replace(/^./, letter => letter.toUpperCase());
@@ -21,12 +22,14 @@ const shortTime = (date: string) => new Date(date).toLocaleDateString(undefined,
 
 
 type Task = { id: string; title: string; taskId: string; runIds: string[]; agentId: string; status: string; reviewLabel?: string; latestAt: string; searchable: string };
-function tasksFrom(record: InvestigationRecord): Task[] {
-  return record.runs.filter(run => !run.parentRunId && record.escalations.some(item => item.runId === run.id)).map(root => {
-    const branches = record.runs.filter(run => run.parentRunId === root.id);
+function tasksFrom(record: InvestigationRecord, includeAll = false): Task[] {
+  return record.runs.filter(run => !run.parentRunId && (includeAll || record.escalations.some(item => item.runId === run.id))).map(root => {
+    const descendants = new Set([root.id]);
+    for (let pass = 0; pass < record.runs.length; pass++) for (const run of record.runs) if (run.parentRunId && descendants.has(run.parentRunId)) descendants.add(run.id);
+    const branches = record.runs.filter(run => run.id !== root.id && descendants.has(run.id));
     const runIds = [root.id, ...branches.map(run => run.id)];
     const latest = branches.at(-1) ?? root;
-    const escalated = record.escalations.some(item => item.runId === root.id && item.status === "open");
+    const escalated = escalationCases(record).find(item=>item.run.id===root.id)?.open ?? false;
     const status = escalated ? "escalated" : "resolved";
     const report = [...record.reports].reverse().find(item => item.runId === root.id);
     const reviewLabel = escalated && branches.length ? report?.status === "filed" ? "Review filed" : "Human review open" : undefined;
@@ -39,7 +42,9 @@ function tasksFrom(record: InvestigationRecord): Task[] {
 type SpeechResult = { results: ArrayLike<ArrayLike<{ transcript: string }>> };
 type SpeechRecognitionLike = { lang: string; interimResults: boolean; continuous: boolean; onstart: (() => void) | null; onend: (() => void) | null; onresult: ((event: SpeechResult) => void) | null; onerror: ((event: { error?: string }) => void) | null; onspeechstart: (() => void) | null; onspeechend: (() => void) | null; start(): void; stop(): void };
 
-export function CompanionWorkspace() {
+export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?:string;initialRunId?:string} = {}) {
+  const apiPath = (suffix = "") => platformRunId ? `/api/platform/review/${encodeURIComponent(platformRunId)}${suffix}` : `/api/visual-audit${suffix}`;
+  const [correctionChoice,setCorrectionChoice] = useState("cite_clarification");
   const [chatExpanded, setChatExpanded] = useState(false);
   const [voiceError, setVoiceError] = useState("");
   const [conversationId, setConversationId] = useState("default");
@@ -50,8 +55,8 @@ export function CompanionWorkspace() {
   const [liveCaption, setLiveCaption] = useState("");
   const [spokenCharIndex, setSpokenCharIndex] = useState(-1);
   const [record, setRecord] = useState<InvestigationRecord>(empty);
-  const [taskId, setTaskId] = useState<string>();
-  const [runId, setRunId] = useState<string>();
+  const [taskId, setTaskId] = useState<string | undefined>(initialRunId);
+  const [runId, setRunId] = useState<string | undefined>(platformRunId ?? initialRunId);
   const [snapshotId, setSnapshotId] = useState<string>();
   const [follow, setFollow] = useState(false);
   const [query, setQuery] = useState("");
@@ -80,7 +85,7 @@ export function CompanionWorkspace() {
   const [compareOpen, setCompareOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [steerOpen, setSteerOpen] = useState(false);
-  const [instruction, setInstruction] = useState("The payment reference identifies Client B. Reevaluate the ownership allocation using the original bank evidence.");
+  const [instruction, setInstruction] = useState(platformRunId ? "" : "The payment reference identifies Client B. Reevaluate the ownership allocation using the original bank evidence.");
   const [reportText, setReportText] = useState("");
   const [memoryText, setMemoryText] = useState("");
   const [busy, setBusy] = useState(false);
@@ -100,8 +105,8 @@ export function CompanionWorkspace() {
   const steeringStage = useRef<"none" | "submitted" | "running">("none");
   useEffect(() => { if (window.innerWidth < 760) setSidebarOpen(false); }, []);
 
-  const tasks = useMemo(() => tasksFrom(record), [record]);
-  const task = tasks.find(item => item.id === taskId) ?? tasks.find(item => item.status === caseStatus);
+  const tasks = useMemo(() => tasksFrom(record, !!platformRunId), [record, platformRunId]);
+  const task = tasks.find(item => item.id === taskId || item.runIds.includes(taskId ?? "")) ?? tasks.find(item => item.status === caseStatus) ?? (platformRunId ? tasks[0] : undefined);
   const taskRuns = record.runs.filter(item => task?.runIds.includes(item.id));
   const activeRun = taskRuns.find(item => item.id === runId) ?? taskRuns.find(item => item.id === task?.id) ?? taskRuns[0];
   const originalRun = taskRuns.find(item => item.id === task?.id);
@@ -112,7 +117,7 @@ export function CompanionWorkspace() {
   const selected = snapshots.find(item => item.id === snapshotId) ?? (follow ? latestCapture ?? latest : snapshots.find(item => item.id === escalation?.snapshotId) ?? snapshots.find(item => item.auditStatus === "flagged") ?? latestCapture ?? latest);
   const visual = selected;
   const finding = record.findings.find(item => item.runId === originalRun?.id);
-  const proposal = record.snapshots.find(item => item.runId === originalRun?.id && item.actionType === "PROPOSE");
+  const proposal = record.snapshots.find(item => item.runId === originalRun?.id && item.actionType === "PROPOSE") ?? (platformRunId ? record.snapshots.find(item=>item.runId===originalRun?.id && item.auditStatus==="flagged") : undefined);
   const report = [...record.reports].reverse().find(item => item.runId === originalRun?.id);
   const memory = [...record.memoryRecords].reverse().find(item => item.sourceReportId === report?.id);
   const messages = [...record.chatMessages.filter(item => task?.runIds.includes(item.runId) && (item.conversationId ?? "default") === conversationId), ...record.steeringRequests.filter(item => conversationId === "default" && item.parentRunId === task?.id).map(item => ({ id: `steering-chat-${item.id}`, runId: item.parentRunId, role: "user" as const, text: item.instruction, snapshotIds: [item.checkpointSnapshotId], createdAt: item.createdAt }))].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
@@ -137,9 +142,13 @@ export function CompanionWorkspace() {
   const filteredTasks = tasks.filter(item => item.status === caseStatus && item.searchable.includes(query.toLowerCase()));
   const canSteer = !!selected && selected.id === proposal?.id && originalRun?.status === "escalated";
   const narration = useMemo<NarratedExplanation | undefined>(() => {
+    if(platformRunId && originalRun) {
+      const parts=record.snapshots.filter(item=>item.runId===activeRun?.id).map(item=>({snapshotId:item.id,text:item.summary,annotationIds:item.annotations?.slice(0,1).map(a=>a.id)??[]}));
+      return buildSpokenReply(`platform-${originalRun.id}`,"",parts,record.snapshots);
+    }
     if (!originalRun || !finding) return;
     return buildWalkthroughDialogue(originalRun.id, finding, record.snapshots);
-  }, [originalRun?.id, finding?.id, record.snapshots]);
+  }, [originalRun?.id, activeRun?.id, finding?.id, record.snapshots, platformRunId]);
 
   useEffect(() => {
     const onSegment = (segment?: { snapshotId?: string; highlightIds: string[] }, index?: number) => {
@@ -157,10 +166,13 @@ export function CompanionWorkspace() {
     return () => { narrator.current?.stop(); stopDictation(); };
   }, []);
   useEffect(() => {
-    fetch("/api/visual-audit", { cache: "no-store" }).then(async response => { const data = await response.json(); if (!response.ok) throw new Error(data.error); setRecord(data); }).catch(cause => setError(cause.message));
-    const source = new EventSource("/api/visual-audit/stream"); source.onmessage = event => { try { setRecord(JSON.parse(event.data)); setError(""); } catch {} }; source.onerror = () => setError("Connection interrupted. Refresh to reconnect.");
-    return () => { source.close(); };
-  }, []);
+    let active=true;
+    const refresh = async () => { try {const response=await fetch(apiPath(),{cache:"no-store"});const data=await response.json();if(!response.ok)throw new Error(data.error);if(active){setRecord(data);setError("");}}catch(cause){if(active)setError((cause as Error).message);} };
+    void refresh();
+    if(platformRunId) { const timer=setInterval(refresh,5000);return ()=>{active=false;clearInterval(timer);}; }
+    const source=new EventSource("/api/visual-audit/stream");source.onmessage=event=>{try{setRecord(JSON.parse(event.data));setError("");}catch{}};source.onerror=()=>setError("Connection interrupted. Refresh to reconnect.");
+    return ()=>{active=false;source.close();};
+  }, [platformRunId]);
   useEffect(() => { setHighlightIds(current => current.some(id => selected?.annotations?.some(item => item.id === id)) ? current : selected?.annotations?.map(item => item.id) ?? []); setFocusBubble(undefined); setFocusedAnnotationId(current => selected?.annotations?.some(item => item.id === current) ? current : undefined); }, [selected?.id]);
   useEffect(() => { setReportText(report?.content ?? ""); }, [report?.version, report?.id]);
   useEffect(() => { setMemoryText(memory?.content ?? ""); }, [memory?.id, memory?.version]);
@@ -203,7 +215,7 @@ export function CompanionWorkspace() {
     setVoiceReply(""); setWalkthroughOpen(true);
     setDraft(""); setPendingQuestion(prompt); setThinking(true); setError("");
     try {
-      const response = await fetch("/api/visual-audit/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: prompt, snapshotId: selected.id, conversationId, conversationTitle: chatTitle }) });
+      const response = await fetch(apiPath("/chat"), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: prompt, snapshotId: selected.id, conversationId, conversationTitle: chatTitle }) });
       const data = await response.json(); if (!response.ok) throw new Error(data.error);
       setRecord(current => ({ ...current, chatMessages: [...current.chatMessages, ...[data.user, data.assistant].filter(message => !current.chatMessages.some(existing => existing.id === message.id))] }));
       const actions = visualActionsForQuestion(prompt, selected, record, data.assistant.snapshotIds);
@@ -269,7 +281,8 @@ export function CompanionWorkspace() {
   const post = async (body: object) => {
     setBusy(true); setError("");
     if ("action" in body && body.action === "steer") { steeringStartedAt.current = Date.now() - 1000; steeringStage.current = "none"; addFlow("I'm preparing a correction for the tasked agent based on this evidence."); }
-    try { const response = await fetch("/api/visual-audit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }); const data = await response.json(); if (!response.ok) throw new Error(data.error);
+    try { const response = await fetch(apiPath(), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({...body,...(platformRunId ? {choice:correctionChoice,runId:record.platformReview?.runId} : {})}) }); const data = await response.json(); if (!response.ok) throw new Error(data.error);
+      if(platformRunId) {setRecord(data.record);setRunId(data.runId);setBranchId(data.runId);setSnapshotId(undefined);setSteerOpen(false);setNotice("Correction sent. The new attempt will appear as evidence is recorded.");return;}
       setRecord(data.record); const resultRun = data.corrected ?? data.run;
       const resultSnapshots = data.record.snapshots.filter((item: Snapshot) => item.runId === resultRun.id) as Snapshot[];
       setTaskId(data.corrected ? data.corrected.parentRunId : resultRun.id); setRunId(resultRun.id); setBranchId(resultRun.id);
@@ -294,29 +307,30 @@ export function CompanionWorkspace() {
     try { const response = await fetch("/api/visual-audit/resolve", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ runId: originalRun.id, conversationId, conversationTitle: conversation?.title }) }); const data = await response.json(); if (!response.ok) throw new Error(data.error); setRecord(data.record); setTaskId(originalRun.id); setCaseStatus("resolved"); setInspectorTab("chat"); setFlowMessages([]); setNotice(""); }
     catch (cause) { setError((cause as Error).message); } finally { setBusy(false); }
   };
+  const graphConflictId = record.escalations.find(item=>item.runId===originalRun?.id)?.snapshotId ?? finding?.snapshotId;
   const originalSnapshots = record.snapshots.filter(item => item.runId === originalRun?.id).sort((a, b) => a.sequence - b.sequence);
   const correctedBranches = taskRuns.filter(item => item.branchId === "corrected");
   const latestCorrectedRun = correctedBranches.at(-1);
   const correctedRun = correctedBranches.find(item => item.id === branchId) ?? latestCorrectedRun;
   const correctedSnapshots = record.snapshots.filter(item => item.runId === correctedRun?.id).sort((a, b) => a.sequence - b.sequence);
   const annotations = selected?.annotations ?? [];
-  const canResolve = !!escalation && !!correctedRun && correctedRun.id === latestCorrectedRun?.id && correctedRun.status === "corrected" && !!report && !record.findings.some(item => item.runId === correctedRun.id && item.reviewStatus === "open");
-  const caseAnnotations = [...originalSnapshots, ...correctedSnapshots].flatMap(snapshot => (snapshot.annotations ?? []).map(annotation => ({ snapshot, annotation })));
+  const canResolve = !platformRunId && !!escalation && !!correctedRun && correctedRun.id === latestCorrectedRun?.id && correctedRun.status === "corrected" && !!report && !record.findings.some(item => item.runId === correctedRun.id && item.reviewStatus === "open");
+  const caseAnnotations = (platformRunId ? (selected ? [selected] : []) : [...originalSnapshots, ...correctedSnapshots]).flatMap(snapshot => (snapshot.annotations ?? []).map(annotation => ({ snapshot, annotation })));
   const annotationNumbers = Object.fromEntries(caseAnnotations.map(({ annotation }, index) => [annotation.id, index + 1]));
   const amount = originalSnapshots.map(item => item.summary).join(" ").match(/\$[\d,]+(?:\.\d{2})?/)?.[0];
   const reference = originalSnapshots.flatMap(item => item.observation.fields).find(item => item.id === "bank-reference")?.value.split(" / ")[0];
   const comparisonSnapshots = (correctedRun ? [proposal, correctedSnapshots.find(item => item.actionType === "PROPOSE")] : [originalSnapshots.find(item => /bank/i.test(item.title)), originalSnapshots.find(item => /invoice|funding/i.test(item.title))]).filter((item): item is Snapshot => !!item);
   const submitComposer = () => {
     if (!draft.trim() || busy || thinking) return;
-    if (composeMode === "correction" && proposal) { if (draft.trim().length < 12) return; const text = draft.trim(); setDraft(""); post({ action: "steer", snapshotId: proposal.id, instruction: text, scope: "dependent_work" }); }
+    if (composeMode === "correction" && proposal) { if (draft.trim().length < 12) return; if(platformRunId){if(!record.platformReview?.canCorrect){setError("Review the required action on the overview before sending a correction.");return;}setInstruction(draft.trim());setSteerOpen(true);return;} const text = draft.trim(); setDraft(""); post({ action: "steer", snapshotId: proposal.id, instruction: text, scope: "dependent_work" }); }
     else ask(draft);
   };
 
-  return <div className={`review-shell ${chatExpanded ? "chat-expanded" : ""} ${sidebarOpen ? "" : "sidebar-closed"}`}>
+  return <div className={`review-shell ${platformRunId || initialRunId ? "platform-review" : ""} ${chatExpanded ? "chat-expanded" : ""} ${sidebarOpen ? "" : "sidebar-closed"}`}>
     <aside className="review-sidebar" aria-label="Escalated cases">
       <div className="sidebar-brand"><MangekyoAvatar size={38}/><strong>Mangekyo</strong><IconButton label="Hide case list" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={16}/></IconButton></div>
       <div className="sidebar-section"><Inbox size={17}/><h2>Exceptions</h2><span>{tasks.filter(item => item.status === caseStatus).length}</span></div>
-      <select className="case-status-filter" aria-label="Case status" value={caseStatus} onChange={event => { setCaseStatus(event.target.value); setTaskId(undefined); setRunId(undefined); setSnapshotId(undefined); }}><option value="escalated">Open exceptions</option><option value="resolved">Resolved</option></select>
+      <select className="case-status-filter" aria-label="Case status" value={caseStatus} onChange={event => { setCaseStatus(event.target.value); setTaskId(undefined); setRunId(undefined); setSnapshotId(undefined); }}><option value="escalated">Needs escalation</option><option value="resolved">Completed</option></select>
       <label className="sidebar-search"><Search size={14}/><input aria-label="Search escalated cases" placeholder="Search cases" value={query} onChange={event => setQuery(event.target.value)}/></label>
       <div className="case-list">{filteredTasks.map(item => {
         const caseSnapshots = record.snapshots.filter(snapshot => snapshot.runId === item.id);
@@ -331,18 +345,18 @@ export function CompanionWorkspace() {
     <main className="review-main">
           <WalkthroughIsland title={answerNarration ? "Mangekyo" : undefined} thinking={thinking} autoSend={composeMode === "question"} listening={listening} speaking={microphoneMeter.speaking} levels={microphoneMeter.bars} reply={voiceReply} inputError={dictationError || microphoneMeter.error} speechSupported={speechSupported} onListen={microphone} error={voiceError} caption={liveCaption} spokenCharIndex={spokenCharIndex} open={walkthroughOpen} status={voiceStatus} available={voiceAvailable} explanation={answerNarration ?? narration} index={segmentIndex} snapshots={record.snapshots} annotationNumbers={annotationNumbers} onStart={() => { if (answerNarration) { voiceSession.current++; stopDictation(); setWalkthroughOpen(true); narrator.current?.play(answerNarration, 0, true, true); return; } if (narration) { voiceSession.current++; setAnswerNarration(undefined); stopDictation(); setWalkthroughOpen(true); setCompareOpen(false); narrator.current?.play(narration, 0, false); } }} onContinue={() => { stopDictation(); narrator.current?.continue(); }} onPause={() => narrator.current?.pause()} onResume={() => { stopDictation(); narrator.current?.resume(); }} onClose={() => { voiceSession.current++; stopDictation(); narrator.current?.stop(); setWalkthroughOpen(false); }} onSeek={index => { if (narration) narrator.current?.play(narration, index, false); }}/>
       <header className="case-header">
-        <div className="case-heading"><div className="case-breadcrumb">{sidebarOpen ? <IconButton label="Hide case list" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={17}/></IconButton> : <button className="sidebar-reopen" aria-label="Show case list" aria-expanded={false} onClick={() => setSidebarOpen(true)}><PanelLeftOpen size={17}/><span>Show cases</span></button>}<span>Exceptions</span><ChevronRight size={13}/><span>{task?.taskId.match(/\d+$/)?.[0] ? `#${task.taskId.match(/\d+$/)?.[0]}` : "Review"}</span></div><h1>{task ? task.title : "Exceptions"}</h1></div>
-        {task && <div className="case-header-actions"><span className="case-status">{task.status === "resolved" ? <><Check size={12}/> Resolved</> : <><i/> Unresolved</>}</span>{canResolve && <button className="review-primary" onClick={resolveCase} disabled={busy}><Check size={15}/> Approve &amp; resolve</button>}<ReviewMenu items={[
+        <div className="case-heading"><div className="case-breadcrumb">{sidebarOpen ? <IconButton label="Hide case list" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={17}/></IconButton> : <button className="sidebar-reopen" aria-label="Show case list" aria-expanded={false} onClick={() => setSidebarOpen(true)}><PanelLeftOpen size={17}/><span>Show cases</span></button>}<a href="/escalations">Escalations</a><ChevronRight size={13}/><span>{task?.taskId.match(/\d+$/)?.[0] ? `#${task.taskId.match(/\d+$/)?.[0]}` : "Review"}</span></div><h1>{task ? task.title : "Escalations"}</h1></div>
+        {task && <div className="case-header-actions"><span className={`case-status ${task.status==="resolved"?"completed":""}`}>{platformRunId ? <>{record.platformReview?.status === "resolved" ? "Completed" : record.platformReview?.status === "ready_for_approval" ? "Ready for approval" : record.platformReview?.status === "running" ? "Agent running" : "Needs escalation"}</> : task.status === "resolved" ? <><Check size={12}/>Completed</> : <><i/> Needs escalation</>}</span>{platformRunId && <a className="review-primary" href={`/desk?tab=reviews&accountId=${encodeURIComponent(record.platformReview?.accountId ?? "")}`}>Review on overview</a>}{canResolve && <button className="review-primary" onClick={resolveCase} disabled={busy}><Check size={15}/> Approve correction</button>}<ReviewMenu items={[
           { label: "Compare evidence", icon: <Columns2 size={15}/>, onSelect: () => setCompareOpen(value => !value), disabled: comparisonSnapshots.length < 2 },
           { label: "Review report", icon: <FileText size={15}/>, onSelect: () => setReportOpen(true), disabled: !report },
           { label: "Correct decision", icon: <GitBranch size={15}/>, onSelect: () => suggest("Re-evaluate ownership using the bank payment reference and customer record.", "correction"), disabled: !proposal || busy },
         ]}/></div>}
       </header>
-      {task && <div className="case-facts">{amount && <div><span>Amount</span><strong>{amount}</strong></div>}{reference && <div><span>Reference</span><strong>{reference}</strong></div>}<div><span>Proposed owner</span><strong className={originalRun?.proposedOwner ? "conflicting-value" : ""}>{originalRun?.proposedOwner ?? "Unassigned"}</strong>{canResolve && <><ArrowRight size={13}/><strong className="corrected-value">{correctedRun?.proposedOwner}</strong></>}</div><div className="case-facts-agent"><span>Agent</span><strong>{agentName(task.agentId)}</strong></div></div>}
+      {task && <div className="case-facts">{amount && <div><span>Amount</span><strong>{amount}</strong></div>}{reference && <div><span>Reference</span><strong>{reference}</strong></div>}{!platformRunId && <div><span>Proposed owner</span><strong className={originalRun?.proposedOwner ? "conflicting-value" : ""}>{originalRun?.proposedOwner ?? "Unassigned"}</strong>{canResolve && <><ArrowRight size={13}/><strong className="corrected-value">{correctedRun?.proposedOwner}</strong></>}</div>}<div className="case-facts-agent"><span>Agent</span><strong>{agentName(task.agentId)}</strong></div></div>}
       {error && <div className="review-error" role="alert"><CircleAlert size={16}/>{error}<button onClick={() => setError("")} aria-label="Dismiss error"><X size={14}/></button></div>}
       {task ? <div className="review-workspace">
         <section className="review-evidence" aria-label="Snapshot review">
-          <SnapshotBranchGraph branchControl={correctedBranches.length > 1 ? <select className="history-branch-select" aria-label="Correction branch" value={correctedRun?.id} onChange={event => { setBranchId(event.target.value); const target = record.snapshots.find(item => item.runId === event.target.value && item.actionType === "PROPOSE"); if (target) chooseSnapshot(target); }}>{correctedBranches.map((branch, index) => <option key={branch.id} value={branch.id}>Correction {index + 1}</option>)}</select> : undefined} original={originalSnapshots} corrected={correctedSnapshots} selectedId={selected?.id} conflictId={escalation?.snapshotId} onSelect={item => { setCompareOpen(false); chooseSnapshot(item); }}/>
+          <SnapshotBranchGraph branchControl={correctedBranches.length > 1 ? <select className="history-branch-select" aria-label="Correction branch" value={correctedRun?.id} onChange={event => { setBranchId(event.target.value); const target = record.snapshots.find(item => item.runId === event.target.value && item.actionType === "PROPOSE"); if (target) chooseSnapshot(target); }}>{correctedBranches.map((branch, index) => <option key={branch.id} value={branch.id}>Correction {index + 1}</option>)}</select> : undefined} original={originalSnapshots} corrected={correctedSnapshots} selectedId={selected?.id} conflictId={graphConflictId} onSelect={item => { setCompareOpen(false); chooseSnapshot(item); }}/>
           <div className="evidence-heading"><div><FileText size={16}/><h2>{compareOpen ? "Compare evidence" : selected?.title ?? "Snapshot"}</h2></div><div><span>{!compareOpen && selected ? `Snapshot ${selected.sequence}` : correctedRun ? "Before / After" : "Bank / Invoice"}</span><IconButton label={compareOpen ? "Close comparison" : "Compare evidence"} disabled={comparisonSnapshots.length < 2} onClick={() => setCompareOpen(value => !value)} className={compareOpen ? "is-active" : ""}><Columns2 size={16}/></IconButton></div></div>
 
           {compareOpen ? <div className="evidence-comparison">{comparisonSnapshots.map((item, index) => <div className="comparison-pane" key={item.id}><div className="comparison-pane-label"><i className={correctedRun && index === 1 ? "corrected" : ""}/><span>{correctedRun ? index === 0 ? "Before correction" : "After correction" : item.title}</span></div><EvidenceCanvas annotationNumbers={annotationNumbers} snapshot={item} highlightIds={item.annotations?.map(annotation => annotation.id) ?? []} onEvidence={evidenceId => { chooseSnapshot(item); setCompareOpen(false); const annotation = item.annotations?.find(note => note.evidenceRef === evidenceId); if (annotation) focusAnnotation(annotation.id, evidenceId); }}/><div className="comparison-value">{item.observation.fields.map(field => <span key={field.id}>{field.label}<strong>{field.value}</strong></span>)}</div></div>)}</div> : <EvidenceCanvas annotationNumbers={annotationNumbers} snapshot={selected} showCallout={walkthroughOpen} zoomOnFocus={!walkthroughOpen} focusedAnnotationId={focusedAnnotationId} focusRequestId={focusRequestId} highlightIds={highlightIds} onEvidence={evidenceId => { const annotation = selected?.annotations?.find(item => item.evidenceRef === evidenceId); if (annotation) focusAnnotation(annotation.id, evidenceId); }}/>} 
@@ -353,9 +367,9 @@ export function CompanionWorkspace() {
           <div className="inspector-heading"><MangekyoAvatar size={26}/><h2>Mangekyo</h2><span className={`agent-presence ${thinking || busy ? "working" : ""}`} title={thinking || busy ? "Working" : "Ready"}/><IconButton label={chatExpanded ? "Collapse chat" : "Expand chat"} onClick={() => { setChatExpanded(value => !value); setInspectorTab("chat"); }}>{chatExpanded ? <Minimize2 size={16}/> : <Maximize2 size={16}/>}</IconButton></div>
           <Tabs.List className="inspector-tabs" aria-label="Review panel"><Tabs.Trigger value="chat">Chat</Tabs.Trigger><Tabs.Trigger value="annotations">Annotations<span>{caseAnnotations.length}</span></Tabs.Trigger><Tabs.Trigger value="details">Details</Tabs.Trigger></Tabs.List>
           <Tabs.Content value="annotations" className="inspector-content notes-content">
-            <div className="notes-scroll"><div className="issue-note"><span className="issue-title"><CircleAlert size={15}/>{finding?.category === "ownership_conflict" ? "Ownership mismatch" : "Review required"}</span><p>{finding?.explanation ?? selected?.summary}</p></div>
+            <div className="notes-scroll"><div className="issue-note"><span className="issue-title"><CircleAlert size={15}/>{task?.status === "resolved" ? "Original finding" : finding?.category === "ownership_conflict" ? "Ownership mismatch" : "Needs escalation"}</span><p>{finding?.explanation ?? selected?.summary}</p></div>
             <div className="annotation-list">{caseAnnotations.map(({ snapshot, annotation }, index) => <button key={annotation.id} ref={node => { annotationRefs.current[annotation.id] = node; }} className={`annotation-row ${focusedAnnotationId === annotation.id ? "active" : ""} ${snapshot.id === selected?.id ? "current-snapshot" : ""}`} onClick={() => { chooseSnapshot(snapshot); setCompareOpen(false); focusAnnotation(annotation.id, annotation.evidenceRef); }}><span className="annotation-number">{index + 1}</span><span className="annotation-copy"><strong>{annotation.label}</strong><span>{annotationContext(snapshot, annotation.evidenceRef, annotation.textQuote)}</span>{snapshot.actionType !== "READ" && snapshot.recordedJustification && <span className="annotation-context">{snapshot.recordedJustification}</span>}<small>{snapshot.runId === correctedRun?.id ? "Corrected · " : ""}Snapshot {snapshot.sequence}</small></span><ArrowUpRight size={13}/></button>)}</div></div>
-            <div className="inspector-bottom"><button className="review-primary wide" disabled={!proposal || busy} onClick={() => suggest("Re-evaluate ownership using the bank payment reference and customer record.", "correction")}><GitBranch size={15}/> {correctedRun ? "Refine correction" : "Correct decision"}<ArrowRight size={15}/></button></div>
+            <div className="inspector-bottom"><button className="review-primary wide" disabled={!proposal || busy || (!!platformRunId && !record.platformReview?.canCorrect)} onClick={() => suggest("Re-evaluate ownership using the bank payment reference and customer record.", "correction")}><GitBranch size={15}/> {correctedRun ? "Refine correction" : "Correct decision"}<ArrowRight size={15}/></button></div>
           </Tabs.Content>
           <Tabs.Content value="chat" className="inspector-content chat-content">
             <div className="chat-titlebar"><select aria-label="Chat title" value={conversationId} disabled={thinking || busy} onChange={event => switchConversation(event.target.value)}>{conversations.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}</select><IconButton label="New chat" disabled={thinking || busy} onClick={newConversation}><Plus size={16}/></IconButton></div>
@@ -378,7 +392,7 @@ export function CompanionWorkspace() {
     </main>
     {notice && <div className="review-toast" role="status"><Check size={15}/><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notification"><X size={14}/></button></div>}
 
-    {steerOpen && proposal && <div className="mc-modal-shade" onMouseDown={event => { if (event.target === event.currentTarget) setSteerOpen(false); }}><section className="mc-modal mc-steer-modal" role="dialog" aria-modal="true" aria-label="Steer agent"><header><div><span>Correct this decision</span><h2>Guide the Matching Agent</h2></div><button onClick={() => setSteerOpen(false)} aria-label="Close steering">×</button></header><div className="mc-steer-preview">{proposal.screenshot && <img src={proposal.screenshot.url} alt={proposal.screenshot.alt}/>}<div><strong>{proposal.title}</strong><p>{proposal.summary}</p><small>{proposal.evidence.map(item => `${item.label}: ${item.value}`).join(" · ")}</small></div></div><label htmlFor="mc-instruction">What should the agent reconsider?</label><textarea id="mc-instruction" value={instruction} onChange={event => setInstruction(event.target.value)}/><p>The affected task will restart with preserved context. This does not post or approve a transaction.</p><footer><button onClick={() => setSteerOpen(false)}>Cancel</button><button disabled={busy || instruction.trim().length < 12} onClick={() => post({ action: "steer", snapshotId: proposal.id, instruction, scope: "dependent_work" })}>{busy ? "Rerunning agent…" : "Send direction and rerun"}</button></footer></section></div>}
+    {steerOpen && proposal && <div className="mc-modal-shade" onMouseDown={event => { if (event.target === event.currentTarget) setSteerOpen(false); }}><section className="mc-modal mc-steer-modal" role="dialog" aria-modal="true" aria-label="Steer agent"><header><div><span>Correct this decision</span><h2>Guide {platformRunId ? "Trust Intake" : "the Matching Agent"}</h2></div><button onClick={() => setSteerOpen(false)} aria-label="Close steering">×</button></header><div className="mc-steer-preview">{proposal.screenshot && <img src={proposal.screenshot.url} alt={proposal.screenshot.alt}/>}<div><strong>{proposal.title}</strong><p>{proposal.summary}</p><small>{proposal.evidence.map(item => `${item.label}: ${item.value}`).join(" · ")}</small></div></div>{platformRunId && <label className="platform-correction-type">Correction type<select value={correctionChoice} onChange={event=>setCorrectionChoice(event.target.value)}><option value="cite_clarification">Cite a recorded clarification</option><option value="add_document">Add source document text</option><option value="checker_wrong">Challenge the checker with a reason</option></select><small>Submitted as Sam, the platform's demo approver. Existing permission checks still apply.</small></label>}<label htmlFor="mc-instruction">What should the agent reconsider?</label><textarea id="mc-instruction" value={instruction} onChange={event => setInstruction(event.target.value)}/><p>The affected task will restart with preserved context. This does not post or approve a transaction.</p><footer><button onClick={() => setSteerOpen(false)}>Cancel</button><button disabled={busy || instruction.trim().length < 12} onClick={() => post({ action: "steer", snapshotId: proposal.id, instruction, scope: "dependent_work" })}>{busy ? "Rerunning agent…" : "Send direction and rerun"}</button></footer></section></div>}
       {reportOpen && report && <div className="mc-modal-shade" onMouseDown={event => { if (event.target === event.currentTarget) setReportOpen(false); }}><section className="mc-modal mc-report-modal" role="dialog" aria-modal="true" aria-label="Investigation report"><header><div><span>Investigation report</span><h2>Issue and correction</h2></div><button onClick={() => setReportOpen(false)} aria-label="Close report">×</button></header><div className="mc-report-status">{report.status.replaceAll("_", " ")} · {report.evidenceSnapshotIds.length} linked observations</div><textarea aria-label="Report content" value={reportText} onChange={event => setReportText(event.target.value)} disabled={report.status === "filed"}/><p>Remaining uncertainty: {report.remainingUncertainty}</p><div className="mc-report-actions"><button disabled={busy || report.status === "filed"} onClick={() => reviseReport(report.status)}>Save changes</button>{report.status === "draft" && <button onClick={() => reviseReport("pending_review")}>Submit for review</button>}{report.status === "pending_review" && <button onClick={() => reviseReport("approved")}>Approve report</button>}{report.status === "approved" && <button onClick={() => reviseReport("filed")}>File report</button>}</div>{report.status === "filed" && <div className="mc-memory"><h3>{memory?.status === "approved" ? "Approved agent context" : memory ? "Lesson awaiting approval" : "Save a lesson for future runs"}</h3><p>Lessons apply only to this agent’s matching task and remain separate from the steering instruction.</p>{memory ? <><textarea aria-label="Proposed agent memory" value={memoryText} disabled={memory.status !== "pending"} onChange={event => setMemoryText(event.target.value)}/><span>{memory.status === "approved" ? "Approved and available for matching tasks" : "Awaiting reviewer approval"}</span>{memory.status === "pending" && <button disabled={busy || memoryText.trim().length < 30} onClick={() => memoryAction("approve")}>Approve lesson</button>}</> : <button disabled={busy} onClick={() => memoryAction("propose")}>Prepare lesson for review</button>}</div>}</section></div>}
   </div>;
 }

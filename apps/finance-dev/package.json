@@ -20,7 +20,11 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "three": "0.134.0",
-    "vanta": "^0.5.24"
+    "vanta": "^0.5.24",
+    "lucide-react": "^1.61.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/stack-sans-notch": "^5.3.0",
+    "@mangekyo/visual-audit": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

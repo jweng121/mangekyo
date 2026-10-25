@@ -1,3 +1,5 @@
+import { PlatformShell } from "../../finance-dev/app/components/PlatformShell";
+import { ChatDock } from "./ChatDock";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "@fontsource-variable/inter";
@@ -12,7 +14,7 @@ import "./companion.css";
 import "./review.css";
 
 export const metadata: Metadata = {
-  title: "Mangekyo | Visual Agent Audit",
+  title: "Mangekyo | Trust operations",
   icons: { icon: "/mangekyo-logo.png", apple: "/mangekyo-logo.png" },
   description: "Visual investigation of monitored agent browser evidence.",
 };
@@ -21,7 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        {children}
+        <PlatformShell>{children}<ChatDock/></PlatformShell>
       </body>
     </html>
   );

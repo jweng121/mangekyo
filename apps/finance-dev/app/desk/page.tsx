@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 import Link from "next/link";
+import { ChevronRight, CircleAlert, CircleCheck, SlidersHorizontal } from "lucide-react";
 import { useMutation, useQuery, usePaginatedQuery } from "convex/react";
 import { ConvexError } from "convex/values";
 import gsap from "gsap";
@@ -35,14 +36,18 @@ function Bars({ pool, available, requested, ownerName }: { pool: number | null; 
 }
 
 function Card({ tone, tag, tagTone, title, children }: { tone?: "bad" | "wait"; tag: string; tagTone: string; title: ReactNode; children: ReactNode }) {
-  return <article className={`card ${tone ?? ""}`}><span className={`tag ${tagTone}`}>{tag}</span><h3>{title}</h3>{children}</article>;
+  return <details className={`review-item ${tone ?? ""}`}><summary>{tone === "bad" ? <CircleAlert size={16} color="#bd514d"/> : <CircleCheck size={16} color="#a78d9a"/>}<span className="review-item-title"><strong>{title}</strong><small>{tag}</small></span><ChevronRight className="review-item-chevron" size={15}/></summary><div className="review-item-body">{children}</div></details>;
 }
 
 export default function Desk() {
   const accounts = useQuery(api.financeIntake.listAccounts);
+  const [viewTab, setViewTab] = useState("overview");
+  useEffect(()=>{ const tab=new URLSearchParams(window.location.search).get("tab"); if(tab && ["owners","reviews","activity"].includes(tab)) setViewTab(tab); }, []);
   const [chosen, setChosen] = useState<string | null>(null);
+  useEffect(()=>{try {setChosen(new URLSearchParams(window.location.search).get("accountId") || localStorage.getItem("mangekyo-platform-account"));}catch{}},[]);
+  useEffect(()=>{if(chosen)try{localStorage.setItem("mangekyo-platform-account",chosen);}catch{}},[chosen]);
   const newestDemo = accounts?.map(a => a.accountId).filter(isDemo).sort().at(-1) ?? accounts?.[0]?.accountId ?? null;
-  const accountId = chosen ?? newestDemo;
+  const accountId = accounts?.some(a=>a.accountId===chosen) ? chosen : newestDemo;
   const [minute, setMinute] = useState(() => Math.floor(Date.now() / 60_000) * 60_000);
   useEffect(() => { const t = setInterval(() => setMinute(Math.floor(Date.now() / 60_000) * 60_000), 60_000); return () => clearInterval(t); }, []);
   const overview = useQuery(api.financeIntake.getAccountOverview, accountId ? { accountId, now: minute + 59_999 } : "skip");
@@ -278,10 +283,11 @@ export default function Desk() {
 
   return <MotionRoot className="">
     <header className="bar"><div className="wrap bar-in">
-      <Link className="brand" href="/" aria-label="Mangekyo home"><img src="/mangekyo-logo.png" alt="" width={34} height={34} />Mangekyo</Link>
+      <div><span className="eyebrow">Trust operations</span><h1 style={{fontSize:28,fontWeight:550,letterSpacing:"-.8px",margin:"6px 0 0"}}>Overview</h1></div>
       <div className="ctl">
-        <label>Acting as (dev only)<select aria-label="Acting as (dev only)" value={acting} onChange={e => setActing(e.target.value as Acting)}><option value="sam">sam, approver</option><option value="riley">riley, requester</option></select></label>
         <label>Account<select aria-label="Account" value={accountId ?? ""} onChange={e => setChosen(e.target.value)}>{accounts?.map(a => <option key={a.accountId} value={a.accountId}>{a.name.replace("Sandbox ERP pooled trust accounts (TRUST-01 + TRUST-02)", "Sandbox ERP (seed 42)")}</option>)}</select></label>
+        <details className="demo-tools"><summary className="btn alt"><SlidersHorizontal size={14}/> Workspace tools</summary><div className="demo-tools-menu">        <label>Acting as (dev only)<select aria-label="Acting as (dev only)" value={acting} onChange={e => setActing(e.target.value as Acting)}><option value="sam">sam, approver</option><option value="riley">riley, requester</option></select></label>
+
         {accountId && isDemo(accountId) && <button className="btn alt" disabled={busy || desk?.feed.mode !== "mock" || (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7)} title={desk?.feed.mode !== "mock" ? "Mock mode only: in CREAO mode investigations cost money" : undefined} onClick={() => setPlaying(!playing)}>
           {desk?.feed.mode !== "mock" ? "Live feed (mock only)" : (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7) ? "Feed finished" : playing ? "Pause live feed" : desk?.feed.stepsDone ? `Resume live feed (${desk.feed.stepsDone}/${desk.feed.total})` : "Start live feed"}</button>}
         {accountId && isDemo(accountId) && <button className="btn alt" disabled={busy || playing || desk?.feed.mode !== "mock" || (desk?.feed.stepsDone ?? 0) >= (desk?.feed.total ?? 7)} onClick={() => act(async () => { const result = await m.feed({ accountId }); setToast(result.done ? "Live feed finished." : "One scripted step saved."); })}>Next step</button>}
@@ -298,7 +304,7 @@ export default function Desk() {
           if (v === "batch") void act(async () => { const r = await m.batch({ count: 200 }); setChosen(r.accountId); }, "Batch started: 200 synthetic deposits on a fresh DEMO account.");
         }}><option value="">Measure…</option><option value="planted">Planted-mistake scorecard</option><option value="batch">Batch: 200 deposits</option></select>
         <button className="btn alt" disabled={busy} onClick={() => act(async () => { const r = await m.fresh({}); setChosen(r.accountId); }, "Fresh DEMO run loaded. Earlier runs are unchanged.")}>Fresh DEMO run</button>
-        <button className="btn" onClick={() => setPayOpen({})}>New payment</button>
+        </div></details><button className="btn" onClick={() => setPayOpen({})}>New payment</button>
       </div>
     </div></header>
     <div className="wrap proto">{config?.mode === "creao" ? "CREAO mode · investigations cost money" : config?.mode === "mock" && overview?.account.datasetVersion === "law-firm-demo-v1" ? "Sample data · fictional law firm · agents simulated" : config?.mode === "mock" ? "Sample data · agents simulated" : "Provider mode not configured"}</div>
@@ -329,17 +335,18 @@ export default function Desk() {
               {tw.outstanding?.map(o => <li key={o.entryId}><span>{o.kind === "outstanding_payment" ? "Outstanding payment" : "Deposit in transit"} · {names.owner(o.ownerId)} · {o.ageDays === 0 ? "today" : `${o.ageDays} day${o.ageDays === 1 ? "" : "s"} old`} · not yet at the bank (limit {overview.outstandingMaxDays} days)</span><span className="n">{money(o.amountCents)}</span></li>)}
             </ul></div>}
           {pipeline && pipeline.rows.length > 0 && <div className="counts" aria-label="Pipeline">{(["ready_for_approval", "needs_person", "rejected", "waiting_to_clear", "failed", "investigating", "validating", "checking"] as const).filter(state => pipeline.counts[state]).map(state => <span key={state}><b className="n">{pipeline.counts[state]}</b> {STATE[state].label.toLowerCase()}</span>)}</div>}
-          {orchestrator && <p className="meta" style={{ margin: 0 }}>Investigator {orchestrator.investigator ?? "not set"} · checker {orchestrator.checker.mode ?? "misconfigured"} · timeout {(orchestrator.timeoutMs / 1000).toFixed(0)} s · real runs today {orchestrator.budget.usedToday} of {orchestrator.budget.perDay} (max {orchestrator.budget.perDeposit} per deposit; mock runs don&apos;t count){orchestrator.mockFault ? ` · MOCK_PROVIDER_FAULT=${orchestrator.mockFault}` : ""}</p>}
+          {orchestrator && <details className="runtime-details"><summary>Agent activity</summary><p className="meta" style={{ margin: 0 }}>Investigator {orchestrator.investigator ?? "not set"} · checker {orchestrator.checker.mode ?? "misconfigured"} · timeout {(orchestrator.timeoutMs / 1000).toFixed(0)} s · real runs today {orchestrator.budget.usedToday} of {orchestrator.budget.perDay} (max {orchestrator.budget.perDeposit} per deposit; mock runs don&apos;t count){orchestrator.mockFault ? ` · MOCK_PROVIDER_FAULT=${orchestrator.mockFault}` : ""}</p></details>}
           <div className="counts"><span><b className="n">{desk?.counts.autoStarted ?? 0}</b> started automatically</span><span><b className="n">{queue.length}</b> waiting on a person</span><span><b className="n">{desk?.counts.blocked ?? 0}</b> blocked by the lock</span><span><b className="n">{desk?.counts.posted ?? 0}</b> posted after sign-off</span></div>
         </section>
 
-        <div className="cols">
-          <section className="col-side" aria-label="Needs a person">
+        <div className="platform-tabs" role="tablist" aria-label="Account sections">{[{id:"overview",label:"Overview"},{id:"reviews",label:"Reviews"},{id:"owners",label:"Owners"},{id:"activity",label:"Activity"}].map(tab=><button type="button" role="tab" aria-selected={viewTab===tab.id} key={tab.id} onClick={()=>setViewTab(tab.id)}>{tab.label}{tab.id==="reviews" && <small>{queue.length}</small>}</button>)}</div>
+        <div className="cols" hidden={viewTab==="owners"}>
+          <section className="col-side" aria-label="Needs a person" hidden={viewTab==="activity"}>
             <div className="colhead"><h2>Needs a person <span className="m" style={{ fontSize: 14, color: "var(--muted)" }}>{queue.length}</span></h2>
               <button className="btn alt sm" disabled={busy || !proposals.some(p => p.kind === "allocation" && p.status === "pending_approval" && usedPolicy(p.evidenceSourceIds, names))} onClick={() => act(async () => { const r = await m.allProven({ accountId: accountId!, dev }); setToast(`Approved ${r.approved.length} proven item${r.approved.length === 1 ? "" : "s"} as ${dev.name}. ${r.skipped.length} still need one-by-one review.`); })}>Approve all proven items</button></div>
             {queue.length === 0 ? <div className="empty">Nothing needs a person right now.</div> : queue.map(item => <div key={item.key}>{item.node}</div>)}
           </section>
-          <section className="col-main" aria-label="Activity">
+          <section className="col-main" aria-label="Activity" hidden={viewTab==="reviews"}>
             <div className="colhead"><h2>Activity</h2><span className="m" style={{ fontSize: 12, color: "var(--muted)" }}>Newest first · from saved events</span></div>
             <div className="feed" aria-live="polite">
               {working.map(w => <div key={w.key} className="working">{w.text}</div>)}
@@ -351,7 +358,7 @@ export default function Desk() {
           </section>
         </div>
 
-        <section aria-label="Owners" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <section aria-label="Owners" hidden={viewTab!=="owners"} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <div className="colhead"><h2 style={{ fontSize: 18, margin: 0 }}>Owners</h2><span style={{ fontSize: 13, color: "var(--muted)" }}>Pooled account, adjusted cleared: <b className="n"><Money cents={pool} /></b></span></div>
           <div className="tbl"><table>
             <thead><tr><th>Owner</th><th className="r">Posted</th><th className="r">Not cleared</th><th className="r">Available</th><th>Status</th></tr></thead>

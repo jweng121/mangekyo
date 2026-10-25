@@ -561,3 +561,12 @@
 @keyframes record-narration-focus { from { background-color: #fff; } 50% { background-color: #f1c6d5; } to { background-color: #f9e8ee; } }
 .record-view tr.record-focused { animation: record-narration-focus .65s ease-out; }
 @media (prefers-reduced-motion: reduce) { .record-view tr.record-focused { animation: none; } }
+
+.evidence-structured tr.record-focused { background:#f9e8ee; animation:record-narration-focus .65s ease-out; }.evidence-structured .record-fields td { white-space:pre-wrap; overflow-wrap:anywhere; }.evidence-structured .record-fields th { width:180px; }.platform-correction-type { display:grid; gap:9px; }.platform-correction-type select { padding:10px; border:1px solid #eadfe5; border-radius:6px; background:white; }.platform-correction-type small { color:#96828d; font-weight:400; font-size:11px; }
+/* Preserve the abandoned path as inspectable history after a correction branches. */
+.history-superseded { fill:none; stroke:#d9dadd; stroke-width:1.5; stroke-dasharray:4 4; }
+.snapshot-history .history-node.superseded .history-dot { background:#ececee; border-color:#dcdcdf; color:#a6a6ac; box-shadow:0 0 0 3px #fff; }
+.snapshot-history .history-node.superseded .history-node-label { color:#b2b2b7; }
+.snapshot-history .history-node.superseded.selected .history-dot { background:#d0d0d5; border-color:#b8b8bf; box-shadow:0 0 0 3px #fff,0 0 0 4px #c9c9cf; }
+.snapshot-history .history-node.superseded.selected .history-node-label { color:#777780; }
+.case-status.completed{color:#528166}

@@ -35,6 +35,8 @@ CREATE TABLE IF NOT EXISTS allocation_drafts (id TEXT PRIMARY KEY, bankLine TEXT
   rows=[("client-a","Client A","Aster Property Group","A-118","Harbor Trust / Aster","INV-88","$5,000.00","2100-118"),("client-b","Client B","Beacon Development LLC","B-204","Harbor Trust / Beacon","INV-204","$5,000.00","2100-204"),("company-x","Company X","Cedar Facilities","X-310","Harbor Trust / Cedar","INV-310","$3,250.00","2100-310"),("company-y","Company Y","Dune Services","Y-407","Harbor Trust / Dune","INV-407","$7,100.00","2100-407")]
   db.executemany("INSERT OR IGNORE INTO trust_clients VALUES (?,?,?,?,?,?,?,?)",rows);db.commit()
   action=request["action"];stamp=datetime.now(timezone.utc).isoformat()
+  if action=="workspace":
+   return {"clients":[dict(row) for row in db.execute("SELECT * FROM trust_clients ORDER BY id")],"drafts":[dict(row) for row in db.execute("SELECT * FROM allocation_drafts ORDER BY createdAt DESC")]}
   if action=="read":
    code=request.get("paymentCode")
    records=[dict(row) for row in db.execute("SELECT * FROM trust_clients WHERE code = ? ORDER BY id",(code,))] if code else [dict(row) for row in db.execute("SELECT * FROM trust_clients ORDER BY id")]

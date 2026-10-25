@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Schibsted_Grotesk, Spline_Sans_Mono } from "next/font/google";
+import "@fontsource-variable/inter";
+import "@fontsource-variable/stack-sans-notch";
+import { PlatformShell } from "./components/PlatformShell";
 import { FinanceProvider } from "./provider";
 import "./base.css";
-
-const display = Schibsted_Grotesk({ subsets: ["latin"], variable: "--font-display", display: "swap" });
-const mono = Spline_Sans_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = {
   title: "Mangekyo",
@@ -13,5 +12,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return <html lang="en" className={`${display.variable} ${mono.variable}`}><body><FinanceProvider>{children}</FinanceProvider></body></html>;
+  return <html lang="en"><body><PlatformShell><FinanceProvider>{children}</FinanceProvider></PlatformShell></body></html>;
 }

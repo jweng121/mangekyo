@@ -107,7 +107,7 @@ describe("desk render with real backend query results", () => {
     for (const text of ["Every run is kept", "Ready for approval", "Claim by claim", "Supported", "Checker confirmed the claims it could judge", "Gathered and froze the evidence", "What the agent saw"]) expect(inspector).toContain(text);
     const { default: AgentView } = await import("../app/runs/[runId]/view/page");
     const seen = decode(renderToString(<AgentView />));
-    for (const text of ["PLACEHOLDER · VISUAL AUDIT", "Exactly what it was given", "demo:bank:txn:A-001", "demo:document:remit-a-001:v1", "finance-investigator/v1", "context as of"]) expect(seen).toContain(text);
+    for (const text of ["Recorded evidence", "Exactly what it was given", "demo:bank:txn:A-001", "demo:document:remit-a-001:v1", "finance-investigator/v1", "context as of"]) expect(seen).toContain(text);
   });
 
   it("shows a checker-stopped run on the desk and the Fix it choices in the inspector", async () => {

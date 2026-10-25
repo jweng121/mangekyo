@@ -39,6 +39,7 @@ export interface InvestigationReport {
 }
 
 export interface InvestigationRecord {
+  platformReview?: { runId: string; accountId: string | null; canCorrect: boolean; status: "needs_review" | "ready_for_approval" | "resolved" | "running" };
   runs: InvestigationRun[];
   events: AgentEvent[];
   snapshots: Snapshot[];
