@@ -33,3 +33,8 @@ output/*
 output/pdf/*
 !output/pdf/trust-bank-statement.pdf
 !output/pdf/trust-funding-instruction.pdf
+
+# Local documentation and agent instructions.
+/docs/
+[Aa][Gg][Ee][Nn][Tt][Ss].[Mm][Dd]
+[Cc][Ll][Aa][Uu][Dd][Ee].[Mm][Dd]
