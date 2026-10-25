@@ -11,6 +11,8 @@ from PIL import Image
 ROOT=Path(__file__).resolve().parent
 REPO=ROOT.parents[3]
 def load(n):return json.loads((ROOT/n).read_text(encoding='utf-8'))
+SCALE=load("manifest.json").get("valueScale",1)
+
 def dollars(s):return int(Decimal(s.replace('$','').replace(',',''))*100)
 def amounts(text):return [dollars(s) for s in re.findall(r'-?\$[\d,]+\.\d{2}',text)]
 def check(ok,message):
@@ -172,14 +174,14 @@ def main():
     allocation=data['allocation-agreements'][0];alloc={a['clientId']:a for a in allocation['allocations']}
     check(allocation['signed'] and sum(a['basisPoints'] for a in alloc.values())==10000,'signed allocation')
     receipts=[r for r in data['cost-receipts'] if r.get('shared')]
-    check(sum(r['amountCents'] for r in receipts)==allocation['sharedCostCents']==450000,'shared receipt totals')
+    check(sum(r['amountCents'] for r in receipts)==allocation['sharedCostCents']==450000*SCALE,'shared receipt totals')
     for a in alloc.values():
         check(a['amountCents']==allocation['grossCents']*a['basisPoints']//10000,'gross split')
         check(a['costCents']==allocation['sharedCostCents']*a['basisPoints']//10000,'cost split')
     statements=sorted([s for s in data['settlement-statements'] if s['matterId']=='m01'],key=lambda s:s['version']);v1,v2=statements
     def line(s,cid,kind):return next(l['amountCents'] for l in s['lines'] if l['clientId']==cid and l['kind']==kind)
     for s in statements:
-        check(sum(l['amountCents'] for l in s['lines'])==s['grossCents']==12500000,'statement balances')
+        check(sum(l['amountCents'] for l in s['lines'])==s['grossCents']==12500000*SCALE,'statement balances')
         for cid,a in alloc.items():check(sum(l['amountCents'] for l in s['lines'] if l['clientId']==cid)==a['amountCents'],'client split balances')
     check(v1['signed'] and not v2['signed'] and v2['signedDate'] is None,'version signatures')
     correct=(alloc['c03']['amountCents']-alloc['c03']['costCents'])*fees['c03']['rateBasisPoints']//10000;b=cases['B1']
@@ -199,16 +201,16 @@ def main():
     check(msg['fromAddress'].split('@')[1]==c['senderDomain']!=c['onFileDomain']==onfile['email'].split('@')[1],'domain mismatch')
     check(msg['requestedBank']['account']==c['requestedAccount']!=c['onFileAccount']==onfile['bank']['account']==bytx['bayside-prior-paid']['bankAccount'],'bank mismatch')
     check((date.fromisoformat(msg['scheduledPaymentDate'])-date.fromisoformat(msg['receivedAt'][:10])).days==1,'day before payout')
-    check(onfile['phone']==c['phone'] and msg['requestedAmountCents']==1450000,'verification contact and amount')
-    check('****5521' in email.get_body().get_content() and '$14,500.00' in email.get_body().get_content(),'email body')
+    check(onfile['phone']==c['phone'] and msg['requestedAmountCents']==1450000*SCALE,'verification contact and amount')
+    check('****5521' in email.get_body().get_content() and f'${14500*SCALE:,.2f}' in email.get_body().get_content(),'email body')
     incoming=data['incoming-items'];policy_=data['policies'][0];d=cases['D']
     check(policy_['status']=='approved' and policy_['approvedBy']=='sam' and policy_['approvedDate']<incoming[1]['receivedDate'],'approved memory')
-    check(incoming[1]['amountCents']==d['amountCents']==500000 and incoming[1]['receivedDate'].startswith('2026-11'),'November supplemental')
+    check(incoming[1]['amountCents']==d['amountCents']==500000*SCALE and incoming[1]['receivedDate'].startswith('2026-11'),'November supplemental')
     check({a['clientId']:a['basisPoints']*d['amountCents']//10000 for a in policy_['allocations']}==d['allocationsCents'],'memory split')
     deposit=[t for t in txs if t['matterId']=='m01']
     check([t['id'] for t in deposit]==['harborline-deposit'],'only the Harborline deposit posts for the live matter')
     deposit=deposit[0];global_item=next(i for i in incoming if i['id']=='incoming-global')
-    check(deposit['postedDate']=='2026-10-22' and deposit['checkNo']=='902174' and deposit['amountCents']==global_item['amountCents']==12500000,'Harborline draft deposited October 22')
+    check(deposit['postedDate']=='2026-10-22' and deposit['checkNo']=='902174' and deposit['amountCents']==global_item['amountCents']==12500000*SCALE,'Harborline draft deposited October 22')
     check({l['clientId']:l['amountCents'] for l in deposit['allocations']}=={cid:a['amountCents'] for cid,a in alloc.items()},'deposit follows signed allocation')
     check(global_item['status']=='deposited' and global_item['transactionId']==deposit['id'],'incoming item linked to deposit')
     check('902174' in (ROOT/docs['bank-statement-2026-10']['text']).read_text(encoding='utf-8'),'deposit on October statement')
@@ -250,7 +252,15 @@ def main():
     for payee in payees.values():
         check(re.fullmatch(r'\*{4}\d{4}',payee['bank']['account']) is not None and payee['bank']['routing']=='withheld','masked payee details')
     expected_facts='355f01ff0f35f29522431f67b815d478176485a00dac0f41d490ad3c53b79e80'
-    original={k:v for k,v in load('answer-key.json').items() if k in ['fictional','cases']}
+    def original_values(v, cents=False):
+        if isinstance(v,dict):return {k:original_values(x,cents or k.endswith('Cents')) for k,x in v.items()}
+        if isinstance(v,list):return [original_values(x,cents) for x in v]
+        if type(v) is int and cents:
+            check(v % SCALE==0,'exact value-only scale')
+            return v//SCALE
+        if isinstance(v,str):return re.sub(r'\$([\d,]+\.\d{2})',lambda m:f'${Decimal(m[1].replace(",", ""))/SCALE:,.2f}',v)
+        return v
+    original=original_values({k:v for k,v in load('answer-key.json').items() if k in ['fictional','cases']})
     check(hashlib.sha256(json.dumps(original,sort_keys=True,separators=(',',':')).encode()).hexdigest()==expected_facts,'original answer-key facts preserved except masking')
     learned=learning(data,docs,cases,payees,bytx,fees)
     rendered=0

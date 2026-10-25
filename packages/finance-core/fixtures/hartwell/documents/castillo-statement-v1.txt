@@ -8,20 +8,20 @@
 
    Owen Castillo | Castillo collision
 
-     Harborline Mutual Insurance claim HL-51340 | Gross recovery: $40,000.00
+     Harborline Mutual Insurance claim HL-51340 | Gross recovery: $6,000,000.00
 
     SIGNED CLIENT DISTRIBUTION
 
-        Allocation / fee basis                               Attorney fee        Costs             Liens              Net to client
+          Allocation / fee basis                                      Attorney fee           Costs               Liens                 Net to client
 
-      100% / 30% of net after costs                           $11,640.00        $1,200.00           $7,350.00           $19,810.00
-     Fee calculation per signed agreement: 30% x ($40,000.00 - $1,200.00) = 30% x $38,800.00 = $11,640.00
+      100% / 30% of net after costs                                 $1,746,000.00         $180,000.00          $1,102,500.00           $2,971,500.00
+     Fee calculation per signed agreement: 30% x ($6,000,000.00 - $180,000.00) = 30% x $5,820,000.00 = $1,746,000.00
       Lien payee: Bayside Medical Group | payoff letter CASTILLO-BAYSIDE-V2, revision 2 dated 2026-11-09 | Fees and cost reimbursement payable
        to Hartwell & Moreno LLP.
 
         Client signature: /s/ Owen Castillo                                                     Date: 2026-11-12
 
-    Total distributions: $40,000.00
+    Total distributions: $6,000,000.00
 
        Attorney signature: /s/ Luis Moreno                                                    Date: 2026-11-12
 

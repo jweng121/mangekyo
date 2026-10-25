@@ -12,51 +12,51 @@
 
    Opening balance                Deposits / credits                Withdrawals / debits              Closing balance
 
-   $164,087.93                    $111,968.62                    $71,319.97                     $204,736.58
+   $24,613,189.50                 $16,795,293.00                 $10,697,995.50                 $30,710,487.00
 
 
     Posting        Description / check reference                                                  Debit                 Credit              Balance
     date
 
-    09-02       ZELLE FROM ADRIAN MOSS                                                                        $5,472.43          $169,560.36
+    09-02       ZELLE FROM ADRIAN MOSS                                                                     $820,864.50        $25,434,054.00
 
-    09-03      ACH TO HARTWELL OPER 2290                                                 $425.00                              $169,135.36
+    09-03      ACH TO HARTWELL OPER 2290                                                $63,750.00                           $25,370,304.00
 
-    09-04      CHECK TIDEMARK CASUALTY / 8204                                                              $48,000.00          $217,135.36
+    09-04      CHECK TIDEMARK CASUALTY / 8204                                                             $7,200,000.00        $32,570,304.00
 
-    09-04      ACH REFUND ADRIAN MOSS                                                   $127.85                              $217,007.51
+    09-04      ACH REFUND ADRIAN MOSS                                                  $19,177.50                           $32,551,126.50
 
-    09-05      ACH FROM NINA PETROV                                                                           $5,340.38          $222,347.89
+    09-05      ACH FROM NINA PETROV                                                                       $801,057.00        $33,352,183.50
 
-    09-06      ACH TO HARTWELL OPER 2290                                                 $357.50                              $221,990.39
+    09-06      ACH TO HARTWELL OPER 2290                                                $53,625.00                           $33,298,558.50
 
-    09-07      ACH COST REIMB OPER 2290                                                   $131.02                              $221,859.37
+    09-07      ACH COST REIMB OPER 2290                                                  $19,653.00                           $33,278,905.50
 
-    09-08       WIRE FROM CALEB ROSS                                                                          $5,482.43          $227,341.80
+    09-08       WIRE FROM CALEB ROSS                                                                       $822,364.50        $34,101,270.00
 
-    09-09      ACH TO WESLEY FORD                                                       $31,210.00                              $196,131.80
+    09-09      ACH TO WESLEY FORD                                                     $4,681,500.00                           $29,419,770.00
 
-    09-09      ACH COST REIMB OPER 2290                                                   $950.00                              $195,181.80
+    09-09      ACH COST REIMB OPER 2290                                                $142,500.00                           $29,277,270.00
 
-    09-09      ACH TO HARTWELL OPER 2290                                                $15,840.00                              $179,341.80
+    09-09      ACH TO HARTWELL OPER 2290                                              $2,376,000.00                           $26,901,270.00
 
-    09-09      ACH TO HARTWELL OPER 2290                                                 $427.50                              $178,914.30
+    09-09      ACH TO HARTWELL OPER 2290                                                $64,125.00                           $26,837,145.00
 
-    09-10      ACH COST REIMB OPER 2290                                                   $134.19                              $178,780.11
+    09-10      ACH COST REIMB OPER 2290                                                  $20,128.50                           $26,817,016.50
 
-    09-11      CHECK FROM IRIS TRAN / 6135                                                                     $5,727.29          $184,507.40
+    09-11      CHECK FROM IRIS TRAN / 6135                                                                  $859,093.50        $27,676,110.00
 
-    09-12      ACH TO HARTWELL OPER 2290                                                 $422.50                              $184,084.90
+    09-12      ACH TO HARTWELL OPER 2290                                                $63,375.00                           $27,612,735.00
 
-    09-13      ACH REFUND IRIS TRAN                                                       $137.36                              $183,947.54
+    09-13      ACH REFUND IRIS TRAN                                                      $20,604.00                           $27,592,131.00
 
-    09-14       ZELLE FROM DANIEL OKAFOR                                                                      $5,899.08          $189,846.62
+    09-14       ZELLE FROM DANIEL OKAFOR                                                                  $884,862.00        $28,476,993.00
 
-    09-15      CHECK TIDEMARK CASUALTY / 8032                                                              $18,673.41          $208,520.03
+    09-15      CHECK TIDEMARK CASUALTY / 8032                                                             $2,801,011.50        $31,278,004.50
 
-    09-15      ACH TO HARTWELL OPER 2290                                                 $430.00                              $208,090.03
+    09-15      ACH TO HARTWELL OPER 2290                                                $64,500.00                           $31,213,504.50
 
-    09-16      ACH COST REIMB OPER 2290                                                   $140.53                              $207,949.50
+    09-16      ACH COST REIMB OPER 2290                                                  $21,079.50                           $31,192,425.00
 
 
 
@@ -73,27 +73,27 @@ FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                            
     Posting        Description / check reference                                                  Debit                 Credit              Balance
     date
 
-    09-17      ACH TO LENA BROOKS                                                        $18,673.41                              $189,276.09
+    09-17      ACH TO LENA BROOKS                                                      $2,801,011.50                           $28,391,413.50
 
-    09-17      ACH FROM JAMIE NGUYEN                                                                         $5,320.63          $194,596.72
+    09-17      ACH FROM JAMIE NGUYEN                                                                     $798,094.50        $29,189,508.00
 
-    09-18      ACH TO HARTWELL OPER 2290                                                 $487.50                              $194,109.22
+    09-18      ACH TO HARTWELL OPER 2290                                                $73,125.00                           $29,116,383.00
 
-    09-19      ACH COST REIMB OPER 2290                                                   $143.70                              $193,965.52
+    09-19      ACH COST REIMB OPER 2290                                                  $21,555.00                           $29,094,828.00
 
-    09-20       WIRE FROM JORDAN NGUYEN                                                                      $5,609.58          $199,575.10
+    09-20       WIRE FROM JORDAN NGUYEN                                                                  $841,437.00        $29,936,265.00
 
-    09-21      ACH TO HARTWELL OPER 2290                                                 $432.50                              $199,142.60
+    09-21      ACH TO HARTWELL OPER 2290                                                $64,875.00                           $29,871,390.00
 
-    09-21      ACH CR D OKAFOR PART PMT                                                                      $1,250.00          $200,392.60
+    09-21      ACH CR D OKAFOR PART PMT                                                                  $187,500.00        $30,058,890.00
 
-    09-22      ACH REFUND JORDAN NGUYEN                                                $146.87                              $200,245.73
+    09-22      ACH REFUND JORDAN NGUYEN                                               $22,030.50                           $30,036,859.50
 
-    09-23      CHECK FROM ELENA PARK / 6139                                                                   $5,193.39          $205,439.12
+    09-23      CHECK FROM ELENA PARK / 6139                                                               $779,008.50        $30,815,868.00
 
-    09-24      ACH TO HARTWELL OPER 2290                                                 $552.50                              $204,886.62
+    09-24      ACH TO HARTWELL OPER 2290                                                $82,875.00                           $30,732,993.00
 
-    09-25      ACH COST REIMB OPER 2290                                                   $150.04                              $204,736.58
+    09-25      ACH COST REIMB OPER 2290                                                  $22,506.00                           $30,710,487.00
 
  Please compare this statement with your account records. This statement reports posted bank activity; it does not certify individual client ledger
   balances. Questions: (510) 555-0120.

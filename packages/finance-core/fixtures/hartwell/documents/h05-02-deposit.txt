@@ -7,7 +7,7 @@
 
   To: Hartwell & Moreno LLP
    Client reference: c06
-  Amount: $5,505.96
+  Amount: $825,894.00
   Method: ACH
   Memo: part pmt
   Please credit my trust ledger. This is an advance toward fees and costs.

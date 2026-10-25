@@ -11,9 +11,9 @@
 
        Service date       Description                                    Hours / units    Rate            Amount
 
-       2026-07-20       Completed milestone: review and written advice               1          $432.50          $432.50
+       2026-07-20       Completed milestone: review and written advice               1        $64,875.00        $64,875.00
 
-    Total due: $432.50
+    Total due: $64,875.00
 
      Approved for trust payment: /s/ Sam Whitfield | 2026-07-21
 

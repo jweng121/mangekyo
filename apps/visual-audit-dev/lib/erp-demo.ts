@@ -59,14 +59,14 @@ async function agreementSnapshot(r:InvestigationRun,sequence:number){
 }
 async function settlementEvidence(r:InvestigationRun){
  const transactions=await fixture<BankRow[]>("bank-transactions");const deposit=transactions.find(t=>t.id==="harborline-deposit")!;
- await records(r,1,"bank-transactions",[deposit],"The ERP recorded a $125,000 settlement deposit from Harborline. It belongs to a joint matter with three separate client allocations.");await pause();
- await capturePdfRead({bytes:await readFile(path.join(fixtureRoot,"documents/allocation-global.pdf")),filename:"allocation-global.pdf",run:r,sequence:2,title:"Signed client allocation",field:"allocation",label:"Bello allocation and costs",pattern:"Ana Bello: [^\n]*",summary:"The signed allocation gives Ana Bello $25,000, with $900 in shared litigation costs."});await pause();
- await agreementSnapshot(r,3);await pause();
- await capturePdfRead({bytes:await readFile(path.join(fixtureRoot,"documents/settlement-v1.pdf")),filename:"settlement-v1.pdf",run:r,sequence:4,title:"Signed distribution statement",field:"fee",label:"Bello distribution",pattern:"20% / 25% of gross[^\n]*",summary:"The signed statement lists a $6,250 fee and $17,850 to Ana Bello. It calculates the fee on gross recovery, before costs."});await pause();
  const allocation=(await fixture("allocation-agreements"))[0].allocations.find((a:any)=>a.clientId==="c03");
  const agreement=(await fixture("fee-agreements")).find((a:any)=>a.clientId==="c03");
  const statement=(await fixture("settlement-statements")).find((s:any)=>s.id==="settlement-v1");
  const proposedFee=statement.lines.find((l:any)=>l.clientId==="c03"&&l.kind==="attorney_fee").amountCents;
+ await records(r,1,"bank-transactions",[deposit],`The ERP recorded a ${dollars(deposit.amountCents)} settlement deposit from Harborline. It belongs to a joint matter with three separate client allocations.`);await pause();
+ await capturePdfRead({bytes:await readFile(path.join(fixtureRoot,"documents/allocation-global.pdf")),filename:"allocation-global.pdf",run:r,sequence:2,title:"Signed client allocation",field:"allocation",label:"Bello allocation and costs",pattern:"Ana Bello: [^\n]*",summary:`The signed allocation gives Ana Bello ${dollars(allocation.amountCents)}, with ${dollars(allocation.costCents)} in shared litigation costs.`});await pause();
+ await agreementSnapshot(r,3);await pause();
+ await capturePdfRead({bytes:await readFile(path.join(fixtureRoot,"documents/settlement-v1.pdf")),filename:"settlement-v1.pdf",run:r,sequence:4,title:"Signed distribution statement",field:"fee",label:"Bello distribution",pattern:"20% / 25% of gross[^\n]*",summary:`The signed statement lists a ${dollars(proposedFee)} fee and ${dollars(allocation.amountCents-allocation.costCents-proposedFee)} to Ana Bello. It calculates the fee on gross recovery, before costs.`});await pause();
  return {allocation,agreement,proposedFee,check:checkSettlement(allocation,agreement,proposedFee)};
 }
 export async function executeDemo(action:string,sessionId:string){
@@ -111,14 +111,14 @@ export async function executeDemo(action:string,sessionId:string){
    await mutate(s=>{s.phase="connected";s.step="ERP connected. Ready for incoming data."});
   }else{
    active=await run("Harborline settlement received","settlement-intake-agent",sessionId);await pause();
-   await mutate(s=>{s.imported=boundary+1;s.step="New bank post imported: $125,000 settlement"});
-   await records(active,1,"incoming-items",(await fixture("incoming-items")).filter((r:any)=>r.id==="incoming-global"),"Received settlement draft 902174 and its existing ERP bank post. Added $125,000 to the imported cash balance.");await pause();await updateRun(active.id,{status:"completed"});
+   await mutate(s=>{s.imported=boundary+1;s.step=`New bank post imported: ${dollars(all[boundary].amountCents)} settlement`});
+   await records(active,1,"incoming-items",(await fixture("incoming-items")).filter((r:any)=>r.id==="incoming-global"),`Received settlement draft 902174 and its existing ERP bank post. Added ${dollars(all[boundary].amountCents)} to the imported cash balance.`);await pause();await updateRun(active.id,{status:"completed"});
    active=await run("Ana Bello / Settlement fee review","settlement-distribution-agent",sessionId);await pause();
    const {allocation,proposedFee,check}=await settlementEvidence(active);
-   const proposal=await records(active,5,"proposed-distribution",[{client:"Ana Bello",grossCents:allocation.amountCents,costCents:allocation.costCents,feeCents:proposedFee,clientCents:allocation.amountCents-allocation.costCents-proposedFee}],"The distribution agent carried forward the signed statement's $6,250 fee. That uses the gross allocation before costs.","PROPOSE");await pause();
+   const proposal=await records(active,5,"proposed-distribution",[{client:"Ana Bello",grossCents:allocation.amountCents,costCents:allocation.costCents,feeCents:proposedFee,clientCents:allocation.amountCents-allocation.costCents-proposedFee}],`The distribution agent carried forward the signed statement's ${dollars(proposedFee)} fee. That uses the gross allocation before costs.`,"PROPOSE");await pause();
    await savedDraft(active,6,proposedFee,allocation.amountCents-allocation.costCents-proposedFee);await pause();
    if(check.excessCents<=0)throw new Error("Scenario no longer contains the expected fee discrepancy");
-   const explanation=`Ana Bello's fee is overstated by ${dollars(check.excessCents)}. The signed agreement requires 25% of ($25,000 minus $900): ${dollars(check.feeCents)}, leaving ${dollars(check.clientCents)} for the client.`;
+   const explanation=`Ana Bello's fee is overstated by ${dollars(check.excessCents)}. The signed agreement requires 25% of (${dollars(allocation.amountCents)} minus ${dollars(allocation.costCents)}): ${dollars(check.feeCents)}, leaving ${dollars(check.clientCents)} for the client.`;
    await records(active,7,"fee-basis-check",[{proposedFeeCents:proposedFee,correctFeeCents:check.feeCents,excessCents:check.excessCents,release:"Held for human review"}],explanation,"AUDIT","flagged");
    await records(active,8,"human-review",[{client:"Ana Bello",status:"Needs escalation",taskedAgent:active.agentId,release:"No payment released"}],"The fee discrepancy needs human review. Compare the agreement with the statement, then direct a corrected draft. Updated signatures and payment approval remain separate.","ESCALATE","needs_review");
    const findingId=crypto.randomUUID();await appendAudit({id:findingId,schemaVersion:1,runId:active.id,snapshotId:proposal.id,category:"risky_write",severity:"high",explanation,evidence:(await readInvestigation()).snapshots.filter(s=>s.runId===active!.id&&s.sequence<=5).flatMap(s=>s.evidence),suggestedAction:"Recalculate the fee after costs. Hold payment until the corrected statement is signed and approved.",reviewStatus:"open",reviewedThroughSequence:8},{id:crypto.randomUUID(),findingId,snapshotId:proposal.id,runId:active.id,status:"open",createdAt:new Date().toISOString()});
@@ -127,15 +127,15 @@ export async function executeDemo(action:string,sessionId:string){
  }catch(e){const current=await readInvestigation();for(const job of queued)if(current.runs.some(r=>r.id===job.id&&r.status==="running"))await updateRun(job.id,{status:"failed"});if(active&&!queued.some(job=>job.id===active!.id))await updateRun(active.id,{status:"failed"});if((await demoState()).sessionId!==sessionId)return;await mutate(s=>{s.phase="failed";s.error=(e as Error).message;s.step="Simulation stopped"});}
 }
 export async function correctSettlement(parent:InvestigationRun,steering:SteeringRequest){
- if(!/net|cost|6025|6,025/i.test(steering.instruction))throw new Error("For this demo, direct the agent to calculate the fee after costs. Other corrections require a different workflow.");
+ if(!/net|cost|903750|903,750/i.test(steering.instruction))throw new Error("For this demo, direct the agent to calculate the fee after costs. Other corrections require a different workflow.");
  const corrected:InvestigationRun={...parent,id:crypto.randomUUID(),parentRunId:parent.id,steeringId:steering.id,branchId:"corrected",status:"running",createdAt:new Date().toISOString()};await addRun(corrected);await updateDemo(s=>{s.runIds.push(corrected.id)});
  try{
-  const {check}=await settlementEvidence(corrected);
-  await records(corrected,5,"corrected-distribution",[{client:"Ana Bello",feeCents:check.feeCents,clientCents:check.clientCents}],"Recalculated the fee after $900 in costs: $6,025. Ana Bello's proceeds increase to $18,075.","PROPOSE");
+  const {check,allocation,proposedFee}=await settlementEvidence(corrected);
+  await records(corrected,5,"corrected-distribution",[{client:"Ana Bello",feeCents:check.feeCents,clientCents:check.clientCents}],`Recalculated the fee after ${dollars(allocation.costCents)} in costs: ${dollars(check.feeCents)}. Ana Bello's proceeds increase to ${dollars(check.clientCents)}.`,"PROPOSE");
   await savedDraft(corrected,6,check.feeCents,check.clientCents);
   await records(corrected,7,"fee-basis-check",[{feeCents:check.feeCents,agreesWithContract:true,paymentReleased:false}],"The corrected fee agrees with the signed fee basis. The new distribution draft remains held for signatures and payment approval.","AUDIT","clear");
   await updateRun(corrected.id,{status:"corrected"});
-  const report={id:crypto.randomUUID(),version:1,runId:parent.id,correctedRunId:corrected.id,taskId:parent.taskId,agentId:parent.agentId,escalationSnapshotId:steering.checkpointSnapshotId,steeringRequestId:steering.id,status:"draft" as const,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),authorId:"mangekyo-local-auditor",content:`Ana Bello settlement fee corrected from $6,250 to $6,025 using the signed net-after-costs agreement. Client proceeds: $18,075. Operator instruction: ${steering.instruction}. A new held draft was saved; no payment was posted. Supersedes the prior draft for this review only. Updated client signatures and separate payment approval are still required.`,evidenceSnapshotIds:(await readInvestigation()).snapshots.filter(s=>s.runId===corrected.id).map(s=>s.id),remainingUncertainty:"Corrected settlement signatures and payment authorization are outstanding. This review covers Bello's fee only."};
+  const report={id:crypto.randomUUID(),version:1,runId:parent.id,correctedRunId:corrected.id,taskId:parent.taskId,agentId:parent.agentId,escalationSnapshotId:steering.checkpointSnapshotId,steeringRequestId:steering.id,status:"draft" as const,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),authorId:"mangekyo-local-auditor",content:`Ana Bello settlement fee corrected from ${dollars(proposedFee)} to ${dollars(check.feeCents)} using the signed net-after-costs agreement. Client proceeds: ${dollars(check.clientCents)}. Operator instruction: ${steering.instruction}. A new held draft was saved; no payment was posted. Supersedes the prior draft for this review only. Updated client signatures and separate payment approval are still required.`,evidenceSnapshotIds:(await readInvestigation()).snapshots.filter(s=>s.runId===corrected.id).map(s=>s.id),remainingUncertainty:"Corrected settlement signatures and payment authorization are outstanding. This review covers Bello's fee only."};
   await saveReport(report);return {steering,corrected:{...corrected,status:"corrected"},report,record:await readInvestigation()};
  }catch(e){await updateRun(corrected.id,{status:"failed"});throw e;}
 }

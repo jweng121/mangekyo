@@ -5,13 +5,13 @@
     "clientId": "c05",
     "matterId": "m03",
     "date": "2026-05-03",
-    "amountCents": 42500,
+    "amountCents": 6375000,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 42500,
-        "amountCents": 42500,
+        "unitCents": 6375000,
+        "amountCents": 6375000,
         "serviceDate": "2026-05-02"
       }
     ],
@@ -24,20 +24,20 @@
     "clientId": "c06",
     "matterId": "m04",
     "date": "2026-05-06",
-    "amountCents": 35750,
+    "amountCents": 5362500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-05-04"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 7,
-        "rateCents": 32500,
-        "amountCents": 22750,
+        "rateCents": 4875000,
+        "amountCents": 3412500,
         "serviceDate": "2026-05-05"
       }
     ],
@@ -50,13 +50,13 @@
     "clientId": "c07",
     "matterId": "m05",
     "date": "2026-05-09",
-    "amountCents": 42750,
+    "amountCents": 6412500,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 42750,
-        "amountCents": 42750,
+        "unitCents": 6412500,
+        "amountCents": 6412500,
         "serviceDate": "2026-05-08"
       }
     ],
@@ -69,20 +69,20 @@
     "clientId": "c08",
     "matterId": "m06",
     "date": "2026-05-12",
-    "amountCents": 42250,
+    "amountCents": 6337500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-05-10"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 9,
-        "rateCents": 32500,
-        "amountCents": 29250,
+        "rateCents": 4875000,
+        "amountCents": 4387500,
         "serviceDate": "2026-05-11"
       }
     ],
@@ -95,13 +95,13 @@
     "clientId": "c09",
     "matterId": "m07",
     "date": "2026-05-15",
-    "amountCents": 43000,
+    "amountCents": 6450000,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 43000,
-        "amountCents": 43000,
+        "unitCents": 6450000,
+        "amountCents": 6450000,
         "serviceDate": "2026-05-14"
       }
     ],
@@ -114,20 +114,20 @@
     "clientId": "c10",
     "matterId": "m08",
     "date": "2026-05-18",
-    "amountCents": 48750,
+    "amountCents": 7312500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-05-16"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 11,
-        "rateCents": 32500,
-        "amountCents": 35750,
+        "rateCents": 4875000,
+        "amountCents": 5362500,
         "serviceDate": "2026-05-17"
       }
     ],
@@ -140,13 +140,13 @@
     "clientId": "c11",
     "matterId": "m09",
     "date": "2026-05-21",
-    "amountCents": 43250,
+    "amountCents": 6487500,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 43250,
-        "amountCents": 43250,
+        "unitCents": 6487500,
+        "amountCents": 6487500,
         "serviceDate": "2026-05-20"
       }
     ],
@@ -159,20 +159,20 @@
     "clientId": "c12",
     "matterId": "m10",
     "date": "2026-05-24",
-    "amountCents": 55250,
+    "amountCents": 8287500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-05-22"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 13,
-        "rateCents": 32500,
-        "amountCents": 42250,
+        "rateCents": 4875000,
+        "amountCents": 6337500,
         "serviceDate": "2026-05-23"
       }
     ],
@@ -185,13 +185,13 @@
     "clientId": "c13",
     "matterId": "m11",
     "date": "2026-06-03",
-    "amountCents": 42500,
+    "amountCents": 6375000,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 42500,
-        "amountCents": 42500,
+        "unitCents": 6375000,
+        "amountCents": 6375000,
         "serviceDate": "2026-06-02"
       }
     ],
@@ -204,20 +204,20 @@
     "clientId": "c14",
     "matterId": "m12",
     "date": "2026-06-06",
-    "amountCents": 35750,
+    "amountCents": 5362500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-06-04"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 7,
-        "rateCents": 32500,
-        "amountCents": 22750,
+        "rateCents": 4875000,
+        "amountCents": 3412500,
         "serviceDate": "2026-06-05"
       }
     ],
@@ -230,13 +230,13 @@
     "clientId": "c15",
     "matterId": "m13",
     "date": "2026-06-09",
-    "amountCents": 42750,
+    "amountCents": 6412500,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 42750,
-        "amountCents": 42750,
+        "unitCents": 6412500,
+        "amountCents": 6412500,
         "serviceDate": "2026-06-08"
       }
     ],
@@ -249,20 +249,20 @@
     "clientId": "c16",
     "matterId": "m14",
     "date": "2026-06-12",
-    "amountCents": 42250,
+    "amountCents": 6337500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-06-10"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 9,
-        "rateCents": 32500,
-        "amountCents": 29250,
+        "rateCents": 4875000,
+        "amountCents": 4387500,
         "serviceDate": "2026-06-11"
       }
     ],
@@ -275,13 +275,13 @@
     "clientId": "c17",
     "matterId": "m15",
     "date": "2026-06-15",
-    "amountCents": 43000,
+    "amountCents": 6450000,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 43000,
-        "amountCents": 43000,
+        "unitCents": 6450000,
+        "amountCents": 6450000,
         "serviceDate": "2026-06-14"
       }
     ],
@@ -294,20 +294,20 @@
     "clientId": "c18",
     "matterId": "m16",
     "date": "2026-06-18",
-    "amountCents": 48750,
+    "amountCents": 7312500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-06-16"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 11,
-        "rateCents": 32500,
-        "amountCents": 35750,
+        "rateCents": 4875000,
+        "amountCents": 5362500,
         "serviceDate": "2026-06-17"
       }
     ],
@@ -320,13 +320,13 @@
     "clientId": "c19",
     "matterId": "m17",
     "date": "2026-06-21",
-    "amountCents": 43250,
+    "amountCents": 6487500,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 43250,
-        "amountCents": 43250,
+        "unitCents": 6487500,
+        "amountCents": 6487500,
         "serviceDate": "2026-06-20"
       }
     ],
@@ -339,20 +339,20 @@
     "clientId": "c20",
     "matterId": "m18",
     "date": "2026-06-24",
-    "amountCents": 55250,
+    "amountCents": 8287500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-06-22"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 13,
-        "rateCents": 32500,
-        "amountCents": 42250,
+        "rateCents": 4875000,
+        "amountCents": 6337500,
         "serviceDate": "2026-06-23"
       }
     ],
@@ -365,13 +365,13 @@
     "clientId": "c21",
     "matterId": "m19",
     "date": "2026-07-03",
-    "amountCents": 42500,
+    "amountCents": 6375000,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 42500,
-        "amountCents": 42500,
+        "unitCents": 6375000,
+        "amountCents": 6375000,
         "serviceDate": "2026-07-02"
       }
     ],
@@ -384,20 +384,20 @@
     "clientId": "c22",
     "matterId": "m20",
     "date": "2026-07-06",
-    "amountCents": 35750,
+    "amountCents": 5362500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-07-04"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 7,
-        "rateCents": 32500,
-        "amountCents": 22750,
+        "rateCents": 4875000,
+        "amountCents": 3412500,
         "serviceDate": "2026-07-05"
       }
     ],
@@ -410,13 +410,13 @@
     "clientId": "c23",
     "matterId": "m21",
     "date": "2026-07-09",
-    "amountCents": 42750,
+    "amountCents": 6412500,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 42750,
-        "amountCents": 42750,
+        "unitCents": 6412500,
+        "amountCents": 6412500,
         "serviceDate": "2026-07-08"
       }
     ],
@@ -429,20 +429,20 @@
     "clientId": "c24",
     "matterId": "m22",
     "date": "2026-07-12",
-    "amountCents": 42250,
+    "amountCents": 6337500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-07-10"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 9,
-        "rateCents": 32500,
-        "amountCents": 29250,
+        "rateCents": 4875000,
+        "amountCents": 4387500,
         "serviceDate": "2026-07-11"
       }
     ],
@@ -455,13 +455,13 @@
     "clientId": "c25",
     "matterId": "m23",
     "date": "2026-07-15",
-    "amountCents": 43000,
+    "amountCents": 6450000,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 43000,
-        "amountCents": 43000,
+        "unitCents": 6450000,
+        "amountCents": 6450000,
         "serviceDate": "2026-07-14"
       }
     ],
@@ -474,20 +474,20 @@
     "clientId": "c26",
     "matterId": "m24",
     "date": "2026-07-18",
-    "amountCents": 48750,
+    "amountCents": 7312500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-07-16"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 11,
-        "rateCents": 32500,
-        "amountCents": 35750,
+        "rateCents": 4875000,
+        "amountCents": 5362500,
         "serviceDate": "2026-07-17"
       }
     ],
@@ -500,13 +500,13 @@
     "clientId": "c27",
     "matterId": "m25",
     "date": "2026-07-21",
-    "amountCents": 43250,
+    "amountCents": 6487500,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 43250,
-        "amountCents": 43250,
+        "unitCents": 6487500,
+        "amountCents": 6487500,
         "serviceDate": "2026-07-20"
       }
     ],
@@ -519,20 +519,20 @@
     "clientId": "c28",
     "matterId": "m03",
     "date": "2026-07-24",
-    "amountCents": 55250,
+    "amountCents": 8287500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-07-22"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 13,
-        "rateCents": 32500,
-        "amountCents": 42250,
+        "rateCents": 4875000,
+        "amountCents": 6337500,
         "serviceDate": "2026-07-23"
       }
     ],
@@ -545,13 +545,13 @@
     "clientId": "c29",
     "matterId": "m04",
     "date": "2026-08-03",
-    "amountCents": 42500,
+    "amountCents": 6375000,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 42500,
-        "amountCents": 42500,
+        "unitCents": 6375000,
+        "amountCents": 6375000,
         "serviceDate": "2026-08-02"
       }
     ],
@@ -564,20 +564,20 @@
     "clientId": "c30",
     "matterId": "m05",
     "date": "2026-08-06",
-    "amountCents": 35750,
+    "amountCents": 5362500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-08-04"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 7,
-        "rateCents": 32500,
-        "amountCents": 22750,
+        "rateCents": 4875000,
+        "amountCents": 3412500,
         "serviceDate": "2026-08-05"
       }
     ],
@@ -590,13 +590,13 @@
     "clientId": "c31",
     "matterId": "m06",
     "date": "2026-08-09",
-    "amountCents": 42750,
+    "amountCents": 6412500,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 42750,
-        "amountCents": 42750,
+        "unitCents": 6412500,
+        "amountCents": 6412500,
         "serviceDate": "2026-08-08"
       }
     ],
@@ -609,20 +609,20 @@
     "clientId": "c32",
     "matterId": "m07",
     "date": "2026-08-12",
-    "amountCents": 42250,
+    "amountCents": 6337500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-08-10"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 9,
-        "rateCents": 32500,
-        "amountCents": 29250,
+        "rateCents": 4875000,
+        "amountCents": 4387500,
         "serviceDate": "2026-08-11"
       }
     ],
@@ -635,13 +635,13 @@
     "clientId": "c33",
     "matterId": "m08",
     "date": "2026-08-15",
-    "amountCents": 43000,
+    "amountCents": 6450000,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 43000,
-        "amountCents": 43000,
+        "unitCents": 6450000,
+        "amountCents": 6450000,
         "serviceDate": "2026-08-14"
       }
     ],
@@ -654,20 +654,20 @@
     "clientId": "c34",
     "matterId": "m09",
     "date": "2026-08-18",
-    "amountCents": 48750,
+    "amountCents": 7312500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-08-16"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 11,
-        "rateCents": 32500,
-        "amountCents": 35750,
+        "rateCents": 4875000,
+        "amountCents": 5362500,
         "serviceDate": "2026-08-17"
       }
     ],
@@ -680,13 +680,13 @@
     "clientId": "c35",
     "matterId": "m10",
     "date": "2026-08-21",
-    "amountCents": 43250,
+    "amountCents": 6487500,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 43250,
-        "amountCents": 43250,
+        "unitCents": 6487500,
+        "amountCents": 6487500,
         "serviceDate": "2026-08-20"
       }
     ],
@@ -699,20 +699,20 @@
     "clientId": "c36",
     "matterId": "m11",
     "date": "2026-08-24",
-    "amountCents": 55250,
+    "amountCents": 8287500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-08-22"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 13,
-        "rateCents": 32500,
-        "amountCents": 42250,
+        "rateCents": 4875000,
+        "amountCents": 6337500,
         "serviceDate": "2026-08-23"
       }
     ],
@@ -725,13 +725,13 @@
     "clientId": "c37",
     "matterId": "m12",
     "date": "2026-09-03",
-    "amountCents": 42500,
+    "amountCents": 6375000,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 42500,
-        "amountCents": 42500,
+        "unitCents": 6375000,
+        "amountCents": 6375000,
         "serviceDate": "2026-09-02"
       }
     ],
@@ -744,20 +744,20 @@
     "clientId": "c38",
     "matterId": "m13",
     "date": "2026-09-06",
-    "amountCents": 35750,
+    "amountCents": 5362500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-09-04"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 7,
-        "rateCents": 32500,
-        "amountCents": 22750,
+        "rateCents": 4875000,
+        "amountCents": 3412500,
         "serviceDate": "2026-09-05"
       }
     ],
@@ -770,13 +770,13 @@
     "clientId": "c39",
     "matterId": "m14",
     "date": "2026-09-09",
-    "amountCents": 42750,
+    "amountCents": 6412500,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 42750,
-        "amountCents": 42750,
+        "unitCents": 6412500,
+        "amountCents": 6412500,
         "serviceDate": "2026-09-08"
       }
     ],
@@ -789,20 +789,20 @@
     "clientId": "c40",
     "matterId": "m15",
     "date": "2026-09-12",
-    "amountCents": 42250,
+    "amountCents": 6337500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-09-10"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 9,
-        "rateCents": 32500,
-        "amountCents": 29250,
+        "rateCents": 4875000,
+        "amountCents": 4387500,
         "serviceDate": "2026-09-11"
       }
     ],
@@ -815,13 +815,13 @@
     "clientId": "c05",
     "matterId": "m03",
     "date": "2026-09-15",
-    "amountCents": 43000,
+    "amountCents": 6450000,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 43000,
-        "amountCents": 43000,
+        "unitCents": 6450000,
+        "amountCents": 6450000,
         "serviceDate": "2026-09-14"
       }
     ],
@@ -834,20 +834,20 @@
     "clientId": "c06",
     "matterId": "m04",
     "date": "2026-09-18",
-    "amountCents": 48750,
+    "amountCents": 7312500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-09-16"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 11,
-        "rateCents": 32500,
-        "amountCents": 35750,
+        "rateCents": 4875000,
+        "amountCents": 5362500,
         "serviceDate": "2026-09-17"
       }
     ],
@@ -860,13 +860,13 @@
     "clientId": "c07",
     "matterId": "m05",
     "date": "2026-09-21",
-    "amountCents": 43250,
+    "amountCents": 6487500,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 43250,
-        "amountCents": 43250,
+        "unitCents": 6487500,
+        "amountCents": 6487500,
         "serviceDate": "2026-09-20"
       }
     ],
@@ -879,20 +879,20 @@
     "clientId": "c08",
     "matterId": "m06",
     "date": "2026-09-24",
-    "amountCents": 55250,
+    "amountCents": 8287500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-09-22"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 13,
-        "rateCents": 32500,
-        "amountCents": 42250,
+        "rateCents": 4875000,
+        "amountCents": 6337500,
         "serviceDate": "2026-09-23"
       }
     ],
@@ -905,13 +905,13 @@
     "clientId": "c09",
     "matterId": "m07",
     "date": "2026-10-03",
-    "amountCents": 42500,
+    "amountCents": 6375000,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 42500,
-        "amountCents": 42500,
+        "unitCents": 6375000,
+        "amountCents": 6375000,
         "serviceDate": "2026-10-02"
       }
     ],
@@ -924,20 +924,20 @@
     "clientId": "c10",
     "matterId": "m08",
     "date": "2026-10-06",
-    "amountCents": 35750,
+    "amountCents": 5362500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-10-04"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 7,
-        "rateCents": 32500,
-        "amountCents": 22750,
+        "rateCents": 4875000,
+        "amountCents": 3412500,
         "serviceDate": "2026-10-05"
       }
     ],
@@ -950,13 +950,13 @@
     "clientId": "c11",
     "matterId": "m09",
     "date": "2026-10-09",
-    "amountCents": 42750,
+    "amountCents": 6412500,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 42750,
-        "amountCents": 42750,
+        "unitCents": 6412500,
+        "amountCents": 6412500,
         "serviceDate": "2026-10-08"
       }
     ],
@@ -969,20 +969,20 @@
     "clientId": "c12",
     "matterId": "m10",
     "date": "2026-10-12",
-    "amountCents": 42250,
+    "amountCents": 6337500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-10-10"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 9,
-        "rateCents": 32500,
-        "amountCents": 29250,
+        "rateCents": 4875000,
+        "amountCents": 4387500,
         "serviceDate": "2026-10-11"
       }
     ],
@@ -995,13 +995,13 @@
     "clientId": "c13",
     "matterId": "m11",
     "date": "2026-10-15",
-    "amountCents": 43000,
+    "amountCents": 6450000,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 43000,
-        "amountCents": 43000,
+        "unitCents": 6450000,
+        "amountCents": 6450000,
         "serviceDate": "2026-10-14"
       }
     ],
@@ -1014,20 +1014,20 @@
     "clientId": "c14",
     "matterId": "m12",
     "date": "2026-10-18",
-    "amountCents": 48750,
+    "amountCents": 7312500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-10-16"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 11,
-        "rateCents": 32500,
-        "amountCents": 35750,
+        "rateCents": 4875000,
+        "amountCents": 5362500,
         "serviceDate": "2026-10-17"
       }
     ],
@@ -1040,13 +1040,13 @@
     "clientId": "c15",
     "matterId": "m13",
     "date": "2026-10-21",
-    "amountCents": 43250,
+    "amountCents": 6487500,
     "lines": [
       {
         "description": "Completed milestone: review and written advice",
         "quantity": 1,
-        "unitCents": 43250,
-        "amountCents": 43250,
+        "unitCents": 6487500,
+        "amountCents": 6487500,
         "serviceDate": "2026-10-20"
       }
     ],
@@ -1059,20 +1059,20 @@
     "clientId": "c16",
     "matterId": "m14",
     "date": "2026-10-24",
-    "amountCents": 55250,
+    "amountCents": 8287500,
     "lines": [
       {
         "description": "Review records and prepare case notes",
         "hoursTenths": 4,
-        "rateCents": 32500,
-        "amountCents": 13000,
+        "rateCents": 4875000,
+        "amountCents": 1950000,
         "serviceDate": "2026-10-22"
       },
       {
         "description": "Client conference and written follow-up",
         "hoursTenths": 13,
-        "rateCents": 32500,
-        "amountCents": 42250,
+        "rateCents": 4875000,
+        "amountCents": 6337500,
         "serviceDate": "2026-10-23"
       }
     ],
@@ -1085,20 +1085,20 @@
     "clientId": "c04",
     "matterId": "m02",
     "date": "2026-10-08",
-    "amountCents": 600000,
+    "amountCents": 90000000,
     "lines": [
       {
         "description": "Site inspection and measurements",
         "quantity": 3,
-        "unitCents": 75000,
-        "amountCents": 225000,
+        "unitCents": 11250000,
+        "amountCents": 33750000,
         "serviceDate": "2026-10-06"
       },
       {
         "description": "Expert analysis and testimony preparation",
         "quantity": 5,
-        "unitCents": 75000,
-        "amountCents": 375000,
+        "unitCents": 11250000,
+        "amountCents": 56250000,
         "serviceDate": "2026-10-07"
       }
     ],

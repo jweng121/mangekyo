@@ -1,5 +1,11 @@
 # Hartwell & Moreno trust-account fixture
 
+Dollar values are uniformly scaled 150 times for the presentation. Dates, clients,
+transaction counts, percentage rates and the original workflow are unchanged.
+After the incoming settlement, imported trust cash is $53,763,963.00 and funds
+received are $84,126,547.50. The incoming settlement is $18,750,000.00.
+These are synthetic scaled demonstration values, not typical legal fees.
+
 Fictional data and source documents for the Mangekyo demo. No app integration,
 backend changes, deployment, external model calls, or real financial records.
 The firm has 12 attorneys in Oakland practicing personal injury, real estate,
@@ -45,40 +51,40 @@ refunds, costs, lien payments, and a property-damage settlement create the
 background. Similar Nguyen names, vague Zelle memos, claim-number variants,
 Delgado's name variants, and a misspelled retainer memo require source review.
 Two Estuary Title wires have the same reference; both actually arrived and
-one was returned. A $25 bank charge hits the firm's charge-clearing ledger
+one was returned. A $3,750.00 bank charge hits the firm's charge-clearing ledger
 and is replaced from operating the next day; no client is charged.
 
 **A: matched month-end, negative client during the month.** Cho starts with
-$1,800. Riley pays a $6,000 expert invoice October 9. Cho is at -$4,200 through
-October 29, then pays $5,200 October 30, ending at $1,000. Every bank transaction
+$270,000.00. Riley pays a $900,000.00 expert invoice October 9. Cho is at -$630,000.00 through
+October 29, then pays $780,000.00 October 30, ending at $150,000.00. Every bank transaction
 has a balanced journal, so all six month ends still reconcile. The Trust
 Compliance Auditor must inspect daily client balances. The separate temporary
 negative firm charge-clearing balance is the documented bank-fee replacement,
 not another client deficit.
 
-**B/C: a separate live review snapshot at October 22.** The unposted $125,000
+**B/C: a separate live review snapshot at October 22.** The unposted $18,750,000.00
 Harborline check belongs to the three-client Ridgeway crash case. Signed
 allocation is 50/30/20. The signed v1 statement balances but charges Bello
-25% of gross instead of net after costs ($225 too much), and uses an obsolete
-$12,000 Bayside payoff instead of the later $14,500 quote. Reyes's 40% tier is
+25% of gross instead of net after costs ($33,750.00 too much), and uses an obsolete
+$1,800,000.00 Bayside payoff instead of the later $2,175,000.00 quote. Reyes's 40% tier is
 correct because the complaint was filed March 3. Corrected v2 preserves the
-$125,000 total but is unsigned. The email on October 22 requests new bank
+$18,750,000.00 total but is unsigned. The email on October 22 requests new bank
 details for a planned October 23 payout, using `baysidemedlcal.com` instead of
 `baysidemedical.com`. Prior settled payoff records establish the genuine
 instructions within this fictional scenario. Hold the request and verify
 using the on-file phone number. The email never updates the payee master.
 
-The $125,000 Harborline draft 902174 is deposited October 22 and appears in the
+The $18,750,000.00 Harborline draft 902174 is deposited October 22 and appears in the
 bank feed and October statement. Its one bank line posts to three client ledgers
-by the signed 50/30/20 allocation, so the October close rises by $125,000.00 and
+by the signed 50/30/20 allocation, so the October close rises by $18,750,000.00 and
 still reconciles. Nothing is paid out: the proposed October 23 payment remains
 unapproved and never posts. The endorsed complaint (`complaint-filed`, clerk
-stamped 03/03/2026) and the $450.00 filing fee receipt (`global-filing`, also
+stamped 03/03/2026) and the $67,500.00 filing fee receipt (`global-filing`, also
 03/03/2026) prove Reyes's tier. For a chronological demonstration, do not treat
 later October rows as facts already available on October 22.
 
-**D: November follow-up.** A November 6 supplemental $5,000 check uses the
-October 23 approved policy to allocate $2,500 / $1,500 / $1,000. This is ownership
+**D: November follow-up.** A November 6 supplemental $750,000.00 check uses the
+October 23 approved policy to allocate $375,000.00 / $225,000.00 / $150,000.00. This is ownership
 allocation only, not permission to disburse or reuse unsigned v2. It is not in
 the May-October bank history.
 
@@ -92,9 +98,9 @@ holds the expected results, and `verify.py` recomputes each one from the exports
 **History.** Three Bayside payoffs were wired to Cedar Inlet Bank ****1264: Park
 (June, one letter) and two settlements where Bayside revised the payoff after
 the client signed. In both, the client re-signed a version 2 statement and the
-firm paid the latest payoff. Ames (July, 33% of gross) went up from $8,200.00
-to $8,975.00; Vasquez (August, 25% after costs) went down from $5,400.00 to
-$5,150.00. Ford (September, 33% of gross, no lien) is the third settlement.
+firm paid the latest payoff. Ames (July, 33% of gross) went up from $1,230,000.00
+to $1,346,250.00; Vasquez (August, 25% after costs) went down from $810,000.00 to
+$772,500.00. Ford (September, 33% of gross, no lien) is the third settlement.
 Each settlement is deposited, paid exactly as signed and fully disbursed within
 its month, so May to September month-end balances are unchanged.
 
@@ -103,16 +109,16 @@ held for a phone check at (510) 555-0186) and L2 (pay the latest Bayside revisio
 only after the client signs a statement showing it). It should not propose
 "fees are charged on gross": Vasquez contradicts it, so it disagrees 1 of 3.
 
-**Correction.** Case B1 triggers it: settlement v1 charges Bello $6,250.00, but
-her agreement charges 25% of ($25,000.00 - $900.00) = $6,025.00. The resulting
+**Correction.** Case B1 triggers it: settlement v1 charges Bello $937,500.00, but
+her agreement charges 25% of ($3,750,000.00 - $135,000.00) = $903,750.00. The resulting
 policy L3 checks each fee against the client's own agreement basis. Backtest:
 3 of 3 past settlements agree with what the firm paid, 0 disagree. In October
 it accepts Delgado and Reyes and flags only Bello.
 
-**November.** Castillo (one client) settles for $40,000.00 on a 30% after-costs
-agreement; Bayside revises $6,800.00 to $7,350.00 before the only statement is
-signed on November 12. Intake allocation, the $11,640.00 fee (L3), the $7,350.00
-payoff (L2), the wire to ****1264 (L1), $1,200.00 costs and the $19,810.00 net
+**November.** Castillo (one client) settles for $6,000,000.00 on a 30% after-costs
+agreement; Bayside revises $1,020,000.00 to $1,102,500.00 before the only statement is
+signed on November 12. Intake allocation, the $1,746,000.00 fee (L3), the $1,102,500.00
+payoff (L2), the wire to ****1264 (L1), $180,000.00 costs and the $2,971,500.00 net
 all clear with no person. Posting the four draft payments still needs Sam as
 approver. The check is not in the May to October bank history.
 

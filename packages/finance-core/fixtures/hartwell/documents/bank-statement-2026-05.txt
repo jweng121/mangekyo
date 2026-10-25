@@ -12,51 +12,51 @@
 
    Opening balance                Deposits / credits                Withdrawals / debits              Closing balance
 
-   $0.00                          $46,450.26                     $4,646.56                      $41,803.70
+   $0.00                          $6,967,539.00                  $696,984.00                    $6,270,555.00
 
 
     Posting        Description / check reference                                                  Debit                 Credit              Balance
     date
 
-    05-02       ZELLE FROM DANIEL OKAFOR                                                                      $5,660.32             $5,660.32
+    05-02       ZELLE FROM DANIEL OKAFOR                                                                  $849,048.00          $849,048.00
 
-    05-03      ACH TO HARTWELL OPER 2290                                                 $425.00                                 $5,235.32
+    05-03      ACH TO HARTWELL OPER 2290                                                $63,750.00                              $785,298.00
 
-    05-04      ACH REFUND DANIEL OKAFOR                                                 $127.85                                 $5,107.47
+    05-04      ACH REFUND DANIEL OKAFOR                                                $19,177.50                              $766,120.50
 
-    05-05      ACH CR RAYMOND CHO                                                                            $1,800.00             $6,907.47
+    05-05      ACH CR RAYMOND CHO                                                                        $270,000.00         $1,036,120.50
 
-    05-05      ACH FROM JAMIE NGUYEN                                                                         $5,505.96            $12,413.43
+    05-05      ACH FROM JAMIE NGUYEN                                                                     $825,894.00         $1,862,014.50
 
-    05-06      ACH TO HARTWELL OPER 2290                                                 $357.50                               $12,055.93
+    05-06      ACH TO HARTWELL OPER 2290                                                $53,625.00                             $1,808,389.50
 
-    05-07      ACH COST REIMB OPER 2290                                                   $131.02                               $11,924.91
+    05-07      ACH COST REIMB OPER 2290                                                  $19,653.00                             $1,788,736.50
 
-    05-08       WIRE FROM JORDAN NGUYEN                                                                      $5,059.24            $16,984.15
+    05-08       WIRE FROM JORDAN NGUYEN                                                                  $758,886.00         $2,547,622.50
 
-    05-09      ACH TO HARTWELL OPER 2290                                                 $427.50                               $16,556.65
+    05-09      ACH TO HARTWELL OPER 2290                                                $64,125.00                             $2,483,497.50
 
-    05-10      ACH COST REIMB OPER 2290                                                   $134.19                               $16,422.46
+    05-10      ACH COST REIMB OPER 2290                                                  $20,128.50                             $2,463,369.00
 
-    05-11      CHECK FROM ELENA PARK / 6103                                                                   $5,527.68            $21,950.14
+    05-11      CHECK FROM ELENA PARK / 6103                                                               $829,152.00         $3,292,521.00
 
-    05-12      ACH TO HARTWELL OPER 2290                                                 $422.50                               $21,527.64
+    05-12      ACH TO HARTWELL OPER 2290                                                $63,375.00                             $3,229,146.00
 
-    05-13      ACH REFUND ELENA PARK                                                     $137.36                               $21,390.28
+    05-13      ACH REFUND ELENA PARK                                                    $20,604.00                             $3,208,542.00
 
-    05-14       ZELLE FROM VICTOR CHEN                                                                         $5,673.70            $27,063.98
+    05-14       ZELLE FROM VICTOR CHEN                                                                     $851,055.00         $4,059,597.00
 
-    05-15      ACH TO HARTWELL OPER 2290                                                 $430.00                               $26,633.98
+    05-15      ACH TO HARTWELL OPER 2290                                                $64,500.00                             $3,995,097.00
 
-    05-16      ACH COST REIMB OPER 2290                                                   $140.53                               $26,493.45
+    05-16      ACH COST REIMB OPER 2290                                                  $21,079.50                             $3,974,017.50
 
-    05-17      ACH FROM NADIA FLORES                                                                          $5,159.51            $31,652.96
+    05-17      ACH FROM NADIA FLORES                                                                      $773,926.50         $4,747,944.00
 
-    05-18      ACH TO HARTWELL OPER 2290                                                 $487.50                               $31,165.46
+    05-18      ACH TO HARTWELL OPER 2290                                                $73,125.00                             $4,674,819.00
 
-    05-19      ACH COST REIMB OPER 2290                                                   $143.70                               $31,021.76
+    05-19      ACH COST REIMB OPER 2290                                                  $21,555.00                             $4,653,264.00
 
-    05-19       ZELLE FROM J NGUYEN                                                                           $875.25            $31,897.01
+    05-19       ZELLE FROM J NGUYEN                                                                        $131,287.50         $4,784,551.50
 
 
 
@@ -73,17 +73,17 @@ FICTIONAL DEMO RECORD - NOT FOR PAYMENT OR LEGAL USE                            
     Posting        Description / check reference                                                  Debit                 Credit              Balance
     date
 
-    05-20       WIRE FROM OMAR HASSAN                                                                        $5,844.43            $37,741.44
+    05-20       WIRE FROM OMAR HASSAN                                                                     $876,664.50         $5,661,216.00
 
-    05-21      ACH TO HARTWELL OPER 2290                                                 $432.50                               $37,308.94
+    05-21      ACH TO HARTWELL OPER 2290                                                $64,875.00                             $5,596,341.00
 
-    05-22      ACH REFUND OMAR HASSAN                                                   $146.87                               $37,162.07
+    05-22      ACH REFUND OMAR HASSAN                                                  $22,030.50                             $5,574,310.50
 
-    05-23      CHECK FROM LENA BROOKS / 6107                                                                 $5,344.17            $42,506.24
+    05-23      CHECK FROM LENA BROOKS / 6107                                                             $801,625.50         $6,375,936.00
 
-    05-24      ACH TO HARTWELL OPER 2290                                                 $552.50                               $41,953.74
+    05-24      ACH TO HARTWELL OPER 2290                                                $82,875.00                             $6,293,061.00
 
-    05-25      ACH COST REIMB OPER 2290                                                   $150.04                               $41,803.70
+    05-25      ACH COST REIMB OPER 2290                                                  $22,506.00                             $6,270,555.00
 
  Please compare this statement with your account records. This statement reports posted bank activity; it does not certify individual client ledger
   balances. Questions: (510) 555-0120.

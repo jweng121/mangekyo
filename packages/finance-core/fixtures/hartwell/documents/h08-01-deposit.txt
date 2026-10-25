@@ -7,7 +7,7 @@
 
   To: Hartwell & Moreno LLP
    Client reference: c29
-  Amount: $5,253.51
+  Amount: $788,026.50
   Method: ZELLE
   Memo: retainer
   Please credit my trust ledger. This is an advance toward fees and costs.

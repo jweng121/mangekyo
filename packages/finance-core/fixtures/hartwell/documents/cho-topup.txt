@@ -7,7 +7,7 @@
 
    Client: Raymond Cho
    Matter: Cho v. Alder Terrace Properties
-  Payment: $5,200.00
+  Payment: $780,000.00
   Memo: expert costs / retainer
 
 

@@ -1,3 +1,14 @@
+## Value scaling verification
+
+The active fixture uses 150 times the original monetary values. All 175 journal
+entries balance, six monthly reconciliations match, and all 263 PDF pages render.
+The verifier reverses the monetary scale before comparing the original scenario
+fingerprint, confirming that case facts and percentage rates are preserved.
+October closing cash is $55,309,723.50; the simulation imports through October 22
+and therefore shows $53,763,963.00 after its incoming batch.
+
+The notes below describe the original, unscaled fixture revisions.
+
 ﻿# Verification record — learning demo pass
 
 Run on `main` with Python 3.11 and the pinned `requirements.txt` dependencies.

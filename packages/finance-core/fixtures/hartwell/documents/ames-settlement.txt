@@ -7,7 +7,7 @@
 
    Claimant: Harold Ames
    Claim: TC-61822
-   Settlement amount: $60,000.00
+   Settlement amount: $9,000,000.00
   Payable to: Hartwell & Moreno LLP Client Trust
   Check No. 8117
   Release executed by the claimant; this payment resolves the claim.

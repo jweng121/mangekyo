@@ -222,7 +222,7 @@ def content(d,data,width):
             story.append(p(f'This statement replaces version {prior["version"]} signed {prior["signedDate"]}, which showed the earlier Bayside payoff of {money(old)}. Bayside issued revision {letter["version"]} on {letter["date"]}; the client reviewed the revised payoff and signed again before any distribution.',9,'Times-Roman'))
         story += [table([['Allocation / fee basis','Attorney fee','Costs','Liens','Net to client'],
                          ['100% / '+rate,money(lines['attorney_fee']),money(lines['costs']),money(lines.get('lien',0)),money(lines['client_share'])]],
-                        [width-308,77,69,78,84],small=8,align_right=(1,2,3,4)),
+                        [width-308,77,69,78,84],small=7,align_right=(1,2,3,4)),
                   p('Fee calculation per signed agreement: '+calc,8,after=4),
                   p('Lien payee: '+(f'Bayside Medical Group | payoff letter {letter["id"].upper()}, revision {letter["version"]} dated {letter["date"]}' if letter else 'None')+' | Fees and cost reimbursement payable to Hartwell & Moreno LLP.',7.5,after=4),
                   table([['Client signature: /s/ '+client,'Date: '+rec['signedDate']]],[width*.73,width*.27],header=False,small=9),Spacer(1,7),
@@ -232,7 +232,7 @@ def content(d,data,width):
     elif kind=='settlement_statement':
         rec=next(r for r in data['settlement-statements'] if r['id']==d['id'])
         story += [p('Delgado, Reyes & Bello v. Ridgeway Logistics',11,'Times-Bold'),
-                  p('Harborline claim HL-50877 | Gross recovery: $125,000.00',9),
+                  p('Harborline claim HL-50877 | Gross recovery: '+money(sum(a['amountCents'] for a in data['allocation-agreements'][0]['allocations'])),9),
                   p('SIGNED CLIENT DISTRIBUTION' if rec['signed'] else 'DRAFT - CLIENT CONFIRMATION AND SIGNATURES REQUIRED',9,'Helvetica-Bold')]
         allocations=data['allocation-agreements'][0]['allocations']
         for a in allocations:
@@ -243,11 +243,11 @@ def content(d,data,width):
             block=[p(client+' | Allocation '+money(a['amountCents']),10,'Times-Bold',after=4),
                 table([['Allocation / fee basis','Attorney fee','Costs','Liens','Net to client'],
                        [f'{a["basisPoints"]//100}% / '+rate,money(lines['attorney_fee']),money(lines['costs']),money(lines.get('lien',0)),money(lines['client_share'])]],
-                       [width-308,77,69,78,84],small=8,align_right=(1,2,3,4)),
+                       [width-308,77,69,78,84],small=7,align_right=(1,2,3,4)),
                 p('Lien payee: '+lien_name+' | Fees and cost reimbursement payable to Hartwell & Moreno LLP.',7.5,after=4),
                 table([['Client signature: '+('/s/ '+client if rec['signed'] else '____________________________'),'Date: '+(rec['signedDate'] if rec['signed'] else '____________')]], [width*.73,width*.27],header=False,small=9),Spacer(1,7)]
             story.append(KeepTogether(block))
-        story += [p('Total distributions: $125,000.00',11,'Helvetica-Bold'),
+        story += [p('Total distributions: '+money(sum(a['amountCents'] for a in allocations)),11,'Helvetica-Bold'),
                   table([['Attorney signature: '+('/s/ Luis Moreno' if rec['signed'] else '____________________________'),'Date: '+('2026-10-19' if rec['signed'] else '____________')]], [width*.73,width*.27],header=False,small=9),Spacer(1,7),
                   p('By signing, each client acknowledges review of the allocation and listed deductions and authorizes distribution as shown, subject to cleared funds and final payment approval. A copy of this statement will be retained in the matter file.',9,'Times-Roman')]
     elif kind=='fee_agreement':

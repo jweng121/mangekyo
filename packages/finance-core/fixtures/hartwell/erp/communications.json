@@ -5,7 +5,7 @@
     "receivedAt": "2026-10-22T16:42:00-07:00",
     "fromAddress": "billing@baysidemedlcal.com",
     "payeeId": "bayside",
-    "requestedAmountCents": 1450000,
+    "requestedAmountCents": 217500000,
     "requestedBank": {
       "bank": "Juniper Channel Bank",
       "routing": "withheld",

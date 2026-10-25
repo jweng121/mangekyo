@@ -5,7 +5,7 @@
     "ledgerDate": "2026-05-02",
     "clientId": "c05",
     "matterId": "m03",
-    "amountCents": 566032,
+    "amountCents": 84904800,
     "description": "ZELLE FROM DANIEL OKAFOR",
     "documentIds": [
       "h05-01-deposit"
@@ -15,7 +15,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 566032
+    "balanceCents": 84904800
   },
   {
     "id": "h05-01-fee",
@@ -23,7 +23,7 @@
     "ledgerDate": "2026-05-03",
     "clientId": "c05",
     "matterId": "m03",
-    "amountCents": -42500,
+    "amountCents": -6375000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h05-01-invoice"
@@ -33,7 +33,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 523532
+    "balanceCents": 78529800
   },
   {
     "id": "h05-01-out",
@@ -41,7 +41,7 @@
     "ledgerDate": "2026-05-04",
     "clientId": "c05",
     "matterId": "m03",
-    "amountCents": -12785,
+    "amountCents": -1917750,
     "description": "ACH REFUND DANIEL OKAFOR",
     "documentIds": [
       "h05-01-refund"
@@ -51,7 +51,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c05",
-    "balanceCents": 510747
+    "balanceCents": 76612050
   },
   {
     "id": "cho-retainer",
@@ -59,7 +59,7 @@
     "ledgerDate": "2026-05-05",
     "clientId": "c04",
     "matterId": "m02",
-    "amountCents": 180000,
+    "amountCents": 27000000,
     "description": "ACH CR RAYMOND CHO",
     "documentIds": [
       "cho-retainer"
@@ -68,7 +68,7 @@
     "initiatedBy": "riley",
     "approvedBy": "sam",
     "status": "posted",
-    "balanceCents": 690747
+    "balanceCents": 103612050
   },
   {
     "id": "h05-02-in",
@@ -76,7 +76,7 @@
     "ledgerDate": "2026-05-05",
     "clientId": "c06",
     "matterId": "m04",
-    "amountCents": 550596,
+    "amountCents": 82589400,
     "description": "ACH FROM JAMIE NGUYEN",
     "documentIds": [
       "h05-02-deposit"
@@ -86,7 +86,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 1241343
+    "balanceCents": 186201450
   },
   {
     "id": "h05-02-fee",
@@ -94,7 +94,7 @@
     "ledgerDate": "2026-05-06",
     "clientId": "c06",
     "matterId": "m04",
-    "amountCents": -35750,
+    "amountCents": -5362500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h05-02-invoice"
@@ -104,7 +104,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 1205593
+    "balanceCents": 180838950
   },
   {
     "id": "h05-02-out",
@@ -112,7 +112,7 @@
     "ledgerDate": "2026-05-07",
     "clientId": "c06",
     "matterId": "m04",
-    "amountCents": -13102,
+    "amountCents": -1965300,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h05-02-cost"
@@ -122,7 +122,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 1192491
+    "balanceCents": 178873650
   },
   {
     "id": "h05-03-in",
@@ -130,7 +130,7 @@
     "ledgerDate": "2026-05-08",
     "clientId": "c07",
     "matterId": "m05",
-    "amountCents": 505924,
+    "amountCents": 75888600,
     "description": "WIRE FROM JORDAN NGUYEN",
     "documentIds": [
       "h05-03-deposit"
@@ -140,7 +140,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 1698415
+    "balanceCents": 254762250
   },
   {
     "id": "h05-03-fee",
@@ -148,7 +148,7 @@
     "ledgerDate": "2026-05-09",
     "clientId": "c07",
     "matterId": "m05",
-    "amountCents": -42750,
+    "amountCents": -6412500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h05-03-invoice"
@@ -158,7 +158,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 1655665
+    "balanceCents": 248349750
   },
   {
     "id": "h05-03-out",
@@ -166,7 +166,7 @@
     "ledgerDate": "2026-05-10",
     "clientId": "c07",
     "matterId": "m05",
-    "amountCents": -13419,
+    "amountCents": -2012850,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h05-03-cost"
@@ -176,7 +176,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 1642246
+    "balanceCents": 246336900
   },
   {
     "id": "h05-04-in",
@@ -184,7 +184,7 @@
     "ledgerDate": "2026-05-11",
     "clientId": "c08",
     "matterId": "m06",
-    "amountCents": 552768,
+    "amountCents": 82915200,
     "description": "CHECK FROM ELENA PARK",
     "documentIds": [
       "h05-04-deposit"
@@ -194,7 +194,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6103",
-    "balanceCents": 2195014
+    "balanceCents": 329252100
   },
   {
     "id": "h05-04-fee",
@@ -202,7 +202,7 @@
     "ledgerDate": "2026-05-12",
     "clientId": "c08",
     "matterId": "m06",
-    "amountCents": -42250,
+    "amountCents": -6337500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h05-04-invoice"
@@ -212,7 +212,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 2152764
+    "balanceCents": 322914600
   },
   {
     "id": "h05-04-out",
@@ -220,7 +220,7 @@
     "ledgerDate": "2026-05-13",
     "clientId": "c08",
     "matterId": "m06",
-    "amountCents": -13736,
+    "amountCents": -2060400,
     "description": "ACH REFUND ELENA PARK",
     "documentIds": [
       "h05-04-refund"
@@ -230,7 +230,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c08",
-    "balanceCents": 2139028
+    "balanceCents": 320854200
   },
   {
     "id": "h05-05-in",
@@ -238,7 +238,7 @@
     "ledgerDate": "2026-05-14",
     "clientId": "c09",
     "matterId": "m07",
-    "amountCents": 567370,
+    "amountCents": 85105500,
     "description": "ZELLE FROM VICTOR CHEN",
     "documentIds": [
       "h05-05-deposit"
@@ -248,7 +248,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 2706398
+    "balanceCents": 405959700
   },
   {
     "id": "h05-05-fee",
@@ -256,7 +256,7 @@
     "ledgerDate": "2026-05-15",
     "clientId": "c09",
     "matterId": "m07",
-    "amountCents": -43000,
+    "amountCents": -6450000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h05-05-invoice"
@@ -266,7 +266,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 2663398
+    "balanceCents": 399509700
   },
   {
     "id": "h05-05-out",
@@ -274,7 +274,7 @@
     "ledgerDate": "2026-05-16",
     "clientId": "c09",
     "matterId": "m07",
-    "amountCents": -14053,
+    "amountCents": -2107950,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h05-05-cost"
@@ -284,7 +284,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 2649345
+    "balanceCents": 397401750
   },
   {
     "id": "h05-06-in",
@@ -292,7 +292,7 @@
     "ledgerDate": "2026-05-17",
     "clientId": "c10",
     "matterId": "m08",
-    "amountCents": 515951,
+    "amountCents": 77392650,
     "description": "ACH FROM NADIA FLORES",
     "documentIds": [
       "h05-06-deposit"
@@ -302,7 +302,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 3165296
+    "balanceCents": 474794400
   },
   {
     "id": "h05-06-fee",
@@ -310,7 +310,7 @@
     "ledgerDate": "2026-05-18",
     "clientId": "c10",
     "matterId": "m08",
-    "amountCents": -48750,
+    "amountCents": -7312500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h05-06-invoice"
@@ -320,7 +320,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 3116546
+    "balanceCents": 467481900
   },
   {
     "id": "h05-06-out",
@@ -328,7 +328,7 @@
     "ledgerDate": "2026-05-19",
     "clientId": "c10",
     "matterId": "m08",
-    "amountCents": -14370,
+    "amountCents": -2155500,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h05-06-cost"
@@ -338,7 +338,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 3102176
+    "balanceCents": 465326400
   },
   {
     "id": "noise-1",
@@ -346,7 +346,7 @@
     "ledgerDate": "2026-05-19",
     "clientId": "c06",
     "matterId": "m04",
-    "amountCents": 87525,
+    "amountCents": 13128750,
     "description": "ZELLE FROM J NGUYEN",
     "documentIds": [
       "noise-1"
@@ -355,7 +355,7 @@
     "initiatedBy": "riley",
     "approvedBy": "sam",
     "status": "posted",
-    "balanceCents": 3189701
+    "balanceCents": 478455150
   },
   {
     "id": "h05-07-in",
@@ -363,7 +363,7 @@
     "ledgerDate": "2026-05-20",
     "clientId": "c11",
     "matterId": "m09",
-    "amountCents": 584443,
+    "amountCents": 87666450,
     "description": "WIRE FROM OMAR HASSAN",
     "documentIds": [
       "h05-07-deposit"
@@ -373,7 +373,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 3774144
+    "balanceCents": 566121600
   },
   {
     "id": "h05-07-fee",
@@ -381,7 +381,7 @@
     "ledgerDate": "2026-05-21",
     "clientId": "c11",
     "matterId": "m09",
-    "amountCents": -43250,
+    "amountCents": -6487500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h05-07-invoice"
@@ -391,7 +391,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 3730894
+    "balanceCents": 559634100
   },
   {
     "id": "h05-07-out",
@@ -399,7 +399,7 @@
     "ledgerDate": "2026-05-22",
     "clientId": "c11",
     "matterId": "m09",
-    "amountCents": -14687,
+    "amountCents": -2203050,
     "description": "ACH REFUND OMAR HASSAN",
     "documentIds": [
       "h05-07-refund"
@@ -409,7 +409,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c11",
-    "balanceCents": 3716207
+    "balanceCents": 557431050
   },
   {
     "id": "h05-08-in",
@@ -417,7 +417,7 @@
     "ledgerDate": "2026-05-23",
     "clientId": "c12",
     "matterId": "m10",
-    "amountCents": 534417,
+    "amountCents": 80162550,
     "description": "CHECK FROM LENA BROOKS",
     "documentIds": [
       "h05-08-deposit"
@@ -427,7 +427,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6107",
-    "balanceCents": 4250624
+    "balanceCents": 637593600
   },
   {
     "id": "h05-08-fee",
@@ -435,7 +435,7 @@
     "ledgerDate": "2026-05-24",
     "clientId": "c12",
     "matterId": "m10",
-    "amountCents": -55250,
+    "amountCents": -8287500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h05-08-invoice"
@@ -445,7 +445,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 4195374
+    "balanceCents": 629306100
   },
   {
     "id": "h05-08-out",
@@ -453,7 +453,7 @@
     "ledgerDate": "2026-05-25",
     "clientId": "c12",
     "matterId": "m10",
-    "amountCents": -15004,
+    "amountCents": -2250600,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h05-08-cost"
@@ -463,7 +463,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 4180370
+    "balanceCents": 627055500
   },
   {
     "id": "h06-01-in",
@@ -471,7 +471,7 @@
     "ledgerDate": "2026-06-02",
     "clientId": "c13",
     "matterId": "m11",
-    "amountCents": 514306,
+    "amountCents": 77145900,
     "description": "ZELLE FROM ISAAC PATEL",
     "documentIds": [
       "h06-01-deposit"
@@ -481,7 +481,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 4694676
+    "balanceCents": 704201400
   },
   {
     "id": "h06-01-fee",
@@ -489,7 +489,7 @@
     "ledgerDate": "2026-06-03",
     "clientId": "c13",
     "matterId": "m11",
-    "amountCents": -42500,
+    "amountCents": -6375000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h06-01-invoice"
@@ -499,7 +499,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 4652176
+    "balanceCents": 697826400
   },
   {
     "id": "h06-01-out",
@@ -507,7 +507,7 @@
     "ledgerDate": "2026-06-04",
     "clientId": "c13",
     "matterId": "m11",
-    "amountCents": -12785,
+    "amountCents": -1917750,
     "description": "ACH REFUND ISAAC PATEL",
     "documentIds": [
       "h06-01-refund"
@@ -517,7 +517,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c13",
-    "balanceCents": 4639391
+    "balanceCents": 695908650
   },
   {
     "id": "h06-02-in",
@@ -525,7 +525,7 @@
     "ledgerDate": "2026-06-05",
     "clientId": "c14",
     "matterId": "m12",
-    "amountCents": 523408,
+    "amountCents": 78511200,
     "description": "ACH FROM SOFIA RIVERA",
     "documentIds": [
       "h06-02-deposit"
@@ -535,7 +535,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 5162799
+    "balanceCents": 774419850
   },
   {
     "id": "h06-02-fee",
@@ -543,7 +543,7 @@
     "ledgerDate": "2026-06-06",
     "clientId": "c14",
     "matterId": "m12",
-    "amountCents": -35750,
+    "amountCents": -5362500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h06-02-invoice"
@@ -553,7 +553,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 5127049
+    "balanceCents": 769057350
   },
   {
     "id": "h06-02-out",
@@ -561,7 +561,7 @@
     "ledgerDate": "2026-06-07",
     "clientId": "c14",
     "matterId": "m12",
-    "amountCents": -13102,
+    "amountCents": -1965300,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h06-02-cost"
@@ -571,7 +571,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 5113947
+    "balanceCents": 767092050
   },
   {
     "id": "h06-03-in",
@@ -579,7 +579,7 @@
     "ledgerDate": "2026-06-08",
     "clientId": "c15",
     "matterId": "m13",
-    "amountCents": 577425,
+    "amountCents": 86613750,
     "description": "WIRE FROM MARCUS REED",
     "documentIds": [
       "h06-03-deposit"
@@ -589,7 +589,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 5691372
+    "balanceCents": 853705800
   },
   {
     "id": "h06-03-fee",
@@ -597,7 +597,7 @@
     "ledgerDate": "2026-06-09",
     "clientId": "c15",
     "matterId": "m13",
-    "amountCents": -42750,
+    "amountCents": -6412500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h06-03-invoice"
@@ -607,7 +607,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 5648622
+    "balanceCents": 847293300
   },
   {
     "id": "h06-03-out",
@@ -615,7 +615,7 @@
     "ledgerDate": "2026-06-10",
     "clientId": "c15",
     "matterId": "m13",
-    "amountCents": -13419,
+    "amountCents": -2012850,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h06-03-cost"
@@ -625,7 +625,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 5635203
+    "balanceCents": 845280450
   },
   {
     "id": "h06-04-in",
@@ -633,7 +633,7 @@
     "ledgerDate": "2026-06-11",
     "clientId": "c16",
     "matterId": "m14",
-    "amountCents": 564188,
+    "amountCents": 84628200,
     "description": "CHECK FROM GRACE KIM",
     "documentIds": [
       "h06-04-deposit"
@@ -643,7 +643,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6111",
-    "balanceCents": 6199391
+    "balanceCents": 929908650
   },
   {
     "id": "park-funding",
@@ -651,7 +651,7 @@
     "ledgerDate": "2026-06-11",
     "clientId": "c08",
     "matterId": "m06",
-    "amountCents": 320075,
+    "amountCents": 48011250,
     "description": "ACH CR ELENA PARK",
     "documentIds": [
       "park-funding"
@@ -660,7 +660,7 @@
     "initiatedBy": "riley",
     "approvedBy": "sam",
     "status": "posted",
-    "balanceCents": 6519466
+    "balanceCents": 977919900
   },
   {
     "id": "bayside-prior-paid",
@@ -668,7 +668,7 @@
     "ledgerDate": "2026-06-12",
     "clientId": "c08",
     "matterId": "m06",
-    "amountCents": -320075,
+    "amountCents": -48011250,
     "description": "WIRE OUT BAYSIDE MED GRP",
     "documentIds": [
       "bayside-prior-letter",
@@ -680,7 +680,7 @@
     "status": "posted",
     "payeeId": "bayside",
     "bankAccount": "****1264",
-    "balanceCents": 6199391
+    "balanceCents": 929908650
   },
   {
     "id": "h06-04-fee",
@@ -688,7 +688,7 @@
     "ledgerDate": "2026-06-12",
     "clientId": "c16",
     "matterId": "m14",
-    "amountCents": -42250,
+    "amountCents": -6337500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h06-04-invoice"
@@ -698,7 +698,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 6157141
+    "balanceCents": 923571150
   },
   {
     "id": "h06-04-out",
@@ -706,7 +706,7 @@
     "ledgerDate": "2026-06-13",
     "clientId": "c16",
     "matterId": "m14",
-    "amountCents": -13736,
+    "amountCents": -2060400,
     "description": "ACH REFUND GRACE KIM",
     "documentIds": [
       "h06-04-refund"
@@ -716,7 +716,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c16",
-    "balanceCents": 6143405
+    "balanceCents": 921510750
   },
   {
     "id": "h06-05-in",
@@ -724,7 +724,7 @@
     "ledgerDate": "2026-06-14",
     "clientId": "c17",
     "matterId": "m15",
-    "amountCents": 581167,
+    "amountCents": 87175050,
     "description": "ZELLE FROM ROSA ALVAREZ",
     "documentIds": [
       "h06-05-deposit"
@@ -734,7 +734,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 6724572
+    "balanceCents": 1008685800
   },
   {
     "id": "h06-05-fee",
@@ -742,7 +742,7 @@
     "ledgerDate": "2026-06-15",
     "clientId": "c17",
     "matterId": "m15",
-    "amountCents": -43000,
+    "amountCents": -6450000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h06-05-invoice"
@@ -752,7 +752,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 6681572
+    "balanceCents": 1002235800
   },
   {
     "id": "h06-05-out",
@@ -760,7 +760,7 @@
     "ledgerDate": "2026-06-16",
     "clientId": "c17",
     "matterId": "m15",
-    "amountCents": -14053,
+    "amountCents": -2107950,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h06-05-cost"
@@ -770,7 +770,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 6667519
+    "balanceCents": 1000127850
   },
   {
     "id": "h06-06-in",
@@ -778,7 +778,7 @@
     "ledgerDate": "2026-06-17",
     "clientId": "c18",
     "matterId": "m16",
-    "amountCents": 522751,
+    "amountCents": 78412650,
     "description": "ACH FROM ETHAN WALSH",
     "documentIds": [
       "h06-06-deposit"
@@ -788,7 +788,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 7190270
+    "balanceCents": 1078540500
   },
   {
     "id": "h06-06-fee",
@@ -796,7 +796,7 @@
     "ledgerDate": "2026-06-18",
     "clientId": "c18",
     "matterId": "m16",
-    "amountCents": -48750,
+    "amountCents": -7312500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h06-06-invoice"
@@ -806,7 +806,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 7141520
+    "balanceCents": 1071228000
   },
   {
     "id": "noise-2",
@@ -814,7 +814,7 @@
     "ledgerDate": "2026-06-18",
     "clientId": "c07",
     "matterId": "m05",
-    "amountCents": 92040,
+    "amountCents": 13806000,
     "description": "ZELLE FROM J NGUYEN",
     "documentIds": [
       "noise-2"
@@ -823,7 +823,7 @@
     "initiatedBy": "riley",
     "approvedBy": "sam",
     "status": "posted",
-    "balanceCents": 7233560
+    "balanceCents": 1085034000
   },
   {
     "id": "h06-06-out",
@@ -831,7 +831,7 @@
     "ledgerDate": "2026-06-19",
     "clientId": "c18",
     "matterId": "m16",
-    "amountCents": -14370,
+    "amountCents": -2155500,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h06-06-cost"
@@ -841,7 +841,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 7219190
+    "balanceCents": 1082878500
   },
   {
     "id": "h06-07-in",
@@ -849,7 +849,7 @@
     "ledgerDate": "2026-06-20",
     "clientId": "c19",
     "matterId": "m17",
-    "amountCents": 525584,
+    "amountCents": 78837600,
     "description": "WIRE FROM AMIRA SALEH",
     "documentIds": [
       "h06-07-deposit"
@@ -859,7 +859,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 7744774
+    "balanceCents": 1161716100
   },
   {
     "id": "h06-07-fee",
@@ -867,7 +867,7 @@
     "ledgerDate": "2026-06-21",
     "clientId": "c19",
     "matterId": "m17",
-    "amountCents": -43250,
+    "amountCents": -6487500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h06-07-invoice"
@@ -877,7 +877,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 7701524
+    "balanceCents": 1155228600
   },
   {
     "id": "h06-07-out",
@@ -885,7 +885,7 @@
     "ledgerDate": "2026-06-22",
     "clientId": "c19",
     "matterId": "m17",
-    "amountCents": -14687,
+    "amountCents": -2203050,
     "description": "ACH REFUND AMIRA SALEH",
     "documentIds": [
       "h06-07-refund"
@@ -895,7 +895,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c19",
-    "balanceCents": 7686837
+    "balanceCents": 1153025550
   },
   {
     "id": "h06-08-in",
@@ -903,7 +903,7 @@
     "ledgerDate": "2026-06-23",
     "clientId": "c20",
     "matterId": "m18",
-    "amountCents": 504607,
+    "amountCents": 75691050,
     "description": "CHECK FROM NOAH BENNETT",
     "documentIds": [
       "h06-08-deposit"
@@ -913,7 +913,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6115",
-    "balanceCents": 8191444
+    "balanceCents": 1228716600
   },
   {
     "id": "h06-08-fee",
@@ -921,7 +921,7 @@
     "ledgerDate": "2026-06-24",
     "clientId": "c20",
     "matterId": "m18",
-    "amountCents": -55250,
+    "amountCents": -8287500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h06-08-invoice"
@@ -931,7 +931,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 8136194
+    "balanceCents": 1220429100
   },
   {
     "id": "h06-08-out",
@@ -939,7 +939,7 @@
     "ledgerDate": "2026-06-25",
     "clientId": "c20",
     "matterId": "m18",
-    "amountCents": -15004,
+    "amountCents": -2250600,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h06-08-cost"
@@ -949,7 +949,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 8121190
+    "balanceCents": 1218178500
   },
   {
     "id": "h07-01-in",
@@ -957,7 +957,7 @@
     "ledgerDate": "2026-07-02",
     "clientId": "c21",
     "matterId": "m19",
-    "amountCents": 558789,
+    "amountCents": 83818350,
     "description": "ZELLE FROM MEI LIN",
     "documentIds": [
       "h07-01-deposit"
@@ -967,7 +967,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 8679979
+    "balanceCents": 1301996850
   },
   {
     "id": "h07-01-fee",
@@ -975,7 +975,7 @@
     "ledgerDate": "2026-07-03",
     "clientId": "c21",
     "matterId": "m19",
-    "amountCents": -42500,
+    "amountCents": -6375000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h07-01-invoice"
@@ -985,7 +985,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 8637479
+    "balanceCents": 1295621850
   },
   {
     "id": "h07-01-out",
@@ -993,7 +993,7 @@
     "ledgerDate": "2026-07-04",
     "clientId": "c21",
     "matterId": "m19",
-    "amountCents": -12785,
+    "amountCents": -1917750,
     "description": "ACH REFUND MEI LIN",
     "documentIds": [
       "h07-01-refund"
@@ -1003,7 +1003,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c21",
-    "balanceCents": 8624694
+    "balanceCents": 1293704100
   },
   {
     "id": "h07-02-in",
@@ -1011,7 +1011,7 @@
     "ledgerDate": "2026-07-05",
     "clientId": "c22",
     "matterId": "m20",
-    "amountCents": 512573,
+    "amountCents": 76885950,
     "description": "ACH FROM CARLOS VEGA",
     "documentIds": [
       "h07-02-deposit"
@@ -1021,7 +1021,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 9137267
+    "balanceCents": 1370590050
   },
   {
     "id": "ames-deposit",
@@ -1029,7 +1029,7 @@
     "ledgerDate": "2026-07-06",
     "clientId": "c41",
     "matterId": "m26",
-    "amountCents": 6000000,
+    "amountCents": 900000000,
     "description": "CHECK TIDEMARK CASUALTY",
     "documentIds": [
       "ames-settlement"
@@ -1039,7 +1039,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "8117",
-    "balanceCents": 15137267
+    "balanceCents": 2270590050
   },
   {
     "id": "h07-02-fee",
@@ -1047,7 +1047,7 @@
     "ledgerDate": "2026-07-06",
     "clientId": "c22",
     "matterId": "m20",
-    "amountCents": -35750,
+    "amountCents": -5362500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h07-02-invoice"
@@ -1057,7 +1057,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 15101517
+    "balanceCents": 2265227550
   },
   {
     "id": "h07-02-out",
@@ -1065,7 +1065,7 @@
     "ledgerDate": "2026-07-07",
     "clientId": "c22",
     "matterId": "m20",
-    "amountCents": -13102,
+    "amountCents": -1965300,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h07-02-cost"
@@ -1075,7 +1075,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 15088415
+    "balanceCents": 2263262250
   },
   {
     "id": "title-wire-1",
@@ -1083,7 +1083,7 @@
     "ledgerDate": "2026-07-07",
     "clientId": "c06",
     "matterId": "m04",
-    "amountCents": 734125,
+    "amountCents": 110118750,
     "description": "WIRE IN ESTUARY TITLE ETS91",
     "documentIds": [
       "title-wire-1"
@@ -1094,7 +1094,7 @@
     "status": "posted",
     "reference": "ETS-260707-91",
     "payeeId": "title",
-    "balanceCents": 15822540
+    "balanceCents": 2373381000
   },
   {
     "id": "h07-03-in",
@@ -1102,7 +1102,7 @@
     "ledgerDate": "2026-07-08",
     "clientId": "c23",
     "matterId": "m21",
-    "amountCents": 565219,
+    "amountCents": 84782850,
     "description": "WIRE FROM FATIMA YUSUF",
     "documentIds": [
       "h07-03-deposit"
@@ -1112,7 +1112,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 16387759
+    "balanceCents": 2458163850
   },
   {
     "id": "title-wire-2",
@@ -1120,7 +1120,7 @@
     "ledgerDate": "2026-07-08",
     "clientId": "c06",
     "matterId": "m04",
-    "amountCents": 734125,
+    "amountCents": 110118750,
     "description": "WIRE IN ESTUARY TITLE ETS91",
     "documentIds": [
       "title-wire-2"
@@ -1131,7 +1131,7 @@
     "status": "posted",
     "reference": "ETS-260707-91",
     "payeeId": "title",
-    "balanceCents": 17121884
+    "balanceCents": 2568282600
   },
   {
     "id": "h07-03-fee",
@@ -1139,7 +1139,7 @@
     "ledgerDate": "2026-07-09",
     "clientId": "c23",
     "matterId": "m21",
-    "amountCents": -42750,
+    "amountCents": -6412500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h07-03-invoice"
@@ -1149,7 +1149,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 17079134
+    "balanceCents": 2561870100
   },
   {
     "id": "h07-03-out",
@@ -1157,7 +1157,7 @@
     "ledgerDate": "2026-07-10",
     "clientId": "c23",
     "matterId": "m21",
-    "amountCents": -13419,
+    "amountCents": -2012850,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h07-03-cost"
@@ -1167,7 +1167,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 17065715
+    "balanceCents": 2559857250
   },
   {
     "id": "title-return",
@@ -1175,7 +1175,7 @@
     "ledgerDate": "2026-07-10",
     "clientId": "c06",
     "matterId": "m04",
-    "amountCents": -734125,
+    "amountCents": -110118750,
     "description": "WIRE OUT ESTUARY TITLE ETS91",
     "documentIds": [
       "title-return"
@@ -1186,7 +1186,7 @@
     "status": "posted",
     "reference": "ETS-260707-91",
     "payeeId": "title",
-    "balanceCents": 16331590
+    "balanceCents": 2449738500
   },
   {
     "id": "h07-04-in",
@@ -1194,7 +1194,7 @@
     "ledgerDate": "2026-07-11",
     "clientId": "c24",
     "matterId": "m22",
-    "amountCents": 514001,
+    "amountCents": 77100150,
     "description": "CHECK FROM PETER NOVAK",
     "documentIds": [
       "h07-04-deposit"
@@ -1204,7 +1204,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6119",
-    "balanceCents": 16845591
+    "balanceCents": 2526838650
   },
   {
     "id": "h07-04-fee",
@@ -1212,7 +1212,7 @@
     "ledgerDate": "2026-07-12",
     "clientId": "c24",
     "matterId": "m22",
-    "amountCents": -42250,
+    "amountCents": -6337500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h07-04-invoice"
@@ -1222,7 +1222,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 16803341
+    "balanceCents": 2520501150
   },
   {
     "id": "ames-bayside-paid",
@@ -1230,7 +1230,7 @@
     "ledgerDate": "2026-07-13",
     "clientId": "c41",
     "matterId": "m26",
-    "amountCents": -897500,
+    "amountCents": -134625000,
     "description": "WIRE OUT BAYSIDE MED GRP",
     "documentIds": [
       "ames-bayside-v2",
@@ -1243,7 +1243,7 @@
     "status": "posted",
     "payeeId": "bayside",
     "bankAccount": "****1264",
-    "balanceCents": 15905841
+    "balanceCents": 2385876150
   },
   {
     "id": "ames-client-share",
@@ -1251,7 +1251,7 @@
     "ledgerDate": "2026-07-13",
     "clientId": "c41",
     "matterId": "m26",
-    "amountCents": -2977500,
+    "amountCents": -446625000,
     "description": "ACH TO HAROLD AMES",
     "documentIds": [
       "ames-statement-v2"
@@ -1261,7 +1261,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c41",
-    "balanceCents": 12928341
+    "balanceCents": 1939251150
   },
   {
     "id": "ames-costs",
@@ -1269,7 +1269,7 @@
     "ledgerDate": "2026-07-13",
     "clientId": "c41",
     "matterId": "m26",
-    "amountCents": -145000,
+    "amountCents": -21750000,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "ames-statement-v2",
@@ -1281,7 +1281,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 12783341
+    "balanceCents": 1917501150
   },
   {
     "id": "ames-fee",
@@ -1289,7 +1289,7 @@
     "ledgerDate": "2026-07-13",
     "clientId": "c41",
     "matterId": "m26",
-    "amountCents": -1980000,
+    "amountCents": -297000000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "ames-statement-v2"
@@ -1299,7 +1299,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 10803341
+    "balanceCents": 1620501150
   },
   {
     "id": "h07-04-out",
@@ -1307,7 +1307,7 @@
     "ledgerDate": "2026-07-13",
     "clientId": "c24",
     "matterId": "m22",
-    "amountCents": -13736,
+    "amountCents": -2060400,
     "description": "ACH REFUND PETER NOVAK",
     "documentIds": [
       "h07-04-refund"
@@ -1317,7 +1317,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c24",
-    "balanceCents": 10789605
+    "balanceCents": 1618440750
   },
   {
     "id": "h07-05-in",
@@ -1325,7 +1325,7 @@
     "ledgerDate": "2026-07-14",
     "clientId": "c25",
     "matterId": "m23",
-    "amountCents": 550293,
+    "amountCents": 82543950,
     "description": "ZELLE FROM LUCIA SANTOS",
     "documentIds": [
       "h07-05-deposit"
@@ -1335,7 +1335,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 11339898
+    "balanceCents": 1700984700
   },
   {
     "id": "h07-05-fee",
@@ -1343,7 +1343,7 @@
     "ledgerDate": "2026-07-15",
     "clientId": "c25",
     "matterId": "m23",
-    "amountCents": -43000,
+    "amountCents": -6450000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h07-05-invoice"
@@ -1353,7 +1353,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 11296898
+    "balanceCents": 1694534700
   },
   {
     "id": "h07-05-out",
@@ -1361,7 +1361,7 @@
     "ledgerDate": "2026-07-16",
     "clientId": "c25",
     "matterId": "m23",
-    "amountCents": -14053,
+    "amountCents": -2107950,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h07-05-cost"
@@ -1371,7 +1371,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 11282845
+    "balanceCents": 1692426750
   },
   {
     "id": "h07-06-in",
@@ -1379,7 +1379,7 @@
     "ledgerDate": "2026-07-17",
     "clientId": "c26",
     "matterId": "m24",
-    "amountCents": 568309,
+    "amountCents": 85246350,
     "description": "ACH FROM ANDRE LEWIS",
     "documentIds": [
       "h07-06-deposit"
@@ -1389,7 +1389,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 11851154
+    "balanceCents": 1777673100
   },
   {
     "id": "h07-06-fee",
@@ -1397,7 +1397,7 @@
     "ledgerDate": "2026-07-18",
     "clientId": "c26",
     "matterId": "m24",
-    "amountCents": -48750,
+    "amountCents": -7312500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h07-06-invoice"
@@ -1407,7 +1407,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 11802404
+    "balanceCents": 1770360600
   },
   {
     "id": "h07-06-out",
@@ -1415,7 +1415,7 @@
     "ledgerDate": "2026-07-19",
     "clientId": "c26",
     "matterId": "m24",
-    "amountCents": -14370,
+    "amountCents": -2155500,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h07-06-cost"
@@ -1425,7 +1425,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 11788034
+    "balanceCents": 1768205100
   },
   {
     "id": "h07-07-in",
@@ -1433,7 +1433,7 @@
     "ledgerDate": "2026-07-20",
     "clientId": "c27",
     "matterId": "m25",
-    "amountCents": 521070,
+    "amountCents": 78160500,
     "description": "WIRE FROM HELEN WU",
     "documentIds": [
       "h07-07-deposit"
@@ -1443,7 +1443,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 12309104
+    "balanceCents": 1846365600
   },
   {
     "id": "h07-07-fee",
@@ -1451,7 +1451,7 @@
     "ledgerDate": "2026-07-21",
     "clientId": "c27",
     "matterId": "m25",
-    "amountCents": -43250,
+    "amountCents": -6487500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h07-07-invoice"
@@ -1461,7 +1461,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 12265854
+    "balanceCents": 1839878100
   },
   {
     "id": "h07-07-out",
@@ -1469,7 +1469,7 @@
     "ledgerDate": "2026-07-22",
     "clientId": "c27",
     "matterId": "m25",
-    "amountCents": -14687,
+    "amountCents": -2203050,
     "description": "ACH REFUND HELEN WU",
     "documentIds": [
       "h07-07-refund"
@@ -1479,7 +1479,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c27",
-    "balanceCents": 12251167
+    "balanceCents": 1837675050
   },
   {
     "id": "h07-08-in",
@@ -1487,7 +1487,7 @@
     "ledgerDate": "2026-07-23",
     "clientId": "c28",
     "matterId": "m03",
-    "amountCents": 528481,
+    "amountCents": 79272150,
     "description": "CHECK FROM MATEO CRUZ",
     "documentIds": [
       "h07-08-deposit"
@@ -1497,7 +1497,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6123",
-    "balanceCents": 12779648
+    "balanceCents": 1916947200
   },
   {
     "id": "h07-08-fee",
@@ -1505,7 +1505,7 @@
     "ledgerDate": "2026-07-24",
     "clientId": "c28",
     "matterId": "m03",
-    "amountCents": -55250,
+    "amountCents": -8287500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h07-08-invoice"
@@ -1515,7 +1515,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 12724398
+    "balanceCents": 1908659700
   },
   {
     "id": "h07-08-out",
@@ -1523,7 +1523,7 @@
     "ledgerDate": "2026-07-25",
     "clientId": "c28",
     "matterId": "m03",
-    "amountCents": -15004,
+    "amountCents": -2250600,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h07-08-cost"
@@ -1533,7 +1533,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 12709394
+    "balanceCents": 1906409100
   },
   {
     "id": "h08-01-in",
@@ -1541,7 +1541,7 @@
     "ledgerDate": "2026-08-02",
     "clientId": "c29",
     "matterId": "m04",
-    "amountCents": 525351,
+    "amountCents": 78802650,
     "description": "ZELLE FROM TESSA MORGAN",
     "documentIds": [
       "h08-01-deposit"
@@ -1551,7 +1551,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 13234745
+    "balanceCents": 1985211750
   },
   {
     "id": "h08-01-fee",
@@ -1559,7 +1559,7 @@
     "ledgerDate": "2026-08-03",
     "clientId": "c29",
     "matterId": "m04",
-    "amountCents": -42500,
+    "amountCents": -6375000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h08-01-invoice"
@@ -1569,7 +1569,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 13192245
+    "balanceCents": 1978836750
   },
   {
     "id": "h08-01-out",
@@ -1577,7 +1577,7 @@
     "ledgerDate": "2026-08-04",
     "clientId": "c29",
     "matterId": "m04",
-    "amountCents": -12785,
+    "amountCents": -1917750,
     "description": "ACH REFUND TESSA MORGAN",
     "documentIds": [
       "h08-01-refund"
@@ -1587,7 +1587,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c29",
-    "balanceCents": 13179460
+    "balanceCents": 1976919000
   },
   {
     "id": "h08-02-in",
@@ -1595,7 +1595,7 @@
     "ledgerDate": "2026-08-05",
     "clientId": "c30",
     "matterId": "m05",
-    "amountCents": 518665,
+    "amountCents": 77799750,
     "description": "ACH FROM JAMAL PRICE",
     "documentIds": [
       "h08-02-deposit"
@@ -1605,7 +1605,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 13698125
+    "balanceCents": 2054718750
   },
   {
     "id": "h08-02-fee",
@@ -1613,7 +1613,7 @@
     "ledgerDate": "2026-08-06",
     "clientId": "c30",
     "matterId": "m05",
-    "amountCents": -35750,
+    "amountCents": -5362500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h08-02-invoice"
@@ -1623,7 +1623,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 13662375
+    "balanceCents": 2049356250
   },
   {
     "id": "h08-02-out",
@@ -1631,7 +1631,7 @@
     "ledgerDate": "2026-08-07",
     "clientId": "c30",
     "matterId": "m05",
-    "amountCents": -13102,
+    "amountCents": -1965300,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h08-02-cost"
@@ -1641,7 +1641,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 13649273
+    "balanceCents": 2047390950
   },
   {
     "id": "h08-03-in",
@@ -1649,7 +1649,7 @@
     "ledgerDate": "2026-08-08",
     "clientId": "c31",
     "matterId": "m06",
-    "amountCents": 505071,
+    "amountCents": 75760650,
     "description": "WIRE FROM ANITA SHAH",
     "documentIds": [
       "h08-03-deposit"
@@ -1659,7 +1659,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 14154344
+    "balanceCents": 2123151600
   },
   {
     "id": "h08-03-fee",
@@ -1667,7 +1667,7 @@
     "ledgerDate": "2026-08-09",
     "clientId": "c31",
     "matterId": "m06",
-    "amountCents": -42750,
+    "amountCents": -6412500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h08-03-invoice"
@@ -1677,7 +1677,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 14111594
+    "balanceCents": 2116739100
   },
   {
     "id": "h08-03-out",
@@ -1685,7 +1685,7 @@
     "ledgerDate": "2026-08-10",
     "clientId": "c31",
     "matterId": "m06",
-    "amountCents": -13419,
+    "amountCents": -2012850,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h08-03-cost"
@@ -1695,7 +1695,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 14098175
+    "balanceCents": 2114726250
   },
   {
     "id": "vasquez-deposit",
@@ -1703,7 +1703,7 @@
     "ledgerDate": "2026-08-10",
     "clientId": "c42",
     "matterId": "m27",
-    "amountCents": 3200000,
+    "amountCents": 480000000,
     "description": "DEPOSIT HARBORLINE DRAFT 902033",
     "documentIds": [
       "vasquez-check"
@@ -1713,7 +1713,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "902033",
-    "balanceCents": 17298175
+    "balanceCents": 2594726250
   },
   {
     "id": "h08-04-in",
@@ -1721,7 +1721,7 @@
     "ledgerDate": "2026-08-11",
     "clientId": "c32",
     "matterId": "m07",
-    "amountCents": 523847,
+    "amountCents": 78577050,
     "description": "CHECK FROM FELIX ORTIZ",
     "documentIds": [
       "h08-04-deposit"
@@ -1731,7 +1731,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6127",
-    "balanceCents": 17822022
+    "balanceCents": 2673303300
   },
   {
     "id": "h08-04-fee",
@@ -1739,7 +1739,7 @@
     "ledgerDate": "2026-08-12",
     "clientId": "c32",
     "matterId": "m07",
-    "amountCents": -42250,
+    "amountCents": -6337500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h08-04-invoice"
@@ -1749,7 +1749,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 17779772
+    "balanceCents": 2666965800
   },
   {
     "id": "h08-04-out",
@@ -1757,7 +1757,7 @@
     "ledgerDate": "2026-08-13",
     "clientId": "c32",
     "matterId": "m07",
-    "amountCents": -13736,
+    "amountCents": -2060400,
     "description": "ACH REFUND FELIX ORTIZ",
     "documentIds": [
       "h08-04-refund"
@@ -1767,7 +1767,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c32",
-    "balanceCents": 17766036
+    "balanceCents": 2664905400
   },
   {
     "id": "h08-05-in",
@@ -1775,7 +1775,7 @@
     "ledgerDate": "2026-08-14",
     "clientId": "c33",
     "matterId": "m08",
-    "amountCents": 529051,
+    "amountCents": 79357650,
     "description": "ZELLE FROM RUTH COLEMAN",
     "documentIds": [
       "h08-05-deposit"
@@ -1785,7 +1785,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 18295087
+    "balanceCents": 2744263050
   },
   {
     "id": "vasquez-bayside-paid",
@@ -1793,7 +1793,7 @@
     "ledgerDate": "2026-08-14",
     "clientId": "c42",
     "matterId": "m27",
-    "amountCents": -515000,
+    "amountCents": -77250000,
     "description": "WIRE OUT BAYSIDE MED GRP",
     "documentIds": [
       "vasquez-bayside-v2",
@@ -1806,7 +1806,7 @@
     "status": "posted",
     "payeeId": "bayside",
     "bankAccount": "****1264",
-    "balanceCents": 17780087
+    "balanceCents": 2667013050
   },
   {
     "id": "vasquez-client-share",
@@ -1814,7 +1814,7 @@
     "ledgerDate": "2026-08-14",
     "clientId": "c42",
     "matterId": "m27",
-    "amountCents": -1750000,
+    "amountCents": -262500000,
     "description": "ACH TO CORINNE VASQUEZ",
     "documentIds": [
       "vasquez-statement-v2"
@@ -1824,7 +1824,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c42",
-    "balanceCents": 16030087
+    "balanceCents": 2404513050
   },
   {
     "id": "vasquez-costs",
@@ -1832,7 +1832,7 @@
     "ledgerDate": "2026-08-14",
     "clientId": "c42",
     "matterId": "m27",
-    "amountCents": -180000,
+    "amountCents": -27000000,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "vasquez-statement-v2",
@@ -1844,7 +1844,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 15850087
+    "balanceCents": 2377513050
   },
   {
     "id": "vasquez-fee",
@@ -1852,7 +1852,7 @@
     "ledgerDate": "2026-08-14",
     "clientId": "c42",
     "matterId": "m27",
-    "amountCents": -755000,
+    "amountCents": -113250000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "vasquez-statement-v2"
@@ -1862,7 +1862,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 15095087
+    "balanceCents": 2264263050
   },
   {
     "id": "h08-05-fee",
@@ -1870,7 +1870,7 @@
     "ledgerDate": "2026-08-15",
     "clientId": "c33",
     "matterId": "m08",
-    "amountCents": -43000,
+    "amountCents": -6450000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h08-05-invoice"
@@ -1880,7 +1880,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 15052087
+    "balanceCents": 2257813050
   },
   {
     "id": "h08-05-out",
@@ -1888,7 +1888,7 @@
     "ledgerDate": "2026-08-16",
     "clientId": "c33",
     "matterId": "m08",
-    "amountCents": -14053,
+    "amountCents": -2107950,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h08-05-cost"
@@ -1898,7 +1898,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 15038034
+    "balanceCents": 2255705100
   },
   {
     "id": "h08-06-in",
@@ -1906,7 +1906,7 @@
     "ledgerDate": "2026-08-17",
     "clientId": "c34",
     "matterId": "m09",
-    "amountCents": 533625,
+    "amountCents": 80043750,
     "description": "ACH FROM LEILA HADDAD",
     "documentIds": [
       "h08-06-deposit"
@@ -1916,7 +1916,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 15571659
+    "balanceCents": 2335748850
   },
   {
     "id": "bank-service-fee",
@@ -1924,7 +1924,7 @@
     "ledgerDate": "2026-08-18",
     "clientId": "firm",
     "matterId": null,
-    "amountCents": -2500,
+    "amountCents": -375000,
     "description": "MONTHLY SERVICE CHARGE",
     "documentIds": [
       "bank-service-fee"
@@ -1934,7 +1934,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "bank",
-    "balanceCents": 15569159
+    "balanceCents": 2335373850
   },
   {
     "id": "h08-06-fee",
@@ -1942,7 +1942,7 @@
     "ledgerDate": "2026-08-18",
     "clientId": "c34",
     "matterId": "m09",
-    "amountCents": -48750,
+    "amountCents": -7312500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h08-06-invoice"
@@ -1952,7 +1952,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 15520409
+    "balanceCents": 2328061350
   },
   {
     "id": "firm-fee-replacement",
@@ -1960,7 +1960,7 @@
     "ledgerDate": "2026-08-19",
     "clientId": "firm",
     "matterId": null,
-    "amountCents": 2500,
+    "amountCents": 375000,
     "description": "ACH CR HARTWELL OPER 2290",
     "documentIds": [
       "firm-fee-replacement"
@@ -1970,7 +1970,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "bank",
-    "balanceCents": 15522909
+    "balanceCents": 2328436350
   },
   {
     "id": "h08-06-out",
@@ -1978,7 +1978,7 @@
     "ledgerDate": "2026-08-19",
     "clientId": "c34",
     "matterId": "m09",
-    "amountCents": -14370,
+    "amountCents": -2155500,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h08-06-cost"
@@ -1988,7 +1988,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 15508539
+    "balanceCents": 2326280850
   },
   {
     "id": "h08-07-in",
@@ -1996,7 +1996,7 @@
     "ledgerDate": "2026-08-20",
     "clientId": "c35",
     "matterId": "m10",
-    "amountCents": 500222,
+    "amountCents": 75033300,
     "description": "WIRE FROM SIMON BLAKE",
     "documentIds": [
       "h08-07-deposit"
@@ -2006,7 +2006,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 16008761
+    "balanceCents": 2401314150
   },
   {
     "id": "h08-07-fee",
@@ -2014,7 +2014,7 @@
     "ledgerDate": "2026-08-21",
     "clientId": "c35",
     "matterId": "m10",
-    "amountCents": -43250,
+    "amountCents": -6487500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h08-07-invoice"
@@ -2024,7 +2024,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 15965511
+    "balanceCents": 2394826650
   },
   {
     "id": "h08-07-out",
@@ -2032,7 +2032,7 @@
     "ledgerDate": "2026-08-22",
     "clientId": "c35",
     "matterId": "m10",
-    "amountCents": -14687,
+    "amountCents": -2203050,
     "description": "ACH REFUND SIMON BLAKE",
     "documentIds": [
       "h08-07-refund"
@@ -2042,7 +2042,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c35",
-    "balanceCents": 15950824
+    "balanceCents": 2392623600
   },
   {
     "id": "h08-08-in",
@@ -2050,7 +2050,7 @@
     "ledgerDate": "2026-08-23",
     "clientId": "c36",
     "matterId": "m11",
-    "amountCents": 528223,
+    "amountCents": 79233450,
     "description": "CHECK FROM DINA FAROUK",
     "documentIds": [
       "h08-08-deposit"
@@ -2060,7 +2060,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6131",
-    "balanceCents": 16479047
+    "balanceCents": 2471857050
   },
   {
     "id": "h08-08-fee",
@@ -2068,7 +2068,7 @@
     "ledgerDate": "2026-08-24",
     "clientId": "c36",
     "matterId": "m11",
-    "amountCents": -55250,
+    "amountCents": -8287500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h08-08-invoice"
@@ -2078,7 +2078,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 16423797
+    "balanceCents": 2463569550
   },
   {
     "id": "h08-08-out",
@@ -2086,7 +2086,7 @@
     "ledgerDate": "2026-08-25",
     "clientId": "c36",
     "matterId": "m11",
-    "amountCents": -15004,
+    "amountCents": -2250600,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h08-08-cost"
@@ -2096,7 +2096,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 16408793
+    "balanceCents": 2461318950
   },
   {
     "id": "h09-01-in",
@@ -2104,7 +2104,7 @@
     "ledgerDate": "2026-09-02",
     "clientId": "c37",
     "matterId": "m12",
-    "amountCents": 547243,
+    "amountCents": 82086450,
     "description": "ZELLE FROM ADRIAN MOSS",
     "documentIds": [
       "h09-01-deposit"
@@ -2114,7 +2114,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 16956036
+    "balanceCents": 2543405400
   },
   {
     "id": "h09-01-fee",
@@ -2122,7 +2122,7 @@
     "ledgerDate": "2026-09-03",
     "clientId": "c37",
     "matterId": "m12",
-    "amountCents": -42500,
+    "amountCents": -6375000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h09-01-invoice"
@@ -2132,7 +2132,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 16913536
+    "balanceCents": 2537030400
   },
   {
     "id": "ford-deposit",
@@ -2140,7 +2140,7 @@
     "ledgerDate": "2026-09-04",
     "clientId": "c43",
     "matterId": "m28",
-    "amountCents": 4800000,
+    "amountCents": 720000000,
     "description": "CHECK TIDEMARK CASUALTY",
     "documentIds": [
       "ford-settlement"
@@ -2150,7 +2150,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "8204",
-    "balanceCents": 21713536
+    "balanceCents": 3257030400
   },
   {
     "id": "h09-01-out",
@@ -2158,7 +2158,7 @@
     "ledgerDate": "2026-09-04",
     "clientId": "c37",
     "matterId": "m12",
-    "amountCents": -12785,
+    "amountCents": -1917750,
     "description": "ACH REFUND ADRIAN MOSS",
     "documentIds": [
       "h09-01-refund"
@@ -2168,7 +2168,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c37",
-    "balanceCents": 21700751
+    "balanceCents": 3255112650
   },
   {
     "id": "h09-02-in",
@@ -2176,7 +2176,7 @@
     "ledgerDate": "2026-09-05",
     "clientId": "c38",
     "matterId": "m13",
-    "amountCents": 534038,
+    "amountCents": 80105700,
     "description": "ACH FROM NINA PETROV",
     "documentIds": [
       "h09-02-deposit"
@@ -2186,7 +2186,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 22234789
+    "balanceCents": 3335218350
   },
   {
     "id": "h09-02-fee",
@@ -2194,7 +2194,7 @@
     "ledgerDate": "2026-09-06",
     "clientId": "c38",
     "matterId": "m13",
-    "amountCents": -35750,
+    "amountCents": -5362500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h09-02-invoice"
@@ -2204,7 +2204,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 22199039
+    "balanceCents": 3329855850
   },
   {
     "id": "h09-02-out",
@@ -2212,7 +2212,7 @@
     "ledgerDate": "2026-09-07",
     "clientId": "c38",
     "matterId": "m13",
-    "amountCents": -13102,
+    "amountCents": -1965300,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h09-02-cost"
@@ -2222,7 +2222,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 22185937
+    "balanceCents": 3327890550
   },
   {
     "id": "h09-03-in",
@@ -2230,7 +2230,7 @@
     "ledgerDate": "2026-09-08",
     "clientId": "c39",
     "matterId": "m14",
-    "amountCents": 548243,
+    "amountCents": 82236450,
     "description": "WIRE FROM CALEB ROSS",
     "documentIds": [
       "h09-03-deposit"
@@ -2240,7 +2240,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 22734180
+    "balanceCents": 3410127000
   },
   {
     "id": "ford-client-share",
@@ -2248,7 +2248,7 @@
     "ledgerDate": "2026-09-09",
     "clientId": "c43",
     "matterId": "m28",
-    "amountCents": -3121000,
+    "amountCents": -468150000,
     "description": "ACH TO WESLEY FORD",
     "documentIds": [
       "ford-statement-v1"
@@ -2258,7 +2258,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c43",
-    "balanceCents": 19613180
+    "balanceCents": 2941977000
   },
   {
     "id": "ford-costs",
@@ -2266,7 +2266,7 @@
     "ledgerDate": "2026-09-09",
     "clientId": "c43",
     "matterId": "m28",
-    "amountCents": -95000,
+    "amountCents": -14250000,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "ford-statement-v1",
@@ -2278,7 +2278,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 19518180
+    "balanceCents": 2927727000
   },
   {
     "id": "ford-fee",
@@ -2286,7 +2286,7 @@
     "ledgerDate": "2026-09-09",
     "clientId": "c43",
     "matterId": "m28",
-    "amountCents": -1584000,
+    "amountCents": -237600000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "ford-statement-v1"
@@ -2296,7 +2296,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 17934180
+    "balanceCents": 2690127000
   },
   {
     "id": "h09-03-fee",
@@ -2304,7 +2304,7 @@
     "ledgerDate": "2026-09-09",
     "clientId": "c39",
     "matterId": "m14",
-    "amountCents": -42750,
+    "amountCents": -6412500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h09-03-invoice"
@@ -2314,7 +2314,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 17891430
+    "balanceCents": 2683714500
   },
   {
     "id": "h09-03-out",
@@ -2322,7 +2322,7 @@
     "ledgerDate": "2026-09-10",
     "clientId": "c39",
     "matterId": "m14",
-    "amountCents": -13419,
+    "amountCents": -2012850,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h09-03-cost"
@@ -2332,7 +2332,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 17878011
+    "balanceCents": 2681701650
   },
   {
     "id": "h09-04-in",
@@ -2340,7 +2340,7 @@
     "ledgerDate": "2026-09-11",
     "clientId": "c40",
     "matterId": "m15",
-    "amountCents": 572729,
+    "amountCents": 85909350,
     "description": "CHECK FROM IRIS TRAN",
     "documentIds": [
       "h09-04-deposit"
@@ -2350,7 +2350,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6135",
-    "balanceCents": 18450740
+    "balanceCents": 2767611000
   },
   {
     "id": "h09-04-fee",
@@ -2358,7 +2358,7 @@
     "ledgerDate": "2026-09-12",
     "clientId": "c40",
     "matterId": "m15",
-    "amountCents": -42250,
+    "amountCents": -6337500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h09-04-invoice"
@@ -2368,7 +2368,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 18408490
+    "balanceCents": 2761273500
   },
   {
     "id": "h09-04-out",
@@ -2376,7 +2376,7 @@
     "ledgerDate": "2026-09-13",
     "clientId": "c40",
     "matterId": "m15",
-    "amountCents": -13736,
+    "amountCents": -2060400,
     "description": "ACH REFUND IRIS TRAN",
     "documentIds": [
       "h09-04-refund"
@@ -2386,7 +2386,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c40",
-    "balanceCents": 18394754
+    "balanceCents": 2759213100
   },
   {
     "id": "h09-05-in",
@@ -2394,7 +2394,7 @@
     "ledgerDate": "2026-09-14",
     "clientId": "c05",
     "matterId": "m03",
-    "amountCents": 589908,
+    "amountCents": 88486200,
     "description": "ZELLE FROM DANIEL OKAFOR",
     "documentIds": [
       "h09-05-deposit"
@@ -2404,7 +2404,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 18984662
+    "balanceCents": 2847699300
   },
   {
     "id": "brooks-settlement",
@@ -2412,7 +2412,7 @@
     "ledgerDate": "2026-09-15",
     "clientId": "c12",
     "matterId": "m10",
-    "amountCents": 1867341,
+    "amountCents": 280101150,
     "description": "CHECK TIDEMARK CASUALTY",
     "documentIds": [
       "brooks-settlement"
@@ -2423,7 +2423,7 @@
     "status": "posted",
     "checkNo": "8032",
     "payeeId": "c12",
-    "balanceCents": 20852003
+    "balanceCents": 3127800450
   },
   {
     "id": "h09-05-fee",
@@ -2431,7 +2431,7 @@
     "ledgerDate": "2026-09-15",
     "clientId": "c05",
     "matterId": "m03",
-    "amountCents": -43000,
+    "amountCents": -6450000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h09-05-invoice"
@@ -2441,7 +2441,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 20809003
+    "balanceCents": 3121350450
   },
   {
     "id": "h09-05-out",
@@ -2449,7 +2449,7 @@
     "ledgerDate": "2026-09-16",
     "clientId": "c05",
     "matterId": "m03",
-    "amountCents": -14053,
+    "amountCents": -2107950,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h09-05-cost"
@@ -2459,7 +2459,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 20794950
+    "balanceCents": 3119242500
   },
   {
     "id": "brooks-client-payment",
@@ -2467,7 +2467,7 @@
     "ledgerDate": "2026-09-17",
     "clientId": "c12",
     "matterId": "m10",
-    "amountCents": -1867341,
+    "amountCents": -280101150,
     "description": "ACH TO LENA BROOKS",
     "documentIds": [
       "brooks-client-payment"
@@ -2478,7 +2478,7 @@
     "status": "posted",
     "checkNo": "",
     "payeeId": "c12",
-    "balanceCents": 18927609
+    "balanceCents": 2839141350
   },
   {
     "id": "h09-06-in",
@@ -2486,7 +2486,7 @@
     "ledgerDate": "2026-09-17",
     "clientId": "c06",
     "matterId": "m04",
-    "amountCents": 532063,
+    "amountCents": 79809450,
     "description": "ACH FROM JAMIE NGUYEN",
     "documentIds": [
       "h09-06-deposit"
@@ -2496,7 +2496,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 19459672
+    "balanceCents": 2918950800
   },
   {
     "id": "h09-06-fee",
@@ -2504,7 +2504,7 @@
     "ledgerDate": "2026-09-18",
     "clientId": "c06",
     "matterId": "m04",
-    "amountCents": -48750,
+    "amountCents": -7312500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h09-06-invoice"
@@ -2514,7 +2514,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 19410922
+    "balanceCents": 2911638300
   },
   {
     "id": "h09-06-out",
@@ -2522,7 +2522,7 @@
     "ledgerDate": "2026-09-19",
     "clientId": "c06",
     "matterId": "m04",
-    "amountCents": -14370,
+    "amountCents": -2155500,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h09-06-cost"
@@ -2532,7 +2532,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 19396552
+    "balanceCents": 2909482800
   },
   {
     "id": "h09-07-in",
@@ -2540,7 +2540,7 @@
     "ledgerDate": "2026-09-20",
     "clientId": "c07",
     "matterId": "m05",
-    "amountCents": 560958,
+    "amountCents": 84143700,
     "description": "WIRE FROM JORDAN NGUYEN",
     "documentIds": [
       "h09-07-deposit"
@@ -2550,7 +2550,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 19957510
+    "balanceCents": 2993626500
   },
   {
     "id": "h09-07-fee",
@@ -2558,7 +2558,7 @@
     "ledgerDate": "2026-09-21",
     "clientId": "c07",
     "matterId": "m05",
-    "amountCents": -43250,
+    "amountCents": -6487500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h09-07-invoice"
@@ -2568,7 +2568,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 19914260
+    "balanceCents": 2987139000
   },
   {
     "id": "noise-3",
@@ -2576,7 +2576,7 @@
     "ledgerDate": "2026-09-21",
     "clientId": "c05",
     "matterId": "m03",
-    "amountCents": 125000,
+    "amountCents": 18750000,
     "description": "ACH CR D OKAFOR PART PMT",
     "documentIds": [
       "noise-3"
@@ -2585,7 +2585,7 @@
     "initiatedBy": "riley",
     "approvedBy": "sam",
     "status": "posted",
-    "balanceCents": 20039260
+    "balanceCents": 3005889000
   },
   {
     "id": "h09-07-out",
@@ -2593,7 +2593,7 @@
     "ledgerDate": "2026-09-22",
     "clientId": "c07",
     "matterId": "m05",
-    "amountCents": -14687,
+    "amountCents": -2203050,
     "description": "ACH REFUND JORDAN NGUYEN",
     "documentIds": [
       "h09-07-refund"
@@ -2603,7 +2603,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c07",
-    "balanceCents": 20024573
+    "balanceCents": 3003685950
   },
   {
     "id": "h09-08-in",
@@ -2611,7 +2611,7 @@
     "ledgerDate": "2026-09-23",
     "clientId": "c08",
     "matterId": "m06",
-    "amountCents": 519339,
+    "amountCents": 77900850,
     "description": "CHECK FROM ELENA PARK",
     "documentIds": [
       "h09-08-deposit"
@@ -2621,7 +2621,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6139",
-    "balanceCents": 20543912
+    "balanceCents": 3081586800
   },
   {
     "id": "h09-08-fee",
@@ -2629,7 +2629,7 @@
     "ledgerDate": "2026-09-24",
     "clientId": "c08",
     "matterId": "m06",
-    "amountCents": -55250,
+    "amountCents": -8287500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h09-08-invoice"
@@ -2639,7 +2639,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 20488662
+    "balanceCents": 3073299300
   },
   {
     "id": "h09-08-out",
@@ -2647,7 +2647,7 @@
     "ledgerDate": "2026-09-25",
     "clientId": "c08",
     "matterId": "m06",
-    "amountCents": -15004,
+    "amountCents": -2250600,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h09-08-cost"
@@ -2657,7 +2657,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 20473658
+    "balanceCents": 3071048700
   },
   {
     "id": "h10-01-in",
@@ -2665,7 +2665,7 @@
     "ledgerDate": "2026-10-02",
     "clientId": "c09",
     "matterId": "m07",
-    "amountCents": 518784,
+    "amountCents": 77817600,
     "description": "ZELLE FROM VICTOR CHEN",
     "documentIds": [
       "h10-01-deposit"
@@ -2675,7 +2675,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 20992442
+    "balanceCents": 3148866300
   },
   {
     "id": "h10-01-fee",
@@ -2683,7 +2683,7 @@
     "ledgerDate": "2026-10-03",
     "clientId": "c09",
     "matterId": "m07",
-    "amountCents": -42500,
+    "amountCents": -6375000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h10-01-invoice"
@@ -2693,7 +2693,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 20949942
+    "balanceCents": 3142491300
   },
   {
     "id": "h10-01-out",
@@ -2701,7 +2701,7 @@
     "ledgerDate": "2026-10-04",
     "clientId": "c09",
     "matterId": "m07",
-    "amountCents": -12785,
+    "amountCents": -1917750,
     "description": "ACH REFUND VICTOR CHEN",
     "documentIds": [
       "h10-01-refund"
@@ -2711,7 +2711,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c09",
-    "balanceCents": 20937157
+    "balanceCents": 3140573550
   },
   {
     "id": "h10-02-in",
@@ -2719,7 +2719,7 @@
     "ledgerDate": "2026-10-05",
     "clientId": "c10",
     "matterId": "m08",
-    "amountCents": 556708,
+    "amountCents": 83506200,
     "description": "ACH FROM NADIA FLORES",
     "documentIds": [
       "h10-02-deposit"
@@ -2729,7 +2729,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 21493865
+    "balanceCents": 3224079750
   },
   {
     "id": "h10-02-fee",
@@ -2737,7 +2737,7 @@
     "ledgerDate": "2026-10-06",
     "clientId": "c10",
     "matterId": "m08",
-    "amountCents": -35750,
+    "amountCents": -5362500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h10-02-invoice"
@@ -2747,7 +2747,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 21458115
+    "balanceCents": 3218717250
   },
   {
     "id": "h10-02-out",
@@ -2755,7 +2755,7 @@
     "ledgerDate": "2026-10-07",
     "clientId": "c10",
     "matterId": "m08",
-    "amountCents": -13102,
+    "amountCents": -1965300,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h10-02-cost"
@@ -2765,7 +2765,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 21445013
+    "balanceCents": 3216751950
   },
   {
     "id": "h10-03-in",
@@ -2773,7 +2773,7 @@
     "ledgerDate": "2026-10-08",
     "clientId": "c11",
     "matterId": "m09",
-    "amountCents": 526182,
+    "amountCents": 78927300,
     "description": "WIRE FROM OMAR HASSAN",
     "documentIds": [
       "h10-03-deposit"
@@ -2783,7 +2783,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 21971195
+    "balanceCents": 3295679250
   },
   {
     "id": "cho-expert-payment",
@@ -2791,7 +2791,7 @@
     "ledgerDate": "2026-10-09",
     "clientId": "c04",
     "matterId": "m02",
-    "amountCents": -600000,
+    "amountCents": -90000000,
     "description": "CHECK 7074 MARLOWE FORENSIC",
     "documentIds": [
       "cho-expert-invoice"
@@ -2802,7 +2802,7 @@
     "status": "posted",
     "payeeId": "expert",
     "checkNo": "7074",
-    "balanceCents": 21371195
+    "balanceCents": 3205679250
   },
   {
     "id": "h10-03-fee",
@@ -2810,7 +2810,7 @@
     "ledgerDate": "2026-10-09",
     "clientId": "c11",
     "matterId": "m09",
-    "amountCents": -42750,
+    "amountCents": -6412500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h10-03-invoice"
@@ -2820,7 +2820,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 21328445
+    "balanceCents": 3199266750
   },
   {
     "id": "h10-03-out",
@@ -2828,7 +2828,7 @@
     "ledgerDate": "2026-10-10",
     "clientId": "c11",
     "matterId": "m09",
-    "amountCents": -13419,
+    "amountCents": -2012850,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h10-03-cost"
@@ -2838,7 +2838,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 21315026
+    "balanceCents": 3197253900
   },
   {
     "id": "h10-04-in",
@@ -2846,7 +2846,7 @@
     "ledgerDate": "2026-10-11",
     "clientId": "c12",
     "matterId": "m10",
-    "amountCents": 547216,
+    "amountCents": 82082400,
     "description": "CHECK FROM LENA BROOKS",
     "documentIds": [
       "h10-04-deposit"
@@ -2856,7 +2856,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6143",
-    "balanceCents": 21862242
+    "balanceCents": 3279336300
   },
   {
     "id": "h10-04-fee",
@@ -2864,7 +2864,7 @@
     "ledgerDate": "2026-10-12",
     "clientId": "c12",
     "matterId": "m10",
-    "amountCents": -42250,
+    "amountCents": -6337500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h10-04-invoice"
@@ -2874,7 +2874,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 21819992
+    "balanceCents": 3272998800
   },
   {
     "id": "h10-04-out",
@@ -2882,7 +2882,7 @@
     "ledgerDate": "2026-10-13",
     "clientId": "c12",
     "matterId": "m10",
-    "amountCents": -13736,
+    "amountCents": -2060400,
     "description": "ACH REFUND LENA BROOKS",
     "documentIds": [
       "h10-04-refund"
@@ -2892,7 +2892,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c12",
-    "balanceCents": 21806256
+    "balanceCents": 3270938400
   },
   {
     "id": "h10-05-in",
@@ -2900,7 +2900,7 @@
     "ledgerDate": "2026-10-14",
     "clientId": "c13",
     "matterId": "m11",
-    "amountCents": 508690,
+    "amountCents": 76303500,
     "description": "ZELLE FROM ISAAC PATEL",
     "documentIds": [
       "h10-05-deposit"
@@ -2910,7 +2910,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 22314946
+    "balanceCents": 3347241900
   },
   {
     "id": "h10-05-fee",
@@ -2918,7 +2918,7 @@
     "ledgerDate": "2026-10-15",
     "clientId": "c13",
     "matterId": "m11",
-    "amountCents": -43000,
+    "amountCents": -6450000,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h10-05-invoice"
@@ -2928,7 +2928,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 22271946
+    "balanceCents": 3340791900
   },
   {
     "id": "h10-05-out",
@@ -2936,7 +2936,7 @@
     "ledgerDate": "2026-10-16",
     "clientId": "c13",
     "matterId": "m11",
-    "amountCents": -14053,
+    "amountCents": -2107950,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h10-05-cost"
@@ -2946,7 +2946,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 22257893
+    "balanceCents": 3338683950
   },
   {
     "id": "h10-06-in",
@@ -2954,7 +2954,7 @@
     "ledgerDate": "2026-10-17",
     "clientId": "c14",
     "matterId": "m12",
-    "amountCents": 551492,
+    "amountCents": 82723800,
     "description": "ACH FROM SOFIA RIVERA",
     "documentIds": [
       "h10-06-deposit"
@@ -2964,7 +2964,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 22809385
+    "balanceCents": 3421407750
   },
   {
     "id": "h10-06-fee",
@@ -2972,7 +2972,7 @@
     "ledgerDate": "2026-10-18",
     "clientId": "c14",
     "matterId": "m12",
-    "amountCents": -48750,
+    "amountCents": -7312500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h10-06-invoice"
@@ -2982,7 +2982,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 22760635
+    "balanceCents": 3414095250
   },
   {
     "id": "h10-06-out",
@@ -2990,7 +2990,7 @@
     "ledgerDate": "2026-10-19",
     "clientId": "c14",
     "matterId": "m12",
-    "amountCents": -14370,
+    "amountCents": -2155500,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h10-06-cost"
@@ -3000,7 +3000,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 22746265
+    "balanceCents": 3411939750
   },
   {
     "id": "h10-07-in",
@@ -3008,7 +3008,7 @@
     "ledgerDate": "2026-10-20",
     "clientId": "c15",
     "matterId": "m13",
-    "amountCents": 566814,
+    "amountCents": 85022100,
     "description": "WIRE FROM MARCUS REED",
     "documentIds": [
       "h10-07-deposit"
@@ -3018,7 +3018,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "",
-    "balanceCents": 23313079
+    "balanceCents": 3496961850
   },
   {
     "id": "noise-4",
@@ -3026,7 +3026,7 @@
     "ledgerDate": "2026-10-20",
     "clientId": "c05",
     "matterId": "m03",
-    "amountCents": 87500,
+    "amountCents": 13125000,
     "description": "ACH CR D OKAFOR PART PMT",
     "documentIds": [
       "noise-4"
@@ -3035,7 +3035,7 @@
     "initiatedBy": "riley",
     "approvedBy": "sam",
     "status": "posted",
-    "balanceCents": 23400579
+    "balanceCents": 3510086850
   },
   {
     "id": "h10-07-fee",
@@ -3043,7 +3043,7 @@
     "ledgerDate": "2026-10-21",
     "clientId": "c15",
     "matterId": "m13",
-    "amountCents": -43250,
+    "amountCents": -6487500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h10-07-invoice"
@@ -3053,7 +3053,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 23357329
+    "balanceCents": 3503599350
   },
   {
     "id": "h10-07-out",
@@ -3061,7 +3061,7 @@
     "ledgerDate": "2026-10-22",
     "clientId": "c15",
     "matterId": "m13",
-    "amountCents": -14687,
+    "amountCents": -2203050,
     "description": "ACH REFUND MARCUS REED",
     "documentIds": [
       "h10-07-refund"
@@ -3071,7 +3071,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "c15",
-    "balanceCents": 23342642
+    "balanceCents": 3501396300
   },
   {
     "id": "harborline-deposit",
@@ -3079,7 +3079,7 @@
     "ledgerDate": "2026-10-22",
     "clientId": null,
     "matterId": "m01",
-    "amountCents": 12500000,
+    "amountCents": 1875000000,
     "description": "DEPOSIT HARBORLINE DRAFT 902174",
     "documentIds": [
       "global-check",
@@ -3093,18 +3093,18 @@
     "allocations": [
       {
         "clientId": "c01",
-        "amountCents": 6250000
+        "amountCents": 937500000
       },
       {
         "clientId": "c02",
-        "amountCents": 3750000
+        "amountCents": 562500000
       },
       {
         "clientId": "c03",
-        "amountCents": 2500000
+        "amountCents": 375000000
       }
     ],
-    "balanceCents": 35842642
+    "balanceCents": 5376396300
   },
   {
     "id": "h10-08-in",
@@ -3112,7 +3112,7 @@
     "ledgerDate": "2026-10-23",
     "clientId": "c16",
     "matterId": "m14",
-    "amountCents": 580761,
+    "amountCents": 87114150,
     "description": "CHECK FROM GRACE KIM",
     "documentIds": [
       "h10-08-deposit"
@@ -3122,7 +3122,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "checkNo": "6147",
-    "balanceCents": 36423403
+    "balanceCents": 5463510450
   },
   {
     "id": "h10-08-fee",
@@ -3130,7 +3130,7 @@
     "ledgerDate": "2026-10-24",
     "clientId": "c16",
     "matterId": "m14",
-    "amountCents": -55250,
+    "amountCents": -8287500,
     "description": "ACH TO HARTWELL OPER 2290",
     "documentIds": [
       "h10-08-invoice"
@@ -3140,7 +3140,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 36368153
+    "balanceCents": 5455222950
   },
   {
     "id": "h10-08-out",
@@ -3148,7 +3148,7 @@
     "ledgerDate": "2026-10-25",
     "clientId": "c16",
     "matterId": "m14",
-    "amountCents": -15004,
+    "amountCents": -2250600,
     "description": "ACH COST REIMB OPER 2290",
     "documentIds": [
       "h10-08-cost"
@@ -3158,7 +3158,7 @@
     "approvedBy": "sam",
     "status": "posted",
     "payeeId": "firm",
-    "balanceCents": 36353149
+    "balanceCents": 5452972350
   },
   {
     "id": "cho-topup",
@@ -3166,7 +3166,7 @@
     "ledgerDate": "2026-10-30",
     "clientId": "c04",
     "matterId": "m02",
-    "amountCents": 520000,
+    "amountCents": 78000000,
     "description": "ACH CR RAYMOND CHO",
     "documentIds": [
       "cho-topup"
@@ -3175,6 +3175,6 @@
     "initiatedBy": "riley",
     "approvedBy": "sam",
     "status": "posted",
-    "balanceCents": 36873149
+    "balanceCents": 5530972350
   }
 ]

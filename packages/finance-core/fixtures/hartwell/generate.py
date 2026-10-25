@@ -4,6 +4,7 @@ from collections import defaultdict
 from datetime import date, timedelta
 from pathlib import Path
 from document_layouts import enrich_documents, render
+from value_scale import VALUE_SCALE, scale_values, scale_bank_files, number_words
 import fitz
 from PIL import Image, ImageDraw
 from reportlab.pdfgen import canvas
@@ -295,7 +296,18 @@ def answer_key():
     dump(ROOT/'answer-key.json',dict(fictional=True,cases=cases,learning=learning))
 
 def main():
+    global DATA, DOCS
     setup();history();live();learning();book();answer_key();enrich_documents(DATA,DOCS)
+    # Transform copies once: source structures share transaction objects.
+    DATA=scale_values(DATA); DOCS=scale_values(DOCS)
+    for d in DOCS:
+        if d['kind']=='check':
+            amount=d['amountCents'][0]
+            d['body'][5]=number_words(amount//100).capitalize()+f' and {amount%100:02}/100 dollars'
+    scale_bank_files(ROOT)
+    for email in ROOT.glob("documents/*.eml"):
+        email.write_bytes(scale_values(email.read_bytes().decode("utf8")).encode("utf8"))
+    dump(ROOT/'answer-key.json',scale_values(json.loads((ROOT/'answer-key.json').read_text(encoding='utf8'))))
     samples={'bayside-v2':'scanned-lien-letter','settlement-v1':'settlement-statement-v1','global-check':'settlement-check','bayside-bank-change':'fraud-email','fee-c02':'fee-agreement','bank-statement-2026-10':'bank-statement'}
     screenshot=REPO/'docs/screenshots/hartwell-data';screenshot.mkdir(parents=True,exist_ok=True)
     for d in DOCS:
@@ -305,6 +317,6 @@ def main():
     DATA['documents']=[{k:v for k,v in d.items() if k!='body'} for d in DOCS]
     for n,records in DATA.items():dump(ROOT/f'erp/{n}.json',records)
     files=sorted([*ROOT.glob('bank/*.csv'),*ROOT.glob('erp/*.json'),*ROOT.glob('documents/*'),ROOT/'answer-key.json',*screenshot.glob('*.png')])
-    dump(ROOT/'manifest.json',dict(seed=SEED,counts={**{k:len(v) for k,v in DATA.items() if isinstance(v,list)},'scannedPdfs':sum(d['scanned'] for d in DOCS),'screenshots':6},sha256={p.relative_to(REPO).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in files}))
+    dump(ROOT/'manifest.json',dict(seed=SEED,valueScale=VALUE_SCALE,counts={**{k:len(v) for k,v in DATA.items() if isinstance(v,list)},'scannedPdfs':sum(d['scanned'] for d in DOCS),'screenshots':6},sha256={p.relative_to(REPO).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in files}))
     print(json.dumps({'transactions':len(TX),'clients':len(DATA['clients']),'matters':len(DATA['matters']),'documents':len(DOCS),'scanned':sum(d['scanned'] for d in DOCS)}))
 if __name__=='__main__':main()

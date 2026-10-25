@@ -7,7 +7,7 @@
 
   To: Hartwell & Moreno LLP
    Client reference: c19
-  Amount: $5,255.84
+  Amount: $788,376.00
   Method: WIRE
   Memo: for file
   Please credit my trust ledger. This is an advance toward fees and costs.

@@ -8,17 +8,17 @@
 
      Period ended: 2026-09-30 | Bay Commerce Bank IOLTA ending 4417
 
-    Opening bank balance: $164,087.93
+    Opening bank balance: $24,613,189.50
 
-     Closing bank balance: $204,736.58
+     Closing bank balance: $30,710,487.00
 
      Outstanding checks: $0.00 | Deposits in transit: $0.00
 
-     Adjusted bank balance: $204,736.58
+     Adjusted bank balance: $30,710,487.00
 
-     Trust book balance: $204,736.58
+     Trust book balance: $30,710,487.00
 
-     Total client subsidiary ledgers: $204,736.58
+     Total client subsidiary ledgers: $30,710,487.00
 
      Firm charge clearing ledger: $0.00
 

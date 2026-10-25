@@ -8,7 +8,7 @@
 
      Client confirmed by portal receipt: Jamie Nguyen
 
-    Amount: $875.25
+    Amount: $131,287.50
 
     Memo: for file
 

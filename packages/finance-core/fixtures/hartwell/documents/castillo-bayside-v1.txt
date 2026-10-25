@@ -17,13 +17,13 @@
 
      Service date / description                                                        Billed             Adjustments       Payoff
 
-    2026-02-18                                                                $5,330.00         $1,250.00         $4,080.00
+    2026-02-18                                                             $799,500.00      $187,500.00      $612,000.00
       Clinical evaluation and diagnostic imaging
 
-    2026-03-10                                                                $3,470.00          $750.00         $2,720.00
+    2026-03-10                                                             $520,500.00      $112,500.00      $408,000.00
      Outpatient treatment and follow-up care
 
-   TOTAL                                                                    $8,800.00         $2,000.00         $6,800.00
+   TOTAL                                                                 $1,320,000.00      $300,000.00     $1,020,000.00
 
   Payoff valid through: 2026-11-20
 

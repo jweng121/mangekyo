@@ -7,7 +7,7 @@
   Date: 2026-08-18 | Reference: BANK-SERVICE-FEE
 
  Account: IOLTA ending 4417
- Service charge: $25.00
+ Service charge: $3,750.00
  Charge belongs to the firm; no client ledger is charged.
 
 

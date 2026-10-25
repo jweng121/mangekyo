@@ -5,26 +5,26 @@
     "matterId": "m01",
     "signed": true,
     "date": "2026-10-15",
-    "grossCents": 12500000,
-    "sharedCostCents": 450000,
+    "grossCents": 1875000000,
+    "sharedCostCents": 67500000,
     "allocations": [
       {
         "clientId": "c01",
         "basisPoints": 5000,
-        "amountCents": 6250000,
-        "costCents": 225000
+        "amountCents": 937500000,
+        "costCents": 33750000
       },
       {
         "clientId": "c02",
         "basisPoints": 3000,
-        "amountCents": 3750000,
-        "costCents": 135000
+        "amountCents": 562500000,
+        "costCents": 20250000
       },
       {
         "clientId": "c03",
         "basisPoints": 2000,
-        "amountCents": 2500000,
-        "costCents": 90000
+        "amountCents": 375000000,
+        "costCents": 13500000
       }
     ]
   }

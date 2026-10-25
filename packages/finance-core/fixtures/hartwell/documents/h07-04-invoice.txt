@@ -11,11 +11,11 @@
 
        Service date       Description                                    Hours / units    Rate            Amount
 
-       2026-07-10       Review records and prepare case notes                      0.4 h          $325.00          $130.00
+       2026-07-10       Review records and prepare case notes                      0.4 h        $48,750.00        $19,500.00
 
-       2026-07-11         Client conference and written follow-up                       0.9 h          $325.00          $292.50
+       2026-07-11         Client conference and written follow-up                       0.9 h        $48,750.00        $43,875.00
 
-    Total due: $422.50
+    Total due: $63,375.00
 
      Approved for trust payment: /s/ Sam Whitfield | 2026-07-12
 

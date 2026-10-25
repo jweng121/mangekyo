@@ -5,7 +5,7 @@
     "clientId": "c06",
     "matterId": "m04",
     "date": "2026-05-07",
-    "amountCents": 13102,
+    "amountCents": 1965300,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -15,7 +15,7 @@
     "clientId": "c07",
     "matterId": "m05",
     "date": "2026-05-10",
-    "amountCents": 13419,
+    "amountCents": 2012850,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -25,7 +25,7 @@
     "clientId": "c09",
     "matterId": "m07",
     "date": "2026-05-16",
-    "amountCents": 14053,
+    "amountCents": 2107950,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -35,7 +35,7 @@
     "clientId": "c10",
     "matterId": "m08",
     "date": "2026-05-19",
-    "amountCents": 14370,
+    "amountCents": 2155500,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -45,7 +45,7 @@
     "clientId": "c12",
     "matterId": "m10",
     "date": "2026-05-25",
-    "amountCents": 15004,
+    "amountCents": 2250600,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -55,7 +55,7 @@
     "clientId": "c14",
     "matterId": "m12",
     "date": "2026-06-07",
-    "amountCents": 13102,
+    "amountCents": 1965300,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -65,7 +65,7 @@
     "clientId": "c15",
     "matterId": "m13",
     "date": "2026-06-10",
-    "amountCents": 13419,
+    "amountCents": 2012850,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -75,7 +75,7 @@
     "clientId": "c17",
     "matterId": "m15",
     "date": "2026-06-16",
-    "amountCents": 14053,
+    "amountCents": 2107950,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -85,7 +85,7 @@
     "clientId": "c18",
     "matterId": "m16",
     "date": "2026-06-19",
-    "amountCents": 14370,
+    "amountCents": 2155500,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -95,7 +95,7 @@
     "clientId": "c20",
     "matterId": "m18",
     "date": "2026-06-25",
-    "amountCents": 15004,
+    "amountCents": 2250600,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -105,7 +105,7 @@
     "clientId": "c22",
     "matterId": "m20",
     "date": "2026-07-07",
-    "amountCents": 13102,
+    "amountCents": 1965300,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -115,7 +115,7 @@
     "clientId": "c23",
     "matterId": "m21",
     "date": "2026-07-10",
-    "amountCents": 13419,
+    "amountCents": 2012850,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -125,7 +125,7 @@
     "clientId": "c25",
     "matterId": "m23",
     "date": "2026-07-16",
-    "amountCents": 14053,
+    "amountCents": 2107950,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -135,7 +135,7 @@
     "clientId": "c26",
     "matterId": "m24",
     "date": "2026-07-19",
-    "amountCents": 14370,
+    "amountCents": 2155500,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -145,7 +145,7 @@
     "clientId": "c28",
     "matterId": "m03",
     "date": "2026-07-25",
-    "amountCents": 15004,
+    "amountCents": 2250600,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -155,7 +155,7 @@
     "clientId": "c30",
     "matterId": "m05",
     "date": "2026-08-07",
-    "amountCents": 13102,
+    "amountCents": 1965300,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -165,7 +165,7 @@
     "clientId": "c31",
     "matterId": "m06",
     "date": "2026-08-10",
-    "amountCents": 13419,
+    "amountCents": 2012850,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -175,7 +175,7 @@
     "clientId": "c33",
     "matterId": "m08",
     "date": "2026-08-16",
-    "amountCents": 14053,
+    "amountCents": 2107950,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -185,7 +185,7 @@
     "clientId": "c34",
     "matterId": "m09",
     "date": "2026-08-19",
-    "amountCents": 14370,
+    "amountCents": 2155500,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -195,7 +195,7 @@
     "clientId": "c36",
     "matterId": "m11",
     "date": "2026-08-25",
-    "amountCents": 15004,
+    "amountCents": 2250600,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -205,7 +205,7 @@
     "clientId": "c38",
     "matterId": "m13",
     "date": "2026-09-07",
-    "amountCents": 13102,
+    "amountCents": 1965300,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -215,7 +215,7 @@
     "clientId": "c39",
     "matterId": "m14",
     "date": "2026-09-10",
-    "amountCents": 13419,
+    "amountCents": 2012850,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -225,7 +225,7 @@
     "clientId": "c05",
     "matterId": "m03",
     "date": "2026-09-16",
-    "amountCents": 14053,
+    "amountCents": 2107950,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -235,7 +235,7 @@
     "clientId": "c06",
     "matterId": "m04",
     "date": "2026-09-19",
-    "amountCents": 14370,
+    "amountCents": 2155500,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -245,7 +245,7 @@
     "clientId": "c08",
     "matterId": "m06",
     "date": "2026-09-25",
-    "amountCents": 15004,
+    "amountCents": 2250600,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -255,7 +255,7 @@
     "clientId": "c10",
     "matterId": "m08",
     "date": "2026-10-07",
-    "amountCents": 13102,
+    "amountCents": 1965300,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -265,7 +265,7 @@
     "clientId": "c11",
     "matterId": "m09",
     "date": "2026-10-10",
-    "amountCents": 13419,
+    "amountCents": 2012850,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -275,7 +275,7 @@
     "clientId": "c13",
     "matterId": "m11",
     "date": "2026-10-16",
-    "amountCents": 14053,
+    "amountCents": 2107950,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -285,7 +285,7 @@
     "clientId": "c14",
     "matterId": "m12",
     "date": "2026-10-19",
-    "amountCents": 14370,
+    "amountCents": 2155500,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -295,7 +295,7 @@
     "clientId": "c16",
     "matterId": "m14",
     "date": "2026-10-25",
-    "amountCents": 15004,
+    "amountCents": 2250600,
     "description": "Certified transcript and delivery",
     "paidBy": "firm operating"
   },
@@ -305,16 +305,16 @@
     "clientId": null,
     "matterId": "m01",
     "date": "2026-09-28",
-    "amountCents": 300000,
-    "description": "Collision reconstruction: 4 hours x $750.00",
+    "amountCents": 45000000,
+    "description": "Collision reconstruction: 4 hours x $112,500.00",
     "paidBy": "firm operating",
     "allocationAgreementId": "allocation-global",
     "shared": true,
     "lines": [
       {
         "hours": 4,
-        "rateCents": 75000,
-        "amountCents": 300000
+        "rateCents": 11250000,
+        "amountCents": 45000000
       }
     ]
   },
@@ -324,7 +324,7 @@
     "clientId": null,
     "matterId": "m01",
     "date": "2026-04-16",
-    "amountCents": 105000,
+    "amountCents": 15750000,
     "description": "Deposition transcript and attendance",
     "paidBy": "firm operating",
     "allocationAgreementId": "allocation-global",
@@ -336,7 +336,7 @@
     "clientId": null,
     "matterId": "m01",
     "date": "2026-03-03",
-    "amountCents": 45000,
+    "amountCents": 6750000,
     "description": "Civil complaint filing fee",
     "paidBy": "firm operating",
     "allocationAgreementId": "allocation-global",
@@ -348,7 +348,7 @@
     "clientId": "c41",
     "matterId": "m26",
     "date": "2026-03-04",
-    "amountCents": 18500,
+    "amountCents": 2775000,
     "description": "Collision report and certified records",
     "paidBy": "firm operating"
   },
@@ -358,7 +358,7 @@
     "clientId": "c41",
     "matterId": "m26",
     "date": "2026-05-20",
-    "amountCents": 126500,
+    "amountCents": 18975000,
     "description": "Collision reconstruction consult",
     "paidBy": "firm operating"
   },
@@ -368,7 +368,7 @@
     "clientId": "c42",
     "matterId": "m27",
     "date": "2026-04-14",
-    "amountCents": 34000,
+    "amountCents": 5100000,
     "description": "Certified incident and code-inspection records",
     "paidBy": "firm operating"
   },
@@ -378,7 +378,7 @@
     "clientId": "c42",
     "matterId": "m27",
     "date": "2026-06-23",
-    "amountCents": 146000,
+    "amountCents": 21900000,
     "description": "Deposition transcript and attendance",
     "paidBy": "firm operating"
   },
@@ -388,7 +388,7 @@
     "clientId": "c43",
     "matterId": "m28",
     "date": "2026-05-12",
-    "amountCents": 21500,
+    "amountCents": 3225000,
     "description": "Collision report and certified records",
     "paidBy": "firm operating"
   },
@@ -398,7 +398,7 @@
     "clientId": "c43",
     "matterId": "m28",
     "date": "2026-07-21",
-    "amountCents": 73500,
+    "amountCents": 11025000,
     "description": "Scene photographs and diagram",
     "paidBy": "firm operating"
   },
@@ -408,7 +408,7 @@
     "clientId": "c44",
     "matterId": "m29",
     "date": "2026-07-15",
-    "amountCents": 26000,
+    "amountCents": 3900000,
     "description": "Collision report and certified records",
     "paidBy": "firm operating"
   },
@@ -418,7 +418,7 @@
     "clientId": "c44",
     "matterId": "m29",
     "date": "2026-10-06",
-    "amountCents": 94000,
+    "amountCents": 14100000,
     "description": "Deposition transcript and attendance",
     "paidBy": "firm operating"
   }

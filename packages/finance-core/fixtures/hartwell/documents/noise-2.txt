@@ -8,7 +8,7 @@
 
      Client confirmed by portal receipt: Jordan Nguyen
 
-    Amount: $920.40
+    Amount: $138,060.00
 
     Memo: for file
 

@@ -7,72 +7,72 @@
     "signed": true,
     "signedDate": "2026-10-19",
     "date": "2026-10-19",
-    "grossCents": 12500000,
+    "grossCents": 1875000000,
     "lines": [
       {
         "clientId": "c01",
         "kind": "attorney_fee",
-        "amountCents": 2062500,
+        "amountCents": 309375000,
         "payeeId": "firm"
       },
       {
         "clientId": "c01",
         "kind": "costs",
-        "amountCents": 225000,
+        "amountCents": 33750000,
         "payeeId": "firm"
       },
       {
         "clientId": "c01",
         "kind": "lien",
-        "amountCents": 1200000,
+        "amountCents": 180000000,
         "payeeId": "bayside"
       },
       {
         "clientId": "c01",
         "kind": "client_share",
-        "amountCents": 2762500,
+        "amountCents": 414375000,
         "payeeId": "c01"
       },
       {
         "clientId": "c02",
         "kind": "attorney_fee",
-        "amountCents": 1500000,
+        "amountCents": 225000000,
         "payeeId": "firm"
       },
       {
         "clientId": "c02",
         "kind": "costs",
-        "amountCents": 135000,
+        "amountCents": 20250000,
         "payeeId": "firm"
       },
       {
         "clientId": "c02",
         "kind": "lien",
-        "amountCents": 320000,
+        "amountCents": 48000000,
         "payeeId": "medicare"
       },
       {
         "clientId": "c02",
         "kind": "client_share",
-        "amountCents": 1795000,
+        "amountCents": 269250000,
         "payeeId": "c02"
       },
       {
         "clientId": "c03",
         "kind": "attorney_fee",
-        "amountCents": 625000,
+        "amountCents": 93750000,
         "payeeId": "firm"
       },
       {
         "clientId": "c03",
         "kind": "costs",
-        "amountCents": 90000,
+        "amountCents": 13500000,
         "payeeId": "firm"
       },
       {
         "clientId": "c03",
         "kind": "client_share",
-        "amountCents": 1785000,
+        "amountCents": 267750000,
         "payeeId": "c03"
       }
     ],
@@ -97,72 +97,72 @@
     "signed": false,
     "signedDate": null,
     "date": "2026-10-22",
-    "grossCents": 12500000,
+    "grossCents": 1875000000,
     "lines": [
       {
         "clientId": "c01",
         "kind": "attorney_fee",
-        "amountCents": 2062500,
+        "amountCents": 309375000,
         "payeeId": "firm"
       },
       {
         "clientId": "c01",
         "kind": "costs",
-        "amountCents": 225000,
+        "amountCents": 33750000,
         "payeeId": "firm"
       },
       {
         "clientId": "c01",
         "kind": "lien",
-        "amountCents": 1450000,
+        "amountCents": 217500000,
         "payeeId": "bayside"
       },
       {
         "clientId": "c01",
         "kind": "client_share",
-        "amountCents": 2512500,
+        "amountCents": 376875000,
         "payeeId": "c01"
       },
       {
         "clientId": "c02",
         "kind": "attorney_fee",
-        "amountCents": 1500000,
+        "amountCents": 225000000,
         "payeeId": "firm"
       },
       {
         "clientId": "c02",
         "kind": "costs",
-        "amountCents": 135000,
+        "amountCents": 20250000,
         "payeeId": "firm"
       },
       {
         "clientId": "c02",
         "kind": "lien",
-        "amountCents": 320000,
+        "amountCents": 48000000,
         "payeeId": "medicare"
       },
       {
         "clientId": "c02",
         "kind": "client_share",
-        "amountCents": 1795000,
+        "amountCents": 269250000,
         "payeeId": "c02"
       },
       {
         "clientId": "c03",
         "kind": "attorney_fee",
-        "amountCents": 602500,
+        "amountCents": 90375000,
         "payeeId": "firm"
       },
       {
         "clientId": "c03",
         "kind": "costs",
-        "amountCents": 90000,
+        "amountCents": 13500000,
         "payeeId": "firm"
       },
       {
         "clientId": "c03",
         "kind": "client_share",
-        "amountCents": 1807500,
+        "amountCents": 271125000,
         "payeeId": "c03"
       }
     ],
@@ -187,30 +187,30 @@
     "signed": true,
     "signedDate": "2026-07-06",
     "date": "2026-07-06",
-    "grossCents": 6000000,
+    "grossCents": 900000000,
     "lines": [
       {
         "clientId": "c41",
         "kind": "attorney_fee",
-        "amountCents": 1980000,
+        "amountCents": 297000000,
         "payeeId": "firm"
       },
       {
         "clientId": "c41",
         "kind": "costs",
-        "amountCents": 145000,
+        "amountCents": 21750000,
         "payeeId": "firm"
       },
       {
         "clientId": "c41",
         "kind": "lien",
-        "amountCents": 820000,
+        "amountCents": 123000000,
         "payeeId": "bayside"
       },
       {
         "clientId": "c41",
         "kind": "client_share",
-        "amountCents": 3055000,
+        "amountCents": 458250000,
         "payeeId": "c41"
       }
     ],
@@ -234,30 +234,30 @@
     "signed": true,
     "signedDate": "2026-07-10",
     "date": "2026-07-10",
-    "grossCents": 6000000,
+    "grossCents": 900000000,
     "lines": [
       {
         "clientId": "c41",
         "kind": "attorney_fee",
-        "amountCents": 1980000,
+        "amountCents": 297000000,
         "payeeId": "firm"
       },
       {
         "clientId": "c41",
         "kind": "costs",
-        "amountCents": 145000,
+        "amountCents": 21750000,
         "payeeId": "firm"
       },
       {
         "clientId": "c41",
         "kind": "lien",
-        "amountCents": 897500,
+        "amountCents": 134625000,
         "payeeId": "bayside"
       },
       {
         "clientId": "c41",
         "kind": "client_share",
-        "amountCents": 2977500,
+        "amountCents": 446625000,
         "payeeId": "c41"
       }
     ],
@@ -281,30 +281,30 @@
     "signed": true,
     "signedDate": "2026-08-10",
     "date": "2026-08-10",
-    "grossCents": 3200000,
+    "grossCents": 480000000,
     "lines": [
       {
         "clientId": "c42",
         "kind": "attorney_fee",
-        "amountCents": 755000,
+        "amountCents": 113250000,
         "payeeId": "firm"
       },
       {
         "clientId": "c42",
         "kind": "costs",
-        "amountCents": 180000,
+        "amountCents": 27000000,
         "payeeId": "firm"
       },
       {
         "clientId": "c42",
         "kind": "lien",
-        "amountCents": 540000,
+        "amountCents": 81000000,
         "payeeId": "bayside"
       },
       {
         "clientId": "c42",
         "kind": "client_share",
-        "amountCents": 1725000,
+        "amountCents": 258750000,
         "payeeId": "c42"
       }
     ],
@@ -328,30 +328,30 @@
     "signed": true,
     "signedDate": "2026-08-13",
     "date": "2026-08-13",
-    "grossCents": 3200000,
+    "grossCents": 480000000,
     "lines": [
       {
         "clientId": "c42",
         "kind": "attorney_fee",
-        "amountCents": 755000,
+        "amountCents": 113250000,
         "payeeId": "firm"
       },
       {
         "clientId": "c42",
         "kind": "costs",
-        "amountCents": 180000,
+        "amountCents": 27000000,
         "payeeId": "firm"
       },
       {
         "clientId": "c42",
         "kind": "lien",
-        "amountCents": 515000,
+        "amountCents": 77250000,
         "payeeId": "bayside"
       },
       {
         "clientId": "c42",
         "kind": "client_share",
-        "amountCents": 1750000,
+        "amountCents": 262500000,
         "payeeId": "c42"
       }
     ],
@@ -375,24 +375,24 @@
     "signed": true,
     "signedDate": "2026-09-08",
     "date": "2026-09-08",
-    "grossCents": 4800000,
+    "grossCents": 720000000,
     "lines": [
       {
         "clientId": "c43",
         "kind": "attorney_fee",
-        "amountCents": 1584000,
+        "amountCents": 237600000,
         "payeeId": "firm"
       },
       {
         "clientId": "c43",
         "kind": "costs",
-        "amountCents": 95000,
+        "amountCents": 14250000,
         "payeeId": "firm"
       },
       {
         "clientId": "c43",
         "kind": "client_share",
-        "amountCents": 3121000,
+        "amountCents": 468150000,
         "payeeId": "c43"
       }
     ],
@@ -415,30 +415,30 @@
     "signed": true,
     "signedDate": "2026-11-12",
     "date": "2026-11-12",
-    "grossCents": 4000000,
+    "grossCents": 600000000,
     "lines": [
       {
         "clientId": "c44",
         "kind": "attorney_fee",
-        "amountCents": 1164000,
+        "amountCents": 174600000,
         "payeeId": "firm"
       },
       {
         "clientId": "c44",
         "kind": "costs",
-        "amountCents": 120000,
+        "amountCents": 18000000,
         "payeeId": "firm"
       },
       {
         "clientId": "c44",
         "kind": "lien",
-        "amountCents": 735000,
+        "amountCents": 110250000,
         "payeeId": "bayside"
       },
       {
         "clientId": "c44",
         "kind": "client_share",
-        "amountCents": 1981000,
+        "amountCents": 297150000,
         "payeeId": "c44"
       }
     ],

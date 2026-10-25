@@ -7,7 +7,7 @@
 
    Claimant: Wesley Ford
    Claim: TC-63090
-   Settlement amount: $48,000.00
+   Settlement amount: $7,200,000.00
   Payable to: Hartwell & Moreno LLP Client Trust
   Check No. 8204
   Release executed by the claimant; this payment resolves the claim.

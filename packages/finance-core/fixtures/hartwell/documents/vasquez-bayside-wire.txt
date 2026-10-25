@@ -11,7 +11,7 @@
  Account: ****1264
  Routing: withheld
  Client: Corinne Vasquez / Account BG-63518
- Wire amount: $5,150.00
+ Wire amount: $772,500.00
  Status: settled; beneficiary acknowledged receipt.
 
 

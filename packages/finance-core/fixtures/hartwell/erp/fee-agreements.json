@@ -42,8 +42,8 @@
     "matterId": "m02",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c05",
@@ -52,8 +52,8 @@
     "matterId": "m03",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -63,8 +63,8 @@
     "matterId": "m04",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c07",
@@ -73,8 +73,8 @@
     "matterId": "m05",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -84,8 +84,8 @@
     "matterId": "m06",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c09",
@@ -94,8 +94,8 @@
     "matterId": "m07",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -105,8 +105,8 @@
     "matterId": "m08",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c11",
@@ -115,8 +115,8 @@
     "matterId": "m09",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -126,8 +126,8 @@
     "matterId": "m10",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c13",
@@ -136,8 +136,8 @@
     "matterId": "m11",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -147,8 +147,8 @@
     "matterId": "m12",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c15",
@@ -157,8 +157,8 @@
     "matterId": "m13",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -168,8 +168,8 @@
     "matterId": "m14",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c17",
@@ -178,8 +178,8 @@
     "matterId": "m15",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -189,8 +189,8 @@
     "matterId": "m16",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c19",
@@ -199,8 +199,8 @@
     "matterId": "m17",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -210,8 +210,8 @@
     "matterId": "m18",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c21",
@@ -220,8 +220,8 @@
     "matterId": "m19",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -231,8 +231,8 @@
     "matterId": "m20",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c23",
@@ -241,8 +241,8 @@
     "matterId": "m21",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -252,8 +252,8 @@
     "matterId": "m22",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c25",
@@ -262,8 +262,8 @@
     "matterId": "m23",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -273,8 +273,8 @@
     "matterId": "m24",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c27",
@@ -283,8 +283,8 @@
     "matterId": "m25",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -294,8 +294,8 @@
     "matterId": "m03",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c29",
@@ -304,8 +304,8 @@
     "matterId": "m04",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -315,8 +315,8 @@
     "matterId": "m05",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c31",
@@ -325,8 +325,8 @@
     "matterId": "m06",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -336,8 +336,8 @@
     "matterId": "m07",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c33",
@@ -346,8 +346,8 @@
     "matterId": "m08",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -357,8 +357,8 @@
     "matterId": "m09",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c35",
@@ -367,8 +367,8 @@
     "matterId": "m10",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -378,8 +378,8 @@
     "matterId": "m11",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c37",
@@ -388,8 +388,8 @@
     "matterId": "m12",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -399,8 +399,8 @@
     "matterId": "m13",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c39",
@@ -409,8 +409,8 @@
     "matterId": "m14",
     "signed": true,
     "basis": "flat",
-    "flatFeeCents": 450000,
-    "initialRetainerCents": 250000,
+    "flatFeeCents": 67500000,
+    "initialRetainerCents": 37500000,
     "earnedOn": "completed milestones invoiced separately"
   },
   {
@@ -420,8 +420,8 @@
     "matterId": "m15",
     "signed": true,
     "basis": "hourly",
-    "hourlyRateCents": 32500,
-    "initialRetainerCents": 500000
+    "hourlyRateCents": 4875000,
+    "initialRetainerCents": 75000000
   },
   {
     "id": "fee-c41",

@@ -11,7 +11,7 @@
  Account: ****1264
  Routing: withheld
  Client: Elena Park / Account BG-61104
- Wire amount: $3,200.75
+ Wire amount: $480,112.50
  Status: settled; beneficiary acknowledged receipt.
 
 

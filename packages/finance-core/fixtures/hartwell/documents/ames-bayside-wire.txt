@@ -11,7 +11,7 @@
  Account: ****1264
  Routing: withheld
  Client: Harold Ames / Account BG-62307
- Wire amount: $8,975.00
+ Wire amount: $1,346,250.00
  Status: settled; beneficiary acknowledged receipt.
 
 
