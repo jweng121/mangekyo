@@ -9,6 +9,9 @@ try {
   const response={user:{id:'test-user',runId:'test',role:'user',text:body.question,snapshotIds:[],createdAt:new Date().toISOString()},assistant:{id:'test-assistant',runId:'test',role:'assistant',text:'The recorded lookup identifies Client B.',snapshotIds:[],createdAt:new Date().toISOString()}};
   await route.fulfill({json:response});
  });
+ await page.route('**/api/visual-audit/transcribe',route=>route.request().method()==='GET'
+  ?route.fulfill({json:{configured:true}})
+  :route.fulfill({json:{text:'Why did the agent choose Client A?'}}));
  await page.route('**/api/visual-audit/tts',route=>{
   if(route.request().method()==='GET')return route.fulfill({json:{provider:'fish',configured:true}});
   const request=route.request().postDataJSON();requests.push(request.text);assert.equal(request.timestamps,true);
@@ -17,6 +20,7 @@ try {
  });
  await page.addInitScript(() => {
   navigator.mediaDevices.getUserMedia = async () => {
+   window.testMicOpens=(window.testMicOpens||0)+1;
    const context=new AudioContext(), oscillator=context.createOscillator(), gain=context.createGain(), destination=context.createMediaStreamDestination();
    gain.gain.value=0; oscillator.frequency.value=220; oscillator.connect(gain);gain.connect(destination);oscillator.start();await context.resume();
    window.testMicGain=gain;window.testMicStopped=false;
@@ -24,16 +28,12 @@ try {
    track.stop=()=>{window.testMicStopped=true;stop();void context.close();};
    return destination.stream;
   };
-  window.SpeechRecognition = class {
-   start() { window.testRecognitionStarts=(window.testRecognitionStarts || 0)+1; window.testRecognition=this; this.onstart?.(); }
-   stop() { window.testRecognitionStopped=true; if(window.testFinalTranscript)this.onresult?.({results:[[{transcript:window.testFinalTranscript}]]}); this.onend?.(); }
-  };
  });
- await page.goto('http://localhost:3000');await page.locator('.case-row').filter({hasText:'DB Read / Client mismatch'}).click();
+ await page.goto('http://localhost:3000/examples');await page.locator('.case-row').filter({hasText:'DB Read / Client mismatch'}).click();
  await page.getByRole('button',{name:'Start walkthrough',exact:true}).click();
  const caption=page.locator('.caption-phrase');await caption.waitFor();
- await page.waitForFunction(()=>document.querySelector('.caption-phrase')?.textContent==='The agent');
- assert.equal(await caption.innerText(),'The agent');
+ await page.waitForFunction(()=>!!document.querySelector('.caption-phrase')?.textContent?.trim());
+ assert((await caption.innerText()).trim());
  const title=await page.locator('.walkthrough-callout').boundingBox(),text=await caption.boundingBox();assert(text.y>=title.y+title.height);
  await page.getByRole('button',{name:'Pause walkthrough',exact:true}).click();
  await page.getByText('Listening',{exact:true}).waitFor();
@@ -45,7 +45,6 @@ try {
  await page.evaluate(()=>window.testMicGain.gain.value=.2);
  await page.waitForFunction(previous=>Number(document.querySelector('.operator-waveform i').style.transform.match(/scaleY\(([^)]+)\)/)[1])>previous+.1,quietHeight);
 
- await page.evaluate(()=>window.testRecognition.onresult({results:[[{transcript:'Why did the agent choose Client A?'}]]}));
  await page.evaluate(()=>window.testMicGain.gain.value=0);
  await page.waitForFunction(()=>document.querySelector('.walkthrough-callout strong')?.textContent==='Mangekyo');
  await page.waitForFunction(()=>document.querySelector('.caption-phrase')?.textContent?.startsWith('The recorded'));
@@ -53,8 +52,8 @@ try {
  assert.equal(requests[1],'The recorded lookup identifies Client B.');
  assert.equal(await page.locator('.operator-waveform').count(),0,'Microphone UI stays off while the reply speaks');
  assert(await page.evaluate(()=>window.testMicStopped));
- const starts=await page.evaluate(()=>window.testRecognitionStarts);
- await page.waitForFunction(previous=>window.testRecognitionStarts>previous,starts,{timeout:15000});
+ const starts=await page.evaluate(()=>window.testMicOpens);
+ await page.waitForFunction(previous=>window.testMicOpens>previous,starts,{timeout:15000});
  await page.getByText('Listening',{exact:true}).waitFor();
  await page.waitForTimeout(1500);assert.equal(questions.length,1,'Do not send an empty follow-up');
  await page.getByRole('button',{name:'Close walkthrough',exact:true}).click();

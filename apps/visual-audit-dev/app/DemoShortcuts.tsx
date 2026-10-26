@@ -13,11 +13,10 @@ export function DemoShortcuts(){
    if(event.target instanceof Element && event.target.closest("input,textarea,select,[contenteditable=true],[role=textbox]"))return;
    const action=({Digit1:"connect",Digit2:"incoming",Digit0:"reset"} as Record<string,string>)[event.code];
    if(!action)return;
-   event.preventDefault();if(pending.current)return;pending.current=true;
+   event.preventDefault();if(pending.current)return;pending.current=true;setNotice("");
    try{
     const response=await fetch("/api/workspace/simulate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action})});
     const result=await response.json();if(!response.ok)throw new Error(result.error??"Demo action failed");
-    setNotice(action==="reset"?"Demo reset. Pre-simulation data restored.":action==="connect"?"ERP connection started.":"Incoming data simulation started.");
     window.dispatchEvent(new Event("mangekyo:workspace-refresh"));
     if(action==="reset")router.push("/desk");
     else if(action==="connect")router.push("/activity");

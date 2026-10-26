@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
       const source = record.snapshots.find(snapshot => snapshot.id === body.snapshotId);
       const parent = source && record.runs.find(run => run.id === source.runId);
       if (!source || !parent || parent.status !== "escalated" || source.actionType !== "PROPOSE") return NextResponse.json({ error: "Select the escalated proposal checkpoint" }, { status: 400 });
+      if (parent.agentId === "trust-compliance-auditor") return NextResponse.json({ error: "The ownership lock cannot be overridden. Add cleared Hayes funds or reduce the request, then submit a new payment." }, { status: 400 });
       const instruction = body.instruction?.trim() ?? "";
       if (instruction.length < 12 || instruction.length > 2000) return NextResponse.json({ error: "Correction must be 12 to 2000 characters" }, { status: 400 });
       const steering: SteeringRequest = { id: crypto.randomUUID(), schemaVersion: 1, parentRunId: parent.id, checkpointSnapshotId: source.id, instruction, evidenceIds: source.evidence.map(item => item.id), actorId: "local-demo-reviewer", createdAt: new Date().toISOString(), scope: body.scope === "checkpoint" ? "checkpoint" : "dependent_work", status: "submitted" };

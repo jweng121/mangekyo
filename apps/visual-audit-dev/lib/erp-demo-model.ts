@@ -1,4 +1,4 @@
-export type DemoPhase = "disconnected" | "connecting" | "connected" | "receiving" | "escalated" | "failed";
+export type DemoPhase = "disconnected" | "connecting" | "connected" | "receiving" | "auditing" | "escalated" | "failed";
 export type DemoState = {phase:DemoPhase; sessionId:string; runIds:string[]; imported:number; step:string; escalationRunId?:string; error?:string;updatedAt?:string};
 export type BankRow = {id:string;postedDate:string;description:string;amountCents:number;balanceCents:number;clientId:string|null;documentIds:string[];allocations?:{clientId:string;amountCents:number}[]};
 export function checkSettlement(allocation:{amountCents:number;costCents:number}, agreement:{basis:string;rateBasisPoints:number;signed:boolean}, proposedFeeCents:number) {

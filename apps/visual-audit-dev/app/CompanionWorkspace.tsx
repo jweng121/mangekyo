@@ -136,7 +136,7 @@ export function CompanionWorkspace({platformRunId,initialRunId}: {platformRunId?
   const switchConversation = (id: string) => { voiceSession.current++; setReplyError(""); narrator.current?.stop(); stopDictation(); setWalkthroughOpen(false); setAnswerNarration(undefined); setConversationId(id); setDraft(""); setFlowMessages([]); setComposeMode("question"); };
   const newConversation = () => { if (!task) return; const id = crypto.randomUUID(); setChatSessions(current => [...current, { id, caseId: task.id, title: "New chat" }]); switchConversation(id); setInspectorTab("chat"); requestAnimationFrame(() => chatInput.current?.focus()); };
   const filteredTasks = tasks.filter(item => item.status === caseStatus && item.searchable.includes(query.toLowerCase()));
-  const canSteer = !!selected && selected.id === proposal?.id && originalRun?.status === "escalated";
+  const canSteer = !!selected && selected.id === proposal?.id && originalRun?.status === "escalated" && originalRun?.agentId !== "trust-compliance-auditor";
   const narration = useMemo<NarratedExplanation | undefined>(() => {
     const welcome=(explanation:NarratedExplanation):NarratedExplanation=>({...explanation,segments:[{id:explanation.id+"-welcome",text:"Hey, let's get started. Anything you want to address first?",evidenceRefs:[],highlightIds:[]},...explanation.segments]});
     if(originalRun && (platformRunId || originalRun.taskId.startsWith("hartwell-"))) {

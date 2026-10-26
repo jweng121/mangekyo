@@ -38,7 +38,7 @@ export function escalationCases(record:InvestigationRecord) {
     return {run,latest,completed,open:!completed,
     outcome:record.snapshots.filter(s=>s.runId===latest.id).sort((a,b)=>a.sequence-b.sequence).at(-1)?.summary,
     agent:run.agentId.replaceAll(/[-_]/g," ").replace(/^./,letter=>letter.toUpperCase()),
-    workflow:run.taskId.startsWith("hartwell-")?"Settlement distribution":run.taskId==="bank-line-1042"?"Deposit ownership":run.agentId==="trust-records-agent"?"Client record validation":run.taskId.replaceAll(/[-_]/g," ").replace(/^./,letter=>letter.toUpperCase()),
+    workflow:run.agentId==="trust-compliance-auditor"?"Ownership lock":run.taskId.startsWith("hartwell-")?"Settlement distribution":run.taskId==="bank-line-1042"?"Deposit ownership":run.agentId==="trust-records-agent"?"Client record validation":run.taskId.replaceAll(/[-_]/g," ").replace(/^./,letter=>letter.toUpperCase()),
     finding:record.findings.find(f=>f.runId===run.id),
     snapshots:record.snapshots.filter(s=>s.runId===run.id).length,
   };});

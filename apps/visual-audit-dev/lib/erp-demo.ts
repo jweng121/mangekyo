@@ -9,12 +9,13 @@ import {captureStructuredCheckpoint} from "./capture-agent";
 import {capturePdfRead} from "./pdf-evidence";
 import {evidenceWorker} from "./evidence-worker";
 import {checkSettlement,ownerBalances,initialImportBatches,type BankRow,type DemoState} from "./erp-demo-model";
+import {evaluateHayesRequest} from "./hayes-lock";
 export const fixtureRoot=path.resolve(process.cwd(),"../../packages/finance-core/fixtures/hartwell");
 export async function fixture<T=any[]>(name:string):Promise<T>{return JSON.parse(await readFile(path.join(fixtureRoot,"erp",name+".json"),"utf8"));}
 const file=()=>path.join(artifactDirectory(),"..","erp-simulation.json");
 let queue=Promise.resolve();
 const initial=():DemoState=>({phase:"disconnected",sessionId:"",runIds:[],imported:0,step:"Connect the ERP to begin"});
-export async function demoState():Promise<DemoState>{try{const state:DemoState=JSON.parse(await readFile(file(),"utf8"));if(["connecting","receiving"].includes(state.phase)&&state.updatedAt&&Date.now()-Date.parse(state.updatedAt)>120000)return {...state,phase:"failed",step:"Demo interrupted",error:"The server stopped processing. Restart the demo to replay the import."};return state}catch(e){if((e as NodeJS.ErrnoException).code!=="ENOENT")throw e;return initial();}}
+export async function demoState():Promise<DemoState>{try{const state:DemoState=JSON.parse(await readFile(file(),"utf8"));if(["connecting","receiving","auditing"].includes(state.phase)&&state.updatedAt&&Date.now()-Date.parse(state.updatedAt)>120000)return {...state,phase:"failed",step:"Demo interrupted",error:"The server stopped processing. Restart the demo to replay the import."};return state}catch(e){if((e as NodeJS.ErrnoException).code!=="ENOENT")throw e;return initial();}}
 async function updateDemo(fn:(state:DemoState)=>void){const task=queue.then(async()=>{const state=await demoState();fn(state);state.updatedAt=new Date().toISOString();await mkdir(path.dirname(file()),{recursive:true});const tmp=file()+".tmp";await writeFile(tmp,JSON.stringify(state));await atomicRename(tmp,file());});queue=task.catch(()=>{});await task;return demoState();}
 const dollars=(cents:number)=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(cents/100);
 const pause=()=>new Promise(resolve=>setTimeout(resolve,1800));
@@ -24,6 +25,10 @@ export async function startDemo(action:string){
   }else if(action==="connect"){
    if(s.phase!=="disconnected")throw new Error("ERP is already connected. Use incoming data for the next batch.");
    Object.assign(s,{phase:"connecting",sessionId:crypto.randomUUID(),step:"Connecting to Hartwell ERP",runIds:[],imported:0});
+  }else if(action==="hayes"){
+   if(!["connected","escalated"].includes(s.phase) && !(s.phase==="failed"&&s.imported>0))throw new Error("Connect the ERP before reviewing the Hayes payment.");
+   delete s.error;
+   s.phase="auditing";s.step="Replaying Hayes payment through the ownership lock";
   }else if(action==="incoming"){
    if(s.phase!=="connected")throw new Error("Finish connecting the ERP before importing the next batch.");
    s.phase="receiving";s.step="Receiving settlement documents and bank post";
@@ -43,18 +48,20 @@ async function savedDraft(r:InvestigationRun,sequence:number,feeCents:number,cli
  const result=await evidenceWorker<{record:RecordEvidence}>({action:"settlement_draft",databasePath,row});
  return captureStructuredCheckpoint({run:r,sequence,actionType:"WRITE_CONFIRMED",title:"Distribution draft saved",summary:`Saved a held distribution draft: ${dollars(feeCents)} in fees and ${dollars(clientCents)} to Ana Bello. No payment was released.`,documentId:"settlement_drafts",documentVersion:r.id,toolCall:"INSERT INTO settlement_drafts (id, client, feeCents, clientCents, status, ledgerPosted)",toolResponse:JSON.stringify(result),observation:{label:"Settlement draft",record:result.record,fields:[{id:"fee",label:"Attorney fee",value:dollars(feeCents)},{id:"client",label:"Client proceeds",value:dollars(clientCents)},{id:"status",label:"Payment status",value:"Held / not posted"}]}});
 }
-async function agreementSnapshot(r:InvestigationRun,sequence:number){
- const bytes=await readFile(path.join(fixtureRoot,"documents/fee-c03.pdf"));
+async function agreementSnapshot(r:InvestigationRun,sequence:number,documentId="fee-c03"){
+ const invoice=documentId==="cho-expert-invoice";
+ const bytes=await readFile(path.join(fixtureRoot,`documents/${documentId}.pdf`));
  // This scanned PDF ships with Edwin's text companion. Preserve that provenance;
  // do not claim that a text parser or live OCR extracted the raster page.
- const text=await readFile(path.join(fixtureRoot,"documents/fee-c03.txt"),"utf8");
- if(!text.includes("NET recovery after deduction"))throw new Error("Fee agreement text changed; review the scenario");
+ const text=await readFile(path.join(fixtureRoot,`documents/${documentId}.txt`),"utf8");
+ if(!text.includes(invoice?"900,000":"NET recovery after deduction"))throw new Error("Source document text changed; review the scenario");
  const rendered=await evidenceWorker<{pngBase64:string;dimensions:{width:number;height:number};pageCount:number}>({action:"pdf",bytes:bytes.toString("base64"),renderOnly:true});
  const pdf=await savePdf(bytes),png=await saveScreenshot(Buffer.from(rendered.pngBase64,"base64"));
  const id=`${r.id}-snapshot-${sequence}`,eventId=`${r.id}-event-${sequence}`,timestamp=new Date().toISOString();
- const summary="Ana Bello's signed agreement requires a 25% fee after her share of costs is deducted. The agent must use the net recovery, not the gross allocation.";
- const event:AgentEvent={id:eventId,schemaVersion:1,runId:r.id,taskId:r.taskId,agentId:r.agentId,agentRole:r.agentId,sequence,timestamp,actionType:"READ",title:"Signed fee agreement",summary,parentEventIds:[`${r.id}-event-${sequence-1}`],branchId:r.branchId,snapshotId:id,status:"completed"};
- const snapshot:Snapshot={id,eventId,schemaVersion:1,runId:r.id,taskId:r.taskId,agentId:r.agentId,agentRole:r.agentId,sequence,timestamp,actionType:"READ",title:event.title,summary,parentSnapshotId:`${r.id}-snapshot-${sequence-1}`,documentId:"fee-c03",documentVersion:"fixture-scan-with-text-companion",source:"fee-c03.pdf + supplied fee-c03.txt",sourceDocument:{url:`/api/visual-audit/documents/${pdf}`,filename:"fee-c03.pdf",mimeType:"application/pdf",sha256:createHash("sha256").update(bytes).digest("hex"),pageNumber:1,pageCount:rendered.pageCount,extraction:"provided-transcript"},screenshot:{url:`/api/visual-audit/artifacts/${png}`,provenance:"actual",artifactId:png,alt:"Original scanned Ana Bello fee agreement",capturedAt:timestamp},screenshotDimensions:rendered.dimensions,observation:{kind:"document",label:"Signed agreement / supplied text companion",documentText:text,fields:[{id:"basis",label:"Fee basis",value:"25% of NET recovery after deduction of allocated litigation costs"}]},readTargets:["Signed fee basis"],writeTargets:[],evidence:[{id:id+"-basis",label:"Signed fee basis",source:"fee-c03.txt (supplied transcript of fee-c03.pdf)",value:text}],instructionVersion:"hartwell-demo-1",policyVersion:"hold-distributions-1",executionStatus:"completed",auditStatus:"unreviewed"};
+ const summary=invoice?"The expert invoice requests $900,000 for Raymond Hayes. Invoice support does not transfer ownership of other clients' trust money.":"Ana Bello's signed agreement requires a 25% fee after her share of costs is deducted. The agent must use the net recovery, not the gross allocation.";
+ const event:AgentEvent={id:eventId,schemaVersion:1,runId:r.id,taskId:r.taskId,agentId:r.agentId,agentRole:r.agentId,sequence,timestamp,actionType:"READ",title:invoice?"Hayes expert invoice":"Signed fee agreement",summary,parentEventIds:[`${r.id}-event-${sequence-1}`],branchId:r.branchId,snapshotId:id,status:"completed"};
+ const evidenceId=id+(invoice?"-invoice":"-basis");
+ const snapshot:Snapshot={id,eventId,schemaVersion:1,runId:r.id,taskId:r.taskId,agentId:r.agentId,agentRole:r.agentId,sequence,timestamp,actionType:"READ",title:event.title,summary,parentSnapshotId:`${r.id}-snapshot-${sequence-1}`,documentId,documentVersion:"fixture-scan-with-text-companion",source:`${documentId}.pdf + supplied ${documentId}.txt`,sourceDocument:{url:`/api/visual-audit/documents/${pdf}`,filename:`${documentId}.pdf`,mimeType:"application/pdf",sha256:createHash("sha256").update(bytes).digest("hex"),pageNumber:1,pageCount:rendered.pageCount,extraction:"provided-transcript"},screenshot:{url:`/api/visual-audit/artifacts/${png}`,provenance:"actual",artifactId:png,alt:invoice?"Original scanned Raymond Hayes expert invoice":"Original scanned Ana Bello fee agreement",capturedAt:timestamp},screenshotDimensions:rendered.dimensions,observation:{kind:"document",label:invoice?"Expert invoice / supplied text companion":"Signed agreement / supplied text companion",documentText:text,fields:[{id:invoice?"invoice":"basis",label:invoice?"Expert invoice":"Fee basis",value:invoice?"$900,000.00 requested for Raymond Hayes":"25% of NET recovery after deduction of allocated litigation costs"}]},readTargets:[invoice?"Expert invoice":"Signed fee basis"],writeTargets:[],evidence:[{id:evidenceId,label:invoice?"Expert invoice":"Signed fee basis",source:`${documentId}.txt (supplied transcript of ${documentId}.pdf)`,value:text}],annotations:invoice?[{id:`${id}-invoice-annotation`,snapshotId:id,evidenceRef:evidenceId,label:"$900,000 expert invoice",fieldPath:"observation.fields.invoice"}]:undefined,instructionVersion:"hartwell-demo-1",policyVersion:"hold-distributions-1",executionStatus:"completed",auditStatus:"unreviewed"};
  await appendCheckpoint(event,snapshot);return snapshot;
 }
 async function settlementEvidence(r:InvestigationRun){
@@ -109,6 +116,24 @@ export async function executeDemo(action:string,sessionId:string){
    await records(active,2,"ledger-reconciliation",[{account:"IOLTA 4417",cashCents:total,clientLiabilityCents:total,balancedJournals:journal.length}],`Reconciled ${journal.length} balanced journal entries and client liabilities to ${dollars(total)} in trust cash. This verifies totals; it does not approve historical transactions or perform a full compliance audit.`);
    await updateRun(active.id,{status:"completed"});
    await mutate(s=>{s.phase="connected";s.step="ERP connected. Ready for incoming data."});
+  }else if(action==="hayes"){
+   active=await run("Raymond Hayes / Ownership lock","trust-compliance-auditor",sessionId);
+   const clients=await fixture<Array<{id:string;name:string}>>("clients");
+   const {payment,poolCents,ownerCents,amountCents,shortageCents,result}=evaluateHayesRequest(all,clients);
+   const reconciliations=await fixture<Array<{month:string;bankEndingCents:number;bookEndingCents:number;clientLedgerTotalCents:number}>>("reconciliations");
+   if(!reconciliations.every(row=>row.bankEndingCents===row.bookEndingCents&&row.bookEndingCents===row.clientLedgerTotalCents))throw new Error("Month-end reconciliations are no longer all matched");
+   await records(active,1,"month-end-reconciliations",reconciliations.map(row=>({month:row.month,bankCents:row.bankEndingCents,bookCents:row.bookEndingCents,clientLedgersCents:row.clientLedgerTotalCents,status:"Matched"})),"All six month-end bank, book, and client-ledger totals match. A monthly total cannot prove each client had enough money on the day of a payment.");await pause();
+   await agreementSnapshot(active,2,"cho-expert-invoice");await pause();
+   await records(active,3,"owner-balance-at-request",[{client:"Raymond Hayes",clientAvailableCents:ownerCents,requestCents:amountCents,poolBeforePaymentCents:poolCents,otherClientsNeededCents:shortageCents,asOf:payment.postedDate}],`Immediately before the request, Hayes owned ${dollars(ownerCents)}. The trust account held ${dollars(poolCents)}, but ${dollars(shortageCents)} of the proposed ${dollars(amountCents)} would come from other clients.`);await pause();
+   const proposal=await records(active,4,"payment-request",[{client:"Raymond Hayes",payee:"Marlowe Forensic",amountCents,status:"Preflight only",bankPostedInHistoricalExport:true}],`Replay the historical ${dollars(amountCents)} request as a preflight check. The source export records that it was paid; this replay makes no new payment.`,"PROPOSE");await pause();
+   const failure=result.failures.find(f=>f.rule==="L1")!;
+   await records(active,5,"ownership-lock",[{rule:failure.rule,code:failure.code,ownerAvailableCents:result.facts.ownerAvailableCents,poolClearedCents:result.facts.poolAdjustedClearedCents,requestCents:amountCents,otherClientsNeededCents:shortageCents,allowed:result.allowed}],`L1 blocked the replay: ${dollars(amountCents)} exceeds Hayes's ${dollars(ownerCents)}. ${dollars(shortageCents)} belongs to other clients. A matched month-end reconciliation and ${dollars(poolCents)} in pooled cash do not authorize the payment.`,"AUDIT","flagged");await pause();
+   await records(active,6,"human-review",[{client:"Raymond Hayes",historicalPayment:"Posted in source export",livePreflight:"Blocked by L1",newPaymentReleased:false}],"Flag the historical ownership breach for review. Any new request with this shortfall is blocked by the code lock before money moves.","ESCALATE","needs_review");
+   const explanation=`${failure.message} The historical export shows the payment posted despite six matched month-end reconciliations; this preflight replay blocks it before a new payment.`;
+   const findingId=crypto.randomUUID();await appendAudit({id:findingId,schemaVersion:1,runId:active.id,snapshotId:proposal.id,category:"risky_write",severity:"high",explanation,evidence:(await readInvestigation()).snapshots.filter(s=>s.runId===active!.id&&s.sequence<=4).flatMap(s=>s.evidence),suggestedAction:"Do not pay from pooled cash. Obtain cleared funds belonging to Hayes or reduce the request, then submit a new payment for review.",reviewStatus:"open",reviewedThroughSequence:6},{id:crypto.randomUUID(),findingId,snapshotId:proposal.id,runId:active.id,status:"open",createdAt:new Date().toISOString()});
+   await updateRun(active.id,{status:"escalated"});
+   const priorHayes=new Set((await readInvestigation()).runs.filter(item=>item.agentId==="trust-compliance-auditor"&&item.id!==active!.id).map(item=>item.id));
+   await mutate(s=>{s.runIds=s.runIds.filter(id=>!priorHayes.has(id));s.phase=s.imported>boundary?"escalated":"connected";s.escalationRunId=active!.id;s.step="Hayes ownership shortfall flagged; new payment blocked"});
   }else{
    active=await run("Harborline settlement received","settlement-intake-agent",sessionId);await pause();
    await mutate(s=>{s.imported=boundary+1;s.step=`New bank post imported: ${dollars(all[boundary].amountCents)} settlement`});

@@ -152,6 +152,9 @@ importers:
       '@fontsource-variable/stack-sans-notch':
         specifier: ^5.3.0
         version: 5.3.0
+      '@mangekyo/finance-core':
+        specifier: workspace:*
+        version: link:../../packages/finance-core
       '@mangekyo/visual-audit':
         specifier: workspace:*
         version: link:../../packages/visual-audit
